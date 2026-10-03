@@ -207,3 +207,9 @@ src/Presentation/Nop.Web/wwwroot/sitemaps/*
 !src/Presentation/Nop.Web/wwwroot/sitemaps/Index.htm
 src/packages/*
 src/Tests/Nop.Tests/Connections.resx
+
+# Persian storefront local dependencies and private development settings
+/src/Storefront/**/node_modules/
+/src/Storefront/**/appsettings.Local.json
+/src/Storefront/**/.env
+/src/Storefront/**/.env.local

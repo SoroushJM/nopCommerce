@@ -1,0 +1,6 @@
+<article class="cart-row">
+    <a href="@($"/stationery/product/{Line.ProductId}")"><img src="@Line.Image" alt="@Line.Name"/></a>
+    <div><a href="@($"/stationery/product/{Line.ProductId}")" class="text-[13px] font-bold">@Line.Name</a><p class="text-xs text-slate-400 mt-2">@Line.Options</p><div class="flex gap-3 items-center mt-3"><div class="qty"><button aria-label="@($"کاهش تعداد {Line.Name}")" disabled="@(Line.Quantity<=1)" @onclick="()=>SetQuantity(Line.Quantity-1)"><SfIcon Name="minus" Size="13"/></button><span>@Line.Quantity</span><button aria-label="@($"افزایش تعداد {Line.Name}")" disabled="@(Line.Quantity>=20)" @onclick="()=>SetQuantity(Line.Quantity+1)"><SfIcon Name="plus" Size="13"/></button></div><button aria-label="@($"حذف {Line.Name}")" class="icon-btn text-slate-400" @onclick="()=>SetQuantity(0)"><SfIcon Name="trash" Size="16"/></button></div></div>
+    <div class="text-sm font-bold text-left price">@((Line.UnitPrice*Line.Quantity).ToString("N0",CultureInfo.InvariantCulture)) <small class="font-normal text-[10px] text-slate-500">تومان</small></div>
+</article>
+@code {[Parameter,EditorRequired]public CartLine Line{get;set;}=default!;[Parameter]public EventCallback<QuantityRequest> OnQuantity{get;set;}private Task SetQuantity(int quantity)=>OnQuantity.InvokeAsync(new QuantityRequest(Line.Id,quantity));}

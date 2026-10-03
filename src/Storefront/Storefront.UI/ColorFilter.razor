@@ -1,0 +1,11 @@
+<label class="block text-xs mt-4">رنگ محصول
+    <select class="sf-input mt-2" aria-label="فیلتر رنگ" value="@Value" @onchange="e=>ValueChanged.InvokeAsync(e.Value?.ToString()??string.Empty)">
+        <option value="">همهٔ رنگ‌ها</option>
+        @foreach(var option in Options) { <option value="@option">@option</option> }
+    </select>
+</label>
+@code {
+    [Parameter] public string Value {get;set;}="";
+    [Parameter] public EventCallback<string> ValueChanged {get;set;}
+    [Parameter] public IEnumerable<string> Options {get;set;}=[];
+}

@@ -1,0 +1,1 @@
+{"name":"persian-storefront-styles","private":true,"scripts":{"build":"tailwindcss -i ./Styles/input.css -o ./wwwroot/storefront.css --minify","watch":"tailwindcss -i ./Styles/input.css -o ./wwwroot/storefront.css --watch"},"devDependencies":{"@tailwindcss/cli":"4.1.18","tailwindcss":"4.1.18"}}

@@ -1,0 +1,11 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup><TargetFramework>net10.0</TargetFramework><Nullable>enable</Nullable><ImplicitUsings>enable</ImplicitUsings></PropertyGroup>
+  <ItemGroup><FrameworkReference Include="Microsoft.AspNetCore.App" /><PackageReference Include="BlazorBlueprint.Components" Version="4.1.0" /></ItemGroup>
+  <ItemGroup><Content Update="package.json;package-lock.json" CopyToPublishDirectory="Never" /></ItemGroup><ItemGroup><TailwindSources Include="*.razor;Styles/input.css;package-lock.json" /></ItemGroup>
+  <Target Name="RestoreStorefrontNodeModules" BeforeTargets="PrepareForBuild" Inputs="package-lock.json" Outputs="node_modules/.package-lock.json">
+    <Exec Command="npm ci --no-audit --no-fund" WorkingDirectory="$(MSBuildProjectDirectory)" />
+  </Target>
+  <Target Name="BuildStorefrontStyles" BeforeTargets="PrepareForBuild" DependsOnTargets="RestoreStorefrontNodeModules" Inputs="@(TailwindSources)" Outputs="wwwroot/storefront.css">
+    <Exec Command="npm run build" WorkingDirectory="$(MSBuildProjectDirectory)" />
+  </Target>
+</Project>

@@ -58,3 +58,7 @@
 - توسعهٔ پلاگین nopCommerce: https://docs.nopcommerce.com/en/developer/plugins/
 
 تصمیم معماری پذیرفته شده و در docs/adr/0001-blazor-storefront-on-nopcommerce.md ثبت است؛ جزئیات ادغام نیاز به آزمایش دارند. واژه‌نامه در CONTEXT.md و معیارهای پذیرش در docs/acceptance-criteria.md قرار دارند.
+
+## وضعیت پیاده‌سازی — 2026-10-03
+
+ادغام در پلاگین و RCL مستقل انجام شد؛ هیچ تغییر هسته و ادمین لازم نشد. برند موقت مدادرنگ، فونت Vazirmatn و واحد نمونه IRT انتخاب شدند. انتخاب ویژگی، قیمت/موجودی و سبد به خدمات nopCommerce وصل شدند. ورود موبایل با mock OTP، guest migration، Swagger و Scalar در Development پیاده شدند. PostgreSQL موجود با پایگاه مجزای nop_stationery_dev استفاده شده و اطلاعات اتصال فقط محلی ذخیره شده‌اند. جزئیات تصمیم‌های اجرایی، حدود نسخه و اجرای مجدد در storefront-development.md و گزارش QA قرار دارند. اتصال پنل پیامک واقعی، پرداخت/ارسال و نام نهایی برند برای فاز فروش باقی‌اند.

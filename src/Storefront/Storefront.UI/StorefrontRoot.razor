@@ -1,0 +1,141 @@
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+@inject NavigationManager Navigation
+
+<BbDirectionProvider Direction="TextDirection.RightToLeft">
+<BbPortalHost />
+<div dir="rtl" class="storefront">
+    <div class="bg-[#eaf1fd] text-[#46628b] text-center text-[11px] py-2.5 px-4">یک شروع رنگی برای روزهای تازه <span class="mx-2 text-blue-300">✦</span> لوازم‌تحریری که دوستشان داری</div>
+    <header class="sf-header">
+        <div class="wrap flex items-center justify-between gap-7 py-5 max-md:py-4">
+            <a href="/" class="sf-brand shrink-0" aria-label="مدادرنگ، صفحه اصلی"><span class="brand-mark"><SfIcon Size="23" /></span><span class="brand-word">مداد<span class="text-primary">رنگ</span><small class="block text-[9px] font-normal tracking-normal text-slate-400 mt-0.5">دنیای کوچکِ ایده‌های بزرگ</small></span></a>
+            <form class="search-field max-md:hidden" @onsubmit="Search" @onsubmit:preventDefault><SfIcon Name="search" Size="19"/><input aria-label="جست‌وجوی محصولات" placeholder="دنبال چی می‌گردی؟ دفتر، مداد، یک ایده تازه..." @bind="query" @bind:event="oninput" /><button type="submit" class="sr-only">جست‌وجو</button></form>
+            <div class="flex items-center gap-4 max-md:gap-1">
+                <button class="icon-btn text-sm max-md:hidden" @onclick="ShowLogin"><SfIcon Name="user"/><span>@(cart.SignedIn ? "حساب من" : "ورود / عضویت")</span></button>
+                <span class="w-px h-7 bg-slate-200 max-md:hidden"></span>
+                <button class="icon-btn relative" aria-label="باز کردن سبد خرید" @onclick="()=>cartOpen=true"><SfIcon Name="bag" Size="23"/><span class="absolute -top-0.5 -right-0.5 bg-primary text-white rounded-full min-w-4 h-4 text-[10px] px-1">@cart.Count</span></button>
+            </div>
+        </div>
+        <div class="wrap flex items-center justify-between border-t border-slate-100 max-md:hidden">
+            <nav aria-label="دسته‌بندی‌های فروشگاه" class="flex gap-8">
+                <a href="/stationery/catalog" class="nav-link flex gap-2 items-center font-bold text-primary"><SfIcon Name="menu" Size="17"/>همهٔ محصولات</a>
+                @foreach(var category in Categories) { <a href="@CatalogUrl(category)" class="nav-link">@category</a> }
+            </nav>
+            <a href="/stationery/catalog?sort=price" class="nav-link text-orange-600 flex items-center gap-1"><SfIcon Name="star" Size="15"/> پیشنهادهای رنگی</a>
+        </div>
+    </header>
+    <main id="main-content">
+    @if(!string.IsNullOrEmpty(error)) { <div class="wrap mt-5"><div role="alert" class="notice flex items-center justify-between">@error<button class="icon-btn" @onclick="()=>error=string.Empty" aria-label="بستن پیام"><SfIcon Name="close" Size="16"/></button></div></div> }
+    @if(Page=="home") {
+        <div class="wrap pt-7 max-md:pt-5">
+            <section class="hero grid md:grid-cols-2">
+                <div class="hero-copy">
+                    <span class="inline-flex items-center gap-2 text-[11px] text-blue-600 mb-4 bg-white px-3 py-1.5 rounded-full"><span class="size-1.5 rounded-full bg-blue-500"></span> برای نوشتن، ساختن و خیال‌کردن</span>
+                    <h1>ایده‌های بزرگ،<br/>از یک <span class="text-primary">مداد رنگی</span><br class="max-md:hidden"/> شروع می‌شن.</h1>
+                    <p class="text-sm leading-7 text-slate-500 mt-4 max-w-sm">از اولین خط دفتر تا آخرین رنگ نقاشی؛<br/>همراه‌های دوست‌داشتنیِ درس، کار و خلاقیت اینجان.</p>
+                    <BbButton Href="/stationery/catalog" Class="sf-button mt-6">کشف دنیای رنگ‌ها <span class="mr-3"><SfIcon Name="arrow" Size="17"/></span></BbButton>
+                    <div class="flex items-center gap-2 mt-6 text-[10px] text-slate-500"><SfIcon Name="check" Size="14"/> انتخاب‌های متنوع <span class="mx-1">·</span> خرید ساده و راحت</div>
+                </div>
+                <div class="relative"><img class="hero-image h-full" src="_content/Storefront.UI/images/hero.jpg" alt="لوازم نوشتن و طراحی رنگی روی میز" fetchpriority="high"/><div class="hero-note flex gap-3 items-center"><span class="size-9 rounded-full bg-[#fff1d4] text-amber-700 grid place-items-center"><SfIcon Name="star"/></span><div><strong class="text-xs block">کمی رنگ، کلی حال خوب</strong><small class="text-[10px] text-slate-500">برای میز کار و کیف مدرسه‌ات</small></div></div></div>
+            </section>
+            <section class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6" aria-label="دسته‌های محصولات">
+                @for(var i=0;i<Categories.Length;i++) { var cat=Categories[i]; var n=i; <a href="@CatalogUrl(cat)" class="category-tile"><span class="category-icon" style="background:@CategoryBackground(n);color:@CategoryColor(n)"><SfIcon Name="@(n==1 ? "pencil" : n==2 ? "bag" : n==3 ? "leaf" : "menu")" Size="23"/></span><div><strong class="text-[13px] max-md:text-xs block">@cat</strong><span class="text-[10px] text-slate-400">کشف کن <span class="mr-1">←</span></span></div></a> }
+            </section>
+            <section class="mt-12 max-md:mt-8">
+                <div class="flex items-center justify-between mb-5"><div><p class="text-[10px] text-orange-500 mb-1">کوچک، کاربردی، دوست‌داشتنی</p><h2 class="section-title">انتخاب‌های محبوب</h2></div><a href="/stationery/catalog" class="flex gap-2 text-xs text-slate-500">همهٔ محصولات <SfIcon Name="arrow" Size="16"/></a></div>
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 max-md:gap-3">@foreach(var product in products.Take(4)) { <ProductCard Product="product"/> }</div>
+            </section>
+            <section class="grid md:grid-cols-2 gap-5 mt-9">
+                <a href="@CatalogUrl("هنر و خلاقیت")" class="bg-[#f0f6ed] rounded-2xl p-7 flex justify-between items-center overflow-hidden"><div><span class="text-[10px] text-[#71926a]">برای خیال‌های بی‌مرز</span><h2 class="text-xl font-extrabold mt-2">رنگی‌تر فکر کن.</h2><p class="text-xs text-slate-500 mt-2">ابزارهای هنر و خلاقیت</p><span class="inline-flex items-center gap-2 text-xs mt-5">بزن بریم <SfIcon Name="arrow" Size="15"/></span></div><img class="w-32 h-32 rounded-full object-cover" src="_content/Storefront.UI/images/pencils.jpg" alt="مدادهای رنگی" loading="lazy"/></a>
+                <a href="@CatalogUrl("دفتر و کاغذ")" class="bg-[#fff1e6] rounded-2xl p-7 flex justify-between items-center overflow-hidden"><div><span class="text-[10px] text-orange-500">یک صفحهٔ تازه برای تو</span><h2 class="text-xl font-extrabold mt-2">بنویس، برنامه بریز، بساز.</h2><p class="text-xs text-slate-500 mt-2">دفترها و کاغذهای دوست‌داشتنی</p><span class="inline-flex items-center gap-2 text-xs mt-5">انتخاب دفتر <SfIcon Name="arrow" Size="15"/></span></div><img class="w-32 h-32 rounded-full object-cover" src="_content/Storefront.UI/images/notebook.jpg" alt="دفتر یادداشت" loading="lazy"/></a>
+            </section>
+            <section class="mt-10 mb-9"><div class="flex items-center justify-between mb-5"><h2 class="section-title">تازه‌های مدادرنگ</h2><a href="/stationery/catalog" class="text-xs text-slate-500">دیدن همه ←</a></div><div class="grid grid-cols-2 lg:grid-cols-4 gap-4 max-md:gap-3">@foreach(var product in products.Skip(4).Take(4)) { <ProductCard Product="product"/> }</div></section>
+        </div>
+    } else if(Page=="catalog") {
+        <section class="wrap py-8 sf-catalog">
+            <p class="text-xs text-slate-400 mb-5"><a href="/">خانه</a> / فروشگاه</p><h1 class="page-heading">@(string.IsNullOrEmpty(category) ? "دنیای رنگی نوشت‌افزار" : category)</h1><p class="text-sm text-slate-500 mt-3">همراه کوچکِ هر ایده را اینجا پیدا کن.</p>
+            <form class="search-field mt-6 md:hidden" @onsubmit="Search" @onsubmit:preventDefault><SfIcon Name="search" Size="18"/><input aria-label="جست‌وجو در فروشگاه" @bind="query" @bind:event="oninput" placeholder="نام محصول یا برند..."/><button type="submit" class="text-xs text-primary">بگرد</button></form>
+            <div class="flex items-center justify-between gap-3 flex-wrap py-6 border-b mb-7">
+                <div class="flex gap-2 flex-wrap"><button class="filter-pill @(string.IsNullOrEmpty(category)?"active":"")" @onclick="()=>category=string.Empty">همه</button>@foreach(var cat in Categories) { <button class="filter-pill @(category==cat?"active":"")" @onclick="()=>category=cat">@cat</button> }</div>
+                <label class="flex items-center gap-2 text-xs text-slate-500">مرتب‌سازی<select class="filter-pill" aria-label="مرتب‌سازی محصولات" @bind="sort"><option value="popular">محبوب‌ترین</option><option value="price">ارزان‌ترین</option><option value="price-desc">گران‌ترین</option></select></label>
+            </div>
+            <div class="flex gap-8">
+                <aside class="desktop-filter"><h2 class="font-bold text-sm flex items-center gap-2 mb-5"><SfIcon Name="filter"/>فیلتر محصولات</h2><label class="block text-xs mb-3">برند<select class="sf-input mt-2" @bind="brand"><option value="">همهٔ برندها</option>@foreach(var b in products.Select(x=>x.Brand).Distinct()) { <option>@b</option> }</select></label><label class="block text-xs mt-5">حداکثر قیمت (تومان)<input type="range" min="50000" max="1000000" step="50000" class="w-full mt-4 accent-blue-600" @bind="maxPrice" @bind:event="oninput"/><span class="block mt-2 text-slate-500 price">@Money(maxPrice)</span></label><ColorFilter Options="ColorNames" @bind-Value="colorFilter"/><label class="flex items-center gap-2 text-xs mt-6"><input type="checkbox" @bind="onlyAvailable"/>فقط کالاهای موجود</label><button class="text-xs text-primary mt-6" @onclick="ResetFilters">پاک کردن فیلترها</button></aside>
+                <div class="flex-1 min-w-0"><div class="md:hidden flex gap-2 mb-5"><select class="filter-pill flex-1" aria-label="فیلتر برند" @bind="brand"><option value="">همهٔ برندها</option>@foreach(var b in products.Select(x=>x.Brand).Distinct()) { <option>@b</option> }</select><select class="filter-pill flex-1" aria-label="فیلتر قیمت" @bind="maxPrice"><option value="1000000">همهٔ قیمت‌ها</option><option value="200000">تا 200,000 تومان</option><option value="400000">تا 400,000 تومان</option></select></div><div class="md:hidden mb-4"><ColorFilter Options="ColorNames" @bind-Value="colorFilter"/></div><p class="text-xs text-slate-400 mb-4">@Filtered.Count() محصول @(!string.IsNullOrEmpty(query) ? $"برای «{query}»" : "")</p>
+                @if(!Filtered.Any()) { <div class="empty-state"><SfIcon Name="search" Size="36"/><h2 class="font-bold mt-4">محصولی پیدا نشد</h2><p class="text-sm text-slate-500 mt-2">جست‌وجو یا فیلترها را تغییر بده.</p><BbButton Class="sf-button mt-5" OnClick="ResetFilters">پاک کردن فیلترها</BbButton></div> } else { <div class="grid grid-cols-2 lg:grid-cols-3 gap-4 max-md:gap-3">@foreach(var p in Filtered) { <ProductCard Product="p"/> }</div> }</div>
+            </div>
+        </section>
+    } else if(Page=="product" && CurrentProduct is {} product) {
+        <section class="wrap py-7"><p class="text-xs text-slate-400 mb-6"><a href="/">خانه</a> / <a href="@CatalogUrl(product.Category)">@product.Category</a> / @product.Name</p><div class="grid md:grid-cols-2 gap-10 lg:gap-16">
+            <div><img class="product-main-image" src="@product.Image" alt="@product.Name"/><div class="flex gap-3 mt-4"><img class="thumb ring-2 ring-blue-400" src="@product.Image" alt="نمای اصلی @product.Name"/><span class="text-xs text-slate-400 self-center">تصویر محصول · @product.Brand</span></div></div>
+            <div class="pt-3"><p class="text-xs text-primary mb-3">@product.Brand <span class="text-slate-300 mx-2">/</span> @product.Category</p><h1 class="page-heading leading-relaxed">@product.Name</h1><p class="text-sm leading-8 text-slate-500 mt-5">@product.Description</p><div class="flex items-center gap-2 mt-5 text-xs @(quote.Available?"text-emerald-600":"text-orange-600")"><span class="size-1.5 rounded-full @(quote.Available?"bg-emerald-500":"bg-orange-500")"></span>@(quote.Available ? "موجود و آمادهٔ انتخاب" : "این انتخاب فعلاً ناموجود است")</div><div class="h-px bg-slate-100 my-6"></div>
+            @foreach(var attribute in product.Attributes) { <fieldset class="mb-6"><legend class="text-sm font-bold mb-3">@(attribute.Name): <span class="font-normal text-slate-500">@(attribute.Options.FirstOrDefault(x=>selected.GetValueOrDefault(attribute.Id)==x.Id)?.Name)</span></legend><div class="flex gap-4">@foreach(var option in attribute.Options) { <button class="@(IsColorAttribute(attribute)?"color-choice":"filter-pill") @(selected.GetValueOrDefault(attribute.Id)==option.Id ? "selected":"")" style="@(IsColorAttribute(attribute)?"background:"+option.Color:string.Empty)" aria-label="@($"{attribute.Name} {option.Name}")" title="@option.Name" aria-pressed="@(selected.GetValueOrDefault(attribute.Id)==option.Id)" @onclick="()=>SelectOption(attribute.Id,option.Id)">@if(!IsColorAttribute(attribute)) { @option.Name } else if(selected.GetValueOrDefault(attribute.Id)==option.Id) { <SfIcon Name="check" Size="16"/> }</button> }</div></fieldset> }
+            <div class="flex items-center gap-5 mb-6"><span class="text-sm">تعداد</span><div class="qty"><button aria-label="کاهش تعداد" disabled="@(quantity<=1)" @onclick="()=>ChangeProductQuantity(-1)"><SfIcon Name="minus" Size="14"/></button><span>@quantity</span><button aria-label="افزایش تعداد" disabled="@(quantity>=20)" @onclick="()=>ChangeProductQuantity(1)"><SfIcon Name="plus" Size="14"/></button></div></div>
+            <div class="bg-slate-50 border border-slate-100 rounded-2xl p-5"><div class="flex items-end justify-between mb-5"><span class="text-xs text-slate-500">قیمت هر عدد</span><div class="text-left">@if(product.OldPrice>quote.Price) { <del dir="ltr" class="text-xs text-slate-400 block mb-1">@Money(product.OldPrice)</del> }<strong class="text-2xl price">@Money(quote.Price)</strong> <span class="text-xs">تومان</span></div></div><BbButton Class="sf-button w-full" Disabled="@(!quote.Available || busy)" Loading="busy" OnClick="AddToCart"><SfIcon Name="bag" Size="18"/><span class="mr-2">@(quote.Available?"افزودن به سبد خرید":"فعلاً ناموجود")</span></BbButton></div><p class="text-[11px] text-slate-400 mt-5 flex gap-2"><SfIcon Name="shield" Size="15"/>انتخاب‌ها و موجودی هنگام افزودن به سبد دوباره بررسی می‌شوند.</p></div>
+        </div><div class="border-t mt-12 pt-7"><h2 class="section-title mb-4">برای کنار این انتخاب</h2><div class="grid grid-cols-2 lg:grid-cols-4 gap-4">@foreach(var p in products.Where(x=>x.Id!=product.Id).Take(4)) { <ProductCard Product="p"/> }</div></div></section>
+    } else if(Page=="cart") {
+        <section class="wrap py-9"><p class="text-xs text-slate-400 mb-5"><a href="/">خانه</a> / سبد خرید</p><h1 class="page-heading">سبد خرید تو <span class="text-lg text-slate-400 font-normal">(@cart.Count کالا)</span></h1><p class="text-sm text-slate-500 mt-3 mb-7">انتخاب‌های رنگی‌ات اینجان؛ یک قدم تا ادامهٔ خرید.</p>
+        @if(cart.Count==0) { <div class="empty-state"><span class="inline-grid place-items-center size-20 rounded-full bg-blue-50 text-primary"><SfIcon Name="bag" Size="35"/></span><h2 class="font-bold text-xl mt-5">سبدت منتظر یک انتخاب رنگیه</h2><p class="text-sm text-slate-500 mt-3">از دفترها، مدادها و کلی چیز دوست‌داشتنی شروع کن.</p><BbButton Href="/stationery/catalog" Class="sf-button mt-6">دیدن محصولات</BbButton></div> } else { <div class="grid lg:grid-cols-[1fr_340px] gap-10"><div>@foreach(var line in cart.Lines) { <CartItem Line="line" OnQuantity="UpdateQuantity"/> }</div><aside class="border rounded-2xl p-6 h-fit bg-slate-50"><h2 class="font-bold mb-6">خلاصهٔ سبد</h2><div class="flex justify-between text-sm mb-4"><span class="text-slate-500">جمع کالاها (@cart.Count)</span><span>@Money(cart.Total) تومان</span></div><div class="flex justify-between text-xs text-slate-500 mb-6"><span>هزینهٔ ارسال</span><span>در مرحلهٔ بعد مشخص می‌شود</span></div><div class="border-t pt-5 flex justify-between font-bold mb-6"><span>جمع سبد</span><span>@Money(cart.Total) <small class="font-normal">تومان</small></span></div><BbButton Class="sf-button w-full" OnClick="Checkout">ادامهٔ خرید <span class="mr-2"><SfIcon Name="arrow" Size="16"/></span></BbButton><p class="text-[10px] text-slate-400 mt-4 leading-6">@(cart.SignedIn?"وارد حساب شده‌ای؛ سبدت در حساب محفوظ است.":"برای ادامه، با شمارهٔ موبایلت وارد می‌شوی.")</p></aside></div> }</section>
+    } else { <section class="wrap py-16"><div class="empty-state"><h1 class="page-heading">این محصول پیدا نشد</h1><BbButton Href="/stationery/catalog" Class="sf-button mt-5">بازگشت به فروشگاه</BbButton></div></section> }
+    </main>
+    <div class="wrap mt-8 mb-4 border-t"><div class="grid grid-cols-2 md:grid-cols-4 gap-3 py-3"><div class="benefit"><span class="text-primary"><SfIcon Name="bag" Size="25"/></span><div><strong>انتخاب راحت</strong><small>هر چیزی برای درس و نوشتن</small></div></div><div class="benefit"><span class="text-orange-400"><SfIcon Name="star" Size="25"/></span><div><strong>دنیایی از رنگ</strong><small>برای هر سلیقه و هر ایده</small></div></div><div class="benefit"><span class="text-emerald-600"><SfIcon Name="shield" Size="25"/></span><div><strong>سبد محفوظ</strong><small>ادامهٔ خرید پس از ورود</small></div></div><div class="benefit"><span class="text-violet-400"><SfIcon Name="leaf" Size="25"/></span><div><strong>همراه خلاقیت</strong><small>از یک خط تا یک خیال تازه</small></div></div></div></div>
+    <footer class="sf-footer"><div class="wrap"><div class="grid md:grid-cols-[2fr_1fr_1fr] gap-8"><div><a href="/" class="sf-brand mb-4"><span class="brand-mark"><SfIcon/></span><span>مدادرنگ</span></a><p class="text-xs text-slate-500 leading-7 max-w-sm">برای ما، لوازم‌تحریر فقط ابزار نیست؛ یک بهانهٔ کوچک برای نوشتن، یاد گرفتن و رنگی‌تر دیدن دنیاست.</p></div><div><h2 class="text-sm font-bold mb-4">دنیای مدادرنگ</h2><div class="flex flex-col gap-3 text-xs text-slate-500">@foreach(var cat in Categories) { <a href="@CatalogUrl(cat)">@cat</a> }</div></div><div><h2 class="text-sm font-bold mb-4">همراه خرید تو</h2><div class="flex flex-col gap-3 text-xs text-slate-500"><a href="/stationery/cart">سبد خرید</a><button class="text-right" @onclick="ShowLogin">ورود به حساب</button><a href="/contactus">تماس با ما</a><a href="/shipping-returns">ارسال و بازگشت</a></div></div></div><div class="border-t mt-8 pt-5 text-[10px] text-slate-400 flex justify-between gap-5"><span>مدادرنگ؛ همراه ایده‌های کوچک و بزرگ</span><span>ساخته‌شده برای نوشتن و خیال‌کردن</span></div></div></footer>
+    <nav class="mobile-nav" aria-label="منوی موبایل"><button class="@(Page=="home"?"active":"")" @onclick="GoHome"><SfIcon Name="pencil"/><span>خانه</span></button><button class="@(Page=="catalog"?"active":"")" @onclick="GoCatalog"><SfIcon Name="search"/><span>فروشگاه</span></button><button @onclick="()=>cartOpen=true"><SfIcon Name="bag"/><span>سبد (@cart.Count)</span></button><button @onclick="ShowLogin"><SfIcon Name="user"/><span>حساب من</span></button></nav>
+    <BbSheet Open="cartOpen" OpenChanged="value=>cartOpen=value" Side="SheetSide.Left"><BbSheetContent Class="sf-sheet" ShowClose="true"><BbSheetHeader><BbSheetTitle>سبد خرید تو (@cart.Count)</BbSheetTitle><BbSheetDescription>یک جای کوچک برای انتخاب‌های رنگی</BbSheetDescription></BbSheetHeader><div class="overflow-y-auto flex-1 min-h-0 my-4">@if(cart.Count==0) { <div class="text-center py-12 text-sm text-slate-500">سبدت هنوز خالیه.<br/><a href="/stationery/catalog" class="text-primary inline-block mt-5">یک انتخاب تازه پیدا کن ←</a></div> } else { @foreach(var line in cart.Lines) { <CartItem Line="line" OnQuantity="UpdateQuantity"/> } }</div>@if(cart.Count>0) { <div class="border-t pt-5"><div class="flex justify-between font-bold mb-5"><span>جمع سبد</span><span>@Money(cart.Total) <small class="text-xs font-normal">تومان</small></span></div><BbButton Href="/stationery/cart" Class="sf-button w-full">دیدن سبد و ادامهٔ خرید</BbButton></div> }</BbSheetContent></BbSheet>
+    <BbDialog Open="loginOpen" OpenChanged="value=>loginOpen=value"><BbDialogContent Class="sf-login" ShowClose="true"><BbDialogHeader><BbDialogTitle>@(cart.SignedIn ? "حساب تو" : otpSent ? "کد ورود را بنویس" : "به مدادرنگ خوش اومدی")</BbDialogTitle><BbDialogDescription>@(cart.SignedIn ? "سبد خرید به حساب تو متصل است." : "با شمارهٔ موبایلت، ساده و سریع وارد شو.")</BbDialogDescription></BbDialogHeader>
+        @if(cart.SignedIn) { <p class="text-center text-lg py-6" dir="ltr">@cart.Phone</p><BbButton Href="/stationery/cart" Class="sf-button w-full">دیدن سبد خرید</BbButton><a href="/logout" class="block text-center text-xs text-slate-500 mt-5">خروج از حساب</a> } else { <form @onsubmit="SubmitLogin" @onsubmit:preventDefault class="mt-5"><label for="sf-phone" class="text-xs block mb-2">شمارهٔ موبایل</label><input id="sf-phone" class="sf-input text-left" dir="ltr" inputmode="tel" autocomplete="tel" placeholder="09123456789" maxlength="13" @bind="phone" @bind:event="oninput" disabled="@otpSent"/>@if(otpSent) { <label for="sf-code" class="text-xs block mb-2 mt-5">کد یک‌بارمصرف</label><input id="sf-code" class="sf-input text-center tracking-[.5em]" dir="ltr" inputmode="numeric" autocomplete="one-time-code" maxlength="6" @bind="code" @bind:event="oninput"/> }@if(!string.IsNullOrEmpty(loginMessage)) { <p role="status" class="text-xs text-orange-600 leading-6 mt-4">@loginMessage</p> }@if(!string.IsNullOrEmpty(testCode)) { <p class="notice mt-4">محیط آزمایشی · کد ورود: <strong dir="ltr">@testCode</strong><br/>پیامک واقعی ارسال نشده است.</p> }<BbButton Type="ButtonType.Submit" Class="sf-button w-full mt-5" Loading="busy" Disabled="busy">@(otpSent?"تأیید و ورود":"دریافت کد ورود")</BbButton>@if(otpSent) { <button type="button" class="text-xs text-primary mt-4" @onclick="()=>{otpSent=false;code=string.Empty;testCode=string.Empty;}">تغییر شمارهٔ موبایل</button> }<p class="text-[10px] text-slate-400 mt-5 leading-6">شمارهٔ موبایل فقط برای ورود به حساب استفاده می‌شود.</p></form> }
+    </BbDialogContent></BbDialog>
+    @if(checkoutReady) { <BbDialog Open="true" OpenChanged="v=>checkoutReady=v"><BbDialogContent><BbDialogHeader><BbDialogTitle>سبدت آمادهٔ ادامه است</BbDialogTitle><BbDialogDescription>ورود انجام شد و کالاها در سبد حساب تو محفوظ‌اند.</BbDialogDescription></BbDialogHeader><p class="notice mt-4">درگاه پرداخت و روش ارسال در فاز بعد متصل می‌شوند. در این نسخه پرداخت یا ثبت سفارش نهایی انجام نمی‌شود.</p><BbButton Href="/stationery/cart" Class="sf-button mt-5" OnClick="()=>checkoutReady=false">بازگشت به سبد</BbButton></BbDialogContent></BbDialog> }
+</div>
+</BbDirectionProvider>
+
+@code {
+    [Parameter] public Bootstrap Initial {get;set;}=new([],new([]),false);
+    [Parameter] public string Page {get;set;}="home";
+    [Parameter] public int ProductId {get;set;}
+    private List<StoreProduct> products=[];
+    private CartSnapshot cart=new([]);
+    private IJSObjectReference? module;
+    private string query="",category="",brand="",colorFilter="",sort="popular",error="",phone="",code="",testCode="",loginMessage="";
+    private decimal maxPrice=1000000;
+    private bool onlyAvailable,cartOpen,loginOpen,otpSent,busy,checkoutReady;
+    private int quantity=1;
+    private Dictionary<int,int> selected=[];
+    private Quote quote=new(0,false);
+    private static readonly string[] Categories=["دفتر و کاغذ","نوشت‌افزار","لوازم مدرسه","هنر و خلاقیت"];
+    private static bool IsColorAttribute(ProductAttribute attribute)=>attribute.Name.Contains("رنگ")||attribute.Name.Contains("color",StringComparison.OrdinalIgnoreCase);
+    private IEnumerable<string> ColorNames=>products.SelectMany(p=>p.Attributes).Where(IsColorAttribute).SelectMany(a=>a.Options).Select(o=>o.Name).Distinct();
+    private StoreProduct? CurrentProduct=>products.FirstOrDefault(x=>x.Id==ProductId);
+    private IEnumerable<StoreProduct> Filtered {
+        get { var list=products.Where(x=>(category==""||x.Category==category)&&(brand==""||x.Brand==brand)&&(colorFilter==""||x.Attributes.Where(IsColorAttribute).Any(a=>a.Options.Any(o=>o.Name==colorFilter)))&&x.Price<=maxPrice&&(!onlyAvailable||x.Available)&&(query==""||$"{x.Name} {x.Brand} {x.Category}".Contains(query,StringComparison.OrdinalIgnoreCase))); return sort=="price"?list.OrderBy(x=>x.Price):sort=="price-desc"?list.OrderByDescending(x=>x.Price):list; }
+    }
+    protected override void OnInitialized() {
+        products=Initial.Products;cart=Initial.Cart;if(Page=="login"){Page="home";loginOpen=true;}
+        var qs=Microsoft.AspNetCore.WebUtilities.QueryHelpers.ParseQuery(new Uri(Navigation.Uri).Query);
+        query=qs.GetValueOrDefault("q").ToString(); category=qs.GetValueOrDefault("category").ToString();sort=qs.TryGetValue("sort",out var requestedSort)&&requestedSort.ToString()!=""?requestedSort.ToString():"popular";
+        if(CurrentProduct is {} p) { foreach(var a in p.Attributes) { if(a.Options.FirstOrDefault() is {} o) selected[a.Id]=o.Id; } quote=new(p.Price,p.Available); }
+    }
+    protected override async Task OnAfterRenderAsync(bool firstRender) {
+        if(firstRender) { module=await JS.InvokeAsync<IJSObjectReference>("import","./_content/Storefront.UI/storefront.js"); await Run(async()=>{cart=await Api<CartSnapshot>("cart");if(CurrentProduct!=null)await RefreshQuote();}); StateHasChanged(); }
+    }
+    private async Task<T> Api<T>(string path,string method="GET",object? data=null)=> await module!.InvokeAsync<T>("request",Initial.ApiBase+"/"+path,method,data);
+    private async Task Run(Func<Task> action) { if(module==null)return;busy=true;try {await action();error="";}catch(Exception){error="انجام این کار ممکن نشد. اتصال و انتخاب محصول را بررسی کن و دوباره تلاش کن.";}finally{busy=false;} }
+    private async Task SelectOption(int attribute,int value){ selected[attribute]=value;await Run(RefreshQuote); }
+    private async Task ChangeProductQuantity(int delta){quantity=Math.Clamp(quantity+delta,1,20);await Run(RefreshQuote);}
+    private async Task RefreshQuote()=>quote=await Api<Quote>("quote","POST",new SelectionRequest(ProductId,selected,quantity));
+    private async Task AddToCart()=>await Run(async()=>{cart=await Api<CartSnapshot>("cart/add","POST",new SelectionRequest(ProductId,selected,quantity));cartOpen=true;});
+    private async Task UpdateQuantity(QuantityRequest request)=>await Run(async()=>cart=await Api<CartSnapshot>("cart/quantity","POST",request));
+    private void Search()=>Go("/stationery/catalog?q="+Uri.EscapeDataString(query));
+    private void Go(string url)=>Navigation.NavigateTo(url,true);
+    private void GoHome()=>Go("/");
+    private void GoCatalog()=>Go("/stationery/catalog");
+    private void ResetFilters(){query="";category="";brand="";colorFilter="";maxPrice=1000000;onlyAvailable=false;sort="popular";}
+    private void ShowLogin(){loginOpen=true;loginMessage="";}
+    private void Checkout(){if(cart.SignedIn)checkoutReady=true;else ShowLogin();}
+    private async Task SubmitLogin() { await Run(async()=>{var result=otpSent?await Api<OtpResult>("otp/verify","POST",new VerifyRequest(phone,code)):await Api<OtpResult>("otp/send","POST",new PhoneRequest(phone));loginMessage=result.Message;if(result.TestCode!=null)testCode=result.TestCode;if(result.Success){if(otpSent){cart=await Api<CartSnapshot>("cart");loginOpen=false;otpSent=false;code="";Go("/stationery/cart");}else otpSent=true;}}); }
+    private static string Money(decimal value)=>value.ToString("N0",CultureInfo.InvariantCulture);
+    private static string CatalogUrl(string category)=>"/stationery/catalog?category="+Uri.EscapeDataString(category);
+    private static string CategoryBackground(int i)=>new[]{"#edf3ff","#fff1e5","#f1edf9","#ecf5ed"}[i];
+    private static string CategoryColor(int i)=>new[]{"#5a7ccc","#cd8748","#9680bc","#71a27e"}[i];
+    public async ValueTask DisposeAsync(){if(module!=null)try{await module.DisposeAsync();}catch(JSDisconnectedException){}}
+}

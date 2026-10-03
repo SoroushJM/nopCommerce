@@ -1,0 +1,11 @@
+@using Storefront.UI
+@using Nop.Plugin.Misc.PersianStorefront.Controllers
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model StorefrontPageModel
+@{ Layout = null; }
+<!DOCTYPE html>
+<html lang="fa" dir="rtl"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1"/><base href="/"/><title>مدادرنگ | دنیای رنگی لوازم‌تحریر</title><meta name="description" content="فروشگاه فارسی دفتر، نوشت‌افزار و ابزار خلاقیت مدادرنگ"/><link rel="stylesheet" href="/_content/Storefront.UI/storefront.css"/><link rel="stylesheet" href="/_content/BlazorBlueprint.Components/blazorblueprint.css"/></head><body>
+@Html.AntiForgeryToken()
+<component type="typeof(StorefrontRoot)" render-mode="ServerPrerendered" param-Initial="Model.Initial" param-Page="Model.Page" param-ProductId="Model.ProductId" />
+<script src="/_framework/blazor.server.js"></script>
+</body></html>
