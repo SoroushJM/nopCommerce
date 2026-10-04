@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Newtonsoft.Json;
+using Npgsql;
 using Nop.Core.Caching;
 using Nop.Core.Configuration;
 using Nop.Core.Http;
@@ -13,6 +14,7 @@ using Nop.Services.Helpers;
 using Nop.Services.Installation;
 using Nop.Services.Plugins;
 using Nop.Services.Security;
+using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Framework.Security;
 using Nop.Web.Infrastructure.Installation;
 using Nop.Web.Models.Install;
@@ -137,16 +139,18 @@ public partial class InstallController : Controller
         if (DataSettingsManager.IsDatabaseInstalled())
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
 
+        var installationConfig = _appSettings.Get<InstallationConfig>();
         var model = new InstallModel
         {
-            AdminEmail = "admin@yourStore.com",
+            AdminEmail = installationConfig.AdminEmail,
             InstallSampleData = false,
             SubscribeNewsletters = true,
             InstallRegionalResources = _appSettings.Get<InstallationConfig>().InstallRegionalResources,
             DisableSampleDataOption = _appSettings.Get<InstallationConfig>().DisableSampleData,
             CreateDatabaseIfNotExists = false,
             ConnectionStringRaw = false,
-            DataProvider = DataProviderType.SqlServer
+            DataProvider = Enum.Parse<DataProviderType>(installationConfig.DataProvider, true),
+            DatabaseConfigured = installationConfig.DatabaseConfigured
         };
 
         PrepareAvailableDataProviders(model);
@@ -166,13 +170,23 @@ public partial class InstallController : Controller
     }
 
     [HttpPost]
+    [AutoValidation]
     public virtual async Task<IActionResult> Index(InstallModel model)
     {
         if (DataSettingsManager.IsDatabaseInstalled())
             return RedirectToRoute(NopRouteNames.General.HOMEPAGE);
 
-        model.DisableSampleDataOption = _appSettings.Get<InstallationConfig>().DisableSampleData;
-        model.InstallRegionalResources = _appSettings.Get<InstallationConfig>().InstallRegionalResources;
+        var installationConfig = _appSettings.Get<InstallationConfig>();
+        model.DisableSampleDataOption = installationConfig.DisableSampleData;
+        model.InstallRegionalResources = installationConfig.InstallRegionalResources;
+        model.DatabaseConfigured = installationConfig.DatabaseConfigured;
+        if (model.DatabaseConfigured)
+        {
+            model.DataProvider = Enum.Parse<DataProviderType>(installationConfig.DataProvider, true);
+            model.CreateDatabaseIfNotExists = false;
+            model.Collation = null;
+            model.CharacterSet = null;
+        }
 
         PrepareAvailableDataProviders(model);
         PrepareLanguageList(model);
@@ -211,7 +225,27 @@ public partial class InstallController : Controller
         {
             var dataProvider = DataProviderManager.GetDataProvider(model.DataProvider);
 
-            var connectionString = model.ConnectionStringRaw ? model.ConnectionString : dataProvider.BuildConnectionString(model);
+            string connectionString;
+            if (model.DatabaseConfigured)
+            {
+                connectionString = dataProvider.BuildConnectionString(new InstallModel
+                {
+                    ServerName = installationConfig.ServerName,
+                    DatabaseName = installationConfig.DatabaseName,
+                    Username = installationConfig.Username,
+                    Password = installationConfig.Password
+                });
+                if (model.DataProvider == DataProviderType.PostgreSQL)
+                {
+                    connectionString = new NpgsqlConnectionStringBuilder(connectionString)
+                    {
+                        MaxPoolSize = 10,
+                        MinPoolSize = 0
+                    }.ConnectionString;
+                }
+            }
+            else
+                connectionString = model.ConnectionStringRaw ? model.ConnectionString : dataProvider.BuildConnectionString(model);
 
             if (string.IsNullOrEmpty(connectionString))
                 throw new Exception(_locService.Value.GetResource("ConnectionStringWrongFormat"));

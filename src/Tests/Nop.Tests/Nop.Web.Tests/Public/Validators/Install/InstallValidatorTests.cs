@@ -1,5 +1,6 @@
 ﻿using FluentValidation.TestHelper;
 using Nop.Web.Infrastructure.Installation;
+using Nop.Core.Configuration;
 using Nop.Web.Models.Install;
 using Nop.Web.Validators.Install;
 using NUnit.Framework;
@@ -14,7 +15,8 @@ public class InstallValidatorTests : BaseNopTest
     [OneTimeSetUp]
     public void Setup()
     {
-        _validator = new InstallValidator(GetService<IInstallationLocalizationService>());
+        _validator = new InstallValidator(GetService<IInstallationLocalizationService>(),
+            new AppSettings(new List<IConfig> { new InstallationConfig() }));
     }
 
     [Test]
@@ -119,5 +121,54 @@ public class InstallValidatorTests : BaseNopTest
             ConfirmPassword = "some password"
         };
         _validator.TestValidate(model).ShouldNotHaveValidationErrorFor(x => x.AdminPassword);
+    }
+
+    [Test]
+    public void ConfiguredDatabaseDoesNotRequireBrowserCredentials()
+    {
+        var validator = new InstallValidator(GetService<IInstallationLocalizationService>(),
+            new AppSettings(new List<IConfig>
+            {
+                new InstallationConfig { ServerName = "postgres", DatabaseName = "store", Username = "store", Password = "secret" }
+            }));
+        var model = new InstallModel
+        {
+            AdminEmail = "admin@example.com",
+            AdminPassword = "password",
+            ConfirmPassword = "password"
+        };
+
+        validator.TestValidate(model).ShouldNotHaveAnyValidationErrors();
+    }
+
+    [Test]
+    public void ConfiguredDatabaseStillRequiresValidAdministratorCredentials()
+    {
+        var validator = new InstallValidator(GetService<IInstallationLocalizationService>(),
+            new AppSettings(new List<IConfig> { new InstallationConfig { ServerName = "postgres" } }));
+        var result = validator.TestValidate(new InstallModel());
+
+        result.ShouldHaveValidationErrorFor(x => x.AdminEmail);
+        result.ShouldHaveValidationErrorFor(x => x.AdminPassword);
+        result.ShouldHaveValidationErrorFor(x => x.ConfirmPassword);
+    }
+
+    [Test]
+    public void BrowserCannotBypassDatabaseValidationWithConfiguredFlag()
+    {
+        var result = _validator.TestValidate(new InstallModel { DatabaseConfigured = true });
+
+        result.ShouldHaveValidationErrorFor(x => x.DataProvider);
+        result.ShouldHaveValidationErrorFor(x => x.ServerName);
+        result.ShouldHaveValidationErrorFor(x => x.DatabaseName);
+        result.ShouldHaveValidationErrorFor(x => x.Username);
+        result.ShouldHaveValidationErrorFor(x => x.Password);
+    }
+
+    [Test]
+    public void ManualConnectionStringStillRequiresAValue()
+    {
+        _validator.TestValidate(new InstallModel { ConnectionStringRaw = true })
+            .ShouldHaveValidationErrorFor(x => x.ConnectionString);
     }
 }

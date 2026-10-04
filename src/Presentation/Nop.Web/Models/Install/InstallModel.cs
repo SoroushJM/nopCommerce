@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Nop.Data;
 using Nop.Web.Framework.Mvc;
 
@@ -28,6 +29,8 @@ public partial record InstallModel : INopConnectionStringInfo
     public string CharacterSet { get; set; }
 
     public bool CreateDatabaseIfNotExists { get; set; }
+    [BindNever]
+    public bool DatabaseConfigured { get; set; }
     public bool DisableSampleDataOption { get; set; }
     public bool InstallSampleData { get; set; }
     public bool ConnectionStringRaw { get; set; }

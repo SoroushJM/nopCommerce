@@ -21,14 +21,28 @@ Changing the password alone does not re-encrypt an existing certificate.
 ## First installation
 
 The database initialization enables `citext` and `pgcrypto` before the application starts.
-The first request opens the nopCommerce installer. Choose PostgreSQL and supply:
+Set `ADMIN_EMAIL` in `.env` to prefill the administrator email (default
+`admin@example.com`). The first request opens the nopCommerce installer with
+PostgreSQL already configured from `POSTGRES_DB`, `POSTGRES_USER` and
+`POSTGRES_PASSWORD`. The database fields are omitted, and credentials stay on
+the server. Set and confirm the administrator password, then submit the form.
+The email is editable before installation. Changing `ADMIN_EMAIL` after
+installation does not modify an existing administrator account.
+
+Compose supplies these bootstrap values under `InstallationConfig`, keeping the
+runtime `DataConfig.ConnectionString` unset until the installer creates tables.
+Submitting browser database fields cannot override the configured database.
+PostgreSQL connection pools are limited to 10 connections.
+
+For a manual deployment without `InstallationConfig.ServerName`, the original
+database form remains available. Choose PostgreSQL and supply:
 
 ```text
 Host=nopcommerce_database;Port=5432;Database=nopcommerce;Username=nopcommerce;Password=<POSTGRES_PASSWORD>;Maximum Pool Size=10;Minimum Pool Size=0
 ```
 
 Use the database and user from `.env` if you changed them. The database already
-exists; do not request database creation. Choose your administrator credentials.
+exists; do not request database creation in a manual installation.
 Sample data and downloading regional resources are disabled to reduce installation
 work. No connection string is injected into an empty database: nopCommerce treats
 a nonempty connection string as an already-installed database and skips installation.
@@ -38,6 +52,12 @@ SSL in the store settings and set its URL to `https://<host>:2021/` to serve HTT
 after installation. Configure the matching host and port when deploying remotely.
 Compose supplies the external port pair to `CommonConfig`; protocol redirects map
 2020 to 2021 (and back) instead of preserving an incompatible port.
+
+The first installed-store startup can take several minutes with the small-host CPU
+limit, while plugins initialize and Razor views compile. If installation has
+finished but the browser still shows its last progress message, restart only the
+web service with `docker compose restart nopcommerce_web`, then reload the page.
+Do not rerun installation or delete volumes to fix a stale progress screen.
 
 ## Runtime memory budget
 

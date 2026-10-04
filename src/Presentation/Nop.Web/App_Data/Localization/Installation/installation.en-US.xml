@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Language Name="English" IsDefault="true" IsRightToLeft="false">
+  <LocaleResource Name="DatabaseConfigured">
+    <Value>The {0} database connection is configured. Choose your administrator credentials to finish installation.</Value>
+  </LocaleResource>
   <LocaleResource Name="AdminEmail">
     <Value>Admin user email</Value>
   </LocaleResource>

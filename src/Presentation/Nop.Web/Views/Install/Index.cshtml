@@ -45,7 +45,10 @@
             <div class="content">
                 <div asp-validation-summary="All" class="message-error"></div>
 
-                <p>@ILS.GetResource("Tooltip2")</p>
+                @if (!Model.DatabaseConfigured)
+                {
+                    <p>@ILS.GetResource("Tooltip2")</p>
+                }
                 <p>@ILS.GetResource("Documentation1") 
                     <a href="@(Docs.Main + Utm.OnInstall)" target="_blank" rel="noopener noreferrer">@ILS.GetResource("Documentation2")</a>.
                 </p>
@@ -236,82 +239,92 @@
                             @ILS.GetResource("DatabaseInformation")
                         </h3>
                         <div class="card-body">
-                            <div class="form-group row">
-                                <label asp-for="DataProvider" class="col-sm-3 col-form-label text-right font-weight-bold">
-                                    @ILS.GetResource("Database")
-                                </label>
-                                <div class="col-sm-8">
-                                    <select asp-for="DataProvider" asp-items="Model.AvailableDataProviders" class="form-control"></select>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-6 offset-md-3">
-                                    <div class="form-check">
-                                        <input class="form-check-input" asp-for="CreateDatabaseIfNotExists" />
-                                        <label asp-for="CreateDatabaseIfNotExists" class="form-check-label">
-                                            @ILS.GetResource("CreateDatabaseIfDoesNotExist")
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group row">
-                                <div class="col-md-6 offset-md-3">
-                                    <div class="form-check">
-                                        <input class="form-check-input" asp-for="ConnectionStringRaw" />
-                                        <label asp-for="ConnectionStringRaw" class="form-check-label">
-                                            @ILS.GetResource("RawConnectionString")
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-                            <div id="sqlConnectionInfo">
-                                <hr />
-                                @await Html.PartialAsync("_Install.ConnectionString", Model)
-                                <div class="form-group row" id="sqlDatabaseConnectionString">
-                                    <label asp-for="ConnectionString" class="col-sm-3 col-form-label text-right font-weight-bold">
-                                        @ILS.GetResource("ConnectionString")
+                            @if (Model.DatabaseConfigured)
+                            {
+                                var message = ILS.GetResource("DatabaseConfigured");
+                                if (message == "DatabaseConfigured")
+                                    message = "The {0} database connection is configured. Choose your administrator credentials to finish installation.";
+                                <p>@string.Format(message, Model.DataProvider)</p>
+                            }
+                            else
+                            {
+                                <div class="form-group row">
+                                    <label asp-for="DataProvider" class="col-sm-3 col-form-label text-right font-weight-bold">
+                                        @ILS.GetResource("Database")
                                     </label>
                                     <div class="col-sm-8">
-                                        <input asp-for="ConnectionString" class="form-control" autocomplete="off" />
-                                        <span class="hint">
-                                            @ILS.GetResource("Example"):<br />
-                                            Data Source=sqlServerName;Initial Catalog=dbName;Persist Security Info=True;User
-                                            ID=userName;Password=password
-                                            <br />
-                                            Find more info <a href="http://www.connectionstrings.com/" target="_blank" rel="noopener noreferrer">here</a>
-                                        </span>
+                                        <select asp-for="DataProvider" asp-items="Model.AvailableDataProviders" class="form-control"></select>
                                     </div>
                                 </div>
                                 <div class="form-group row">
-                                    <div class="col-sm-8 offset-sm-3">
+                                    <div class="col-md-6 offset-md-3">
                                         <div class="form-check">
-                                            <input class="form-check-input" asp-for="UseCustomCollation" />
-                                            <label asp-for="UseCustomCollation"  class="form-check-label">
-                                                @ILS.GetResource("CustomCollation")
+                                            <input class="form-check-input" asp-for="CreateDatabaseIfNotExists" />
+                                            <label asp-for="CreateDatabaseIfNotExists" class="form-check-label">
+                                                @ILS.GetResource("CreateDatabaseIfDoesNotExist")
                                             </label>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="credentials" id="sqlDatabaseCollation">
-                                    <div class="form-group row">
-                                        <label asp-for="Collation" class="col-sm-3 col-form-label text-right font-weight-bold">
-                                            @ILS.GetResource("Collation")
-                                        </label>
-                                        <div class="col-sm-8">
-                                            <input asp-for="Collation" class="form-control" />
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label asp-for="CharacterSet" class="col-sm-3 col-form-label text-right font-weight-bold">
-                                            @ILS.GetResource("CharacterSet")
-                                        </label>
-                                        <div class="col-sm-8">
-                                            <input asp-for="CharacterSet" class="form-control" />
+                                <div class="form-group row">
+                                    <div class="col-md-6 offset-md-3">
+                                        <div class="form-check">
+                                            <input class="form-check-input" asp-for="ConnectionStringRaw" />
+                                            <label asp-for="ConnectionStringRaw" class="form-check-label">
+                                                @ILS.GetResource("RawConnectionString")
+                                            </label>
                                         </div>
                                     </div>
                                 </div>
-                                
-                            </div>
+                                <div id="sqlConnectionInfo">
+                                    <hr />
+                                    @await Html.PartialAsync("_Install.ConnectionString", Model)
+                                    <div class="form-group row" id="sqlDatabaseConnectionString">
+                                        <label asp-for="ConnectionString" class="col-sm-3 col-form-label text-right font-weight-bold">
+                                            @ILS.GetResource("ConnectionString")
+                                        </label>
+                                        <div class="col-sm-8">
+                                            <input asp-for="ConnectionString" class="form-control" autocomplete="off" />
+                                            <span class="hint">
+                                                @ILS.GetResource("Example"):<br />
+                                                Data Source=sqlServerName;Initial Catalog=dbName;Persist Security Info=True;User
+                                                ID=userName;Password=password
+                                                <br />
+                                                Find more info <a href="http://www.connectionstrings.com/" target="_blank" rel="noopener noreferrer">here</a>
+                                            </span>
+                                        </div>
+                                    </div>
+                                    <div class="form-group row">
+                                        <div class="col-sm-8 offset-sm-3">
+                                            <div class="form-check">
+                                                <input class="form-check-input" asp-for="UseCustomCollation" />
+                                                <label asp-for="UseCustomCollation"  class="form-check-label">
+                                                    @ILS.GetResource("CustomCollation")
+                                                </label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="credentials" id="sqlDatabaseCollation">
+                                        <div class="form-group row">
+                                            <label asp-for="Collation" class="col-sm-3 col-form-label text-right font-weight-bold">
+                                                @ILS.GetResource("Collation")
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input asp-for="Collation" class="form-control" />
+                                            </div>
+                                        </div>
+                                        <div class="form-group row">
+                                            <label asp-for="CharacterSet" class="col-sm-3 col-form-label text-right font-weight-bold">
+                                                @ILS.GetResource("CharacterSet")
+                                            </label>
+                                            <div class="col-sm-8">
+                                                <input asp-for="CharacterSet" class="form-control" />
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            }
                             <div class="form-group row margin-t-30">
                                 <div class="col-sm-12 text-center">
                                     <button type="submit" class="btn btn-md btn-install">@ILS.GetResource("Install")</button>

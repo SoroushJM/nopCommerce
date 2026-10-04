@@ -22,6 +22,12 @@ services:
       Kestrel__Endpoints__Https__Certificate__Path: /https/nopcommerce.pfx
       Kestrel__Endpoints__Https__Certificate__Password: ${HTTPS_CERT_PASSWORD:?Set HTTPS_CERT_PASSWORD in .env}
       # Leave the connection string unset until the web installer creates the schema.
+      InstallationConfig__AdminEmail: ${ADMIN_EMAIL:-admin@example.com}
+      InstallationConfig__DataProvider: PostgreSQL
+      InstallationConfig__ServerName: nopcommerce_database
+      InstallationConfig__DatabaseName: ${POSTGRES_DB:-nopcommerce}
+      InstallationConfig__Username: ${POSTGRES_USER:-nopcommerce}
+      InstallationConfig__Password: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
       InstallationConfig__InstallRegionalResources: "false"
       InstallationConfig__DisableSampleData: "true"
       CacheConfig__DefaultCacheTime: "5"

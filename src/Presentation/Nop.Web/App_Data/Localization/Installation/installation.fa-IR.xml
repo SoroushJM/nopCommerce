@@ -1,5 +1,8 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <Language Name="فارسی" IsDefault="false" IsRightToLeft="true">
+  <LocaleResource Name="DatabaseConfigured">
+    <Value>اتصال به دیتابیس {0} تنظیم شده است. برای تکمیل نصب، ایمیل و رمز مدیر را مشخص کنید.</Value>
+  </LocaleResource>
   <LocaleResource Name="AdminEmail">
     <Value>ایمیل کاربری مدیر</Value>
   </LocaleResource>
