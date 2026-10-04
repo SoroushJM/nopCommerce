@@ -12,3 +12,4 @@
 .sf-sheet{width:440px!important;max-width:100vw!important;display:flex!important;flex-direction:column;direction:rtl}.sf-sheet .cart-row{grid-template-columns:72px minmax(0,1fr);gap:14px}.sf-sheet .cart-row img{width:72px;height:82px}.sf-sheet .cart-row .price{grid-column:2;text-align:right}.sf-sheet .cart-row>div{min-width:0}.sf-login{direction:rtl;max-width:min(450px,calc(100vw - 32px))!important}.cart-row>div{min-width:0}
 .mobile-nav{z-index:30!important}.sf-sheet{padding-bottom:max(24px,env(safe-area-inset-bottom))!important}
 .filter-pill.selected{border-color:var(--primary);background:#eef3ff;color:var(--primary)}
+.sf-select{min-width:0;width:100%}.sf-select [role="combobox"]{min-height:44px;border-radius:10px;font-family:var(--font-sans);font-size:12px;text-align:right}.sf-select [role="combobox"]>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
