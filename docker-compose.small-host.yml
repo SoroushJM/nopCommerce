@@ -1,0 +1,13 @@
+# Overlay for a shared 1 vCPU / 1 GB test host. Build images elsewhere.
+# docker compose -f docker-compose.yml -f docker-compose.small-host.yml up -d --no-build
+services:
+  nopcommerce_web:
+    mem_limit: 256m
+    memswap_limit: 384m
+    cpus: 0.35
+  nopcommerce_database:
+    mem_limit: 64m
+    memswap_limit: 96m
+    cpus: 0.15
+  certificates:
+    cpus: 0.10

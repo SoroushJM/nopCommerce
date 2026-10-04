@@ -51,6 +51,19 @@ Compose supplies the external port pair to `CommonConfig`; protocol redirects ma
 These are cgroup limits, including container-accounted page cache. Once the helper
 exits, the running services have a combined ceiling of 448 MiB (469.76 MB).
 This budget excludes the host OS, Docker daemon, reverse proxies, and image builds.
+For a shared 1 vCPU / 1 GB host, use the small-host overlay:
+
+```sh
+docker compose -f docker-compose.yml -f docker-compose.small-host.yml up -d --no-build
+```
+
+This overlay limits the web
+service to 256 MiB and 0.35 CPU, and PostgreSQL to 64 MiB and 0.15 CPU.
+The running RAM ceiling is 320 MiB; including the temporary certificate helper it
+is 336 MiB. Up to 128 MiB web swap and 32 MiB database swap are permitted if the
+host has swap configured. Use this profile only for light test traffic.
+The shared test server installs a `docker-compose.override.yml` symlink to this
+overlay, so normal `docker compose` commands keep these tighter limits.
 It caps usage; it does not guarantee arbitrary traffic or large catalogs will fit.
 An exhausted limit can cause an OOM kill. This profile is intended for light test use.
 
