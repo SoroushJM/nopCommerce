@@ -1,5 +1,6 @@
 ﻿using AwesomeAssertions;
 using Microsoft.AspNetCore.Http;
+using Nop.Core.Configuration;
 using Nop.Services.Helpers;
 using NUnit.Framework;
 
@@ -8,6 +9,40 @@ namespace Nop.Tests.Nop.Core.Tests;
 [TestFixture]
 public class WebHelperTests : BaseNopTest
 {
+    [TestCase("http", "localhost:2020", true, "https://localhost:2021")]
+    [TestCase("https", "localhost:2021", false, "http://localhost:2020")]
+    [TestCase("http", "localhost:2020", false, "http://localhost:2020")]
+    [TestCase("https", "localhost:2021", true, "https://localhost:2021")]
+    [TestCase("http", "localhost:9090", true, "https://localhost:9090")]
+    [TestCase("http", "[::1]:2020", true, "https://[::1]:2021")]
+    public void CanSwitchConfiguredProtocolPorts(string scheme, string authority, bool useSsl, string expected)
+    {
+        var context = new DefaultHttpContext();
+        context.Request.Scheme = scheme;
+        context.Request.Host = HostString.FromUriComponent(authority);
+        context.Request.PathBase = "/shop";
+        context.Request.Path = "/stationery/catalog";
+        context.Request.QueryString = new QueryString("?q=a%20b");
+        var settings = new AppSettings(new List<IConfig>
+        {
+            new CommonConfig { HttpPort = 2020, HttpsPort = 2021 }
+        });
+        var helper = new WebHelper(null, new HttpContextAccessor { HttpContext = context }, settings);
+
+        helper.GetThisPageUrl(true, useSsl).Should().Be($"{expected}/shop/stationery/catalog?q=a%20b");
+    }
+
+    [Test]
+    public void CanSwitchProtocolWithoutConfiguredPorts()
+    {
+        var context = new DefaultHttpContext();
+        context.Request.Scheme = "http";
+        context.Request.Host = new HostString("localhost", 9090);
+        var helper = new WebHelper(null, new HttpContextAccessor { HttpContext = context });
+
+        helper.GetStoreHost(true).Should().Be("https://localhost:9090/");
+    }
+
     private HttpContext _httpContext;
     private IWebHelper _webHelper;
 

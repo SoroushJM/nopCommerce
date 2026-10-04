@@ -1,18 +1,113 @@
+name: nopcommerce-test
 services:
-    nopcommerce_web:
-        build: .
-        container_name: nopcommerce
-        ports:
-            - "80:80"
-        depends_on:
-            - nopcommerce_database
-    nopcommerce_database:
-        image: "mcr.microsoft.com/mssql/server:2019-latest"
-        container_name: nopcommerce_mssql_server
-        environment:
-            SA_PASSWORD: "nopCommerce_db_password"
-            ACCEPT_EULA: "Y"
-            MSSQL_PID: "Express"
-
+  nopcommerce_web:
+    image: nopcommerce:low-memory
+    build:
+      context: .
+      target: runtime
+    restart: unless-stopped
+    mem_limit: 352m
+    memswap_limit: 352m
+    cpus: 1.0
+    ports:
+      - "${HTTP_PORT:-2020}:8080"
+      - "${HTTPS_PORT:-2021}:8443"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      Logging__LogLevel__Default: Warning
+      CommonConfig__HttpPort: ${HTTP_PORT:-2020}
+      CommonConfig__HttpsPort: ${HTTPS_PORT:-2021}
+      Kestrel__Endpoints__Http__Url: http://+:8080
+      Kestrel__Endpoints__Https__Url: https://+:8443
+      Kestrel__Endpoints__Https__Certificate__Path: /https/nopcommerce.pfx
+      Kestrel__Endpoints__Https__Certificate__Password: ${HTTPS_CERT_PASSWORD:?Set HTTPS_CERT_PASSWORD in .env}
+      # Leave the connection string unset until the web installer creates the schema.
+      InstallationConfig__InstallRegionalResources: "false"
+      InstallationConfig__DisableSampleData: "true"
+      CacheConfig__DefaultCacheTime: "5"
+      CacheConfig__LinqDisableQueryCache: "true"
+      WebOptimizer__EnableMemoryCache: "false"
+      WebOptimizer__EnableDiskCache: "true"
+    depends_on:
+      nopcommerce_database:
+        condition: service_healthy
+      certificates:
+        condition: service_completed_successfully
+    volumes:
+      - app_data:/app/App_Data
+      - images:/app/wwwroot/images
+      - files:/app/wwwroot/files
+      - icons:/app/wwwroot/icons
+      - https:/https:ro
+    healthcheck:
+      # Static readiness avoids store-level SSL redirects on container-only ports.
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:8080/favicon.ico || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+  nopcommerce_database:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    mem_limit: 96m
+    memswap_limit: 96m
+    cpus: 0.5
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-nopcommerce}
+      POSTGRES_USER: ${POSTGRES_USER:-nopcommerce}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in .env}
+    command:
+      - postgres
+      - -c
+      - shared_buffers=16MB
+      - -c
+      - work_mem=1MB
+      - -c
+      - maintenance_work_mem=16MB
+      - -c
+      - max_connections=20
+      - -c
+      - autovacuum_max_workers=1
+      - -c
+      - max_parallel_workers=0
+      - -c
+      - max_parallel_workers_per_gather=0
+      - -c
+      - jit=off
+    volumes:
+      - postgres_data:/var/lib/postgresql
+      - ./docker/postgres-init.sql:/docker-entrypoint-initdb.d/10-nopcommerce.sql:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U \"$$POSTGRES_USER\" -d \"$$POSTGRES_DB\""]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+  certificates:
+    image: nopcommerce:certificate-helper
+    build:
+      context: .
+      target: certificates
+    restart: "no"
+    mem_limit: 16m
+    memswap_limit: 16m
+    environment:
+      HTTPS_CERT_PASSWORD: ${HTTPS_CERT_PASSWORD:?Set HTTPS_CERT_PASSWORD in .env}
+    volumes:
+      - https:/https
 volumes:
-  nopcommerce_data:            
+  postgres_data:
+  app_data:
+  images:
+  files:
+  icons:
+  https:

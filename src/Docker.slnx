@@ -1,0 +1,13 @@
+<Solution>
+  <Project Path="Libraries/Nop.Core/Nop.Core.csproj" />
+  <Project Path="Libraries/Nop.Data/Nop.Data.csproj" />
+  <Project Path="Libraries/Nop.Services/Nop.Services.csproj" />
+  <Project Path="Presentation/Nop.Web.Framework/Nop.Web.Framework.csproj" />
+  <Project Path="Presentation/Nop.Web/Nop.Web.csproj" />
+  <Project Path="Storefront/Storefront.UI/Storefront.UI.csproj" />
+  <Project Path="Plugins/Nop.Plugin.Misc.PersianStorefront/Nop.Plugin.Misc.PersianStorefront.csproj" />
+  <Project Path="Plugins/Nop.Plugin.Payments.CheckMoneyOrder/Nop.Plugin.Payments.CheckMoneyOrder.csproj" />
+  <Project Path="Plugins/Nop.Plugin.Shipping.FixedByWeightByTotal/Nop.Plugin.Shipping.FixedByWeightByTotal.csproj" />
+  <Project Path="Plugins/Nop.Plugin.Tax.FixedOrByCountryStateZip/Nop.Plugin.Tax.FixedOrByCountryStateZip.csproj" />
+  <Project Path="Plugins/Nop.Plugin.Widgets.Swiper/Nop.Plugin.Widgets.Swiper.csproj" />
+</Solution>

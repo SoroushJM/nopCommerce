@@ -190,3 +190,24 @@ src/Presentation/Nop.Web/wwwroot/files/exportimport/*
 src/Presentation/Nop.Web/wwwroot/sitemaps/*
 !src/Presentation/Nop.Web/wwwroot/sitemaps/Index.htm
 src/packages/*
+
+# Keep local state, secrets, tooling and dependencies out of images
+.git
+**/.git
+**/node_modules
+.env
+.env.*
+!.env.example
+docs
+external
+src/Tests
+src/Storefront/Storefront.Preview
+**/*.pfx
+**/*.key
+src/Presentation/Nop.Web/App_Data/appsettings*.json
+src/Presentation/Nop.Web/App_Data/Gmail/AuthStore
+**/[Bb]in
+**/[Oo]bj
+**/[Ll]ogs
+**/.vs
+docker-*.log

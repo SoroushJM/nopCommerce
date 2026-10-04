@@ -1,4 +1,9 @@
 <Project>
+  <!-- Set the RID per project; the SDK does not support a solution-level RID build. -->
+  <PropertyGroup Condition="'$(DockerRuntimeIdentifier)' != ''">
+    <RuntimeIdentifier>$(DockerRuntimeIdentifier)</RuntimeIdentifier>
+    <SelfContained>false</SelfContained>
+  </PropertyGroup>
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <RepositoryType>Git</RepositoryType>

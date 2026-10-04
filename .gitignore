@@ -213,3 +213,8 @@ src/Tests/Nop.Tests/Connections.resx
 /src/Storefront/**/appsettings.Local.json
 /src/Storefront/**/.env
 /src/Storefront/**/.env.local
+
+# Docker deployment secrets
+/.env
+/.env.*
+!/.env.example

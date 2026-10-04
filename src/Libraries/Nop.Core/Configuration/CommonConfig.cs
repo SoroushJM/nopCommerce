@@ -6,6 +6,17 @@
 public partial class CommonConfig : IConfig
 {
     /// <summary>
+    /// Gets or sets the external HTTP port used when switching from HTTPS.
+    /// Leave both ports unset to preserve the request host's port.
+    /// </summary>
+    public int? HttpPort { get; set; }
+
+    /// <summary>
+    /// Gets or sets the external HTTPS port used when switching from HTTP.
+    /// </summary>
+    public int? HttpsPort { get; set; }
+
+    /// <summary>
     /// Gets or sets a value indicating whether to display the full error in production environment. It's ignored (always enabled) in development environment
     /// </summary>
     public bool DisplayFullErrorStack { get; protected set; } = false;
