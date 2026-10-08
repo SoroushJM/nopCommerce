@@ -13,3 +13,17 @@
 .mobile-nav{z-index:30!important}.sf-sheet{padding-bottom:max(24px,env(safe-area-inset-bottom))!important}
 .filter-pill.selected{border-color:var(--primary);background:#eef3ff;color:var(--primary)}
 .sf-select{min-width:0;width:100%}.sf-select [role="combobox"]{min-height:44px;border-radius:10px;font-family:var(--font-sans);font-size:12px;text-align:right}.sf-select [role="combobox"]>span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* Keep the storefront design while BB supplies the semantic components. */
+.sf-hero-note.sf-hero-note{border:0;color:inherit;background:#ffffffed;border-radius:12px;padding:14px 18px;box-shadow:0 8px 20px #0000000a}
+.sf-price-card.sf-price-card,.sf-summary-card.sf-summary-card{background:#f8fafc;color:inherit;box-shadow:none;border-radius:16px}
+.sf-price-card.sf-price-card{border-color:#f1f5f9}
+.sf-empty-card.sf-empty-card{background:transparent;color:inherit;box-shadow:none;border:1px dashed #d5dce8;border-radius:20px}
+.sf-benefit.sf-benefit{gap:13px;padding:18px 0;border-radius:0}
+.sf-quantity.sf-quantity{align-items:center}
+.sf-header-separator.sf-header-separator{height:28px;width:1px;background:#e2e8f0}
+.sf-product-separator.sf-product-separator{height:1px;background:#f1f5f9}
+.sf-notice.sf-notice{border:0;box-shadow:none;padding:12px 16px;background:#fff6eb;color:#935323;border-radius:10px;font-size:12px}.sf-notice.sf-notice>div{display:flex;align-items:center;justify-content:space-between;gap:8px}
+.sf-label.sf-label{display:block;font-size:12px;font-weight:400;line-height:inherit}
+.sf-bb-input.sf-bb-input{height:48px;padding-block:0;font-size:inherit;box-shadow:none}
+@media(max-width:767px){.sf-hero-note.sf-hero-note{padding:10px 13px;font-size:11px}}
