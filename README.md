@@ -5,6 +5,25 @@
 
 ![nopCommerce demo](https://www.nopcommerce.com/images/github/responsive_devices_codeplex.png#v1)
 
+## اجرای محلی فروشگاه و پنل فارسی
+
+روی [start-local.cmd](start-local.cmd) در ریشهٔ پروژه دوبارکلیک کنید. اسکریپت پروژهٔ وب، افزونهٔ فروشگاه و دارایی‌های فرانت‌اند را build می‌کند و سپس سایت را در حالت Development اجرا می‌کند. اگر همین checkout از قبل روی پورت فعال باشد، آن را متوقف و دوباره اجرا می‌کند؛ فرایند نامرتبط را متوقف نمی‌کند.
+
+پیش‌نیازها: .NET SDK مشخص‌شده در [global.json](global.json)، Node.js/npm روی PATH و PostgreSQL محلی با تنظیمات اتصال موجود. سرویس PostgreSQL 17 در صورت خاموش‌بودن شروع می‌شود؛ اگر دسترسی لازم را ندارید، سرویس را دستی روشن کنید یا launcher را با دسترسی Administrator اجرا کنید.
+
+- [فروشگاه](http://localhost:5090/)
+- [پنل ادمین](http://localhost:5090/admin)
+- [ورود مشتری](http://localhost:5090/stationery/login)
+
+پنجرهٔ اجرا را باز نگه دارید؛ **Ctrl+C** سایت را متوقف می‌کند. اجرای مستقیم از PowerShell و انتخاب پورت دیگر:
+
+```powershell
+./scripts/run-storefront.ps1
+./scripts/run-storefront.ps1 -Port 5091
+```
+
+مشخصات ورود مدیر و اتصال محلی در `%LOCALAPPDATA%\MadadrangDev\local-settings.json` قرار دارند؛ رمزها در README یا مخزن ثبت نمی‌شوند. راهنمای فارسی‌سازی، انتخاب تقویم فایل و برگشت به انگلیسی در [راهنمای پنل فارسی](docs/admin-localization-runbook.md) آمده است.
+
 ### Key features ###
 
 * The product is being developed and supported by the professional team since 2008.
