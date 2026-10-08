@@ -142,6 +142,7 @@ public partial class NewsLetterSubscriptionModelFactory : INewsLetterSubscriptio
 
                 //convert dates to the user time
                 subscriptionModel.CreatedOn = (await _dateTimeHelper.ConvertToUserTimeAsync(subscription.CreatedOnUtc, DateTimeKind.Utc)).ToString();
+                subscriptionModel.CreatedOnIsoDate = (await _dateTimeHelper.ConvertToUserTimeAsync(subscription.CreatedOnUtc, DateTimeKind.Utc)).ToString("O");
 
                 //fill in additional values (not existing in the entity)
                 subscriptionModel.StoreName = (await _storeService.GetStoreByIdAsync(subscription.StoreId))?.Name ?? "Deleted";
@@ -176,6 +177,7 @@ public partial class NewsLetterSubscriptionModelFactory : INewsLetterSubscriptio
 
             //convert dates to the user time
             model.CreatedOn = (await _dateTimeHelper.ConvertToUserTimeAsync(subscription.CreatedOnUtc, DateTimeKind.Utc)).ToString();
+            model.CreatedOnIsoDate = (await _dateTimeHelper.ConvertToUserTimeAsync(subscription.CreatedOnUtc, DateTimeKind.Utc)).ToString("O");
 
             model.SubscriptionTypeName = (await _newsLetterSubscriptionTypeService.GetNewsLetterSubscriptionTypeByIdAsync(subscription.TypeId))?.Name;
 

@@ -609,7 +609,10 @@ public partial class OrderModelFactory : IOrderModelFactory
             return;
 
         if (order.DesiredDeliveryDateUtc.HasValue)
+        {
             model.DesiredDeliveryDate = (await _dateTimeHelper.ConvertToUserTimeAsync(order.DesiredDeliveryDateUtc.Value, DateTimeKind.Utc)).ToString("d");
+            model.DesiredDeliveryDateIso = (await _dateTimeHelper.ConvertToUserTimeAsync(order.DesiredDeliveryDateUtc.Value, DateTimeKind.Utc)).ToString("O");
+        }
 
         model.IsShippable = true;
         model.ShippingMethod = order.ShippingMethod;

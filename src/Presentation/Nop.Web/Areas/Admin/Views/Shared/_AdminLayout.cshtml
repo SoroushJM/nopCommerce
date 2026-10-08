@@ -26,6 +26,7 @@
 
     //avatar
     var currentCustomer = await workContext.GetCurrentCustomerAsync();
+    var footerDate = await dateTimeHelper.ConvertToUserTimeAsync(DateTime.UtcNow, DateTimeKind.Utc);
 
     //event
     await eventPublisher.PublishAsync(new PageRenderingEvent(NopHtml));
@@ -83,15 +84,15 @@
                 <a href="@Url.Content("~/Admin")" class="brand-link navbar-dark">
                     <img src="~/css/admin/images/logo.png" alt="logo.png" class="brand-image logo d-block d-md-none d-sm-block d-sm-none">
                 </a>
+                <div class="admin-language-selector px-2">
+                    @await Component.InvokeAsync(typeof(AdminLanguageSelectorViewComponent))
+                </div>
                 <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarText" aria-controls="navbarText" aria-expanded="false" aria-label="Toggle navigation">
                     <span class="navbar-toggler-icon"></span>
                 </button>
                 @await Component.InvokeAsync(typeof(AdminWidgetViewComponent), new { widgetZone = AdminWidgetZones.HeaderNavbarBefore })
                 <div class="collapse navbar-collapse" id="navbarText">
                     <ul class="navbar-nav ml-auto pl-2">
-                        <li class="nav-item">
-                            @await Component.InvokeAsync(typeof(AdminLanguageSelectorViewComponent))
-                        </li>
                         @if (await customerService.IsRegisteredAsync(currentCustomer))
                         {
                             <li class="nav-item">
@@ -195,18 +196,18 @@
                             <div class="col-md-4 col-xs-12 text-md-left text-center">
                                 @*Would you like to remove the "Powered by nopCommerce" link in the bottom of the footer?
                                     Please find more info at https://www.nopcommerce.com/nopcommerce-copyright-removal-key*@
-                                Powered by <a href="@(OfficialSite.Main + Utm.OnAdminFooter)" target="_blank">nopCommerce</a>
+                                @T("Admin.Persian.PoweredBy") <a href="@(OfficialSite.Main + Utm.OnAdminFooter)" target="_blank">nopCommerce</a>
                             </div>
                         }
                         else
                         {
                             <div class="col-md-4 col-xs-12"></div>
                         }
-                        <div class="col-md-4 col-xs-12 text-center">
-                            @((await dateTimeHelper.ConvertToUserTimeAsync(DateTime.Now)).ToString("f", CultureInfo.CurrentCulture))
+                        <div class="col-md-4 col-xs-12 text-center" data-admin-date="@footerDate.ToString("O", CultureInfo.InvariantCulture)">
+                            @footerDate.ToString("f", CultureInfo.CurrentCulture)
                         </div>
                         <div class="col-md-4 col-xs-12 text-md-right text-center">
-                            <b>nopCommerce version @NopVersion.FULL_VERSION</b>
+                            <b data-admin-latin>@T("Admin.Persian.Version") @NopVersion.FULL_VERSION</b>
                         </div>
                     </div>
                 </div>

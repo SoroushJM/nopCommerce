@@ -638,7 +638,7 @@
                             <nop-label asp-for="DesiredDeliveryDate" />
                         </div>
                         <div class="col-lg-9">
-                            <div class="form-text-row">@Model.DesiredDeliveryDate</div>
+                            <div class="form-text-row" data-admin-date="@Model.DesiredDeliveryDateIso" data-admin-date-format="L">@Model.DesiredDeliveryDate</div>
                         </div>
                     </div>
                 }

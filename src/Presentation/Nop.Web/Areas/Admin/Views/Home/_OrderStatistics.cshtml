@@ -1,4 +1,4 @@
-﻿@{
+@{
     const string prefix = "order-statistics";
     const string hideCardAttributeName = "Reports.HideOrderStatisticsCard";
     var hideCard = await genericAttributeService.GetAttributeAsync<bool>(await workContext.GetCurrentCustomerAsync(), hideCardAttributeName);
@@ -73,6 +73,7 @@
             },
             options: {
                 plugins: {
+                    tooltip: { callbacks: { label: context => context.dataset.label + ': ' + (window.nopAdminPersian?.enabled ? window.nopAdminPersian.digits(context.parsed.y) : context.parsed.y) } },
                     legend: {
                         display: false,
                     },
@@ -95,7 +96,8 @@
                     y: {
                         display: true,
                         ticks: {
-                            stepSize: 1
+                            stepSize: 1,
+                            callback: value => window.nopAdminPersian?.enabled ? window.nopAdminPersian.digits(value) : value
                         },
                         grid: {
                             display: true,
@@ -134,7 +136,7 @@
                 },
                 success: function (data, textStatus, jqXHR) {
                     for (var i = 0; i < data.length; i++) {
-                        osLabels.push(data[i].date);
+                        osLabels.push(window.nopAdminPersian?.enabled ? window.nopAdminPersian.formatDate(data[i].isoDate, 'L') : data[i].date);
                         osData.push(data[i].value);
                     }
 

@@ -4,6 +4,10 @@
 
 ## اجرا روی این دستگاه
 
+راه‌اندازی مجدد در ۲۰۲۶-۱۰-۰۸: SDK پایهٔ `global.json` با نسخهٔ نصب‌شدهٔ `10.0.301` هماهنگ شد. PostgreSQL 17 محلی روی پورت 5432 استفاده می‌شود. نصب روی پایگاه مستقل `nop_stationery_dev` با extension `citext` انجام شد. برای دسترسی به مشخصات اتصال و حساب مدیر، فایل `%LOCALAPPDATA%\MadadrangDev\local-settings.json` را باز کنید؛ کلیدهای `AdminEmail` و `AdminPassword` مشخصات ورود مدیر هستند. این فایل خارج از مخزن است.
+
+آدرس فروشگاه `http://localhost:5090/`، پنل مدیر `http://localhost:5090/admin`، ورود مدیر `/login` و ورود مشتری `/stationery/login` است. نصب Development پلاگین، داده‌های نمونهٔ فارسی را ایجاد می‌کند. برای نصب دستی پلاگین روی پایگاه نصب‌شده، `scripts/seed-storefront.ps1` ایمیل مدیر و رمز از نوع SecureString می‌گیرد؛ سپس برنامه باید در Development دوباره اجرا شود.
+
 از ریشهٔ مخزن:
 
 ```powershell

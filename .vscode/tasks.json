@@ -1,0 +1,49 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "nop: restore",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["restore", "src/NopCommerce.sln"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "nop: build solution",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["build", "src/NopCommerce.sln", "--configuration", "Debug", "--verbosity", "minimal"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "nop: build web",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["build", "src/Presentation/Nop.Web/Nop.Web.csproj", "--configuration", "Debug", "--verbosity", "minimal"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": "build",
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "nop: test",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["test", "src/Tests/Nop.Tests/Nop.Tests.csproj", "--configuration", "Debug", "--verbosity", "minimal"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "group": { "kind": "test", "isDefault": true },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "nop: watch web (Hot Reload)",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["watch", "--project", "src/Presentation/Nop.Web/Nop.Web.csproj", "run", "--launch-profile", "Nop.Web"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "problemMatcher": "$msCompile",
+      "presentation": { "reveal": "always", "panel": "dedicated" }
+    }
+  ]
+}

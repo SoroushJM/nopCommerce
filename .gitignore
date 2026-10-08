@@ -25,6 +25,12 @@ x64/
 
 # Visual Studio Code files
 .vscode/
+!/.vscode/
+/.vscode/*
+!/.vscode/settings.json
+!/.vscode/extensions.json
+!/.vscode/tasks.json
+!/.vscode/launch.json
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
@@ -177,6 +183,7 @@ src/Presentation/Nop.Web/App_Data/installedPlugins.json
 src/Presentation/Nop.Web/App_Data/plugins.json
 src/Presentation/Nop.Web/App_Data/dataSettings.json
 src/Presentation/Nop.Web/App_Data/appsettings.json
+src/Presentation/Nop.Web/App_Data/admin-language.override.json
 src/Presentation/Nop.Web/App_Data/TempUploads/*
 !src/Presentation/Nop.Web/App_Data/TempUploads/Index.htm
 src/Presentation/Nop.Web/App_Data/DataProtectionKeys/*
@@ -218,3 +225,6 @@ src/Tests/Nop.Tests/Connections.resx
 /.env
 /.env.*
 !/.env.example
+
+# Local downloaded admin verification files
+/output/admin-localization/

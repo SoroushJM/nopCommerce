@@ -8,11 +8,11 @@
     var returnUrl = webHelper.GetRawUrl(Context.Request);
     var languages = await Model.AvailableLanguages.SelectAwait(async lang => new SelectListItem
                 {
-                    Text = lang.Name,
+                    Text = lang.LanguageCulture.StartsWith("fa", StringComparison.OrdinalIgnoreCase) ? "فارسی" : lang.LanguageCulture.StartsWith("en", StringComparison.OrdinalIgnoreCase) ? "English" : lang.Name,
                     Value = Url.Action("SetLanguage", "Common", new { langid = lang.Id, area = AreaNames.ADMIN, returnUrl },
                 webHelper.GetCurrentRequestProtocol()),
                     Selected = lang.Id.Equals(Model.CurrentLanguage.Id)
                 }).ToListAsync();
 
-    <nop-select asp-for-name="customerlanguage" asp-items="@languages" onchange="setLocation(this.value);" />
+    <nop-select asp-for-name="customerlanguage" asp-items="@languages" onchange="setLocation(this.value);" aria-label="فارسی / English" />
 }

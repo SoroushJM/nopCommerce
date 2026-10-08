@@ -1,0 +1,9 @@
+/* Keep the original named/id control for plugin selectors and server binding. */
+@font-face { font-family: Vazirmatn; src: url('../../fonts/Vazirmatn.woff2') format('woff2'); font-weight: 100 900; font-display: swap; }
+html[lang^="fa"] body, html[lang^="fa"] input, html[lang^="fa"] button, html[lang^="fa"] select, html[lang^="fa"] textarea { font-family: Vazirmatn, Tahoma, sans-serif; }
+.admin-persian-backing { display: none !important; }
+.admin-persian-input { text-align: right; font-variant-numeric: tabular-nums; }
+.admin-persian-input:invalid { border-color: #b32533; }
+.admin-persian-input:focus { outline-offset: 2px; }
+.admin-calendar-button { margin-top: 4px; }
+jdp-container { font-family: Vazirmatn, Tahoma, sans-serif; }

@@ -1,4 +1,5 @@
 @model ShipmentModel
+@inject Nop.Services.Helpers.IDateTimeHelper adminDateTimeHelper
 
 @{
     //page title
@@ -198,7 +199,7 @@
                                     <div class="col-md-9">
                                         <div class="input-group input-group-short">
                                             <div id="lblShippedDate" class="input-group-text">
-                                                @Model.ShippedDate
+                                                <span data-admin-date="@(Model.ShippedDateUtc.HasValue ? (await adminDateTimeHelper.ConvertToUserTimeAsync(Model.ShippedDateUtc.Value, DateTimeKind.Utc)).ToString("O") : null)">@Model.ShippedDate</span>
                                             </div>
                                             @if (Model.ShippedDateUtc.HasValue)
                                             {
@@ -242,7 +243,7 @@
                                 <div class="col-md-9">
                                     <div class="input-group input-group-short">
                                         <div id="lblDeliveryDate" class="input-group-text">
-                                            @Model.DeliveryDate
+                                            <span data-admin-date="@(Model.DeliveryDateUtc.HasValue ? (await adminDateTimeHelper.ConvertToUserTimeAsync(Model.DeliveryDateUtc.Value, DateTimeKind.Utc)).ToString("O") : null)">@Model.DeliveryDate</span>
                                         </div>
                                         @if (Model.DeliveryDateUtc.HasValue)
                                         {
@@ -412,7 +413,7 @@
                                                 <div>
                                                     @if (item.Date.HasValue)
                                                         {
-                                                        @item.Date.Value.ToString("D")
+                                                        <span data-admin-date="@item.Date.Value.ToString("O")" data-admin-date-format="L">@item.Date.Value.ToString("D")</span>
                                                         }
                                                 </div>
                                             </td>

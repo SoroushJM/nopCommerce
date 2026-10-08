@@ -1,4 +1,4 @@
-﻿@model CustomerModel
+@model CustomerModel
 
 @using Newtonsoft.Json
 @if (Model.CountryEnabled && Model.StateProvinceEnabled)
@@ -513,7 +513,7 @@
                 <nop-label asp-for="CreatedOn" />
             </div>
             <div class="col-md-9">
-                <div class="form-text-row">@Model.CreatedOn</div>
+                <div class="form-text-row" data-admin-date="@Model.CreatedOn.ToString("O")">@Model.CreatedOn</div>
             </div>
         </div>
     }
@@ -524,7 +524,7 @@
                 <nop-label asp-for="LastActivityDate" />
             </div>
             <div class="col-md-9">
-                <div class="form-text-row">@Model.LastActivityDate</div>
+                <div class="form-text-row" data-admin-date="@Model.LastActivityDate.ToString("O")">@Model.LastActivityDate</div>
             </div>
         </div>
     }

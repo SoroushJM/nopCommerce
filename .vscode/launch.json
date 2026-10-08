@@ -1,0 +1,39 @@
+{
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "nopCommerce: Nop.Web (Dev Kit)",
+      "type": "dotnet",
+      "request": "launch",
+      "projectPath": "${workspaceFolder}/src/Presentation/Nop.Web/Nop.Web.csproj",
+      "preLaunchTask": "nop: build solution"
+    },
+    {
+      "name": "nopCommerce: Nop.Web (HTTP)",
+      "type": "coreclr",
+      "request": "launch",
+      "preLaunchTask": "nop: build solution",
+      "program": "${workspaceFolder}/src/Presentation/Nop.Web/bin/Debug/net10.0/Nop.Web.dll",
+      "cwd": "${workspaceFolder}/src/Presentation/Nop.Web",
+      "args": [],
+      "launchSettingsProfile": "",
+      "env": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "DOTNET_ENVIRONMENT": "Development",
+        "ASPNETCORE_URLS": "http://localhost:6992"
+      },
+      "console": "internalConsole",
+      "stopAtEntry": false,
+      "serverReadyAction": {
+        "action": "openExternally",
+        "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
+      }
+    },
+    {
+      "name": "nopCommerce: Attach to .NET process",
+      "type": "coreclr",
+      "request": "attach",
+      "processId": "${command:pickProcess}"
+    }
+  ]
+}

@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Primitives;
@@ -1373,6 +1373,7 @@ public partial class CustomerController : BaseAdminController
                     result.Add(new
                     {
                         date = searchYearDateUser.Date.ToString("Y", culture),
+                        isoDate = searchYearDateUser.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                         value = (await _customerService.GetAllCustomersAsync(
                             createdFromUtc: _dateTimeHelper.ConvertToUtcTime(searchYearDateUser, timeZone),
                             createdToUtc: _dateTimeHelper.ConvertToUtcTime(searchYearDateUser.AddMonths(1), timeZone),
@@ -1394,6 +1395,7 @@ public partial class CustomerController : BaseAdminController
                     result.Add(new
                     {
                         date = searchMonthDateUser.Date.ToString("M", culture),
+                        isoDate = searchMonthDateUser.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                         value = (await _customerService.GetAllCustomersAsync(
                             createdFromUtc: _dateTimeHelper.ConvertToUtcTime(searchMonthDateUser, timeZone),
                             createdToUtc: _dateTimeHelper.ConvertToUtcTime(searchMonthDateUser.AddDays(1), timeZone),
@@ -1416,6 +1418,7 @@ public partial class CustomerController : BaseAdminController
                     result.Add(new
                     {
                         date = searchWeekDateUser.Date.ToString("d dddd", culture),
+                        isoDate = searchWeekDateUser.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                         value = (await _customerService.GetAllCustomersAsync(
                             createdFromUtc: _dateTimeHelper.ConvertToUtcTime(searchWeekDateUser, timeZone),
                             createdToUtc: _dateTimeHelper.ConvertToUtcTime(searchWeekDateUser.AddDays(1), timeZone),

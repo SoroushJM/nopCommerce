@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Linq.Expressions;
 using System.Reflection;
 using System.Text;
@@ -2047,7 +2047,7 @@ public partial class ExportManager : IExportManager
         {
             await xmlWriter.WriteStartElementAsync("Summary");
 
-            await xmlWriter.WriteStringAsync("Summary", saleSummary.Summary);
+            await xmlWriter.WriteStringAsync("Summary", TransferCalendar.ReportSummary(saleSummary.SummaryDate, saleSummary.SummaryType, saleSummary.Summary));
             await xmlWriter.WriteStringAsync("SummaryDate", saleSummary.SummaryDate);
             await xmlWriter.WriteStringAsync("NumberOfOrders", saleSummary.NumberOfOrders);
             await xmlWriter.WriteStringAsync("Profit", saleSummary.Profit);
@@ -2075,7 +2075,7 @@ public partial class ExportManager : IExportManager
     public virtual async Task<byte[]> ExportSalesSummaryToXlsxAsync(IList<SalesSummaryReportLine> salesSummaries)
     {
         var manager = new PropertyManager<SalesSummaryReportLine>([
-            new PropertyByName<SalesSummaryReportLine>("Summary", (p, _) => p.Summary),
+            new PropertyByName<SalesSummaryReportLine>("Summary", (p, _) => TransferCalendar.ReportSummary(p.SummaryDate, p.SummaryType, p.Summary)),
             new PropertyByName<SalesSummaryReportLine>("SummaryDate", (p, _) => p.SummaryDate),
             new PropertyByName<SalesSummaryReportLine>("NumberOfOrders", (p, _) => p.NumberOfOrders),
             new PropertyByName<SalesSummaryReportLine>("Profit", (p, _) => p.Profit),
@@ -2853,7 +2853,7 @@ public partial class ExportManager : IExportManager
             new PropertyByName<Order>("Order status", async (p, _) => await _localizationService.GetLocalizedEnumAsync(p.OrderStatus)),
             new PropertyByName<Order>("Order total", async (p, _) => await _priceFormatter.FormatPriceAsync(_currencyService.ConvertCurrency(p.OrderTotal, p.CurrencyRate), true, p.CustomerCurrencyCode, false, currentLanguage.Id)),
             new PropertyByName<Order>("Shipping method", (p, _) => p.ShippingMethod),
-            new PropertyByName<Order>("Created on", async (p, _) => (await _dateTimeHelper.ConvertToUserTimeAsync(p.CreatedOnUtc, DateTimeKind.Utc)).ToString("D")),
+            new PropertyByName<Order>("Created on", async (p, _) => TransferCalendar.ReportDate(await _dateTimeHelper.ConvertToUserTimeAsync(p.CreatedOnUtc, DateTimeKind.Utc))),
             new PropertyByName<Order>("Billing first name", async (p, _) => (await orderBillingAddress(p))?.FirstName ?? string.Empty),
             new PropertyByName<Order>("Billing last name", async (p, _) => (await orderBillingAddress(p))?.LastName ?? string.Empty),
             new PropertyByName<Order>("Billing email", async (p, _) => (await orderBillingAddress(p))?.Email ?? string.Empty),
@@ -2920,7 +2920,7 @@ public partial class ExportManager : IExportManager
             new PropertyByName<PrivateMessage>("To", async (pm, _) => await _customerService.GetCustomerByIdAsync(pm.ToCustomerId) is Customer cTo ? (_customerSettings.UsernamesEnabled ? cTo.Username : cTo.Email) : string.Empty),
             new PropertyByName<PrivateMessage>("Subject", (pm, _) => pm.Subject),
             new PropertyByName<PrivateMessage>("Text", (pm, _) => pm.Text),
-            new PropertyByName<PrivateMessage>("Created on", async (pm, _) => (await _dateTimeHelper.ConvertToUserTimeAsync(pm.CreatedOnUtc, DateTimeKind.Utc)).ToString("D"))
+            new PropertyByName<PrivateMessage>("Created on", async (pm, _) => TransferCalendar.ReportDate(await _dateTimeHelper.ConvertToUserTimeAsync(pm.CreatedOnUtc, DateTimeKind.Utc)))
         }, _catalogSettings);
 
         List<PrivateMessage> pmList = null;
@@ -2935,7 +2935,7 @@ public partial class ExportManager : IExportManager
         {
             new PropertyByName<GdprLog>("Request type", async (log, _) => await _localizationService.GetLocalizedEnumAsync(log.RequestType)),
             new PropertyByName<GdprLog>("Request details", (log, _) => log.RequestDetails),
-            new PropertyByName<GdprLog>("Created on", async (log, _) => (await _dateTimeHelper.ConvertToUserTimeAsync(log.CreatedOnUtc, DateTimeKind.Utc)).ToString("D"))
+            new PropertyByName<GdprLog>("Created on", async (log, _) => TransferCalendar.ReportDate(await _dateTimeHelper.ConvertToUserTimeAsync(log.CreatedOnUtc, DateTimeKind.Utc)))
         }, _catalogSettings);
 
         var gdprLog = await _gdprService.GetAllLogAsync(customer.Id);

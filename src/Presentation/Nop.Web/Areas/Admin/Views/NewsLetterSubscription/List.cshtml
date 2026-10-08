@@ -176,9 +176,10 @@
                                     {
                                         Title = T("Admin.Promotions.NewsLetterSubscription.Fields.Language").Text
                                     },
-                                    new ColumnProperty(nameof(NewsLetterSubscriptionModel.CreatedOn))
+                                    new ColumnProperty(nameof(NewsLetterSubscriptionModel.CreatedOnIsoDate))
                                     {
                                         Title = T("Admin.Promotions.NewsLetterSubscription.Fields.CreatedOn").Text,
+                                        Render = new RenderDate(),
                                         Width = "180"
                                     },
                                     new ColumnProperty(nameof(NewsLetterSubscriptionModel.Id))

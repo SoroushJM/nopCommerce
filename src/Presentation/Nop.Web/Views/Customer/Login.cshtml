@@ -11,6 +11,12 @@
     //page class
     NopHtml.AppendPageCssClassParts("html-login-page");
 
+    // Admin sign-in uses the public layout, so load the panel's local Persian font here too.
+    var returnUrl = Context.Request.Query["returnUrl"].ToString();
+    if (returnUrl.StartsWith("/admin", StringComparison.OrdinalIgnoreCase) &&
+        Url.IsLocalUrl(returnUrl) && CultureInfo.CurrentUICulture.Name.StartsWith("fa", StringComparison.OrdinalIgnoreCase))
+        NopHtml.AppendCssFileParts("~/css/admin/persian-admin.css");
+
     //register URL with return URL (if specified)
     var registerUrl = Url.RouteUrl(NopRouteNames.Standard.REGISTER, new { returnUrl = this.Context.Request.Query["returnUrl"] }, webHelper.GetCurrentRequestProtocol());
 }

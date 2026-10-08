@@ -51,6 +51,7 @@ public partial record NewsLetterSubscriptionModel : BaseNopEntityModel
 
     [NopResourceDisplayName("Admin.Promotions.NewsLetterSubscription.Fields.CreatedOn")]
     public string CreatedOn { get; set; }
+    public string CreatedOnIsoDate { get; set; }
 
     #endregion
 }

@@ -9,6 +9,7 @@ using PdfRpt.Core.Contracts;
 using PdfRpt.Core.Helper;
 using PdfRpt.FluentInterface;
 using Language = Nop.Core.Domain.Localization.Language;
+using Nop.Services.ExportImport;
 
 namespace Nop.Services.Common.Pdf;
 
@@ -111,6 +112,19 @@ public abstract class PdfDocument<TItem>
     {
         ArgumentNullException.ThrowIfNull(labelSelector);
         ArgumentNullException.ThrowIfNullOrEmpty(text);
+
+        var memberName = ((MemberExpression)labelSelector.Body).Member.Name;
+        if (TransferCalendar.Current is not null && Language.LanguageCulture.StartsWith("fa", StringComparison.OrdinalIgnoreCase) &&
+            (typeof(TLabel) == typeof(InvoiceTotals) || memberName is "Phone" or "OrderDateUser" ||
+             (typeof(TLabel) == typeof(CatalogItem) && memberName is "Price" or "Stock" or "Weight")))
+            text = TransferCalendar.PersianDigits(text);
+
+        // Dates are LTR sequences even inside an RTL invoice; otherwise yyyy/MM/dd renders as dd/MM/yyyy.
+        if (TransferCalendar.Current is not null && Language.Rtl && memberName == "OrderDateUser")
+            text = text.FixWeakCharacters();
+        if (TransferCalendar.Current is not null && Language.Rtl && typeof(TLabel) == typeof(CatalogItem) &&
+            memberName is "Price" or "Weight" or "Sku")
+            text = "\u202A" + text + "\u202C"; // A complete LTR value, including Latin currency/unit/SKU punctuation.
 
         var font = PdfDocumentHelper.GetFont(FontName, FontSize);
         var label = LabelField(labelSelector, font, Language);
@@ -215,6 +229,9 @@ public abstract class PdfDocument<TItem>
 
                     var data = cellData.Attributes.RowData.TableRowData;
                     var text = data.GetSafeStringValueOf(propertyExpression);
+                    var member = propertyExpression.Body is UnaryExpression unary ? unary.Operand as MemberExpression : propertyExpression.Body as MemberExpression;
+                    if (TransferCalendar.Current is not null && Language.LanguageCulture.StartsWith("fa", StringComparison.OrdinalIgnoreCase) && member?.Member.Name is "Price" or "Quantity" or "Total")
+                        text = TransferCalendar.PersianDigits(text);
 
                     table.AddCell(BuildPdfPCell(text, verticalAlignment: Element.ALIGN_TOP));
 
@@ -301,6 +318,9 @@ public abstract class PdfDocument<TItem>
 
         if (!string.IsNullOrEmpty(label) && args.Any())
             label = string.Format(label, args);
+
+        if (TransferCalendar.Current is not null && language?.LanguageCulture.StartsWith("fa", StringComparison.OrdinalIgnoreCase) == true && propertyInfo.Name is "OrderNumberText" or "ShipmentNumberText")
+            label = TransferCalendar.PersianDigits(label);
 
         return new Chunk(label, font);
     }
