@@ -20,6 +20,30 @@ PostgreSQL موجود روی localhost:5432 استفاده می‌شود. برا
 
 برای checkout تازه ابتدا `git submodule update --init`، سپس build پلاگین، نصب nopCommerce با PostgreSQL و نصب پلاگین از Local plugins در ادمین انجام شود. نصب پلاگین در Development هشت کالای نمونه، رنگ‌ها، تصاویر و واحد IRT را می‌سازد؛ در Production دادهٔ نمونه نمی‌سازد. تغییر تنظیم ارز و نیاز به نصب داده‌های نمونه را پیش از نصب روی فروشگاه موجود بررسی کنید.
 
+## فرمت‌بندی کد
+
+مرجع قواعد، `.editorconfig` ریشهٔ مخزن است؛ این فایل با نسخهٔ upstream یکسان است. [مستندات رسمی nopCommerce](https://docs.nopcommerce.com/en/developer/tutorials/coding-standards.html) همین قواعد و پشتیبانی Visual Studio از EditorConfig را معرفی می‌کند؛ formatter اختصاصی دیگری در مخزن یا CI تعریف نشده است.
+
+برای فایل‌های C# سه پروژهٔ فروشگاه، از ابزار رسمی مایکروسافت همراه SDK استفاده کنید:
+
+```powershell
+./scripts/format-storefront.ps1
+./scripts/format-storefront.ps1 -Verify
+```
+
+فرمان دوم بررسی می‌کند که فرمت و اصلاح‌های خودکار سبک C# تغییر دیگری لازم نداشته باشند. پروژه‌های مرجع و submodule فرمت نمی‌شوند. خطای نام‌گذاری `IDE1006` از اجرای دسته‌ای مستثناست، چون ابزار برای آن Fix All ندارد؛ قواعد نام‌گذاری همچنان در `.editorconfig` و ویرایشگر فعال‌اند. این فرمان بررسی همهٔ قراردادهای معماری یا نام‌گذاری نیست.
+
+برای `.razor` و `.cshtml` از **Format Document** افزونهٔ رسمی `ms-dotnettools.csharp` استفاده کنید؛ `.vscode/settings.json` همین formatter را پیش‌فرض کرده و ذخیرهٔ فایل نیز آن را اجرا می‌کند. `dotnet format` جایگزین formatter قالب Razor نیست. اجرای دسته‌ای این تغییر با API رسمی VS Code، یعنی `vscode.executeFormatDocumentProvider`، انجام شد؛ اجراکننده فقط TextEditهای formatter مایکروسافت را اعمال کرد و قواعد یا formatter سفارشی نداشت. CSS و JavaScript با formatterهای داخلی Microsoft VS Code فرمت شدند؛ CSS تولیدشدهٔ Tailwind باید با build بازتولید شود.
+
+قواعد اصلی: چهار فاصله در C#، دو فاصله در JS/CSS و فایل‌های پروژه، `using`های System در ابتدا، آکولادهای چندخطی در خط جدید، ترجیح `var` و namespace فایل‌محور. متدها بدنهٔ بلوکی دارند و propertyهای ساده می‌توانند expression body داشته باشند. `csharp_preserve_single_line_blocks = true` باعث می‌شود formatter بعضی بلوک‌های تک‌خطی موجود را حفظ کند. نام نوع‌ها و اعضای عمومی PascalCase، فیلدهای خصوصی `_camelCase` و نام متدهای async دارای پسوند `Async` است؛ نام‌گذاری از فرمت فاصله‌ها مستقل است.
+
+محدودیت‌های مشاهده‌شده در بررسی ۲۰۲۶-۱۰-۰۸:
+
+- C# با SDK رسمی `10.0.401` و قالب‌های Razor با افزونهٔ Microsoft C# نسخهٔ `2.160.4` فرمت شدند. اجرای بعدی formatter روی قالب‌های تغییرکرده، CSS و JavaScript تغییر دیگری ایجاد نکرد.
+- `StorefrontRoot.razor` مستثنا ماند: نسخه‌های رسمی `2.160.4` و `2.140.9` در عبارت شرطی چندخطیِ شمارش نتایج، با هر اجرا تورفتگی بیشتری اضافه کردند. خروجی این دو آزمایش برگردانده شد؛ فایل دستی فرمت نشده و فرمت موفق آن ادعا نمی‌شود. نسخهٔ قبلی فقط در مسیر موقت نصب شد و افزونه‌های اصلی کاربر تغییر نکردند.
+- در `Storefront.Preview/Program.cs`، بررسی SDK `10.0.401` برای انتهای فایل هم‌زمان `WHITESPACE` (افزودن خط جدید) و `FINALNEWLINE` (حذف همان خط جدید) گزارش می‌دهد. بنابراین `-Verify` در وضعیت فعلی برای این فایل exit غیرصفر دارد، هرچند بررسی پلاگین و `Storefront.UI` موفق است. این تعارض با تغییر قواعد upstream یا فرمت دستی پنهان نشده است.
+- هر دو پروژهٔ پلاگین و پیش‌نمایش بعد از فرمت build شدند. نام‌گذاری و فایل‌های XML پروژه جزو اصلاح‌های انجام‌شده نیستند.
+
 ## معماری و اتصال
 
 MVC فقط میزبان HTML اولیهٔ کامپوننت Blazor است. پلاگین سرویس‌ها، Blazor Hub، مسیرها و assets را ثبت می‌کند. middleware فایل‌های UI پیش از routing اجرا می‌شود؛ در غیر این صورت مسیر catch-all nopCommerce فایل framework را می‌بلعد. اسکریپت رسمی `blazor.server.js` از بستهٔ Microsoft.AspNetCore.App.Internal.Assets نسخهٔ 10.0.12 همراه پلاگین کپی می‌شود؛ هنگام ارتقای runtime این نسخه هم بررسی شود.

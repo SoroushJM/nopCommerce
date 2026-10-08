@@ -1,8 +1,9 @@
 @typeparam TValue
-<BbSelect TValue="TValue" Class="sf-select" AriaLabel="@Label" Options="@Options" Value="@Value" ValueChanged="@ValueChanged" />
+<BbSelect TValue="TValue" Class="sf-select" AriaLabel="@Label" Options="@Options" Value="@Value"
+          ValueChanged="@ValueChanged" />
 @code {
-    [Parameter] public string Label {get;set;}="";
-    [Parameter] public TValue? Value {get;set;}
-    [Parameter] public EventCallback<TValue?> ValueChanged {get;set;}
-    [Parameter] public IEnumerable<SelectOption<TValue>> Options {get;set;}=[];
+    [Parameter] public string Label { get; set; } = "";
+    [Parameter] public TValue? Value { get; set; }
+    [Parameter] public EventCallback<TValue?> ValueChanged { get; set; }
+    [Parameter] public IEnumerable<SelectOption<TValue>> Options { get; set; } = [];
 }

@@ -2,25 +2,38 @@
     <a href="@($"/stationery/product/{Product.Id}")" aria-label="@Product.Name">
         <div class="product-photo">
             <img src="@Product.Image" alt="@Product.Name" loading="lazy" />
-            @if (!string.IsNullOrEmpty(Product.Label)) { <span class="tag absolute right-3 top-3">@Product.Label</span> }
+            @if (!string.IsNullOrEmpty(Product.Label))
+            {
+                <span class="tag absolute right-3 top-3">@Product.Label</span>
+            }
         </div>
         <div class="p-4 pb-2">
             <p class="text-[10px] text-slate-400 mb-2">@Product.Brand · @Product.Category</p>
             <h3 class="text-[13px] font-bold leading-6 min-h-12">@Product.Name</h3>
             <div class="flex gap-1.5 mt-2" aria-label="رنگ‌های محصول">
-                @foreach(var color in Product.Attributes.FirstOrDefault()?.Options.Take(3) ?? []) { <span style="background:@color.Color" class="size-2.5 rounded-full border border-white ring-1 ring-slate-100"></span> }
+                @foreach (var color in Product.Attributes.FirstOrDefault()?.Options.Take(3) ?? [])
+                {
+                    <span style="background:@color.Color"
+                          class="size-2.5 rounded-full border border-white ring-1 ring-slate-100"></span>
+                }
             </div>
         </div>
         <div class="px-4 pb-4 flex items-end justify-between gap-2">
             <div>
-                @if(Product.OldPrice > Product.Price) { <del class="text-[11px] text-slate-400 block mb-1 price" dir="ltr">@Money(Product.OldPrice)</del> }
-                <p class="text-sm font-bold price">@Money(Product.Price) <span class="text-[10px] font-normal text-slate-500">تومان</span></p>
+                @if (Product.OldPrice > Product.Price)
+                {
+                    <del class="text-[11px] text-slate-400 block mb-1 price" dir="ltr">@Money(Product.OldPrice)</del>
+                }
+                <p class="text-sm font-bold price">@Money(Product.Price) <span
+                    class="text-[10px] font-normal text-slate-500">تومان</span></p>
+                </div>
+                <span class="size-8 rounded-lg bg-slate-50 text-slate-500 grid place-items-center">
+                    <SfIcon Name="arrow" Size="16" />
+                </span>
             </div>
-            <span class="size-8 rounded-lg bg-slate-50 text-slate-500 grid place-items-center"><SfIcon Name="arrow" Size="16" /></span>
-        </div>
-    </a>
-</article>
+        </a>
+    </article>
 @code {
-    [Parameter, EditorRequired] public StoreProduct Product {get;set;}=default!;
-    private static string Money(decimal value)=>value.ToString("N0",CultureInfo.InvariantCulture);
+    [Parameter, EditorRequired] public StoreProduct Product { get; set; } = default!;
+    private static string Money(decimal value) => value.ToString("N0", CultureInfo.InvariantCulture);
 }

@@ -1,9 +1,13 @@
 <div class="block text-xs mt-4">رنگ محصول
-    <div class="mt-2"><StoreSelect TValue="string" Label="فیلتر رنگ" Options="ColorOptions" Value="@Value" ValueChanged="value=>ValueChanged.InvokeAsync(value??string.Empty)"/></div>
+    <div class="mt-2">
+        <StoreSelect TValue="string" Label="فیلتر رنگ" Options="ColorOptions" Value="@Value"
+                     ValueChanged="value=>ValueChanged.InvokeAsync(value??string.Empty)" />
+    </div>
 </div>
 @code {
-    [Parameter] public string Value {get;set;}="";
-    [Parameter] public EventCallback<string> ValueChanged {get;set;}
-    [Parameter] public IEnumerable<string> Options {get;set;}=[];
-    private IEnumerable<SelectOption<string>> ColorOptions=>new[]{new SelectOption<string>("","همهٔ رنگ‌ها")}.Concat(Options.Select(option=>new SelectOption<string>(option,option)));
+    [Parameter] public string Value { get; set; } = "";
+    [Parameter] public EventCallback<string> ValueChanged { get; set; }
+    [Parameter] public IEnumerable<string> Options { get; set; } = [];
+    private IEnumerable<SelectOption<string>> ColorOptions => new[] { new SelectOption<string>("", "همهٔ رنگ‌ها")
+}.Concat(Options.Select(option => new SelectOption<string>(option, option)));
 }

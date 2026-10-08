@@ -1,4 +1,4 @@
-namespace Storefront.UI;
+﻿namespace Storefront.UI;
 
 public record ProductOption(int Id, string Name, string Color, decimal Adjustment = 0, bool Available = true);
 public record ProductAttribute(int Id, string Name, List<ProductOption> Options);
@@ -11,7 +11,7 @@ public record CartSnapshot(List<CartLine> Lines, bool SignedIn = false, string P
     public int Count => Lines.Sum(x => x.Quantity);
 }
 public record Bootstrap(List<StoreProduct> Products, CartSnapshot Cart, bool Demo, string ApiBase = "/stationery/api");
-public record SelectionRequest(int ProductId, Dictionary<int,int> Values, int Quantity = 1);
+public record SelectionRequest(int ProductId, Dictionary<int, int> Values, int Quantity = 1);
 public record Quote(decimal Price, bool Available, string Message = "");
 public record QuantityRequest(int LineId, int Quantity);
 public record PhoneRequest(string Phone);
@@ -31,7 +31,9 @@ public static class SampleCatalog
         Make(7,"کاغذ یادداشت رنگی","دفتر و کاغذ","پاپکو",65000,0,"notes.jpg","ایده‌ها و یادآوری‌های کوچک را رنگی بنویس. بستهٔ کاغذ یادداشت برای میز کار و درس.",""),
         Make(8,"ست ابزار نقاشی","هنر و خلاقیت","فابر کاستل",680000,0,"art.jpg","یک شروع رنگی برای تجربه‌های تازه؛ مجموعهٔ ابزار طراحی و نقاشی.","ناموجود",false)
     ];
-    private static StoreProduct Make(int id,string name,string category,string brand,decimal price,decimal old,string image,string description,string label,bool available=true) =>
-        new(id,name,category,brand,price,old,"_content/Storefront.UI/images/"+image,description,available,
-        [new(1,"رنگ",[new(1,"آبی","#4c75dc"),new(2,"سبز","#7cae91",10000),new(3,"صورتی","#eaa3b6",15000),new(4,"نارنجی","#ee965d",0,false)])],label);
+    private static StoreProduct Make(int id, string name, string category, string brand, decimal price, decimal old, string image, string description, string label, bool available = true)
+    {
+        return new(id, name, category, brand, price, old, "_content/Storefront.UI/images/" + image, description, available,
+        [new(1, "رنگ", [new(1, "آبی", "#4c75dc"), new(2, "سبز", "#7cae91", 10000), new(3, "صورتی", "#eaa3b6", 15000), new(4, "نارنجی", "#ee965d", 0, false)])], label);
+    }
 }
