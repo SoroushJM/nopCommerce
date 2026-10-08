@@ -1,4 +1,4 @@
-﻿@model NewsLetterSubscriptionSearchModel
+@model NewsLetterSubscriptionSearchModel
 
 @using Nop.Services.Stores
 
@@ -22,6 +22,7 @@
             @T("Admin.Promotions.NewsLetterSubscriptions")
         </h1>
         <div class="float-right">
+            @await Html.PartialAsync("_AdminTransferCalendar", new AdminTransferCalendarModel())
             <a asp-action="Create" class="btn btn-primary">
                 <i class="fas fa-square-plus"></i>
                 @T("Admin.Common.AddNew")

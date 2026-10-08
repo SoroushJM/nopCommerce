@@ -7,6 +7,7 @@ using Nop.Core.Infrastructure;
 using Nop.Data;
 using Nop.Services.Common;
 using Nop.Services.Customers;
+using Nop.Services.ExportImport;
 using Nop.Services.Helpers;
 using Nop.Services.Localization;
 using Nop.Services.Media;
@@ -15,6 +16,7 @@ using Nop.Services.Orders;
 using Nop.Services.Security;
 using Nop.Services.Seo;
 using Nop.Web.Areas.Admin.Factories;
+using Nop.Web.Areas.Admin.Infrastructure;
 using Nop.Web.Areas.Admin.Models.Common;
 using Nop.Web.Framework;
 using Nop.Web.Framework.Controllers;
@@ -410,10 +412,10 @@ public partial class CommonController : BaseAdminController
     [HttpPost]
     public virtual IActionResult SetTransferCalendar(string transferCalendar, string returnUrl = "")
     {
-        if (!Nop.Services.ExportImport.TransferCalendar.IsValid(transferCalendar))
+        if (!TransferCalendar.IsValid(transferCalendar))
             return BadRequest();
 
-        Response.Cookies.Append(Infrastructure.AdminTransferCalendarPreference.CookieName, transferCalendar, new CookieOptions
+        Response.Cookies.Append(AdminTransferCalendarPreference.CookieName, transferCalendar, new CookieOptions
         {
             HttpOnly = true,
             Secure = Request.IsHttps,

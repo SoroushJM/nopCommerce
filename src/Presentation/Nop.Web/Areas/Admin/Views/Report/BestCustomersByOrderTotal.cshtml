@@ -1,4 +1,4 @@
-﻿@model CustomerReportsSearchModel
+@model CustomerReportsSearchModel
 @using Nop.Services.Orders;
 
 @{
@@ -19,6 +19,7 @@
             @T("Admin.Reports.Customers.BestBy.BestByOrderTotal")
         </h1>
         <div class="float-right">
+            @await Html.PartialAsync("_AdminTransferCalendar", new AdminTransferCalendarModel())
             <div class="btn-group">
                 <button type="button" class="btn btn-success">
                     <i class="fas fa-download"></i>

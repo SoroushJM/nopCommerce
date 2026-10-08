@@ -1,4 +1,4 @@
-﻿@inject IEventPublisher eventPublisher
+@inject IEventPublisher eventPublisher
 @inject LocalizationSettings localizationSettings
 
 @using Nop.Core.Domain.Localization
@@ -46,5 +46,6 @@
 
     @NopHtml.GenerateScripts(ResourceLocation.Footer)
     @NopHtml.GenerateInlineScripts(ResourceLocation.Footer)    
+    @await Html.PartialAsync("_AdminTransferCalendarForm")
 </body>
 </html>

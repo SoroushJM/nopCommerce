@@ -76,7 +76,8 @@
             </small>
         </h1>
         <div class="float-right">
-            <a asp-action="PdfPackagingSlip" asp-route-shipmentId="@Model.Id" class="btn btn-info">
+            @await Html.PartialAsync("_AdminTransferCalendar", new AdminTransferCalendarModel())
+            <a asp-action="PdfPackagingSlip" asp-route-transferCalendar="@AdminTransferCalendarPreference.GetSelectedCalendar(Context.Request)" asp-route-shipmentId="@Model.Id" class="btn btn-info">
                 <i class="far fa-file-pdf"></i>
                 @T("Admin.Orders.Shipments.PrintPackagingSlip")
             </a>

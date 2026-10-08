@@ -1,4 +1,4 @@
-﻿@inject IWebHelper webHelper
+@inject IWebHelper webHelper
 @inject IDateTimeHelper dateTimeHelper
 @inject ICustomerService customerService
 @inject IEventPublisher eventPublisher
@@ -316,5 +316,6 @@
     }
     @NopHtml.GenerateScripts(ResourceLocation.Footer)
     @NopHtml.GenerateInlineScripts(ResourceLocation.Footer)
+    @await Html.PartialAsync("_AdminTransferCalendarForm")
 </body>
 </html>

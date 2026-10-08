@@ -1,4 +1,4 @@
-﻿@model BestsellerSearchModel
+@model BestsellerSearchModel
 
 @{
     //page title
@@ -19,6 +19,7 @@
             @T("Admin.Reports.Sales.Bestsellers")
         </h1>
         <div class="float-right">
+            @await Html.PartialAsync("_AdminTransferCalendar", new AdminTransferCalendarModel())
             <div class="btn-group">
                 <button type="button" class="btn btn-success">
                     <i class="fas fa-download"></i>

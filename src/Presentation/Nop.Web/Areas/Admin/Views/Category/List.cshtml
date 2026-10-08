@@ -17,6 +17,7 @@
         @T("Admin.Catalog.Categories")
     </h1>
     <div class="float-right">
+        @await Html.PartialAsync("_AdminTransferCalendar", new AdminTransferCalendarModel())
         <a asp-action="Create" class="btn btn-primary">
             <i class="fas fa-square-plus"></i>
             @T("Admin.Common.AddNew")
@@ -32,13 +33,13 @@
             </button>
             <ul class="dropdown-menu" role="menu">
                 <li class="dropdown-item">
-                    <a asp-action="ExportXml">
+                    <a asp-action="ExportXml" asp-route-transferCalendar="@AdminTransferCalendarPreference.GetSelectedCalendar(Context.Request)">
                         <i class="far fa-file-code"></i>
                         @T("Admin.Common.ExportToXml")
                     </a>
                 </li>
                 <li class="dropdown-item">
-                    <a asp-action="ExportXlsx">
+                    <a asp-action="ExportXlsx" asp-route-transferCalendar="@AdminTransferCalendarPreference.GetSelectedCalendar(Context.Request)">
                         <i class="far fa-file-excel"></i>
                         @T("Admin.Common.ExportToExcel")
                     </a>
@@ -228,6 +229,7 @@
                             </div>
                             <div class="col-md-10">
                                 <input type="file" id="importexcelfile" name="importexcelfile" class="form-control" />
+                                @await Html.PartialAsync("_AdminTransferCalendar", new AdminTransferCalendarModel { IsImport = true })
                             </div>
                         </div>
                     </div>

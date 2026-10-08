@@ -5,6 +5,7 @@ using ClosedXML.Excel;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Nop.Services.ExportImport;
+using Nop.Web.Areas.Admin.Infrastructure;
 
 namespace Nop.Web.Areas.Admin.Filters;
 
@@ -32,7 +33,7 @@ public sealed class AdminTransferCalendarAttribute : ActionFilterAttribute
         var calendar = (form?["transferCalendar"].FirstOrDefault() ?? request.Query["transferCalendar"].FirstOrDefault());
         var importing = action.Contains("ImportFromXlsx", StringComparison.OrdinalIgnoreCase);
         if (!importing && string.IsNullOrEmpty(calendar))
-            calendar = request.Cookies[Infrastructure.AdminTransferCalendarPreference.CookieName];
+            calendar = request.Cookies[AdminTransferCalendarPreference.CookieName];
         if (!TransferCalendar.IsValid(calendar))
         {
             if (importing)

@@ -18,6 +18,7 @@
             </small>
         </h1>
         <div class="float-right">
+            @await Html.PartialAsync("_AdminTransferCalendar", new AdminTransferCalendarModel())
             <button type="submit" name="save" class="btn btn-primary">
                 <i class="far fa-floppy-disk"></i>
                 @T("Admin.Common.Save")
@@ -26,7 +27,7 @@
                 <i class="far fa-floppy-disk"></i>
                 @T("Admin.Common.SaveContinue")
             </button>
-            <a asp-action="ExportXml" asp-route-id="@Model.Id" class="btn btn-success">
+            <a asp-action="ExportXml" asp-route-transferCalendar="@AdminTransferCalendarPreference.GetSelectedCalendar(Context.Request)" asp-route-id="@Model.Id" class="btn btn-success">
                 <i class="fas fa-download"></i>
                 @T("Admin.Configuration.Languages.Export")
             </a>
