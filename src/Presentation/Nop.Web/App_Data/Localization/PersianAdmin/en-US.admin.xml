@@ -1,0 +1,9 @@
+<?xml version='1.0' encoding='utf-8'?>
+<Language Name="English" SupportedVersion="5.00">
+  <LocaleResource Name="Admin.Persian.PoweredBy">
+    <Value>Powered by</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin.Persian.Version">
+    <Value>nopCommerce version</Value>
+  </LocaleResource>
+</Language>

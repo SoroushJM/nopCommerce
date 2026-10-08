@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.IO.Compression;
 using Nop.Core;
 using Nop.Core.Domain.Catalog;
@@ -372,7 +372,8 @@ public partial class PdfService : IPdfService
 
         foreach (var orderNote in orderNotes)
         {
-            var createdOn = (await _dateTimeHelper.ConvertToUserTimeAsync(orderNote.CreatedOnUtc, DateTimeKind.Utc)).ToString();
+            var noteDate = await _dateTimeHelper.ConvertToUserTimeAsync(orderNote.CreatedOnUtc, DateTimeKind.Utc);
+            var createdOn = Nop.Services.ExportImport.TransferCalendar.Current is null ? noteDate.ToString() : Nop.Services.ExportImport.TransferCalendar.Format(noteDate, Nop.Services.ExportImport.TransferCalendar.Current, lang.LanguageCulture.StartsWith("fa", StringComparison.OrdinalIgnoreCase));
             var note = _htmlFormatter.ConvertHtmlToPlainText(_orderService.FormatOrderNoteText(orderNote), true, true);
 
             notesResult.Add((createdOn, note));
@@ -730,7 +731,7 @@ public partial class PdfService : IPdfService
             FontName = fontName,
             FontSize = fontSize,
             ImageTargetSize = pdfSettingsByStore.ImageTargetSize,
-            OrderDateUser = date.ToString("D", new CultureInfo(language.LanguageCulture)),
+            OrderDateUser = Nop.Services.ExportImport.TransferCalendar.PdfDate(date, language.LanguageCulture),
             LogoData = logo,
             OrderNumberText = order.CustomOrderNumber,
             PageSize = pdfSettingsByStore.LetterPageSizeEnabled ? PdfPageSize.Letter : PdfPageSize.A4,
@@ -897,7 +898,9 @@ public partial class PdfService : IPdfService
 
             var rawDescription = await _localizationService.GetLocalizedAsync(product, x => x.FullDescription, lang.Id);
 
-            var productNumber = products.IndexOf(product) + 1;
+            var productNumber = (products.IndexOf(product) + 1).ToString(CultureInfo.InvariantCulture);
+            if (Nop.Services.ExportImport.TransferCalendar.Current is not null && lang.LanguageCulture.StartsWith("fa", StringComparison.OrdinalIgnoreCase))
+                productNumber = Nop.Services.ExportImport.TransferCalendar.PersianDigits(productNumber);
             var productName = await _localizationService.GetLocalizedAsync(product, x => x.Name, lang.Id);
 
             var item = new CatalogItem()

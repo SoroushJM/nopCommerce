@@ -1,0 +1,24 @@
+@model Nop.Web.Areas.Admin.Models.Common.AdminTransferCalendarModel
+@using Nop.Web.Areas.Admin.Infrastructure
+@{
+    var isPersian = CultureInfo.CurrentUICulture.Name.StartsWith("fa", StringComparison.OrdinalIgnoreCase);
+    var selected = Model.IsImport ? "" : AdminTransferCalendarPreference.GetSelectedCalendar(Context.Request);
+    var id = Model.IsImport ? "admin-import-calendar" : "admin-export-calendar";
+    var formId = Model.IsImport ? null : AdminTransferCalendarPreference.FormId;
+}
+<span class="admin-transfer-calendar d-inline-flex align-items-center mx-1">
+    <label for="@id" class="mb-0 mx-1">@(isPersian ? "تقویم فایل" : "File calendar")</label>
+    <select id="@id" name="transferCalendar" form="@formId" required="@Model.IsImport" class="form-control form-control-sm w-auto">
+        @if (Model.IsImport)
+        {
+            <option value="">@(isPersian ? "انتخاب کنید" : "Choose calendar")</option>
+        }
+        <option value="jalali" selected="@(selected == "jalali")">@(isPersian ? "شمسی" : "Jalali")</option>
+        <option value="gregorian" selected="@(selected == "gregorian")">@(isPersian ? "میلادی" : "Gregorian")</option>
+    </select>
+    @if (!Model.IsImport)
+    {
+        <button type="submit" form="@formId" class="btn btn-secondary btn-sm mx-1">@(isPersian ? "اعمال" : "Apply")</button>
+        <input type="hidden" name="transferCalendar" value="@selected" />
+    }
+</span>

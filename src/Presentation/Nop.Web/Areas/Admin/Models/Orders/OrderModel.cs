@@ -192,6 +192,7 @@ public partial record OrderModel : BaseNopEntityModel
     //creation date
     [NopResourceDisplayName("Admin.Orders.Fields.CreatedOn")]
     public DateTime CreatedOn { get; set; }
+    public string DesiredDeliveryDateIso { get; set; }
 
     //checkout attributes
     public string CheckoutAttributeInfo { get; set; }

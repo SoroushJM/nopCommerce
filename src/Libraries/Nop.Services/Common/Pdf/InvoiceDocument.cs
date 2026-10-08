@@ -3,6 +3,7 @@ using iTextSharp.text;
 using iTextSharp.text.pdf;
 using PdfRpt.Core.Contracts;
 using PdfRpt.Core.Helper;
+using Nop.Services.ExportImport;
 
 namespace Nop.Services.Common.Pdf;
 
@@ -87,7 +88,10 @@ public partial class InvoiceDocument : PdfDocument<ProductItem>
         footerTable.AddCell(PdfDocumentHelper.BuildPdfPCell(footer1Table, DocumentRunDirection));
         footerTable.AddCell(PdfDocumentHelper.BuildPdfPCell(footer2Table, DocumentRunDirection));
 
-        footerTable.AddCell(BuildPdfPCell($"- {footerData.CurrentPageNumber} -", collSpan: 2, horizontalAlign: Element.ALIGN_CENTER));
+        var pageNumber = $"- {footerData.CurrentPageNumber} -";
+        if (TransferCalendar.Current is not null && Language.LanguageCulture.StartsWith("fa", StringComparison.OrdinalIgnoreCase))
+            pageNumber = TransferCalendar.PersianDigits(pageNumber);
+        footerTable.AddCell(BuildPdfPCell(pageNumber, collSpan: 2, horizontalAlign: Element.ALIGN_CENTER));
 
         return footerTable;
     }
@@ -108,7 +112,7 @@ public partial class InvoiceDocument : PdfDocument<ProductItem>
             summaryData.AddCell(BuildTextCell<InvoiceTotals>(totals => totals.Tax, Totals.Tax));
 
         foreach (var rate in Totals.TaxRates)
-            summaryData.AddCell(BuildPdfPCell(rate));
+            summaryData.AddCell(BuildPdfPCell(TransferCalendar.Current is not null && Language.LanguageCulture.StartsWith("fa", StringComparison.OrdinalIgnoreCase) ? TransferCalendar.PersianDigits(rate) : rate));
 
         foreach (var card in Totals.GiftCards)
             summaryData.AddCell(BuildPdfPCell(card));

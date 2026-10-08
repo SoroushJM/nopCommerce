@@ -4,6 +4,7 @@
 
 @{
     var supportRtl = (await workContext.GetWorkingLanguageAsync()).Rtl && !localizationSettings.IgnoreRtlPropertyForAdminArea;
+    var isPersianAdmin = (await workContext.GetWorkingLanguageAsync()).LanguageCulture.StartsWith("fa", StringComparison.OrdinalIgnoreCase);
 }
 
 @*Google Font*@
@@ -30,6 +31,11 @@ else
 }
 
 <link rel="stylesheet" href="~/lib_npm/admin-lte/plugins/select2/css/select2.min.css">
+@if (isPersianAdmin)
+{
+    <link rel="stylesheet" href="~/lib/jalalidatepicker/dist/jalalidatepicker.min.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin/persian-admin.css" asp-append-version="true" />
+}
 
 @NopHtml.GenerateCssFiles()
 
@@ -66,9 +72,14 @@ else
 <script src="~/lib_npm/moment/min/moment-with-locales.min.js"></script>
 <script src="~/lib_npm/datatables.net-buttons/js/dataTables.buttons.min.js"></script>
 <script src="~/lib_npm/datatables.net-buttons-bs4/js/buttons.bootstrap4.min.js"></script>
+@if (isPersianAdmin)
+{
+    <script src="~/lib/jalalidatepicker/dist/jalalidatepicker.min.js" asp-append-version="true"></script>
+    <script src="~/js/persian-admin.js" asp-append-version="true"></script>
+}
 <script asp-location="Footer">
         var rootAppPath = '@(Url.Content("~/"))';
-        var culture = "@NopHtml.GetDefaultJavaScriptCulture()";
+        var culture = "@(isPersianAdmin ? "en" : NopHtml.GetDefaultJavaScriptCulture())";
 
         //load cldr for current culture
         $.when(

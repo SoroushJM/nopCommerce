@@ -408,6 +408,25 @@ public partial class CommonController : BaseAdminController
     }
 
     [HttpPost]
+    public virtual IActionResult SetTransferCalendar(string transferCalendar, string returnUrl = "")
+    {
+        if (!Nop.Services.ExportImport.TransferCalendar.IsValid(transferCalendar))
+            return BadRequest();
+
+        Response.Cookies.Append(Infrastructure.AdminTransferCalendarPreference.CookieName, transferCalendar, new CookieOptions
+        {
+            HttpOnly = true,
+            Secure = Request.IsHttps,
+            SameSite = SameSiteMode.Lax,
+            IsEssential = true,
+            Path = Request.PathBase.HasValue ? Request.PathBase.Value + "/" : "/",
+            Expires = DateTimeOffset.UtcNow.AddYears(1)
+        });
+
+        return Url.IsLocalUrl(returnUrl) ? LocalRedirect(returnUrl) : RedirectToAction("Index", "Home");
+    }
+
+    [HttpPost]
     [CheckPermission(StandardPermission.System.MANAGE_MAINTENANCE)]
     public virtual async Task<IActionResult> ClearCache(string returnUrl = "")
     {

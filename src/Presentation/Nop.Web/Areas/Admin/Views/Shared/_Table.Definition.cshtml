@@ -347,11 +347,13 @@ columns: [
                         className: '@column.ClassName',
                     </text>
                 }
-                @if ((Model.UrlUpdate != null) || (Model.ChildTable?.UrlUpdate != null))
+                @if (column != null)
                 {
                     <text>
                         createdCell: function (td, cellData, rowData, row, col) {
                             $(td).attr('data-columnname', '@column.Data');
+                            if (/sku|url|email|code|guid|ipaddress/i.test('@column.Data'))
+                                $(td).attr('data-admin-latin', '');
                         },
                     </text>
                 }
@@ -359,7 +361,12 @@ columns: [
                 {
                     <text>
                         render: function (data, type, row, meta) {
-                            return escapeHtml(data);
+                            var display = data;
+                            if ((type === 'display' || type === 'filter') && window.nopAdminPersian?.enabled &&
+                                !/sku|url|email|code|guid|ipaddress/i.test('@column.Data') &&
+                                (typeof data === 'number' || /^[-+\d\s.,٬٫]+$/.test(String(data))))
+                                display = window.nopAdminPersian.digits(data);
+                            return escapeHtml(display);
                         },
                     </text>
                 }
@@ -378,7 +385,10 @@ columns: [
                                 else
                                 {
                                     <text>
-                                        return '<a href="@GetUrl(link.Url)' + textRenderer(row.@link.Url.DataId) + '">' + textRenderer(data) + '</a>';
+                                        var label = data;
+                                        if (type === 'display' && window.nopAdminPersian?.enabled && /^\d+$/.test(String(data)))
+                                            label = window.nopAdminPersian.digits(data);
+                                        return '<a href="@GetUrl(link.Url)' + textRenderer(row.@link.Url.DataId) + '">' + textRenderer(label) + '</a>';
                                     </text>
                                 }
                             },
@@ -387,7 +397,11 @@ columns: [
                     case RenderDate date:
                         <text>
                             render: function (data, type, row, meta) {
-                                return (data) ? moment(data).locale('@locale').format('@date.Format') : null;
+                                if (!data) return null;
+                                if (type === 'sort' || type === 'type') return moment(data).valueOf();
+                                if (window.nopAdminPersian?.enabled)
+                                    return window.nopAdminPersian.formatDate(data, '@date.Format');
+                                return moment(data).locale('@locale').format('@date.Format');
                             },
                         </text>
                         break;
@@ -508,4 +522,4 @@ columns: [
             }
         </text>
     }
-]           
+]

@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Nop.Core;
@@ -994,7 +994,7 @@ public partial class OrderController : BaseAdminController
         byte[] bytes;
         await using var stream = new MemoryStream();
 
-        await _pdfService.PrintOrderToPdfAsync(stream, order, _orderSettings.GeneratePdfInvoiceInCustomerLanguage ? null : await _workContext.GetWorkingLanguageAsync(), store: null, vendor: currentVendor);
+        await _pdfService.PrintOrderToPdfAsync(stream, order, await _workContext.GetWorkingLanguageAsync(), store: null, vendor: currentVendor);
         bytes = stream.ToArray();
 
         return File(bytes, MimeTypes.ApplicationPdf, string.Format(await _localizationService.GetResourceAsync("PDFInvoice.FileName"), order.CustomOrderNumber) + ".pdf");
@@ -1060,7 +1060,7 @@ public partial class OrderController : BaseAdminController
             byte[] bytes;
             await using (var stream = new MemoryStream())
             {
-                await _pdfService.PrintOrdersToPdfAsync(stream, orders, _orderSettings.GeneratePdfInvoiceInCustomerLanguage ? null : await _workContext.GetWorkingLanguageAsync(), currentVendor);
+                await _pdfService.PrintOrdersToPdfAsync(stream, orders, await _workContext.GetWorkingLanguageAsync(), currentVendor);
                 bytes = stream.ToArray();
             }
 
@@ -1097,7 +1097,7 @@ public partial class OrderController : BaseAdminController
             byte[] bytes;
             await using (var stream = new MemoryStream())
             {
-                await _pdfService.PrintOrdersToPdfAsync(stream, orders, _orderSettings.GeneratePdfInvoiceInCustomerLanguage ? null : await _workContext.GetWorkingLanguageAsync(), currentVendor);
+                await _pdfService.PrintOrdersToPdfAsync(stream, orders, await _workContext.GetWorkingLanguageAsync(), currentVendor);
                 bytes = stream.ToArray();
             }
 
@@ -2368,7 +2368,7 @@ public partial class OrderController : BaseAdminController
         byte[] bytes;
         await using (var stream = new MemoryStream())
         {
-            await _pdfService.PrintPackagingSlipToPdfAsync(stream, shipment, _orderSettings.GeneratePdfInvoiceInCustomerLanguage ? null : await _workContext.GetWorkingLanguageAsync());
+            await _pdfService.PrintPackagingSlipToPdfAsync(stream, shipment, await _workContext.GetWorkingLanguageAsync());
             bytes = stream.ToArray();
         }
 
@@ -2417,7 +2417,7 @@ public partial class OrderController : BaseAdminController
             byte[] bytes;
             await using (var stream = new MemoryStream())
             {
-                await _pdfService.PrintPackagingSlipsToPdfAsync(stream, shipments, _orderSettings.GeneratePdfInvoiceInCustomerLanguage ? null : await _workContext.GetWorkingLanguageAsync());
+                await _pdfService.PrintPackagingSlipsToPdfAsync(stream, shipments, await _workContext.GetWorkingLanguageAsync());
                 bytes = stream.ToArray();
             }
 
@@ -2452,7 +2452,7 @@ public partial class OrderController : BaseAdminController
             byte[] bytes;
             await using (var stream = new MemoryStream())
             {
-                await _pdfService.PrintPackagingSlipsToPdfAsync(stream, shipments, _orderSettings.GeneratePdfInvoiceInCustomerLanguage ? null : await _workContext.GetWorkingLanguageAsync());
+                await _pdfService.PrintPackagingSlipsToPdfAsync(stream, shipments, await _workContext.GetWorkingLanguageAsync());
                 bytes = stream.ToArray();
             }
 
@@ -2705,6 +2705,7 @@ public partial class OrderController : BaseAdminController
                     result.Add(new
                     {
                         date = searchYearDateUser.Date.ToString("Y", culture),
+                        isoDate = searchYearDateUser.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                         value = (await _orderService.SearchOrdersAsync(
                             createdFromUtc: _dateTimeHelper.ConvertToUtcTime(searchYearDateUser, timeZone),
                             createdToUtc: _dateTimeHelper.ConvertToUtcTime(searchYearDateUser.AddMonths(1), timeZone),
@@ -2725,6 +2726,7 @@ public partial class OrderController : BaseAdminController
                     result.Add(new
                     {
                         date = searchMonthDateUser.Date.ToString("M", culture),
+                        isoDate = searchMonthDateUser.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                         value = (await _orderService.SearchOrdersAsync(
                             createdFromUtc: _dateTimeHelper.ConvertToUtcTime(searchMonthDateUser, timeZone),
                             createdToUtc: _dateTimeHelper.ConvertToUtcTime(searchMonthDateUser.AddDays(1), timeZone),
@@ -2746,6 +2748,7 @@ public partial class OrderController : BaseAdminController
                     result.Add(new
                     {
                         date = searchWeekDateUser.Date.ToString("d dddd", culture),
+                        isoDate = searchWeekDateUser.Date.ToString("yyyy-MM-dd", CultureInfo.InvariantCulture),
                         value = (await _orderService.SearchOrdersAsync(
                             createdFromUtc: _dateTimeHelper.ConvertToUtcTime(searchWeekDateUser, timeZone),
                             createdToUtc: _dateTimeHelper.ConvertToUtcTime(searchWeekDateUser.AddDays(1), timeZone),

@@ -117,7 +117,7 @@
                                 <nop-label asp-for="CreatedOn" />
                             </div>
                             <div class="col-md-9">
-                                <div class="form-text-row">@Model.CreatedOn</div>
+                                <div class="form-text-row" data-admin-date="@Model.CreatedOn.ToString("O")">@Model.CreatedOn</div>
                             </div>
                         </div>
                         @if (Model.ProductReviewReviewTypeMappingSearchModel.IsAnyReviewTypes)

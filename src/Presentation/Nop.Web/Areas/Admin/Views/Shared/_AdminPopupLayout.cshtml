@@ -25,6 +25,9 @@
 </head>
 <body class="hold-transition skin-blue sidebar-collapse layout-fixed">
     <div class="wrapper">
+        <nav class="navbar navbar-light bg-light" aria-label="فارسی / English">
+            @await Component.InvokeAsync(typeof(AdminLanguageSelectorViewComponent))
+        </nav>
         <div class="content-wrapper">
             @await Html.PartialAsync("~/Areas/Admin/Views/Shared/Notifications.cshtml")
             <div>

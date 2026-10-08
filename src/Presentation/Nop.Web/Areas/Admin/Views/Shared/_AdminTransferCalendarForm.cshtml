@@ -1,0 +1,5 @@
+@using Nop.Web.Areas.Admin.Infrastructure
+@* Kept outside page forms; the visible Razor control targets this form by ID. *@
+<form id="@AdminTransferCalendarPreference.FormId" asp-controller="Common" asp-action="SetTransferCalendar" method="post">
+    <input type="hidden" name="returnUrl" value="@(Context.Request.PathBase + Context.Request.Path + Context.Request.QueryString)" />
+</form>

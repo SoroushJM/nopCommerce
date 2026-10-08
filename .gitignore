@@ -177,6 +177,7 @@ src/Presentation/Nop.Web/App_Data/installedPlugins.json
 src/Presentation/Nop.Web/App_Data/plugins.json
 src/Presentation/Nop.Web/App_Data/dataSettings.json
 src/Presentation/Nop.Web/App_Data/appsettings.json
+src/Presentation/Nop.Web/App_Data/admin-language.override.json
 src/Presentation/Nop.Web/App_Data/TempUploads/*
 !src/Presentation/Nop.Web/App_Data/TempUploads/Index.htm
 src/Presentation/Nop.Web/App_Data/DataProtectionKeys/*
@@ -213,3 +214,6 @@ src/Tests/Nop.Tests/Connections.resx
 /src/Storefront/**/appsettings.Local.json
 /src/Storefront/**/.env
 /src/Storefront/**/.env.local
+
+# Local downloaded admin verification files
+/output/admin-localization/

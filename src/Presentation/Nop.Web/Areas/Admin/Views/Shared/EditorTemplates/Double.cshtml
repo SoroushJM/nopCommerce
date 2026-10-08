@@ -7,5 +7,5 @@
     }
 }
 <div class="input-postfix" data-postfix="@postfix">
-    <input asp-for="@Model" type="number" class="form-control" />
+    <input asp-for="@Model" type="number" step="@(ViewData["step"] ?? "any")" class="form-control" />
 </div>
