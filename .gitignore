@@ -25,6 +25,12 @@ x64/
 
 # Visual Studio Code files
 .vscode/
+!/.vscode/
+/.vscode/*
+!/.vscode/settings.json
+!/.vscode/extensions.json
+!/.vscode/tasks.json
+!/.vscode/launch.json
 
 # MSTest test Results
 [Tt]est[Rr]esult*/
