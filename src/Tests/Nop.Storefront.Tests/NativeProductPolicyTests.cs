@@ -68,11 +68,6 @@ public sealed class NativeProductPolicyTests
             var after = await guest.NativeCartAsync();
             await Assert.That(after.GetProperty("Lines").GetArrayLength()).IsEqualTo(1);
             await Assert.That(after.GetProperty("Lines")[0].GetProperty("Id").GetInt32()).IsEqualTo(before.GetProperty("Lines")[0].GetProperty("Id").GetInt32());
-            await WaitForUiAsync(new
-            {
-                DiscountProductId = productId,
-                CallProductId = callId
-            });
         }
         finally
         {
@@ -153,16 +148,6 @@ public sealed class NativeProductPolicyTests
             await Assert.That(hidden.Contains("sf-product-tiers", StringComparison.Ordinal)).IsFalse();
             using var quote = await guest.PostFormAsync($"shoppingcart/productdetails_attributechange/{productId}/true/true", PurchaseFields(guest, productId));
             await Assert.That((await StorefrontClient.ReadJsonAsync(quote)).GetProperty("price").GetString()).IsEqualTo("");
-            // The optional browser session may already be an ordinary registered customer.
-            if (!string.IsNullOrEmpty(Environment.GetEnvironmentVariable("STOREFRONT_TEST_UI_GATE")))
-            {
-                var registeredRole = roles.EnumerateArray().Single(row => row.GetProperty("SystemName").GetString() == "Registered").GetProperty("Id").GetInt32();
-                await SetPermissionRolesAsync(admin, permission.Value, original.Where(id => id != guestRole && id != registeredRole).ToArray());
-            }
-            await WaitForUiAsync(new
-            {
-                HiddenPriceProductId = productId
-            });
         }
         finally
         {
@@ -467,23 +452,5 @@ public sealed class NativeProductPolicyTests
             [$"addtocart_{id}.EnteredQuantity"] = "1",
             ["__RequestVerificationToken"] = client.Token
         };
-    }
-
-    private static async Task WaitForUiAsync(object fixture)
-    {
-        var path = Environment.GetEnvironmentVariable("STOREFRONT_TEST_UI_GATE");
-        if (string.IsNullOrEmpty(path))
-            return;
-        path = Path.GetFullPath(path);
-        if (!path.StartsWith(Path.GetFullPath(Path.GetTempPath()), StringComparison.OrdinalIgnoreCase))
-            throw new InvalidOperationException("UI gate must be in local Temp.");
-        await File.WriteAllTextAsync(path + ".ready", JsonSerializer.Serialize(fixture));
-        var until = DateTime.UtcNow.AddMinutes(8);
-        while (!File.Exists(path + ".done"))
-        {
-            if (DateTime.UtcNow >= until)
-                throw new TimeoutException("Product policy UI inspection did not release fixture.");
-            await Task.Delay(250);
-        }
     }
 }

@@ -1,6 +1,8 @@
 ﻿using System.Net;
 using System.Security.Cryptography;
+using System.Text;
 using System.Text.Json;
+using System.Text.RegularExpressions;
 
 namespace Nop.Storefront.Tests;
 
@@ -8,26 +10,28 @@ namespace Nop.Storefront.Tests;
 public sealed class StorefrontApiTests
 {
     [Test]
-    public async Task VariantPriceStockAndGuestCartUseRealStoreData()
+    public async Task NativeVariantPriceAndStockMatchPersistentGuestCart()
     {
         await using var client = new StorefrontClient();
-        await client.InitializeAsync();
-        var (product, attribute, green, orange) = await Fixture(client);
-        var selection = Selection(product, attribute, green);
-        var quote = await client.PostJsonAsync("stationery/api/quote", selection);
-        await Assert.That(quote.GetProperty("Available").GetBoolean()).IsTrue();
-        await Assert.That(quote.GetProperty("Price").GetDecimal()).IsEqualTo(product.GetProperty("Price").GetDecimal() + green.GetProperty("Adjustment").GetDecimal());
+        await client.InitializeAsync($"product/productdetails?productId={StorefrontClient.ProductId}");
+        var combinations = await client.GetJsonAsync($"product/combinations?productId={StorefrontClient.ProductId}");
+        var available = combinations.EnumerateArray().First(item => item.GetProperty("InStock").GetBoolean());
+        var unavailable = combinations.EnumerateArray().First(item => !item.GetProperty("InStock").GetBoolean());
+        using var quoted = await client.PostFormAsync($"shoppingcart/productdetails_attributechange/{StorefrontClient.ProductId}/true/true", Form(client, available));
+        var quote = await StorefrontClient.ReadJsonAsync(quoted);
+        var price = quote.GetProperty("price").GetString();
+        await Assert.That(!string.IsNullOrWhiteSpace(price)).IsTrue();
         try
         {
-            var cart = await client.PostJsonAsync("stationery/api/cart/add", selection);
+            using var added = await client.PostFormAsync(Add, Form(client, available));
+            await Assert.That((await StorefrontClient.ReadJsonAsync(added)).GetProperty("success").GetBoolean()).IsTrue();
+            var cart = await client.NativeCartAsync();
             await Assert.That(cart.GetProperty("Count").GetInt32()).IsEqualTo(1);
             await Assert.That(cart.GetProperty("SignedIn").GetBoolean()).IsFalse();
-            var unavailable = Selection(product, attribute, orange);
-            var unavailableQuote = await client.PostJsonAsync("stationery/api/quote", unavailable);
-            await Assert.That(unavailableQuote.GetProperty("Available").GetBoolean()).IsFalse();
-            using var rejected = await client.PostAsync("stationery/api/cart/add", unavailable);
-            await Assert.That(rejected.StatusCode).IsEqualTo(HttpStatusCode.BadRequest);
-            await Assert.That((await client.CartAsync()).GetProperty("Count").GetInt32()).IsEqualTo(1);
+            await Assert.That(cart.GetProperty("Lines")[0].GetProperty("UnitPrice").GetString()).IsEqualTo(price);
+            using var rejected = await client.PostFormAsync(Add, Form(client, unavailable));
+            await Assert.That((await StorefrontClient.ReadJsonAsync(rejected)).GetProperty("success").GetBoolean()).IsFalse();
+            await Assert.That((await client.NativeCartAsync()).GetProperty("Count").GetInt32()).IsEqualTo(1);
         }
         finally
         {
@@ -44,45 +48,36 @@ public sealed class StorefrontApiTests
         await first.InitializeAsync();
         await second.InitializeAsync();
         await outsider.InitializeAsync();
-        var (product, attribute, green, _) = await Fixture(first);
-        var selection = Selection(product, attribute, green);
+        var combinations = await first.GetJsonAsync($"product/combinations?productId={StorefrontClient.ProductId}");
+        var selection = combinations.EnumerateArray().First(item => item.GetProperty("InStock").GetBoolean());
         var phone = "0900" + RandomNumberGenerator.GetInt32(1000000, 10000000);
         try
         {
-            await first.PostJsonAsync("stationery/api/cart/add", selection);
+            using var firstAdd = await first.PostFormAsync(Add, Form(first, selection));
+            await Assert.That((await StorefrontClient.ReadJsonAsync(firstAdd)).GetProperty("success").GetBoolean()).IsTrue();
             await Login(first, phone);
-            var cart = await first.CartAsync();
+            var cart = await first.NativeCartAsync();
             await Assert.That(cart.GetProperty("SignedIn").GetBoolean()).IsTrue();
             await Assert.That(cart.GetProperty("Count").GetInt32()).IsEqualTo(1);
-            await second.PostJsonAsync("stationery/api/cart/add", selection);
+            using var secondAdd = await second.PostFormAsync(Add, Form(second, selection));
+            await Assert.That((await StorefrontClient.ReadJsonAsync(secondAdd)).GetProperty("success").GetBoolean()).IsTrue();
             await Login(second, phone);
-            var merged = await second.CartAsync();
+            var merged = await second.NativeCartAsync();
             await Assert.That(merged.GetProperty("SignedIn").GetBoolean()).IsTrue();
             await Assert.That(merged.GetProperty("Count").GetInt32()).IsEqualTo(2);
             var lineId = merged.GetProperty("Lines")[0].GetProperty("Id").GetInt32();
-            using var crossCustomer = await outsider.PostAsync("stationery/api/cart/quantity", new
-            {
-                lineId,
-                quantity = 0
-            });
-            await Assert.That(crossCustomer.StatusCode).IsEqualTo(HttpStatusCode.BadRequest);
-            await Assert.That((await second.CartAsync()).GetProperty("Count").GetInt32()).IsEqualTo(2);
-            var changed = await second.PostJsonAsync("stationery/api/cart/quantity", new
-            {
-                lineId,
-                quantity = 3
-            });
+            var crossCustomer = await outsider.UpdateNativeQuantityAsync(lineId, 0);
+            await Assert.That(crossCustomer.GetProperty("Count").GetInt32()).IsEqualTo(0);
+            await Assert.That((await second.NativeCartAsync()).GetProperty("Count").GetInt32()).IsEqualTo(2);
+            var changed = await second.UpdateNativeQuantityAsync(lineId, 3);
             await Assert.That(changed.GetProperty("Count").GetInt32()).IsEqualTo(3);
-            await Assert.That(changed.GetProperty("Total").GetDecimal()).IsEqualTo(3 * (product.GetProperty("Price").GetDecimal() + green.GetProperty("Adjustment").GetDecimal()));
-            var removed = await second.PostJsonAsync("stationery/api/cart/quantity", new
-            {
-                lineId,
-                quantity = 0
-            });
+            await Assert.That(changed.GetProperty("Lines")[0].GetProperty("UnitPrice").GetString())
+                .IsEqualTo(merged.GetProperty("Lines")[0].GetProperty("UnitPrice").GetString());
+            var removed = await second.UpdateNativeQuantityAsync(lineId, 0);
             await Assert.That(removed.GetProperty("Count").GetInt32()).IsEqualTo(0);
-            using var csrf = await outsider.PostAsync("stationery/api/cart/add", selection, includeToken: false);
+            using var csrf = await outsider.PostFormAsync(Add, Form(outsider, selection, includeToken: false));
             await Assert.That(csrf.StatusCode).IsEqualTo(HttpStatusCode.BadRequest);
-            await Assert.That((await outsider.CartAsync()).GetProperty("Count").GetInt32()).IsEqualTo(0);
+            await Assert.That((await outsider.NativeCartAsync()).GetProperty("Count").GetInt32()).IsEqualTo(0);
         }
         finally
         {
@@ -111,7 +106,8 @@ public sealed class StorefrontApiTests
     {
         await using var client = new StorefrontClient();
         var document = await client.GetJsonAsync("stationery/openapi/v1.json");
-        await Assert.That(document.GetProperty("paths").EnumerateObject().Count() >= 7).IsTrue();
+        var paths = document.GetProperty("paths").EnumerateObject().Select(path => path.Name).Order().ToArray();
+        await Assert.That(paths).IsEquivalentTo(new[] { "/stationery/api/otp/send", "/stationery/api/otp/verify" });
     }
 
     [Test]
@@ -165,26 +161,59 @@ public sealed class StorefrontApiTests
         await Assert.That(replay.GetProperty("Success").GetBoolean()).IsFalse();
     }
 
-    private static object Selection(JsonElement product, JsonElement attribute, JsonElement option)
+    [Test]
+    public async Task DirectLoginUsesNativeLayoutAndClientPrerendering()
     {
-        return new
+        await using var client = new StorefrontClient();
+        var html = await client.InitializeAsync("stationery/login");
+        await Assert.That(html.Contains("\"type\":\"webassembly\"", StringComparison.Ordinal)).IsTrue();
+        await Assert.That(html.Contains("\"type\":\"server\"", StringComparison.Ordinal)).IsFalse();
+        var openLogin = false;
+        foreach (Match match in Regex.Matches(html, "<!--Blazor:(.*?)-->", RegexOptions.Singleline))
         {
-            productId = product.GetProperty("Id").GetInt32(),
-            values = new Dictionary<int, int>
-            {
-                [attribute.GetProperty("Id").GetInt32()] = option.GetProperty("Id").GetInt32()
-            },
-            quantity = 1
-        };
+            using var marker = JsonDocument.Parse(match.Groups[1].Value);
+            if (!marker.RootElement.TryGetProperty("typeName", out var type) || type.GetString() != "Storefront.UI.Components.NativeHeader")
+                continue;
+            using var parameters = JsonDocument.Parse(Encoding.UTF8.GetString(Convert.FromBase64String(marker.RootElement.GetProperty("parameterValues").GetString()!)));
+            openLogin = parameters.RootElement.EnumerateArray().Any(value => value.ValueKind == JsonValueKind.True);
+        }
+        await Assert.That(openLogin).IsTrue();
+        await Assert.That(html.Contains("blazor.server.js", StringComparison.Ordinal)).IsFalse();
+        using var oldHub = await client.GetAsync("_blazor/negotiate");
+        await Assert.That(oldHub.StatusCode).IsEqualTo(HttpStatusCode.NotFound);
     }
 
-    private static async Task<(JsonElement Product, JsonElement Attribute, JsonElement Green, JsonElement Orange)> Fixture(StorefrontClient client)
+    [Test]
+    public async Task RemovedCustomCommerceEndpointsAreUnavailable()
     {
-        var catalog = await client.GetJsonAsync("stationery/api/catalog");
-        var product = catalog.EnumerateArray().First(item => item.GetProperty("Available").GetBoolean() && item.GetProperty("Attributes").GetArrayLength() > 0);
-        var attribute = product.GetProperty("Attributes")[0];
-        var green = attribute.GetProperty("Options").EnumerateArray().First(option => option.GetProperty("Name").GetString() == "سبز");
-        var orange = attribute.GetProperty("Options").EnumerateArray().First(option => option.GetProperty("Name").GetString() == "نارنجی");
-        return (product, attribute, green, orange);
+        await using var client = new StorefrontClient();
+        await client.InitializeAsync();
+        foreach (var path in new[] { "stationery/api/catalog", "stationery/api/cart", "PersianStorefront/Index" })
+        {
+            using var response = await client.GetAsync(path);
+            await Assert.That(response.StatusCode).IsEqualTo(HttpStatusCode.NotFound);
+        }
+        foreach (var path in new[] { "quote", "cart/add", "cart/quantity" })
+        {
+            using var response = await client.PostAsync("stationery/api/" + path, new
+            {
+            });
+            await Assert.That(response.StatusCode).IsEqualTo(HttpStatusCode.NotFound);
+        }
+    }
+
+    private static string Add => $"addproducttocart/details/{StorefrontClient.ProductId}/1";
+
+    private static Dictionary<string, string> Form(StorefrontClient client, JsonElement combination, bool includeToken = true)
+    {
+        var fields = new Dictionary<string, string>
+        {
+            [$"addtocart_{StorefrontClient.ProductId}.EnteredQuantity"] = "1"
+        };
+        foreach (var attribute in combination.GetProperty("Attributes").EnumerateArray())
+            fields[$"product_attribute_{attribute.GetProperty("Id").GetInt32()}"] = attribute.GetProperty("ValueIds")[0].GetInt32().ToString();
+        if (includeToken)
+            fields["__RequestVerificationToken"] = client.Token;
+        return fields;
     }
 }

@@ -25,13 +25,11 @@ public sealed class StorefrontStartup : INopStartup
             options.Filters.Add<NativeProductFallbackFilter>();
             options.Filters.Add<NativeCartResponseFilter>();
         });
-        services.AddServerSideBlazor();
         services.AddBlazorBlueprintComponents(localizer =>
         {
             localizer.Set("Sheet.Close", "بستن");
             localizer.Set("Dialog.Close", "بستن");
         });
-        services.AddScoped<StorefrontService>();
         services.AddScoped<StorefrontNavigation>();
         services.AddScoped<DevelopmentCatalogSeeder>();
         services.AddScoped<DevelopmentPresentationRepair>();
@@ -63,9 +61,6 @@ public sealed class StorefrontStartup : INopStartup
                 app.UseStaticFiles(new StaticFileOptions { FileProvider = new PhysicalFileProvider(path), RequestPath = "/_content/" + name });
         }
 
-        var frameworkPath = Path.Combine(env.ContentRootPath, "Plugins", "Misc.PersianStorefront", "Content", "Framework");
-        if (Directory.Exists(frameworkPath))
-            app.UseStaticFiles(new StaticFileOptions { FileProvider = new PhysicalFileProvider(frameworkPath), RequestPath = "/_framework" });
         if (env.IsDevelopment())
             app.UseSwaggerUI(o =>
             {
@@ -81,7 +76,6 @@ public sealed class StorefrontRoutes : BaseRouteProvider, IRouteProvider
 
     public void RegisterRoutes(IEndpointRouteBuilder endpoints)
     {
-        endpoints.MapBlazorHub();
         var language = GetLanguageRoutePattern();
         endpoints.MapControllerRoute("MadadrangAllProducts", $"{language}/catalog/all", new
         {
@@ -96,8 +90,7 @@ public sealed class StorefrontRoutes : BaseRouteProvider, IRouteProvider
         endpoints.MapControllerRoute("StationeryLogin", "stationery/login", new
         {
             controller = "PersianStorefront",
-            action = "Index",
-            page = "login"
+            action = "Login"
         });
         endpoints.MapControllerRoute("StationeryCatalog", $"{language}/stationery/catalog", new
         {

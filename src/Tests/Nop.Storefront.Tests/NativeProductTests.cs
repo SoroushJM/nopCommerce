@@ -49,7 +49,7 @@ public sealed class NativeProductTests
             using var response = await client.PostFormAsync(Add, Form(client, unavailable));
             var result = await StorefrontClient.ReadJsonAsync(response);
             await Assert.That(result.GetProperty("success").GetBoolean()).IsFalse();
-            await Assert.That((await client.CartAsync()).GetProperty("Count").GetInt32()).IsEqualTo(0);
+            await Assert.That((await client.NativeCartAsync()).GetProperty("Count").GetInt32()).IsEqualTo(0);
         }
         finally
         {
@@ -68,11 +68,11 @@ public sealed class NativeProductTests
             using var response = await client.PostFormAsync(Add, Form(client, available));
             var result = await StorefrontClient.ReadJsonAsync(response);
             await Assert.That(result.GetProperty("success").GetBoolean()).IsTrue();
-            var cart = await client.CartAsync();
+            var cart = await client.NativeCartAsync();
             await Assert.That(cart.GetProperty("SignedIn").GetBoolean()).IsFalse();
             await Assert.That(cart.GetProperty("Lines").GetArrayLength()).IsEqualTo(1);
             await Assert.That(cart.GetProperty("Lines")[0].GetProperty("Quantity").GetInt32()).IsEqualTo(1);
-            var again = await client.CartAsync();
+            var again = await client.NativeCartAsync();
             await Assert.That(again.GetProperty("Lines")[0].GetProperty("Id").GetInt32()).IsEqualTo(cart.GetProperty("Lines")[0].GetProperty("Id").GetInt32());
         }
         finally

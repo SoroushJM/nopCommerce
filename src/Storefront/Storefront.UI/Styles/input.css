@@ -273,22 +273,8 @@
     border-radius: 14px
   }
 
-  .benefit {
-    display: flex;
-    align-items: center;
-    gap: 13px;
-    padding-block: 18px
-  }
 
-  .benefit strong {
-    font-size: 13px;
-    display: block
-  }
 
-  .benefit small {
-    font-size: 11px;
-    color: #79818e
-  }
 
   .sf-footer {
     background: #f7f9fc;
@@ -337,42 +323,8 @@
     font-size: 13px
   }
 
-  .modal-backdrop {
-    position: fixed;
-    inset: 0;
-    background: #16203966;
-    z-index: 80;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 20px;
-    backdrop-filter: blur(3px)
-  }
 
-  .modal {
-    background: white;
-    border-radius: 22px;
-    width: 100%;
-    max-width: 450px;
-    padding: 30px;
-    box-shadow: 0 24px 80px #14203433;
-    max-height: 90dvh;
-    overflow: auto
-  }
 
-  .side-cart {
-    position: fixed;
-    inset-block: 0;
-    inset-inline-end: 0;
-    width: 440px;
-    max-width: 100%;
-    background: white;
-    z-index: 90;
-    padding: 25px;
-    display: flex;
-    flex-direction: column;
-    box-shadow: 0 0 80px #14203422
-  }
 
   .sf-input {
     width: 100%;
@@ -399,11 +351,6 @@
     background: white
   }
 
-  .filter-pill.active {
-    background: #eef3ff;
-    border-color: #9db4ef;
-    color: #315bc5
-  }
 
   .sf-button {
     min-height: 46px !important;
@@ -416,25 +363,7 @@
     display: none
   }
 
-  .toast {
-    position: fixed;
-    bottom: 24px;
-    left: 24px;
-    background: #233a32;
-    color: white;
-    padding: 14px 22px;
-    border-radius: 12px;
-    z-index: 110;
-    font-size: 13px
-  }
 
-  .product-main-image {
-    width: 100%;
-    aspect-ratio: 1;
-    object-fit: cover;
-    border-radius: 20px;
-    background: #f5f6f7
-  }
 
   .cart-row {
     display: grid;
@@ -493,21 +422,11 @@
     box-shadow: 0 8px 20px #0000000a
   }
 
-  .thumb {
-    width: 70px;
-    height: 70px;
-    object-fit: cover;
-    border: 1px solid var(--border);
-    border-radius: 12px
-  }
 
   .brand-word {
     color: #1d2d50
   }
 
-  .muted {
-    color: #718096
-  }
 
   .price {
     font-variant-numeric: tabular-nums
@@ -630,40 +549,19 @@
     color: var(--primary)
   }
 
-  .toast {
-    bottom: 80px;
-    left: 16px;
-    right: 16px
-  }
 
-  .side-cart {
-    padding: 22px 18px;
-    padding-bottom: 24px
-  }
 
   .desktop-filter {
     display: none
   }
 
-  .modal {
-    padding: 24px
-  }
 
-  .product-main-image {
-    aspect-ratio: 1.1
-  }
 
   .sf-button {
     padding-inline: 16px !important
   }
 
-  .benefit strong {
-    font-size: 11px
-  }
 
-  .benefit small {
-    font-size: 10px
-  }
 }
 
 .sf-sheet {
@@ -745,8 +643,7 @@
   box-shadow: 0 8px 20px #0000000a
 }
 
-.sf-price-card.sf-price-card,
-.sf-summary-card.sf-summary-card {
+.sf-price-card.sf-price-card {
   background: #f8fafc;
   color: inherit;
   box-shadow: none;
@@ -757,19 +654,7 @@
   border-color: #f1f5f9
 }
 
-.sf-empty-card.sf-empty-card {
-  background: transparent;
-  color: inherit;
-  box-shadow: none;
-  border: 1px dashed #d5dce8;
-  border-radius: 20px
-}
 
-.sf-benefit.sf-benefit {
-  gap: 13px;
-  padding: 18px 0;
-  border-radius: 0
-}
 
 .sf-quantity.sf-quantity {
   align-items: center

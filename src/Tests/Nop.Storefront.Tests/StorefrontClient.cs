@@ -106,22 +106,40 @@ internal sealed class StorefrontClient : IAsyncDisposable
         return json.RootElement.Clone();
     }
 
-    public Task<JsonElement> CartAsync()
+    public async Task<JsonElement> UpdateNativeQuantityAsync(int lineId, int quantity)
     {
-        return GetJsonAsync("stationery/api/cart");
+        var cart = await NativeCartAsync();
+        var fields = new List<KeyValuePair<string, string>>
+        {
+            new("updatecart", "1"),
+            new(cart.GetProperty("TokenField").GetString()!, Token)
+        };
+        foreach (var field in cart.GetProperty("CheckoutFields").EnumerateArray())
+            foreach (var value in field.GetProperty("Values").EnumerateArray())
+                fields.Add(new(field.GetProperty("Name").GetString()!, value.GetString()!));
+        fields.Add(quantity == 0 ? new("removefromcart", lineId.ToString()) : new($"itemquantity{lineId}", quantity.ToString()));
+        using var response = await PostNativeCartAsync(fields);
+        return await ReadJsonAsync(response);
     }
 
     public async Task ClearCartAsync()
     {
-        var cart = await CartAsync();
-        foreach (var line in cart.GetProperty("Lines").EnumerateArray())
+        // Read the full page: mini-cart Lines can be capped to zero or disabled.
+        var html = await InitializeAsync();
+        var ids = Regex.Matches(html, "data-cart-itemid=\"([0-9]+)\"")
+            .Select(match => match.Groups[1].Value).Distinct().ToArray();
+        if (ids.Length == 0)
+            return;
+        var fields = new List<KeyValuePair<string, string>>
         {
-            await PostJsonAsync("stationery/api/cart/quantity", new
-            {
-                lineId = line.GetProperty("Id").GetInt32(),
-                quantity = 0
-            });
-        }
+            new("updatecart", "1"),
+            new("__RequestVerificationToken", Token)
+        };
+        fields.AddRange(ids.Select(id => new KeyValuePair<string, string>("removefromcart", id)));
+        using var response = await PostNativeCartAsync(fields);
+        var cart = await ReadJsonAsync(response);
+        if (cart.GetProperty("Count").GetInt32() != 0)
+            throw new InvalidOperationException("Native cart cleanup left items behind.");
     }
 
     public ValueTask DisposeAsync()

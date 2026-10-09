@@ -24,7 +24,7 @@ public sealed class DevelopmentPresentationRepair(IProductService products, ICat
     {
         var report = new List<string>();
         var fixtureCategories = new Dictionary<string, Category>();
-        foreach (var sample in Storefront.UI.SampleCatalog.Products)
+        foreach (var sample in SampleCatalog.Products)
         {
             var product = await products.GetProductBySkuAsync("MRG-" + sample.Id);
             if (product == null || product.Deleted)

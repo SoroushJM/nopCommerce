@@ -10,6 +10,12 @@ public partial class NativeHeader
     [Parameter]
     public StoreNavigation Initial { get; set; } = new();
 
+    [Parameter]
+    public bool OpenLoginOnLoad
+    {
+        get; set;
+    }
+
     private IJSObjectReference? module;
     private DotNetObjectReference<NativeHeader>? _reference;
     private NativeCart cart = new();
@@ -18,6 +24,7 @@ public partial class NativeHeader
     private string error = "", phone = "", code = "", testCode = "", loginMessage = "";
     protected override void OnInitialized()
     {
+        loginOpen = OpenLoginOnLoad;
         _count = Initial.CartCount;
         _signedIn = Initial.SignedIn;
         cart = new NativeCart

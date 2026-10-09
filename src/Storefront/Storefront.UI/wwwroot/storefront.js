@@ -25,13 +25,6 @@ export async function request(url, method = "GET", data = null) {
   }
   return await response.json();
 }
-export function lockScroll(locked) {
-  document.body.style.overflow = locked ? "hidden" : "";
-}
-export function focusDialog(id) {
-  document.getElementById(id)?.focus();
-}
-
 export async function postForm(url, fields) {
   const token = antiforgeryToken();
   const body = new URLSearchParams(fields);

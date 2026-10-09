@@ -45,7 +45,8 @@
                     PublicWidgetZones.HeaderLinksBefore,
                         additionalData = ViewData["HeaderLinksModel"]
                     })
-                    <component type="typeof(NativeHeader)" render-mode="WebAssemblyPrerendered" param-Initial="Model" />
+                    <component type="typeof(NativeHeader)" render-mode="WebAssemblyPrerendered" param-Initial="Model"
+                               param-OpenLoginOnLoad="@(Context.Items["Madadrang.OpenLogin"] is true)" />
                     @await Component.InvokeAsync(typeof(WidgetViewComponent), new
                     {
                         widgetZone =

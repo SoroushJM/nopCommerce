@@ -50,7 +50,7 @@ public sealed class DevelopmentCatalogFiltersRepair(IProductService products, IC
             await attributes.SaveAttributeAsync(store, "Madadrang.ColorSpecificationId", attribute.Id);
         }
         var options = (await specifications.GetSpecificationAttributeOptionsBySpecificationAttributeAsync(attribute.Id)).ToList();
-        foreach (var sample in Storefront.UI.SampleCatalog.Products)
+        foreach (var sample in SampleCatalog.Products)
         {
             var product = await products.GetProductBySkuAsync("MRG-" + sample.Id);
             if (product == null || product.Deleted || await attributes.GetAttributeAsync<bool>(product, "Madadrang.ColorFilterPrepared"))

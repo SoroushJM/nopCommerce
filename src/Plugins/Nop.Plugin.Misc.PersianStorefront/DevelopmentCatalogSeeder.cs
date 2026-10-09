@@ -9,7 +9,6 @@ using Nop.Services.Directory;
 using Nop.Services.Helpers;
 using Nop.Services.Media;
 using Nop.Services.Plugins;
-using Storefront.UI;
 
 namespace Nop.Plugin.Misc.PersianStorefront;
 
@@ -75,7 +74,7 @@ public sealed class DevelopmentCatalogSeeder(IProductService products, ICategory
             await manufacturers.InsertProductManufacturerAsync(new ProductManufacturer { ProductId = product.Id, ManufacturerId = manufacturerMap[sample.Brand] });
             var mapping = new ProductAttributeMapping { ProductId = product.Id, ProductAttributeId = color.Id, IsRequired = true, AttributeControlType = AttributeControlType.ColorSquares };
             await attributes.InsertProductAttributeMappingAsync(mapping);
-            foreach (var option in sample.Attributes[0].Options)
+            foreach (var option in sample.Options)
             {
                 var value = new ProductAttributeValue { ProductAttributeMappingId = mapping.Id, Name = option.Name, ColorSquaresRgb = option.Color, PriceAdjustment = option.Adjustment, AttributeValueType = AttributeValueType.Simple, Quantity = 1, IsPreSelected = option.Id == 1, DisplayOrder = option.Id };
                 await attributes.InsertProductAttributeValueAsync(value);

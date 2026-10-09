@@ -1,5 +1,4 @@
 ﻿using System.Net;
-using System.Text.Json;
 using System.Text.RegularExpressions;
 
 namespace Nop.Storefront.Tests;
@@ -63,7 +62,6 @@ public sealed class NativeCartAllowedQuantityTests
             var selected = retained.GetProperty("AllowedQuantities").EnumerateArray().Single(option => option.GetProperty("Selected").GetBoolean());
             await Assert.That(selected.GetProperty("Value").GetString()).IsEqualTo("2");
             await Assert.That((await guest.NativeCartAsync()).GetProperty("Lines")[0].GetProperty("Quantity").GetInt32()).IsEqualTo(2);
-            await WaitForOptionalUiInspectionAsync(productId);
         }
         finally
         {
@@ -83,27 +81,6 @@ public sealed class NativeCartAllowedQuantityTests
                     await Assert.That(deleted.StatusCode).IsEqualTo(HttpStatusCode.Redirect);
                 }
             }
-        }
-    }
-
-    private static async Task WaitForOptionalUiInspectionAsync(int productId)
-    {
-        var path = Environment.GetEnvironmentVariable("STOREFRONT_TEST_UI_GATE");
-        if (string.IsNullOrEmpty(path))
-            return;
-        path = Path.GetFullPath(path);
-        if (!path.StartsWith(Path.GetFullPath(Path.GetTempPath()), StringComparison.OrdinalIgnoreCase))
-            throw new InvalidOperationException("The UI inspection gate must be in the local temporary directory.");
-        await File.WriteAllTextAsync(path + ".ready", JsonSerializer.Serialize(new
-        {
-            ProductId = productId
-        }));
-        var until = DateTime.UtcNow.AddMinutes(8);
-        while (!File.Exists(path + ".done"))
-        {
-            if (DateTime.UtcNow >= until)
-                throw new TimeoutException("The UI inspection did not release its temporary product fixture.");
-            await Task.Delay(250);
         }
     }
 }

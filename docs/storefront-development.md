@@ -46,7 +46,7 @@ PostgreSQL موجود روی localhost:5432 استفاده می‌شود. برا
 
 ## معماری و اتصال
 
-MVC فقط میزبان HTML اولیهٔ کامپوننت Blazor است. پلاگین سرویس‌ها، Blazor Hub، مسیرها و assets را ثبت می‌کند. middleware فایل‌های UI پیش از routing اجرا می‌شود؛ در غیر این صورت مسیر catch-all nopCommerce فایل framework را می‌بلعد. اسکریپت رسمی `blazor.server.js` از بستهٔ Microsoft.AspNetCore.App.Internal.Assets نسخهٔ 10.0.12 همراه پلاگین کپی می‌شود؛ هنگام ارتقای runtime این نسخه هم بررسی شود.
+MVC میزبان HTML اولیهٔ کامپوننت‌های WebAssemblyPrerendered است. پلاگین مسیرها و assets تولیدشدهٔ Client را ثبت می‌کند؛ Blazor Hub و runtime سرور دیگر در فروشگاه استفاده نمی‌شوند. `/stationery/login` هم از قالب بومی و همان دیالوگ Header استفاده می‌کند. پروژهٔ Preview فقط آزمایش مستقل `/renderer/auto` است. جزئیات حذف کد قدیمی در [گزارش پاک‌سازی](refactor-legacy-cleanup.md) آمده است.
 
 رویدادهای Blazor از JavaScript و درخواست HTTP هم‌مبدأ با cookie مشتری و antiforgery token به API پلاگین می‌رسند. قیمت و موجودی، XML ویژگی‌ها و سبد با خدمات اصلی nopCommerce محاسبه می‌شوند؛ وابستگی به HttpContext قدیمی circuit وجود ندارد. ورود از `SignInCustomerAsync` استفاده می‌کند که سبد مهمان را منتقل می‌کند. پس از ورود، صفحه دوباره بارگذاری می‌شود تا token مربوط به هویت جدید تولید شود.
 

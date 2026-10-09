@@ -41,3 +41,7 @@ Roslyn confirmed identical token kinds/text and comments for `PreviewStore.cs` (
 The compact three-statement cart reset callbacks in `StorefrontRoot.razor` and `Components/NativeHeader.razor` are now multiline. A temporary Microsoft Roslyn helper parsed and normalized only the two exact C# lambda expressions. Each lambda retained the same 21 token kinds/text values and zero comments, with zero syntax errors before and after. No handler logic or surrounding markup was rewritten.
 
 `dotnet build src/Storefront/Storefront.UI/Storefront.UI.csproj --no-restore` passed with zero warnings and errors, confirming the multiline quoted Razor attributes compile. The project build ran its existing Tailwind build script and rewrote the already-modified generated `wwwroot/storefront.css`. `git diff --check` passed.
+
+## Current cleanup note — 2026-10-10
+
+The formatting records above describe earlier commits. The obsolete `StorefrontRoot`, `PreviewStore`, and legacy cart/product components have since been deleted after migrating their consumers. The surviving C# changes use the Microsoft SDK formatter with repository rules. See [legacy cleanup](refactor-legacy-cleanup.md) for current files and validation.

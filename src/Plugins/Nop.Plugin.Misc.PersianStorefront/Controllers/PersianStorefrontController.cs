@@ -10,15 +10,11 @@ using Storefront.UI;
 
 namespace Nop.Plugin.Misc.PersianStorefront.Controllers;
 
-public sealed record StorefrontPageModel(Bootstrap Initial, string Page, int ProductId);
-public sealed class PersianStorefrontController(StorefrontService storefront, IWebHostEnvironment environment) : BasePublicController
+public sealed class PersianStorefrontController : BasePublicController
 {
-    public async Task<IActionResult> Index(string page = "home", int id = 0)
+    public IActionResult Login()
     {
-        var catalog = await storefront.Catalog();
-        if (page == "product" && catalog.All(x => x.Id != id))
-            return NotFound();
-        return View("~/Plugins/Misc.PersianStorefront/Views/Index.cshtml", new StorefrontPageModel(new(catalog, await storefront.Cart(), environment.IsDevelopment()), page, id));
+        return View("~/Plugins/Misc.PersianStorefront/Views/Login.cshtml");
     }
 }
 
@@ -28,68 +24,8 @@ public sealed class PersianStorefrontController(StorefrontService storefront, IW
 [AutoValidateAntiforgeryToken]
 [CheckAccessPublicStore]
 [CheckAccessClosedStore]
-public sealed class PersianStorefrontApiController(StorefrontService storefront, IWebHostEnvironment environment, IWorkContext work, IStoreContext store, ICustomerService customers, ICustomerRegistrationService registration, MockOtpStore otp) : ControllerBase
+public sealed class PersianStorefrontApiController(IWebHostEnvironment environment, IWorkContext work, IStoreContext store, ICustomerService customers, ICustomerRegistrationService registration, MockOtpStore otp) : ControllerBase
 {
-    [HttpGet("cart")]
-    public async Task<ActionResult<CartSnapshot>> Cart()
-    {
-        return await storefront.Cart();
-    }
-
-    [HttpGet("catalog")]
-    public async Task<ActionResult<List<StoreProduct>>> Catalog()
-    {
-        return await storefront.Catalog();
-    }
-
-    [HttpPost("quote")]
-    public async Task<ActionResult<Quote>> Quote([FromBody] SelectionRequest request)
-    {
-        try
-        {
-            return await storefront.Quote(request);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new
-            {
-                message = ex.Message
-            });
-        }
-    }
-
-    [HttpPost("cart/add")]
-    public async Task<ActionResult<CartSnapshot>> Add([FromBody] SelectionRequest request)
-    {
-        try
-        {
-            return await storefront.Add(request);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new
-            {
-                message = ex.Message
-            });
-        }
-    }
-
-    [HttpPost("cart/quantity")]
-    public async Task<ActionResult<CartSnapshot>> Quantity([FromBody] QuantityRequest request)
-    {
-        try
-        {
-            return await storefront.Quantity(request);
-        }
-        catch (ArgumentException ex)
-        {
-            return BadRequest(new
-            {
-                message = ex.Message
-            });
-        }
-    }
-
     [HttpPost("otp/send")]
     public async Task<ActionResult<OtpResult>> Send([FromBody] PhoneRequest request)
     {
