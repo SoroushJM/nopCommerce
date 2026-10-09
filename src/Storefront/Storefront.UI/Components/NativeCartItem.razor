@@ -1,0 +1,47 @@
+<article class="cart-row @(ShowImage ? "" : "sf-cart-no-picture")" data-native-cart-line="@Line.Id">
+    @if (ShowImage)
+    {
+        <a href="@Line.Url"><img src="@Line.Image" alt="@Line.ImageAlt" title="@Line.ImageTitle" /></a>
+    }
+    <div class="min-w-0">
+        <a href="@Line.Url" class="text-[13px] font-bold">@Line.Name</a>
+        @foreach (var info in new[] { Line.AttributeInfo, Line.RecurringInfo, Line.RentalInfo })
+        {
+            if (!string.IsNullOrEmpty(info))
+            {
+                <div class="text-xs text-slate-400 mt-2">@((MarkupString)info)</div>
+            }
+        }
+        @if (!string.IsNullOrEmpty(Line.EditUrl))
+        {
+            <a href="@Line.EditUrl" class="text-xs text-primary inline-block mt-2">ویرایش انتخاب‌ها</a>
+        }
+        <div class="flex gap-3 items-center mt-3 flex-wrap" @ref="_quantityControls">
+            @if (Line.AllowedQuantities.Count > 0)
+            {
+                <StoreSelect @key="_selectionRevision" TValue="string" Value="@Line.Quantity.ToString()" ValueChanged="SelectQuantity" Options="Options" Label="@("تعداد " + Line.Name)" Disabled="Busy" />
+            }
+            else
+            {
+                <div class="qty">
+                    <button type="button" aria-label="@("کاهش تعداد " + Line.Name)" disabled="@(Busy || Line.Quantity <= 1)" @onclick="() => SetQuantity(Line.Quantity - 1)"><SfIcon Name="minus" Size="13" /></button>
+                    <span>@Line.Quantity</span>
+                    <button type="button" aria-label="@("افزایش تعداد " + Line.Name)" disabled="@Busy" @onclick="() => SetQuantity(Line.Quantity + 1)"><SfIcon Name="plus" Size="13" /></button>
+                </div>
+            }
+            @if (!Line.DisableRemoval)
+            {
+                <button type="button" aria-label="@("حذف " + Line.Name)" class="icon-btn text-slate-400" disabled="@Busy" @onclick="() => SetQuantity(0)"><SfIcon Name="trash" Size="16" /></button>
+            }
+        </div>
+    </div>
+    <div class="text-sm font-bold text-left price">
+        @Line.SubTotal
+        <p class="text-[10px] font-normal text-slate-400 mt-2">هر عدد: @Line.UnitPrice</p>
+        @if (!string.IsNullOrEmpty(Line.Discount))
+        {
+            <p class="text-xs font-normal text-primary mt-2">تخفیف: @Line.Discount</p>
+            <p class="text-[10px] font-normal text-slate-400 mt-2">@Line.DiscountNote</p>
+        }
+    </div>
+</article>

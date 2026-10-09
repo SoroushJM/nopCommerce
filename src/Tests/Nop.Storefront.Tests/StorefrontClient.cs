@@ -23,7 +23,7 @@ internal sealed class StorefrontClient : IAsyncDisposable
         };
     }
 
-    public async Task<string> InitializeAsync(string path = "stationery/cart")
+    public async Task<string> InitializeAsync(string path = "cart")
     {
         var html = await _http.GetStringAsync(path);
         var match = Regex.Match(html, "name=\"__RequestVerificationToken\"[^>]*value=\"([^\"]+)\"");
@@ -61,6 +61,31 @@ internal sealed class StorefrontClient : IAsyncDisposable
     public Task<HttpResponseMessage> PostFormAsync(string path, Dictionary<string, string> fields)
     {
         return _http.PostAsync(path, new FormUrlEncodedContent(fields));
+    }
+
+    public async Task<JsonElement> NativeCartAsync()
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Get, "cart");
+        request.Headers.Add("X-Madadrang-Cart", "1");
+        using var response = await _http.SendAsync(request);
+        var cart = await ReadJsonAsync(response);
+        Token = cart.GetProperty("Token").GetString()!;
+        return cart;
+    }
+
+    public async Task<HttpResponseMessage> PostNativeCartAsync(IEnumerable<KeyValuePair<string, string>> fields)
+    {
+        using var request = new HttpRequestMessage(HttpMethod.Post, "cart") { Content = new FormUrlEncodedContent(fields) };
+        request.Headers.Add("X-Madadrang-Cart", "1");
+        return await _http.SendAsync(request);
+    }
+
+    public async Task<JsonElement> UploadCheckoutFileAsync(int attributeId)
+    {
+        using var body = new MultipartFormDataContent();
+        body.Add(new ByteArrayContent("TUnit checkout attachment"u8.ToArray()), "file", "tunit-checkout.txt");
+        using var response = await _http.PostAsync($"shoppingcart/uploadfilecheckoutattribute?attributeId={attributeId}", body);
+        return await ReadJsonAsync(response);
     }
 
     public static async Task<JsonElement> ReadJsonAsync(HttpResponseMessage response)

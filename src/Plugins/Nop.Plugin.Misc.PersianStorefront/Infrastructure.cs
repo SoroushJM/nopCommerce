@@ -20,7 +20,11 @@ public sealed class StorefrontStartup : INopStartup
 
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<Microsoft.AspNetCore.Mvc.MvcOptions>(options => options.Filters.Add<NativeProductFallbackFilter>());
+        services.Configure<Microsoft.AspNetCore.Mvc.MvcOptions>(options =>
+        {
+            options.Filters.Add<NativeProductFallbackFilter>();
+            options.Filters.Add<NativeCartResponseFilter>();
+        });
         services.AddServerSideBlazor();
         services.AddBlazorBlueprintComponents(localizer =>
         {
@@ -32,6 +36,7 @@ public sealed class StorefrontStartup : INopStartup
         services.AddScoped<DevelopmentCatalogSeeder>();
         services.AddScoped<DevelopmentPresentationRepair>();
         services.AddScoped<NativeCatalogModelFactory>();
+        services.AddScoped<NativeCartPresentation>();
         services.AddScoped<DevelopmentCatalogFiltersRepair>();
         services.AddSingleton<MockOtpStore>();
         services.AddSwaggerGen(o =>
@@ -88,12 +93,6 @@ public sealed class StorefrontRoutes : BaseRouteProvider, IRouteProvider
             controller = "Catalog",
             action = "Search"
         });
-        endpoints.MapControllerRoute("StationeryCartAlias", "cart", new
-        {
-            controller = "PersianStorefront",
-            action = "Index",
-            page = "cart"
-        });
         endpoints.MapControllerRoute("StationeryLogin", "stationery/login", new
         {
             controller = "PersianStorefront",
@@ -105,17 +104,15 @@ public sealed class StorefrontRoutes : BaseRouteProvider, IRouteProvider
             controller = "MadadrangCatalog",
             action = "LegacyCatalog"
         });
-        endpoints.MapControllerRoute("StationeryCart", "stationery/cart", new
+        endpoints.MapControllerRoute("StationeryCart", $"{language}/stationery/cart", new
         {
-            controller = "PersianStorefront",
-            action = "Index",
-            page = "cart"
+            controller = "MadadrangCompatibility",
+            action = "Cart"
         });
-        endpoints.MapControllerRoute("StationeryProduct", "stationery/product/{id:int}", new
+        endpoints.MapControllerRoute("StationeryProduct", $"{language}/stationery/product/{{id:int}}", new
         {
-            controller = "PersianStorefront",
-            action = "Index",
-            page = "product"
+            controller = "MadadrangCompatibility",
+            action = "Product"
         });
         var env = endpoints.ServiceProvider.GetRequiredService<IWebHostEnvironment>();
         if (env.IsDevelopment())

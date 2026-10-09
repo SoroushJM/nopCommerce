@@ -1,12 +1,14 @@
 ﻿using Nop.Core.Domain.Menus;
 using Nop.Web.Factories;
+using Nop.Core.Http;
+using Nop.Web.Framework.Mvc.Routing;
 using Nop.Web.Models.Menus;
 using Storefront.UI;
 
 namespace Nop.Plugin.Misc.PersianStorefront;
 
 public sealed class StorefrontNavigation(IMenuModelFactory menus,
-    ICommonModelFactory common)
+    ICommonModelFactory common, INopUrlHelper urls)
 {
     public async Task<StoreNavigation> PrepareAsync(Nop.Web.Models.Common.HeaderLinksModel? header = null)
     {
@@ -19,7 +21,8 @@ public sealed class StorefrontNavigation(IMenuModelFactory menus,
             Footer = footer.Select(From).ToList(),
             SignedIn = header.IsAuthenticated,
             CartEnabled = header.ShoppingCartEnabled,
-            CartCount = header.ShoppingCartItems
+            CartCount = header.ShoppingCartItems,
+            CartUrl = urls.RouteUrl(NopRouteNames.General.CART)
         };
     }
 

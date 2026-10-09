@@ -12,7 +12,7 @@ public partial class NativeHeader
 
     private IJSObjectReference? module;
     private DotNetObjectReference<NativeHeader>? _reference;
-    private CartSnapshot cart = new([]);
+    private NativeCart cart = new();
     private bool _signedIn, cartOpen, loginOpen, otpSent, busy;
     private int _count, _listener;
     private string error = "", phone = "", code = "", testCode = "", loginMessage = "";
@@ -20,6 +20,10 @@ public partial class NativeHeader
     {
         _count = Initial.CartCount;
         _signedIn = Initial.SignedIn;
+        cart = new NativeCart
+        {
+            SignedIn = Initial.SignedIn
+        };
     }
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
@@ -31,7 +35,8 @@ public partial class NativeHeader
             module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/Storefront.UI/storefront.js");
             _reference = DotNetObjectReference.Create(this);
             _listener = await module.InvokeAsync<int>("listenForCart", _reference);
-            await RefreshCart();
+            if (Initial.CartEnabled)
+                await RefreshCart();
         }
         catch (Exception)
         {
@@ -48,7 +53,7 @@ public partial class NativeHeader
 
     private async Task RefreshCart()
     {
-        cart = await Api<CartSnapshot>("cart");
+        cart = await module!.InvokeAsync<NativeCart>("getNativeCart", Initial.CartUrl);
         _count = cart.Count;
         _signedIn = cart.SignedIn;
     }
@@ -77,7 +82,7 @@ public partial class NativeHeader
     public async Task CartChanged(bool open)
     {
         await Run(RefreshCart);
-        if (open)
+        if (open && cart.MiniEnabled)
             cartOpen = true;
         await InvokeAsync(StateHasChanged);
     }
@@ -85,16 +90,21 @@ public partial class NativeHeader
     private async Task OpenCart()
     {
         await Run(RefreshCart);
-        cartOpen = true;
+        if (error.Length > 0)
+            return;
+        if (cart.MiniEnabled)
+            cartOpen = true;
+        else
+            await module!.InvokeVoidAsync("navigate", Initial.CartUrl);
     }
 
     private async Task UpdateQuantity(QuantityRequest request)
     {
         await Run(async () =>
-    {
-        cart = await Api<CartSnapshot>("cart/quantity", "POST", request);
-        _count = cart.Count;
-    });
+        {
+            cart = await module!.InvokeAsync<NativeCart>("updateNativeCart", cart, request.LineId, request.Quantity);
+            _count = cart.Count;
+        });
     }
 
     private void ShowLogin()
@@ -106,27 +116,25 @@ public partial class NativeHeader
     private async Task SubmitLogin()
     {
         await Run(async () =>
-    {
-        var result = otpSent ? await Api<OtpResult>("otp/verify", "POST", new VerifyRequest(phone, code)) : await Api<OtpResult>("otp/send", "POST", new PhoneRequest(phone));
-        loginMessage = result.Message;
-        testCode = result.TestCode ?? "";
-        if (!result.Success)
-            return;
-        if (otpSent)
         {
-            await RefreshCart();
-            loginOpen = false;
-            otpSent = false;
-            code = "";
-        }
-        else
-            otpSent = true;
-    });
-    }
+            var result = otpSent ? await Api<OtpResult>("otp/verify", "POST", new VerifyRequest(phone, code)) : await Api<OtpResult>("otp/send", "POST", new PhoneRequest(phone));
+            loginMessage = result.Message;
+            testCode = result.TestCode ?? "";
+            if (!result.Success)
+                return;
+            if (otpSent)
+            {
+                if (await module!.InvokeAsync<bool>("reloadAfterSignIn", !Initial.CartEnabled))
+                    return;
+                await RefreshCart();
 
-    private static string Money(decimal value)
-    {
-        return value.ToString("N0", CultureInfo.InvariantCulture);
+                loginOpen = false;
+                otpSent = false;
+                code = "";
+            }
+            else
+                otpSent = true;
+        });
     }
 
     public async ValueTask DisposeAsync()

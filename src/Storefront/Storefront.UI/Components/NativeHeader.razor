@@ -51,14 +51,34 @@
                 {
                     @foreach (var line in cart.Lines)
                     {
-                        <CartItem Line="line" OnQuantity="UpdateQuantity" />
+                        <NativeCartItem Line="line" ShowImage="cart.ShowProductImages" Busy="busy" OnQuantity="UpdateQuantity" />
                     }
                 }
-            </div> @if(cart.Count > 0) {
+            </div>
+            @foreach (var warning in cart.Warnings)
+            {
+                <BbAlert Class="sf-notice notice mb-3">@warning</BbAlert>
+            }
+            @foreach (var item in cart.ItemWarnings)
+            {
+                <BbAlert Class="sf-notice notice mb-3"><strong>@item.ProductName</strong>
+                    @foreach (var warning in item.Messages)
+                    {
+                        <p>@((MarkupString)warning)</p>
+                    }
+                </BbAlert>
+            }
+            @if(cart.Count > 0) {
             <div class="border-t pt-5">
-                <div class="flex justify-between font-bold mb-5"><span>جمع سبد</span><span>@Money(cart.Total) <small
-                    class="text-xs font-normal">تومان</small></span></div>
-                    <BbButton Href="/stationery/cart" Class="sf-button w-full">دیدن سبد و ادامهٔ خرید</BbButton>
+                <div class="flex justify-between font-bold mb-5"><span>جمع کالاها</span><span>@cart.MiniSubTotal</span></div>
+                    @if (cart.DisplayShoppingCartButton)
+                    {
+                        <BbButton Href="@cart.CartUrl" Class="sf-button w-full">دیدن سبد و ادامهٔ خرید</BbButton>
+                    }
+                    @if (cart.DisplayCheckoutButton)
+                    {
+                        <BbButton Href="@cart.CheckoutUrl" Class="sf-button sf-soft w-full mt-3">ادامهٔ خرید</BbButton>
+                    }
                 </div>
             }
         </BbSheetContent>
@@ -73,7 +93,7 @@
             @if (cart.SignedIn)
             {
                 <p class="text-center text-lg py-6" dir="ltr">@cart.Phone</p>
-                <BbButton Href="/stationery/cart" Class="sf-button w-full">دیدن سبد خرید</BbButton><a href="/logout"
+                <BbButton Href="@Initial.CartUrl" Class="sf-button w-full">دیدن سبد خرید</BbButton><a href="/logout"
                                                                                                       class="block text-center text-xs text-slate-500 mt-5">خروج از حساب</a>
             }
             else

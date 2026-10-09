@@ -80,6 +80,10 @@ public sealed class NativeCatalogAdministrationTests
             await Assert.That(NativeCatalogTests.ProductIds(found).Single()).IsEqualTo(productIds[^1]);
             using var product = await guest.GetAsync(prefix + "-product-201");
             await Assert.That(product.StatusCode).IsEqualTo(HttpStatusCode.OK);
+            using var legacyProduct = await guest.GetAsync("stationery/product/" + productIds[^1]);
+            await Assert.That(legacyProduct.StatusCode).IsEqualTo(HttpStatusCode.Redirect);
+            using var redirectedProduct = await guest.GetAsync(legacyProduct.Headers.Location!.OriginalString);
+            await Assert.That(redirectedProduct.StatusCode).IsEqualTo(HttpStatusCode.OK);
 
             var combined = await guest.InitializeAsync($"catalog/all?q={prefix}&cid={categoryIds[1]}&price=1100-1201");
             await Assert.That(NativeCatalogTests.Total(combined)).IsEqualTo(1);

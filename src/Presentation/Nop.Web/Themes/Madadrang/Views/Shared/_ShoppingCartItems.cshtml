@@ -1,0 +1,95 @@
+@model ShoppingCartModel
+@using Nop.Core.Domain.Catalog
+@using Nop.Services.Helpers
+@inject IWebHelper webHelper
+@if (!Model.IsEditable)
+{
+    @await Html.PartialAsync("~/Views/Shared/_ShoppingCartItems.cshtml", Model)
+    return;
+}
+<div class="sf-cart-items">
+    @foreach (var item in Model.Items)
+    {
+        var productUrl = await NopUrl.RouteGenericUrlAsync<Product>(new { SeName = item.ProductSeName });
+        <article class="cart-row @(Model.ShowProductImages ? "" : "sf-cart-no-picture")" data-cart-itemid="@item.Id">
+            @if (Model.ShowProductImages)
+            {
+                <a href="@productUrl"><img src="@item.Picture.ImageUrl" alt="@item.Picture.AlternateText" title="@item.Picture.Title" /></a>
+            }
+            <div class="min-w-0">
+                <a href="@productUrl" class="text-[13px] font-bold">@item.ProductName</a>
+                @if (Model.ShowSku)
+                {
+                    <p class="text-xs text-slate-400 mt-2">@T("ShoppingCart.SKU"): @item.Sku</p>
+                }
+                @if (Model.ShowVendorName)
+                {
+                    <p class="text-xs text-slate-400 mt-2">@item.VendorName</p>
+                }
+                @foreach (var info in new[] { item.AttributeInfo, item.RecurringInfo, item.RentalInfo })
+                {
+                    if (!string.IsNullOrEmpty(info))
+                    {
+                        <div class="text-xs text-slate-500 mt-2">@Html.Raw(info)</div>
+                    }
+                }
+                @if (item.AllowItemEditing)
+                {
+                    var editUrl = await NopUrl.RouteGenericUrlAsync<Product>(new { SeName = item.ProductSeName }, webHelper.GetCurrentRequestProtocol());
+                    editUrl = webHelper.ModifyQueryString(editUrl, "updatecartitemid", item.Id.ToString());
+                    <a class="text-xs text-primary inline-block mt-2" href="@editUrl">ویرایش انتخاب‌ها</a>
+                }
+                <div class="flex items-center gap-3 mt-3 flex-wrap">
+                    @if (item.AllowedQuantities.Count > 0)
+                    {
+                        @await Component.InvokeAsync("MadadrangFormSelect", new { name = "itemquantity" + item.Id, label = "تعداد " + item.ProductName, options = item.AllowedQuantities, submitName = "updatecart" })
+                    }
+                    else
+                    {
+                        <label class="qty">
+                            <span class="sr-only">تعداد @item.ProductName</span>
+                            <input type="number" class="sf-quantity-input" name="itemquantity@(item.Id)" id="itemquantity@(item.Id)" value="@item.Quantity" min="0" inputmode="numeric" />
+                        </label>
+                    }
+                    @if (!item.DisableRemoval)
+                    {
+                        <button type="button" class="icon-btn text-slate-400 sf-cart-remove" data-remove-cart-item="@item.Id" aria-label="حذف @item.ProductName"><span aria-hidden="true">×</span></button>
+                    }
+                </div>
+                @foreach (var warning in item.Warnings)
+                {
+                    <div role="alert" class="sf-notice notice mt-3">@Html.Raw(warning)</div>
+                }
+            </div>
+            <div class="text-sm font-bold text-left price">
+                <span class="product-subtotal" data-cart-subtotal="@item.Id">@item.SubTotal</span>
+                <p class="text-[11px] font-normal text-slate-400 mt-2">هر عدد: <span class="product-unit-price">@item.UnitPrice</span></p>
+                @if (Model.ShowItemDiscount && !string.IsNullOrEmpty(item.Discount))
+                {
+                    <p class="text-xs font-normal text-primary mt-2">@T("ShoppingCart.ItemYouSave", item.Discount)</p>
+                    if (item.MaximumDiscountedQty.HasValue)
+                    {
+                        <p class="text-xs font-normal mt-2">@T("ShoppingCart.MaximumDiscountedQty", item.MaximumDiscountedQty.Value)</p>
+                    }
+                }
+            </div>
+        </article>
+    }
+</div>
+<script asp-location="Footer">
+    $(function () {
+        $('.sf-cart-remove').on('click', function () {
+            const field = document.createElement('input');
+            field.type = 'hidden';
+            field.name = 'removefromcart';
+            field.value = this.dataset.removeCartItem;
+            const form = this.closest('form');
+            form.appendChild(field);
+            try {
+                form.requestSubmit(form.querySelector('#updatecart'));
+            } finally {
+                field.remove();
+            }
+        });
+    });
+</script>

@@ -19,9 +19,10 @@
                     بزرگ</small></span>
                 </a>
                 <form action="/search" class="search-field max-md:hidden" method="get">
-                    <component type="typeof(SfIcon)" render-mode="Static" param-Name='@("search")' param-Size="19" />
+                    <button type="submit" aria-label="جست‌وجو">
+                        <component type="typeof(SfIcon)" render-mode="Static" param-Name='@("search")' param-Size="19" />
+                    </button>
                     <input name="q" aria-label="جست‌وجوی محصولات" placeholder="دنبال چی می‌گردی؟ دفتر، مداد، یک ایده تازه..." />
-                    <button type="submit" class="sr-only">جست‌وجو</button>
                 </form>
                 <div class="flex items-center gap-2">
                     <div class="md:hidden">
