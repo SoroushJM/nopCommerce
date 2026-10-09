@@ -496,7 +496,12 @@
                 <BbButton Type="ButtonType.Submit" Class="sf-button w-full mt-5" Loading="busy" Disabled="busy">
                     @(otpSent ? "تأیید و ورود" : "دریافت کد ورود")</BbButton>@if(otpSent) {
                     <button type="button" class="text-xs text-primary mt-4"
-                            @onclick="() => { otpSent = false; code = string.Empty; testCode = string.Empty; }">تغییر شمارهٔ
+                            @onclick="() =>
+                                {
+                                    otpSent = false;
+                                    code = string.Empty;
+                                    testCode = string.Empty;
+                                }">تغییر شمارهٔ
                         موبایل</button>
                     }
                     <p class="text-[10px] text-slate-400 mt-5 leading-6">شمارهٔ موبایل فقط برای

@@ -35,3 +35,9 @@ Luna audited authored storefront, plugin, and TUnit source for remaining compres
 Roslyn confirmed identical token kinds/text and comments for `PreviewStore.cs` (1,321 tokens, zero comments) and `Program.cs` (475 tokens, zero comments), with no syntax errors before or after. Targeted whitespace verification passed for `PreviewStore.cs`. For `Program.cs`, verification reports conflicting end-of-file changes (`WHITESPACE` requests a CRLF while `FINALNEWLINE` requests its deletion under `insert_final_newline = false`); the applied formatter leaves the file without a final newline. This remaining diagnostic concerns the file ending, not the expanded function bodies.
 
 `dotnet build Storefront.Preview.csproj --no-restore` succeeded with zero warnings and errors, and `git diff --check` passed. The remaining audit matches were empty forwarding constructors, auto-properties, and previously retained inline Razor event lambdas. No compact block-bodied C# functions were found in the audited authored source. The formatting changes were committed in `8f80f8c57f`.
+
+## 2026-10-09 Razor callback follow-up
+
+The compact three-statement cart reset callbacks in `StorefrontRoot.razor` and `Components/NativeHeader.razor` are now multiline. A temporary Microsoft Roslyn helper parsed and normalized only the two exact C# lambda expressions. Each lambda retained the same 21 token kinds/text values and zero comments, with zero syntax errors before and after. No handler logic or surrounding markup was rewritten.
+
+`dotnet build src/Storefront/Storefront.UI/Storefront.UI.csproj --no-restore` passed with zero warnings and errors, confirming the multiline quoted Razor attributes compile. The project build ran its existing Tailwind build script and rewrote the already-modified generated `wwwroot/storefront.css`. `git diff --check` passed.
