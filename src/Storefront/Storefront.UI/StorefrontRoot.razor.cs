@@ -1,7 +1,7 @@
-﻿using BlazorBlueprint.Primitives;
+﻿using System.Globalization;
+using BlazorBlueprint.Primitives;
 using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
-using System.Globalization;
 
 namespace Storefront.UI;
 
@@ -36,7 +36,11 @@ public partial class StorefrontRoot
     private Dictionary<int, int> selected = [];
     private Quote quote = new(0, false);
     private static readonly string[] Categories = ["دفتر و کاغذ", "نوشت‌افزار", "لوازم مدرسه", "هنر و خلاقیت"];
-    private static bool IsColorAttribute(ProductAttribute attribute) => attribute.Name.Contains("رنگ") || attribute.Name.Contains("color", StringComparison.OrdinalIgnoreCase);
+    private static bool IsColorAttribute(ProductAttribute attribute)
+    {
+        return attribute.Name.Contains("رنگ") || attribute.Name.Contains("color", StringComparison.OrdinalIgnoreCase);
+    }
+
     private IEnumerable<string> ColorNames => products.SelectMany(p => p.Attributes).Where(IsColorAttribute).SelectMany(a => a.Options).Select(o => o.Name).Distinct();
     private StoreProduct? CurrentProduct => products.FirstOrDefault(x => x.Id == ProductId);
 
@@ -90,7 +94,11 @@ public partial class StorefrontRoot
         }
     }
 
-    private async Task<T> Api<T>(string path, string method = "GET", object? data = null) => await module!.InvokeAsync<T>("request", Initial.ApiBase + "/" + path, method, data);
+    private async Task<T> Api<T>(string path, string method = "GET", object? data = null)
+    {
+        return await module!.InvokeAsync<T>("request", Initial.ApiBase + "/" + path, method, data);
+    }
+
     private async Task Run(Func<Task> action)
     {
         if (module == null)
@@ -123,17 +131,45 @@ public partial class StorefrontRoot
         await Run(RefreshQuote);
     }
 
-    private async Task RefreshQuote() => quote = await Api<Quote>("quote", "POST", new SelectionRequest(ProductId, selected, quantity));
-    private async Task AddToCart() => await Run(async () =>
+    private async Task RefreshQuote()
     {
-        cart = await Api<CartSnapshot>("cart/add", "POST", new SelectionRequest(ProductId, selected, quantity));
-        cartOpen = true;
-    });
-    private async Task UpdateQuantity(QuantityRequest request) => await Run(async () => cart = await Api<CartSnapshot>("cart/quantity", "POST", request));
-    private void Search() => Go("/stationery/catalog?q=" + Uri.EscapeDataString(query));
-    private void Go(string url) => Navigation.NavigateTo(url, true);
-    private void GoHome() => Go("/");
-    private void GoCatalog() => Go("/stationery/catalog");
+        quote = await Api<Quote>("quote", "POST", new SelectionRequest(ProductId, selected, quantity));
+    }
+
+    private async Task AddToCart()
+    {
+        await Run(async () =>
+        {
+            cart = await Api<CartSnapshot>("cart/add", "POST", new SelectionRequest(ProductId, selected, quantity));
+            cartOpen = true;
+        });
+    }
+
+    private async Task UpdateQuantity(QuantityRequest request)
+    {
+        await Run(async () => cart = await Api<CartSnapshot>("cart/quantity", "POST", request));
+    }
+
+    private void Search()
+    {
+        Go("/stationery/catalog?q=" + Uri.EscapeDataString(query));
+    }
+
+    private void Go(string url)
+    {
+        Navigation.NavigateTo(url, true);
+    }
+
+    private void GoHome()
+    {
+        Go("/");
+    }
+
+    private void GoCatalog()
+    {
+        Go("/stationery/catalog");
+    }
+
     private void ResetFilters()
     {
         query = "";
@@ -183,22 +219,38 @@ public partial class StorefrontRoot
         });
     }
 
-    private static string Money(decimal value) => value.ToString("N0", CultureInfo.InvariantCulture);
-    private static string CatalogUrl(string category) => "/stationery/catalog?category=" + Uri.EscapeDataString(category);
-    private static string CategoryBackground(int i) => new[]
+    private static string Money(decimal value)
     {
-        "#edf3ff",
-        "#fff1e5",
-        "#f1edf9",
-        "#ecf5ed"
-    }[i];
-    private static string CategoryColor(int i) => new[]
+        return value.ToString("N0", CultureInfo.InvariantCulture);
+    }
+
+    private static string CatalogUrl(string category)
     {
-        "#5a7ccc",
-        "#cd8748",
-        "#9680bc",
-        "#71a27e"
-    }[i];
+        return "/stationery/catalog?category=" + Uri.EscapeDataString(category);
+    }
+
+    private static string CategoryBackground(int i)
+    {
+        return new[]
+        {
+            "#edf3ff",
+            "#fff1e5",
+            "#f1edf9",
+            "#ecf5ed"
+        }[i];
+    }
+
+    private static string CategoryColor(int i)
+    {
+        return new[]
+        {
+            "#5a7ccc",
+            "#cd8748",
+            "#9680bc",
+            "#71a27e"
+        }[i];
+    }
+
     public async ValueTask DisposeAsync()
     {
         if (module != null)
