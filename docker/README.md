@@ -88,10 +88,10 @@ overlay, so normal `docker compose` commands keep these tighter limits.
 It caps usage; it does not guarantee arbitrary traffic or large catalogs will fit.
 An exhausted limit can cause an OOM kill. This profile is intended for light test use.
 
-.NET uses workstation GC, a managed heap budget of 40% of its container limit
-(about 141 MiB in the base profile and 154 MiB on the shared host), aggressive
+.NET uses workstation GC, a managed heap budget of 30% of its container limit
+(about 106 MiB in the base profile and 115 MiB on the shared host), aggressive
 memory conservation, and disabled diagnostic IPC.
-The GC percentage environment variable is hexadecimal (`0x28`).
+The GC percentage environment variable is hexadecimal (`0x1E`).
 Application cache entries default to five minutes and LINQ query caching is disabled.
 WebOptimizer stores generated bundles on disk instead of keeping them in memory.
 PostgreSQL uses 16 MB shared buffers, 1 MB work memory, 16 MB maintenance memory,

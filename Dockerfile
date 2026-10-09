@@ -54,7 +54,7 @@ RUN apk add --no-cache icu-libs icu-data-full tzdata gcompat libgdiplus tiff
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
     ASPNETCORE_HTTP_PORTS=8080 \
     DOTNET_GCServer=0 \
-    DOTNET_GCHeapHardLimitPercent=0x28 \
+    DOTNET_GCHeapHardLimitPercent=0x1E \
     DOTNET_GCConserveMemory=9 \
     DOTNET_EnableDiagnostics=0
 WORKDIR /app
