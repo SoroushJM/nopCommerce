@@ -21,14 +21,14 @@ public sealed class PersianStorefrontController(StorefrontService storefront, IW
         return View("~/Plugins/Misc.PersianStorefront/Views/Index.cshtml", new StorefrontPageModel(new(catalog, await storefront.Cart(), environment.IsDevelopment()), page, id));
     }
 }
+
 [ApiController]
 [Route("stationery/api")]
 [ApiExplorerSettings(GroupName = "stationery")]
 [AutoValidateAntiforgeryToken]
 [CheckAccessPublicStore]
 [CheckAccessClosedStore]
-public sealed class PersianStorefrontApiController(StorefrontService storefront, IWebHostEnvironment environment, IWorkContext work,
- IStoreContext store, ICustomerService customers, ICustomerRegistrationService registration, MockOtpStore otp) : ControllerBase
+public sealed class PersianStorefrontApiController(StorefrontService storefront, IWebHostEnvironment environment, IWorkContext work, IStoreContext store, ICustomerService customers, ICustomerRegistrationService registration, MockOtpStore otp) : ControllerBase
 {
     [HttpGet("cart")]
     public async Task<ActionResult<CartSnapshot>> Cart()
@@ -49,8 +49,15 @@ public sealed class PersianStorefrontApiController(StorefrontService storefront,
         {
             return await storefront.Quote(request);
         }
-        catch (ArgumentException ex) { return BadRequest(new { message = ex.Message }); }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new
+            {
+                message = ex.Message
+            });
+        }
     }
+
     [HttpPost("cart/add")]
     public async Task<ActionResult<CartSnapshot>> Add([FromBody] SelectionRequest request)
     {
@@ -58,8 +65,15 @@ public sealed class PersianStorefrontApiController(StorefrontService storefront,
         {
             return await storefront.Add(request);
         }
-        catch (ArgumentException ex) { return BadRequest(new { message = ex.Message }); }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new
+            {
+                message = ex.Message
+            });
+        }
     }
+
     [HttpPost("cart/quantity")]
     public async Task<ActionResult<CartSnapshot>> Quantity([FromBody] QuantityRequest request)
     {
@@ -67,8 +81,15 @@ public sealed class PersianStorefrontApiController(StorefrontService storefront,
         {
             return await storefront.Quantity(request);
         }
-        catch (ArgumentException ex) { return BadRequest(new { message = ex.Message }); }
+        catch (ArgumentException ex)
+        {
+            return BadRequest(new
+            {
+                message = ex.Message
+            });
+        }
     }
+
     [HttpPost("otp/send")]
     public async Task<ActionResult<OtpResult>> Send([FromBody] PhoneRequest request)
     {
@@ -76,6 +97,7 @@ public sealed class PersianStorefrontApiController(StorefrontService storefront,
             return StatusCode(503, new OtpResult(false, "ورود پیامکی هنوز به سرویس واقعی متصل نشده است."));
         return otp.Send((await work.GetCurrentCustomerAsync()).CustomerGuid, request.Phone);
     }
+
     [HttpPost("otp/verify")]
     public async Task<ActionResult<OtpResult>> Verify([FromBody] VerifyRequest request)
     {
@@ -90,16 +112,28 @@ public sealed class PersianStorefrontApiController(StorefrontService storefront,
             return new OtpResult(false, "ورود به این حساب از محیط آزمایشی مجاز نیست.");
         if (customer == null)
         {
-            customer = new Customer { Email = "mobile-" + phone + "@accounts.invalid", Phone = phone, PhoneSmsVerified = true, Username = "mobile:" + phone, Active = true, CreatedOnUtc = DateTime.UtcNow, LastActivityDateUtc = DateTime.UtcNow, RegisteredInStoreId = (await store.GetCurrentStoreAsync()).Id };
+            customer = new Customer
+            {
+                Email = "mobile-" + phone + "@accounts.invalid",
+                Phone = phone,
+                PhoneSmsVerified = true,
+                Username = "mobile:" + phone,
+                Active = true,
+                CreatedOnUtc = DateTime.UtcNow,
+                LastActivityDateUtc = DateTime.UtcNow,
+                RegisteredInStoreId = (await store.GetCurrentStoreAsync()).Id
+            };
             await customers.InsertCustomerAsync(customer);
             var role = await customers.GetCustomerRoleBySystemNameAsync(NopCustomerDefaults.RegisteredRoleName);
             await customers.AddCustomerRoleMappingAsync(new CustomerCustomerRoleMapping { CustomerId = customer.Id, CustomerRoleId = role.Id });
         }
+
         if (string.IsNullOrWhiteSpace(customer.Email))
         {
             customer.Email = "mobile-" + customer.Id + "@accounts.invalid";
             await customers.UpdateCustomerAsync(customer);
         }
+
         if (await customers.GetCurrentPasswordAsync(customer.Id) == null)
             await customers.InsertCustomerPasswordAsync(new CustomerPassword { CustomerId = customer.Id, PasswordFormat = PasswordFormat.Hashed, Password = Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(64)), PasswordSalt = Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32)), CreatedOnUtc = DateTime.UtcNow });
         await registration.SignInCustomerAsync(customer, "/stationery/cart", true);

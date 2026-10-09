@@ -33,7 +33,11 @@ internal sealed class StorefrontClient : IAsyncDisposable
         return html;
     }
 
-    public Task<HttpResponseMessage> GetAsync(string path) => _http.GetAsync(path);
+    public Task<HttpResponseMessage> GetAsync(string path)
+    {
+        return _http.GetAsync(path);
+    }
+
     public async Task<JsonElement> GetJsonAsync(string path)
     {
         using var response = await GetAsync(path);
@@ -55,7 +59,9 @@ internal sealed class StorefrontClient : IAsyncDisposable
     }
 
     public Task<HttpResponseMessage> PostFormAsync(string path, Dictionary<string, string> fields)
-        => _http.PostAsync(path, new FormUrlEncodedContent(fields));
+    {
+        return _http.PostAsync(path, new FormUrlEncodedContent(fields));
+    }
 
     public static async Task<JsonElement> ReadJsonAsync(HttpResponseMessage response)
     {
@@ -64,14 +70,21 @@ internal sealed class StorefrontClient : IAsyncDisposable
         return json.RootElement.Clone();
     }
 
-    public Task<JsonElement> CartAsync() => GetJsonAsync("stationery/api/cart");
+    public Task<JsonElement> CartAsync()
+    {
+        return GetJsonAsync("stationery/api/cart");
+    }
 
     public async Task ClearCartAsync()
     {
         var cart = await CartAsync();
         foreach (var line in cart.GetProperty("Lines").EnumerateArray())
         {
-            await PostJsonAsync("stationery/api/cart/quantity", new { lineId = line.GetProperty("Id").GetInt32(), quantity = 0 });
+            await PostJsonAsync("stationery/api/cart/quantity", new
+            {
+                lineId = line.GetProperty("Id").GetInt32(),
+                quantity = 0
+            });
         }
     }
 

@@ -6,8 +6,10 @@ namespace Nop.Storefront.Tests;
 // Administrative mutations are opt-in and require the server's own guarded fixture page.
 public sealed class LocalAdminFixtureAttribute() : SkipAttribute("Set STOREFRONT_TEST_ADMIN_FIXTURE=1 for isolated local administrative tests.")
 {
-    public override Task<bool> ShouldSkip(TestRegisteredContext context) =>
-        Task.FromResult(Environment.GetEnvironmentVariable("STOREFRONT_TEST_ADMIN_FIXTURE") != "1");
+    public override Task<bool> ShouldSkip(TestRegisteredContext context)
+    {
+        return Task.FromResult(Environment.GetEnvironmentVariable("STOREFRONT_TEST_ADMIN_FIXTURE") != "1");
+    }
 }
 
 internal static class LocalAdminFixture

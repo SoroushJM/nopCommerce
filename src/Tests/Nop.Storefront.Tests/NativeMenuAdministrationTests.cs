@@ -74,13 +74,19 @@ public sealed class NativeMenuAdministrationTests
             foreach (var item in itemIds.AsEnumerable().Reverse())
             {
                 await admin.InitializeAsync($"Admin/Menu/MenuItemEdit/{item}");
-                using var removed = await admin.PostFormAsync($"Admin/Menu/MenuItemDelete/{item}", new() { ["__RequestVerificationToken"] = admin.Token });
+                using var removed = await admin.PostFormAsync($"Admin/Menu/MenuItemDelete/{item}", new()
+                {
+                    ["__RequestVerificationToken"] = admin.Token
+                });
                 await Assert.That(removed.StatusCode).IsEqualTo(HttpStatusCode.Redirect);
             }
             if (menuId > 0)
             {
                 await admin.InitializeAsync($"Admin/Menu/Edit/{menuId}");
-                using var removed = await admin.PostFormAsync($"Admin/Menu/Delete/{menuId}", new() { ["__RequestVerificationToken"] = admin.Token });
+                using var removed = await admin.PostFormAsync($"Admin/Menu/Delete/{menuId}", new()
+                {
+                    ["__RequestVerificationToken"] = admin.Token
+                });
                 await Assert.That(removed.StatusCode).IsEqualTo(HttpStatusCode.Redirect);
             }
         }

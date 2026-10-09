@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Components;
+﻿using System.Globalization;
+using Microsoft.AspNetCore.Components;
 using Microsoft.JSInterop;
 using Storefront.UI;
-using System.Globalization;
 
 namespace Storefront.UI.Components;
 

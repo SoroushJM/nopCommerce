@@ -17,7 +17,10 @@ public sealed class NativeFixtureRepairTests
         {
             await client.InitializeAsync("Admin/PersianStorefrontMaintenance/Configure");
             using var response = await client.PostFormAsync("Admin/PersianStorefrontMaintenance/Configure",
-                new() { ["__RequestVerificationToken"] = client.Token });
+                new()
+                {
+                    ["__RequestVerificationToken"] = client.Token
+                });
             await Assert.That(response.StatusCode).IsEqualTo(HttpStatusCode.OK);
         }
         var after = await client.InitializeAsync("home/index");

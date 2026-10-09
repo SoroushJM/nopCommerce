@@ -60,7 +60,10 @@ public sealed class NativeHomepageTests
         await client.InitializeAsync("home/index");
         const string path = "Admin/PersianStorefrontMaintenance/Configure";
         using var get = await client.GetAsync(path);
-        using var post = await client.PostFormAsync(path, new() { ["__RequestVerificationToken"] = client.Token });
+        using var post = await client.PostFormAsync(path, new()
+        {
+            ["__RequestVerificationToken"] = client.Token
+        });
         foreach (var response in new[] { get, post })
         {
             await Assert.That(response.StatusCode is HttpStatusCode.Redirect or HttpStatusCode.Unauthorized or HttpStatusCode.Forbidden).IsTrue();

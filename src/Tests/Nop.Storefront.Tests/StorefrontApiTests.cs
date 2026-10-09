@@ -29,7 +29,10 @@ public sealed class StorefrontApiTests
             await Assert.That(rejected.StatusCode).IsEqualTo(HttpStatusCode.BadRequest);
             await Assert.That((await client.CartAsync()).GetProperty("Count").GetInt32()).IsEqualTo(1);
         }
-        finally { await client.ClearCartAsync(); }
+        finally
+        {
+            await client.ClearCartAsync();
+        }
     }
 
     [Test]
@@ -57,13 +60,25 @@ public sealed class StorefrontApiTests
             await Assert.That(merged.GetProperty("SignedIn").GetBoolean()).IsTrue();
             await Assert.That(merged.GetProperty("Count").GetInt32()).IsEqualTo(2);
             var lineId = merged.GetProperty("Lines")[0].GetProperty("Id").GetInt32();
-            using var crossCustomer = await outsider.PostAsync("stationery/api/cart/quantity", new { lineId, quantity = 0 });
+            using var crossCustomer = await outsider.PostAsync("stationery/api/cart/quantity", new
+            {
+                lineId,
+                quantity = 0
+            });
             await Assert.That(crossCustomer.StatusCode).IsEqualTo(HttpStatusCode.BadRequest);
             await Assert.That((await second.CartAsync()).GetProperty("Count").GetInt32()).IsEqualTo(2);
-            var changed = await second.PostJsonAsync("stationery/api/cart/quantity", new { lineId, quantity = 3 });
+            var changed = await second.PostJsonAsync("stationery/api/cart/quantity", new
+            {
+                lineId,
+                quantity = 3
+            });
             await Assert.That(changed.GetProperty("Count").GetInt32()).IsEqualTo(3);
             await Assert.That(changed.GetProperty("Total").GetDecimal()).IsEqualTo(3 * (product.GetProperty("Price").GetDecimal() + green.GetProperty("Adjustment").GetDecimal()));
-            var removed = await second.PostJsonAsync("stationery/api/cart/quantity", new { lineId, quantity = 0 });
+            var removed = await second.PostJsonAsync("stationery/api/cart/quantity", new
+            {
+                lineId,
+                quantity = 0
+            });
             await Assert.That(removed.GetProperty("Count").GetInt32()).IsEqualTo(0);
             using var csrf = await outsider.PostAsync("stationery/api/cart/add", selection, includeToken: false);
             await Assert.That(csrf.StatusCode).IsEqualTo(HttpStatusCode.BadRequest);
@@ -72,8 +87,22 @@ public sealed class StorefrontApiTests
         finally
         {
             try
-            { await first.InitializeAsync(); await first.ClearCartAsync(); }
-            finally { try { await second.InitializeAsync(); await second.ClearCartAsync(); } finally { await outsider.ClearCartAsync(); } }
+            {
+                await first.InitializeAsync();
+                await first.ClearCartAsync();
+            }
+            finally
+            {
+                try
+                {
+                    await second.InitializeAsync();
+                    await second.ClearCartAsync();
+                }
+                finally
+                {
+                    await outsider.ClearCartAsync();
+                }
+            }
         }
     }
 
@@ -103,23 +132,51 @@ public sealed class StorefrontApiTests
 
     private static async Task Login(StorefrontClient client, string phone)
     {
-        var sent = await client.PostJsonAsync("stationery/api/otp/send", new { phone });
+        var sent = await client.PostJsonAsync("stationery/api/otp/send", new
+        {
+            phone
+        });
         await Assert.That(sent.GetProperty("Success").GetBoolean()).IsTrue();
         var code = sent.GetProperty("TestCode").GetString();
         await Assert.That(code?.Length).IsEqualTo(6);
-        var again = await client.PostJsonAsync("stationery/api/otp/send", new { phone });
+        var again = await client.PostJsonAsync("stationery/api/otp/send", new
+        {
+            phone
+        });
         await Assert.That(again.GetProperty("Success").GetBoolean()).IsFalse();
-        var wrong = await client.PostJsonAsync("stationery/api/otp/verify", new { phone, code = "000000" });
+        var wrong = await client.PostJsonAsync("stationery/api/otp/verify", new
+        {
+            phone,
+            code = "000000"
+        });
         await Assert.That(wrong.GetProperty("Success").GetBoolean()).IsFalse();
-        var accepted = await client.PostJsonAsync("stationery/api/otp/verify", new { phone, code });
+        var accepted = await client.PostJsonAsync("stationery/api/otp/verify", new
+        {
+            phone,
+            code
+        });
         await Assert.That(accepted.GetProperty("Success").GetBoolean()).IsTrue();
         await client.InitializeAsync();
-        var replay = await client.PostJsonAsync("stationery/api/otp/verify", new { phone, code });
+        var replay = await client.PostJsonAsync("stationery/api/otp/verify", new
+        {
+            phone,
+            code
+        });
         await Assert.That(replay.GetProperty("Success").GetBoolean()).IsFalse();
     }
 
     private static object Selection(JsonElement product, JsonElement attribute, JsonElement option)
-        => new { productId = product.GetProperty("Id").GetInt32(), values = new Dictionary<int, int> { [attribute.GetProperty("Id").GetInt32()] = option.GetProperty("Id").GetInt32() }, quantity = 1 };
+    {
+        return new
+        {
+            productId = product.GetProperty("Id").GetInt32(),
+            values = new Dictionary<int, int>
+            {
+                [attribute.GetProperty("Id").GetInt32()] = option.GetProperty("Id").GetInt32()
+            },
+            quantity = 1
+        };
+    }
 
     private static async Task<(JsonElement Product, JsonElement Attribute, JsonElement Green, JsonElement Orange)> Fixture(StorefrontClient client)
     {

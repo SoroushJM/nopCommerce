@@ -51,7 +51,10 @@ public sealed class NativeProductTests
             await Assert.That(result.GetProperty("success").GetBoolean()).IsFalse();
             await Assert.That((await client.CartAsync()).GetProperty("Count").GetInt32()).IsEqualTo(0);
         }
-        finally { await client.ClearCartAsync(); }
+        finally
+        {
+            await client.ClearCartAsync();
+        }
     }
 
     [Test]
@@ -70,22 +73,26 @@ public sealed class NativeProductTests
             await Assert.That(cart.GetProperty("Lines").GetArrayLength()).IsEqualTo(1);
             await Assert.That(cart.GetProperty("Lines")[0].GetProperty("Quantity").GetInt32()).IsEqualTo(1);
             var again = await client.CartAsync();
-            await Assert.That(again.GetProperty("Lines")[0].GetProperty("Id").GetInt32())
-                .IsEqualTo(cart.GetProperty("Lines")[0].GetProperty("Id").GetInt32());
+            await Assert.That(again.GetProperty("Lines")[0].GetProperty("Id").GetInt32()).IsEqualTo(cart.GetProperty("Lines")[0].GetProperty("Id").GetInt32());
         }
-        finally { await client.ClearCartAsync(); }
+        finally
+        {
+            await client.ClearCartAsync();
+        }
     }
 
     private static async Task<(JsonElement Available, JsonElement Unavailable)> Combinations(StorefrontClient client)
     {
         var combinations = await client.GetJsonAsync($"product/combinations?productId={StorefrontClient.ProductId}");
-        return (combinations.EnumerateArray().First(item => item.GetProperty("InStock").GetBoolean()),
-            combinations.EnumerateArray().First(item => !item.GetProperty("InStock").GetBoolean()));
+        return (combinations.EnumerateArray().First(item => item.GetProperty("InStock").GetBoolean()), combinations.EnumerateArray().First(item => !item.GetProperty("InStock").GetBoolean()));
     }
 
     private static Dictionary<string, string> Form(StorefrontClient client, JsonElement combination, bool includeToken = true)
     {
-        var fields = new Dictionary<string, string> { [$"addtocart_{StorefrontClient.ProductId}.EnteredQuantity"] = "1" };
+        var fields = new Dictionary<string, string>
+        {
+            [$"addtocart_{StorefrontClient.ProductId}.EnteredQuantity"] = "1"
+        };
         foreach (var attribute in combination.GetProperty("Attributes").EnumerateArray())
             fields[$"product_attribute_{attribute.GetProperty("Id").GetInt32()}"] = attribute.GetProperty("ValueIds")[0].GetInt32().ToString();
         if (includeToken)

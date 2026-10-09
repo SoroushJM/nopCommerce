@@ -52,25 +52,31 @@ public sealed class NativeCategoryAdministrationTests
             if (id > 0)
             {
                 await admin.InitializeAsync($"Admin/Category/Edit/{id}");
-                using var deleted = await admin.PostFormAsync($"Admin/Category/Delete/{id}", new() { ["__RequestVerificationToken"] = admin.Token });
+                using var deleted = await admin.PostFormAsync($"Admin/Category/Delete/{id}", new()
+                {
+                    ["__RequestVerificationToken"] = admin.Token
+                });
                 await Assert.That(deleted.StatusCode).IsEqualTo(HttpStatusCode.Redirect);
             }
         }
     }
 
-    private static Dictionary<string, string> Fields(StorefrontClient client, string name, string slug, int id = 0, bool published = true) => new()
+    private static Dictionary<string, string> Fields(StorefrontClient client, string name, string slug, int id = 0, bool published = true)
     {
-        ["Id"] = id.ToString(),
-        ["Name"] = name,
-        ["SeName"] = slug,
-        ["CategoryTemplateId"] = "1",
-        ["PageSize"] = "12",
-        ["PageSizeOptions"] = "12,24,36",
-        ["AllowCustomersToSelectPageSize"] = "true",
-        ["ShowOnHomepage"] = "true",
-        ["Published"] = published.ToString(),
-        ["DisplayOrder"] = "100",
-        ["save-continue"] = "true",
-        ["__RequestVerificationToken"] = client.Token
-    };
+        return new()
+        {
+            ["Id"] = id.ToString(),
+            ["Name"] = name,
+            ["SeName"] = slug,
+            ["CategoryTemplateId"] = "1",
+            ["PageSize"] = "12",
+            ["PageSizeOptions"] = "12,24,36",
+            ["AllowCustomersToSelectPageSize"] = "true",
+            ["ShowOnHomepage"] = "true",
+            ["Published"] = published.ToString(),
+            ["DisplayOrder"] = "100",
+            ["save-continue"] = "true",
+            ["__RequestVerificationToken"] = client.Token
+        };
+    }
 }
