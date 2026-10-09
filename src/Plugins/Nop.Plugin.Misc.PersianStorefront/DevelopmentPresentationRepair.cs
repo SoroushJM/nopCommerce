@@ -17,7 +17,8 @@ namespace Nop.Plugin.Misc.PersianStorefront;
 // Called only by the guarded, explicit local administrator operation.
 public sealed class DevelopmentPresentationRepair(IProductService products, ICategoryService categories,
     IManufacturerService manufacturers, IUrlRecordService urls, IGenericAttributeService attributes,
-    IStoreContext stores, IMenuService menus, ITopicService topics, ILocalizedEntityService localized, ITopicTemplateService topicTemplates)
+    IStoreContext stores, IMenuService menus, ITopicService topics, ILocalizedEntityService localized, ITopicTemplateService topicTemplates,
+    DevelopmentCatalogFiltersRepair catalogFilters)
 {
     public async Task<List<string>> RunAsync()
     {
@@ -95,6 +96,7 @@ public sealed class DevelopmentPresentationRepair(IProductService products, ICat
              new MenuItem { MenuItemType = MenuItemType.StandardPage, RouteName = NopRouteNames.General.CONTACT_US, Title = "تماس با ما" }]);
         await DisableUntouchedDefaultsAsync(report);
         await HideUntouchedHomepageTextAsync();
+        await catalogFilters.RunAsync(fixtureCategories.Values);
         report.Insert(0, $"نمایش نمونه‌ها آماده شد؛ {fixtureCategories.Count} دستهٔ مرتبط شناسایی شد. قیمت و موجودی تغییر نکردند.");
         return report;
     }

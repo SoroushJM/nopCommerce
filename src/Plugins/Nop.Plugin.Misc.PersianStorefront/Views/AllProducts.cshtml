@@ -1,0 +1,26 @@
+@model Nop.Web.Models.Catalog.SearchModel
+@inherits Nop.Web.Framework.Mvc.Razor.NopRazorPage<TModel>
+@using Nop.Core.Domain.Seo
+@using Nop.Services.Helpers
+@using Nop.Web.Framework.UI
+@inject INopHtmlHelper NopHtml
+@inject IWebHelper webHelper
+@inject SeoSettings seoSettings
+@{
+    Layout = "_MadadrangRoot";
+    Context.Items["Madadrang.NativePage"] = true;
+    NopHtml.AddTitleParts("فروشگاه نوشت‌افزار");
+    NopHtml.AppendPageCssClassParts("html-all-products-page");
+    ViewData["AllProducts"] = true;
+    if (seoSettings.CanonicalUrlsEnabled)
+    {
+        var canonical = Url.RouteUrl("MadadrangAllProducts", new { }, webHelper.GetCurrentRequestProtocol());
+        NopHtml.AddCanonicalUrlParts(canonical, seoSettings.QueryStringInCanonicalUrlsEnabled);
+    }
+}
+<main id="main-content" class="wrap py-8 sf-catalog">
+    <p class="text-xs text-slate-400 mb-5"><a href="@Url.Content("~/")">خانه</a> / فروشگاه</p>
+    <h1 class="page-heading">دنیای رنگی نوشت‌افزار</h1>
+    <p class="text-sm text-slate-500 mt-3">همراه کوچکِ هر ایده را اینجا پیدا کن.</p>
+    @await Html.PartialAsync("~/Themes/Madadrang/Views/Catalog/_MadadrangCatalogBody.cshtml", Model)
+</main>

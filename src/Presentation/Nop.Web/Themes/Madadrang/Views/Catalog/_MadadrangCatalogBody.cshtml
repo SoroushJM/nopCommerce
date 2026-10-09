@@ -1,0 +1,40 @@
+@model SearchModel
+@{
+    var allProducts = ViewData["AllProducts"] as bool? == true;
+    var products = Model.CatalogProductsModel;
+}
+<form method="get" action="@(Context.Request.PathBase + Context.Request.Path)" class="search-field mt-6" role="search">
+    <input type="search" name="q" value="@Model.q" aria-label="جست‌وجو در فروشگاه" placeholder="نام محصول یا برند..." />
+    @foreach (var key in new[] { "advs", "cid", "isc", "mid", "vid", "sid", "sit", "price", "ms", "specs", "orderby", "pagesize", "viewmode" })
+    {
+        if (Context.Request.Query.TryGetValue(key, out var value))
+        {
+            <input type="hidden" name="@key" value="@value" />
+        }
+    }
+    <button type="submit" class="text-xs text-primary">بگرد</button>
+    @if (!allProducts)
+    {
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductSearchPageBasic, additionalData = Model })
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductSearchPageAdvanced, additionalData = Model })
+    }
+</form>
+<div class="py-6 border-b mb-7">
+    @await Component.InvokeAsync("MadadrangCatalogControls", new { model = products, placement = "toolbar", search = Model, allProducts })
+</div>
+<div class="flex flex-col md:flex-row gap-8">
+    <aside class="md:shrink-0">
+        @await Component.InvokeAsync("MadadrangCatalogControls", new { model = products, placement = "filters", search = Model, allProducts })
+    </aside>
+    <section class="flex-1 min-w-0" aria-label="نتایج محصولات">
+        @if (!allProducts)
+        {
+            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductSearchPageBeforeResults, additionalData = Model })
+        }
+        @await Html.PartialAsync("~/Themes/Madadrang/Views/Catalog/_ProductsInGridOrLines.cshtml", products)
+        @if (!allProducts)
+        {
+            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductSearchPageAfterResults, additionalData = Model })
+        }
+    </section>
+</div>

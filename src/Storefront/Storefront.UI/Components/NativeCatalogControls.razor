@@ -1,0 +1,41 @@
+@inject NavigationManager Navigation
+<BbDirectionProvider Direction="TextDirection.RightToLeft">
+    @if (Placement == "toolbar")
+    {
+        <div class="flex items-center gap-3 flex-wrap text-xs text-slate-500" aria-label="نمایش محصولات">
+            @if (Initial.SortOptions.Count > 0)
+            {
+                <div class="flex items-center gap-2"><span>مرتب‌سازی</span>
+                    <StoreSelect TValue="string" Label="مرتب‌سازی محصولات" Options="Options(Initial.SortOptions)"
+                                 Value="Selected(Initial.SortOptions)" ValueChanged='value => Change(new("orderby", value))' />
+                </div>
+            }
+            @if (Initial.PageSizes.Count > 0)
+            {
+                <StoreSelect TValue="string" Label="تعداد محصول در صفحه" Options="Options(Initial.PageSizes)"
+                             Value="Selected(Initial.PageSizes)" ValueChanged='value => Change(new("pagesize", value))' />
+            }
+            @if (Initial.ViewModes.Count > 0)
+            {
+                <StoreSelect TValue="string" Label="نمایش شبکه‌ای یا فهرستی" Options="Options(Initial.ViewModes)"
+                             Value="Selected(Initial.ViewModes)" ValueChanged='value => Change(new("viewmode", value))' />
+            }
+        </div>
+    }
+    else
+    {
+        <div class="desktop-filter">
+            <h2 class="font-bold text-sm flex items-center gap-2 mb-5"><SfIcon Name="filter" />فیلتر محصولات</h2>
+            <CatalogFilterPanel Initial="Initial" InstanceId="sf-catalog-desktop" Change="Change" />
+        </div>
+        <BbSheet Open="_open" OpenChanged="SetOpen" Side="SheetSide.Right">
+            <div class="md:hidden mb-5" @ref="_filterTrigger">
+                <BbSheetTrigger AsChild="true"><BbButton Variant="ButtonVariant.Outline" Class="w-full"><SfIcon Name="filter" />فیلتر محصولات</BbButton></BbSheetTrigger>
+            </div>
+            <BbSheetContent Class="sf-sheet" ShowClose="true">
+                <BbSheetHeader><BbSheetTitle>فیلتر محصولات</BbSheetTitle><BbSheetDescription>انتخاب‌های رنگی را دقیق‌تر پیدا کن.</BbSheetDescription></BbSheetHeader>
+                <div class="overflow-y-auto my-6"><CatalogFilterPanel Initial="Initial" InstanceId="sf-catalog-mobile" Change="Change" /></div>
+            </BbSheetContent>
+        </BbSheet>
+    }
+</BbDirectionProvider>

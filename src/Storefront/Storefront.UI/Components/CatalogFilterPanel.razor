@@ -1,0 +1,75 @@
+<div class="space-y-6">
+    @if (Initial.Categories.Count > 0)
+    {
+        <div>
+            <h3 class="text-xs font-bold mb-3">دسته‌بندی</h3>
+            <StoreSelect TValue="string" Label="دسته‌بندی محصولات" Options="Options(Initial.Categories)"
+                         Value="Selected(Initial.Categories)" ValueChanged='value => Change.InvokeAsync(new("cid", value))' />
+        </div>
+    }
+    @if (Initial.Manufacturers.Count > 0)
+    {
+        <div>
+            <h3 class="text-xs font-bold mb-3">برند</h3>
+            @if (Initial.NativeSearch)
+            {
+                <StoreSelect TValue="string" Label="فیلتر برند" Options="Options(Initial.Manufacturers)"
+                             Value="Selected(Initial.Manufacturers)" ValueChanged='value => Change.InvokeAsync(new("mid", value))' />
+            }
+            else
+            {
+                @foreach (var option in Initial.Manufacturers)
+                {
+                    <label class="flex items-center gap-2 text-xs py-2" for="@(InstanceId + "-brand-" + option.Value)">
+                        <BbCheckbox Id="@(InstanceId + "-brand-" + option.Value)" Checked="option.Selected"
+                                    CheckedChanged='value => Toggle("ms", option.Value, value)' AriaLabel="@option.Text" />
+                        <span>@option.Text</span>
+                    </label>
+                }
+            }
+        </div>
+    }
+    @if (Initial.PriceEnabled)
+    {
+        <div>
+            <h3 class="text-xs font-bold mb-3">بازهٔ قیمت (@Initial.Currency)</h3>
+            <p class="text-[11px] text-slate-400 mb-3" dir="ltr">@Initial.AvailableFrom – @Initial.AvailableTo</p>
+            <div class="grid grid-cols-2 gap-2">
+                <div>
+                    <BbLabel For="@(InstanceId + "-from")" Class="text-xs mb-2 block">از</BbLabel>
+                    <BbInput Id="@(InstanceId + "-from")" Class="sf-input sf-bb-input w-full text-left" dir="ltr" inputmode="decimal"
+                             @bind-Value="_from" UpdateTiming="UpdateTiming.Immediate" />
+                </div>
+                <div>
+                    <BbLabel For="@(InstanceId + "-to")" Class="text-xs mb-2 block">تا</BbLabel>
+                    <BbInput Id="@(InstanceId + "-to")" Class="sf-input sf-bb-input w-full text-left" dir="ltr" inputmode="decimal"
+                             @bind-Value="_to" UpdateTiming="UpdateTiming.Immediate" />
+                </div>
+            </div>
+            @if (_error.Length > 0)
+            {
+                <p role="alert" class="text-xs text-orange-600 mt-2">@_error</p>
+            }
+            <BbButton Class="sf-button w-full mt-3" OnClick="ApplyPrice">اعمال قیمت</BbButton>
+        </div>
+    }
+    @foreach (var group in Initial.Specifications)
+    {
+        <div>
+            <h3 class="text-xs font-bold mb-3">@group.Name</h3>
+            @foreach (var option in group.Options)
+            {
+                <label class="flex items-center gap-2 text-xs py-2" for="@(InstanceId + "-spec-" + option.Value)">
+                    <BbCheckbox Id="@(InstanceId + "-spec-" + option.Value)" Checked="option.Selected"
+                                CheckedChanged='value => Toggle("specs", option.Value, value)' AriaLabel="@option.Text" />
+                    @if (option.Color.Length > 0)
+                    {
+                        <span class="size-3 rounded-full border border-slate-200" style="background:@option.Color"></span>
+                    }
+                    <span>@option.Text</span>
+                </label>
+            }
+        </div>
+    }
+    <BbButton Variant="ButtonVariant.Ghost" Class="text-xs text-primary w-full" OnClick='() => Change.InvokeAsync(new("reset", null))'>پاک کردن فیلترها</BbButton>
+</div>

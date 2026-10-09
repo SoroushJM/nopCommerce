@@ -11,7 +11,8 @@ using Nop.Web.Models.Catalog;
 namespace Nop.Plugin.Misc.PersianStorefront.Components;
 
 public sealed class MadadrangProductCardViewComponent(ICategoryService categories, IManufacturerService manufacturers,
-    IProductAttributeService attributes, ILocalizationService localization, IAclService acl, IStoreMappingService stores) : NopViewComponent
+    IProductAttributeService attributes, ILocalizationService localization, IAclService acl, IStoreMappingService stores,
+    IProductService products) : NopViewComponent
 {
     public async Task<IViewComponentResult> InvokeAsync(ProductOverviewModel model)
     {
@@ -45,6 +46,14 @@ public sealed class MadadrangProductCardViewComponent(ICategoryService categorie
         }
         ViewData["Caption"] = string.Join(" · ", caption);
         ViewData["Colors"] = colors.Distinct().Take(3).ToList();
+        var product = await products.GetProductByIdAsync(model.Id);
+        ViewData["InStock"] = product?.ManageInventoryMethod switch
+        {
+            ManageInventoryMethod.DontManageStock => true,
+            ManageInventoryMethod.ManageStock => product.BackorderMode != BackorderMode.NoBackorders || await products.GetTotalStockQuantityAsync(product) > 0,
+            ManageInventoryMethod.ManageStockByAttributes => (await attributes.GetAllProductAttributeCombinationsAsync(product.Id)).Any(combination => combination.StockQuantity > 0 || combination.AllowOutOfStockOrders),
+            _ => false
+        };
         return await ViewAsync("~/Plugins/Misc.PersianStorefront/Views/ProductCard.cshtml", model);
     }
 }

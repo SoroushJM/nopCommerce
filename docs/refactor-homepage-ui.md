@@ -12,7 +12,7 @@ The native header now has static brand/search structure and separate small WASM 
 
 Native homepage, body, header, footer and product-card widget calls remain. Notifications, the administration header link and the cookie-law component are retained. A product-card view falls back to the original nop view outside the migrated native-page layout.
 
-The accepted `/` and legacy catalog/search/cart routes remain unchanged until their replacement sections pass acceptance. The new page is a native preview; this document does not claim the complete roadmap or route migration is finished.
+At this section's acceptance, `/` and legacy catalog/search/cart routes remained unchanged. The subsequent [catalog section](refactor-catalog-design.md) accepted native home/search ownership and the catalog compatibility redirect. Cart/product/login migration and the complete roadmap remain unfinished.
 
 ## Explicit local fixture repair
 
@@ -43,4 +43,4 @@ Administrative mutations require `STOREFRONT_TEST_ADMIN_FIXTURE=1`, private cred
 
 Plugin/browser-client builds and Tailwind generation passed. Microsoft tools formatted C#/stable Razor files; details and the two Razor convergence limitations are in [storefront-formatting.md](storefront-formatting.md). An upstream `CS0108` warning in the generated VAT service appeared during a dependency rebuild; it is unrelated to the storefront changes.
 
-Pending full-roadmap acceptance includes the native catalog/filter migration, full cart/OTP cleanup, published/Docker assets, plugin widget demonstrations and performance measurements. Native category destinations currently use the preserved default Theme fallback pending the catalog section.
+The subsequent catalog section added native category/search Theme views and paged global browsing. Pending full-roadmap acceptance includes full cart/OTP cleanup, published/Docker assets, plugin widget demonstrations and performance measurements.

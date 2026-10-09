@@ -1,0 +1,12 @@
+@model SearchModel
+@{
+    Layout = "_MadadrangRoot";
+    Context.Items["Madadrang.NativePage"] = true;
+    NopHtml.AddTitleParts(T("PageTitle.Search").Text);
+    NopHtml.AppendPageCssClassParts("html-search-page");
+}
+<main id="main-content" class="wrap py-8 sf-catalog">
+    <p class="text-xs text-slate-400 mb-5"><a href="@Url.Content("~/")">خانه</a> / جست‌وجو</p>
+    <h1 class="page-heading">جست‌وجوی نوشت‌افزار</h1>
+    @await Html.PartialAsync("_MadadrangCatalogBody", Model)
+</main>

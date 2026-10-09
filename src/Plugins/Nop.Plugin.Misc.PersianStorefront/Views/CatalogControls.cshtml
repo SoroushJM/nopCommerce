@@ -1,0 +1,5 @@
+@model Storefront.UI.CatalogControls
+@using Storefront.UI.Components
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<component type="typeof(NativeCatalogControls)" render-mode="WebAssemblyPrerendered"
+           param-Initial="Model" param-Placement='@((string)ViewData["Placement"]!)' />

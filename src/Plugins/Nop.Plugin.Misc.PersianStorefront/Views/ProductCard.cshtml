@@ -13,9 +13,10 @@
 @{
     var url = await NopUrl.RouteGenericUrlAsync<Product>(new { SeName = Model.SeName });
     var picture = Model.PictureModels.FirstOrDefault();
-    var label = Model.ProductPrice.DisableBuyButton ? "خرید غیرفعال" : Model.MarkAsNew ? "تازه رسیده" : !string.IsNullOrEmpty(Model.ProductPrice.OldPrice) ? "پیشنهاد رنگی" : "";
+    var inStock = (bool)ViewData["InStock"]!;
+    var label = !inStock ? "ناموجود" : Model.ProductPrice.DisableBuyButton ? "خرید غیرفعال" : Model.MarkAsNew ? "تازه رسیده" : !string.IsNullOrEmpty(Model.ProductPrice.OldPrice) ? "پیشنهاد رنگی" : "";
 }
-<article class="product-card" data-productid="@Model.Id">
+<article class="product-card" data-productid="@Model.Id" data-product-stock="@inStock.ToString().ToLowerInvariant()">
     <a href="@url" aria-label="@Model.Name">
         <div class="product-photo">
             <img src="@picture?.ImageUrl" alt="@picture?.AlternateText" title="@picture?.Title" loading="lazy" />

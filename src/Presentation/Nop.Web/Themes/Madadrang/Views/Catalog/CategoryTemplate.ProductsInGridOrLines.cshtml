@@ -1,0 +1,90 @@
+@model CategoryModel
+@using Nop.Core.Domain.Catalog
+@using Nop.Core.Domain.Common
+@using Nop.Core.Domain.Seo
+@using Nop.Services.Helpers
+@inject IWebHelper webHelper
+@inject SeoSettings seoSettings
+@inject CommonSettings commonSettings
+@{
+    Layout = "_MadadrangRoot";
+    Context.Items["Madadrang.NativePage"] = true;
+    NopHtml.AddTitleParts(!string.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
+    NopHtml.AddMetaDescriptionParts(Model.MetaDescription);
+    NopHtml.AddMetaKeywordParts(Model.MetaKeywords);
+    NopHtml.AddJsonLdParts(Model.JsonLd);
+    NopHtml.AppendPageCssClassParts("html-category-page");
+    if (seoSettings.CanonicalUrlsEnabled)
+    {
+        var canonical = (await NopUrl.RouteGenericUrlAsync<Category>(new { SeName = Model.SeName }, webHelper.GetCurrentRequestProtocol())).ToLowerInvariant();
+        NopHtml.AddCanonicalUrlParts(canonical, seoSettings.QueryStringInCanonicalUrlsEnabled);
+    }
+}
+@section Breadcrumb
+{
+    @if (Model.DisplayCategoryBreadcrumb)
+    {
+        <nav class="wrap pt-7 text-xs text-slate-400 flex items-center gap-2 flex-wrap" aria-label="مسیر دسته‌بندی">
+            <a href="@Url.RouteUrl(NopRouteNames.General.HOMEPAGE)">@T("Categories.Breadcrumb.Top")</a>
+            @foreach (var category in Model.CategoryBreadcrumb)
+            {
+                <span>@commonSettings.BreadcrumbDelimiter</span>
+                if (category.Id == Model.Id)
+                {
+                    <strong class="text-slate-600" aria-current="page">@category.Name</strong>
+                }
+                else
+                {
+                    <a href="@(await NopUrl.RouteGenericUrlAsync<Category>(new { SeName = category.SeName }))">@category.Name</a>
+                }
+            }
+        </nav>
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CategoryDetailsAfterBreadcrumb, additionalData = Model })
+    }
+}
+<main id="main-content" class="wrap py-8 sf-catalog">
+    <h1 class="page-heading">@Model.Name</h1>
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CategoryDetailsTop, additionalData = Model })
+    @if (!string.IsNullOrWhiteSpace(Model.Description))
+    {
+        <div class="category-description text-sm leading-7 mt-4">@Html.Raw(Model.Description)</div>
+    }
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CategoryDetailsBeforeSubcategories, additionalData = Model })
+    @if (Model.SubCategories.Count > 0)
+    {
+        <div class="flex flex-wrap gap-2 mt-5" aria-label="زیردسته‌ها">
+            @foreach (var category in Model.SubCategories)
+            {
+                <a class="filter-pill" href="@(await NopUrl.RouteGenericUrlAsync<Category>(new { SeName = category.SeName }))">@category.Name</a>
+            }
+        </div>
+    }
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CategoryDetailsBeforeFeaturedProducts, additionalData = Model })
+    @if (Model.FeaturedProducts.Count > 0)
+    {
+        <section class="mt-7 mb-7">
+            <h2 class="font-bold text-lg mb-4">@T("Products.FeaturedProducts")</h2>
+            <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+                @foreach (var product in Model.FeaturedProducts)
+                {
+                    @await Html.PartialAsync("_ProductBox", product)
+                }
+            </div>
+        </section>
+    }
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CategoryDetailsAfterFeaturedProducts, additionalData = Model })
+    <div class="py-6 border-b mb-7">
+        @await Component.InvokeAsync("MadadrangCatalogControls", new { model = Model.CatalogProductsModel, placement = "toolbar" })
+    </div>
+    <div class="flex flex-col md:flex-row gap-8">
+        <aside class="md:shrink-0">
+            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CategoryDetailsBeforeFilters, additionalData = Model })
+            @await Component.InvokeAsync("MadadrangCatalogControls", new { model = Model.CatalogProductsModel, placement = "filters" })
+        </aside>
+        <section class="flex-1 min-w-0" aria-label="محصولات دسته‌بندی">
+            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CategoryDetailsBeforeProductList, additionalData = Model })
+            @await Html.PartialAsync("_ProductsInGridOrLines", Model.CatalogProductsModel)
+        </section>
+    </div>
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CategoryDetailsBottom, additionalData = Model })
+</main>

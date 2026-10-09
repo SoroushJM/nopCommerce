@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi;
 using Nop.Core.Infrastructure;
 using Nop.Web.Framework.Mvc.Routing;
+using Nop.Web.Infrastructure;
 using Scalar.AspNetCore;
 
 namespace Nop.Plugin.Misc.PersianStorefront;
@@ -16,40 +17,77 @@ namespace Nop.Plugin.Misc.PersianStorefront;
 public sealed class StorefrontStartup : INopStartup
 {
     public int Order => 250;
+
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
         services.Configure<Microsoft.AspNetCore.Mvc.MvcOptions>(options => options.Filters.Add<NativeProductFallbackFilter>());
         services.AddServerSideBlazor();
-        services.AddBlazorBlueprintComponents(localizer => { localizer.Set("Sheet.Close", "بستن"); localizer.Set("Dialog.Close", "بستن"); });
+        services.AddBlazorBlueprintComponents(localizer =>
+        {
+            localizer.Set("Sheet.Close", "بستن");
+            localizer.Set("Dialog.Close", "بستن");
+        });
         services.AddScoped<StorefrontService>();
         services.AddScoped<StorefrontNavigation>();
         services.AddScoped<DevelopmentCatalogSeeder>();
         services.AddScoped<DevelopmentPresentationRepair>();
+        services.AddScoped<NativeCatalogModelFactory>();
+        services.AddScoped<DevelopmentCatalogFiltersRepair>();
         services.AddSingleton<MockOtpStore>();
-        services.AddSwaggerGen(o => { o.SwaggerDoc("v1", new OpenApiInfo { Title = "Persian storefront API", Version = "v1" }); o.DocInclusionPredicate((_, description) => description.GroupName == "stationery"); });
+        services.AddSwaggerGen(o =>
+        {
+            o.SwaggerDoc("v1", new OpenApiInfo { Title = "Persian storefront API", Version = "v1" });
+            o.DocInclusionPredicate((_, description) => description.GroupName == "stationery");
+        });
     }
+
     public void Configure(IApplicationBuilder app)
     {
         var env = app.ApplicationServices.GetRequiredService<IWebHostEnvironment>();
-        foreach (var name in new[] { "Storefront.UI", "BlazorBlueprint.Components", "BlazorBlueprint.Primitives" })
+        foreach (var name in new[]
+        {
+            "Storefront.UI",
+            "BlazorBlueprint.Components",
+            "BlazorBlueprint.Primitives"
+        }
+
+        )
         {
             var path = Path.Combine(env.ContentRootPath, "Plugins", "Misc.PersianStorefront", "Content", name);
             if (Directory.Exists(path))
                 app.UseStaticFiles(new StaticFileOptions { FileProvider = new PhysicalFileProvider(path), RequestPath = "/_content/" + name });
         }
+
         var frameworkPath = Path.Combine(env.ContentRootPath, "Plugins", "Misc.PersianStorefront", "Content", "Framework");
         if (Directory.Exists(frameworkPath))
             app.UseStaticFiles(new StaticFileOptions { FileProvider = new PhysicalFileProvider(frameworkPath), RequestPath = "/_framework" });
         if (env.IsDevelopment())
-            app.UseSwaggerUI(o => { o.RoutePrefix = "stationery/swagger"; o.SwaggerEndpoint("/stationery/openapi/v1.json", "Stationery v1"); });
+            app.UseSwaggerUI(o =>
+            {
+                o.RoutePrefix = "stationery/swagger";
+                o.SwaggerEndpoint("/stationery/openapi/v1.json", "Stationery v1");
+            });
     }
 }
-public sealed class StorefrontRoutes : IRouteProvider
+
+public sealed class StorefrontRoutes : BaseRouteProvider, IRouteProvider
 {
     public int Priority => 1000;
+
     public void RegisterRoutes(IEndpointRouteBuilder endpoints)
     {
         endpoints.MapBlazorHub();
+        var language = GetLanguageRoutePattern();
+        endpoints.MapControllerRoute("MadadrangAllProducts", $"{language}/catalog/all", new
+        {
+            controller = "MadadrangCatalog",
+            action = "AllProducts"
+        });
+        endpoints.MapControllerRoute("MadadrangSearchPreview", $"{language}/catalog/search", new
+        {
+            controller = "Catalog",
+            action = "Search"
+        });
         endpoints.MapControllerRoute("StationeryCartAlias", "cart", new
         {
             controller = "PersianStorefront",
@@ -62,23 +100,10 @@ public sealed class StorefrontRoutes : IRouteProvider
             action = "Index",
             page = "login"
         });
-        endpoints.MapControllerRoute("StationerySearch", "search", new
+        endpoints.MapControllerRoute("StationeryCatalog", $"{language}/stationery/catalog", new
         {
-            controller = "PersianStorefront",
-            action = "Index",
-            page = "catalog"
-        });
-        endpoints.MapControllerRoute("StationeryHome", "", new
-        {
-            controller = "PersianStorefront",
-            action = "Index",
-            page = "home"
-        });
-        endpoints.MapControllerRoute("StationeryCatalog", "stationery/catalog", new
-        {
-            controller = "PersianStorefront",
-            action = "Index",
-            page = "catalog"
+            controller = "MadadrangCatalog",
+            action = "LegacyCatalog"
         });
         endpoints.MapControllerRoute("StationeryCart", "stationery/cart", new
         {
