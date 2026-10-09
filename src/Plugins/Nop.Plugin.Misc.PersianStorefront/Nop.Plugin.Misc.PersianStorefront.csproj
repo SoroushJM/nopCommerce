@@ -2,6 +2,11 @@
  <PropertyGroup><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><AddRazorSupportForMvc>true</AddRazorSupportForMvc><OutputPath>../../Presentation/Nop.Web/Plugins/Misc.PersianStorefront</OutputPath><OutDir>$(OutputPath)</OutDir><CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies></PropertyGroup>
  <ItemGroup><FrameworkReference Include="Microsoft.AspNetCore.App"/><ProjectReference Include="../../Presentation/Nop.Web/Nop.Web.csproj" Private="false"/><ProjectReference Include="../../Storefront/Storefront.UI/Storefront.UI.csproj"/><PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.2.3"/><PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.2.3"/><PackageReference Include="Scalar.AspNetCore" Version="2.17.13"/><PackageReference Include="Microsoft.AspNetCore.App.Internal.Assets" Version="10.0.12" PrivateAssets="all"/></ItemGroup>
  <ItemGroup><Content Update="plugin.json" CopyToOutputDirectory="PreserveNewest"/><Content Update="Views/**/*.cshtml" CopyToOutputDirectory="PreserveNewest"/></ItemGroup>
+ <Target Name="BuildStorefrontClient" AfterTargets="Build" BeforeTargets="CopyStorefrontAssets">
+  <MSBuild Projects="../../Storefront/Storefront.Client/Storefront.Client.csproj" Targets="Restore;Publish"
+           RemoveProperties="RuntimeIdentifier;SelfContained;OutputPath;OutDir"
+           Properties="Configuration=$(Configuration);PublishDir=$(MSBuildProjectDirectory)/$(OutDir)/Content/Client/;GenerateCompressedFiles=false" />
+ </Target>
  <Target Name="CopyStorefrontAssets" AfterTargets="Build">
   <ItemGroup><UIAssets Include="../../Storefront/Storefront.UI/wwwroot/**/*"/><BBAssets Include="$(NuGetPackageRoot)blazorblueprint.components/4.1.0/staticwebassets/**/*"/><PrimitiveAssets Include="$(NuGetPackageRoot)blazorblueprint.primitives/4.1.0/staticwebassets/**/*"/></ItemGroup>
   <Copy SourceFiles="@(UIAssets)" DestinationFiles="@(UIAssets->'$(OutDir)/Content/Storefront.UI/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true"/>

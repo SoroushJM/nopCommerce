@@ -31,7 +31,7 @@
 
 ## آزمون اتصال واقعی
 
-`scripts/test-storefront.ps1` اجرا و همهٔ assertionها پاس شدند:
+در اجرای اولیه، `scripts/test-storefront.ps1` اجرا و همهٔ assertionها پاس شدند. این اسکریپت در ۲۰۲۶-۱۰-۰۹ با حفظ پوشش به `src/Tests/Nop.Storefront.Tests/StorefrontApiTests.cs` منتقل و حذف شد؛ [دستور اجرای فعلی](../src/Tests/Nop.Storefront.Tests/README.md) در پروژهٔ TUnit ثبت است:
 
 - token ضد جعل درخواست، انتخاب ویژگی و قیمت واقعی؛
 - افزودن مهمان، جلوگیری از خرید ترکیب ناموجود؛

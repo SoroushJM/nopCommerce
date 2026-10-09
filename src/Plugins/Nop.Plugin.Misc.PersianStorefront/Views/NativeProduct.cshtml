@@ -1,0 +1,19 @@
+@model Nop.Web.Models.Catalog.ProductDetailsModel
+@using Nop.Plugin.Misc.PersianStorefront
+@using Nop.Web.Components
+@using Nop.Web.Framework.Infrastructure
+@using Storefront.UI.Components
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@await Component.InvokeAsync(typeof(WidgetViewComponent), new
+{
+    widgetZone = PublicWidgetZones.ProductDetailsTop,
+    additionalData = Model
+})
+<component type="typeof(NativeProductPage)" render-mode="WebAssemblyPrerendered"
+           param-Initial="NativeProductPresentation.From(Model, Url)" />
+@await Component.InvokeAsync(typeof(WidgetViewComponent), new
+{
+    widgetZone = PublicWidgetZones.ProductDetailsBottom,
+    additionalData = Model
+})

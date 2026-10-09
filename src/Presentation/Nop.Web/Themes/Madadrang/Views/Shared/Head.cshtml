@@ -1,0 +1,18 @@
+@inject Nop.Core.Domain.Catalog.CatalogSettings catalogSettings
+@{
+    Layout = "";
+}
+@if (Context.Items["Madadrang.NativeProduct"] is true)
+{
+    <base href="@Url.Content("~/")" />
+}
+else
+{
+    var rtl = await Html.ShouldUseRtlThemeAsync();
+    NopHtml.AppendCssFileParts($"~/Themes/DefaultClean/Content/css/styles{(rtl ? ".rtl" : "")}.css");
+    NopHtml.AppendCssFileParts("~/lib_npm/jquery-ui-dist/jquery-ui.min.css");
+    if (catalogSettings.DisplayAllPicturesOnCatalogPages)
+    {
+        NopHtml.AppendCssFileParts("~/lib_npm/swiper/swiper-bundle.min.css");
+    }
+}

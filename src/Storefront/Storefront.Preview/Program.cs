@@ -1,11 +1,11 @@
-﻿using BlazorBlueprint.Components;
+using BlazorBlueprint.Components;
 using Scalar.AspNetCore;
 using Storefront.Preview;
 using Storefront.Preview.Components;
 using Storefront.UI;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddRazorComponents().AddInteractiveServerComponents();
+builder.Services.AddRazorComponents().AddInteractiveServerComponents().AddInteractiveWebAssemblyComponents();
 builder.Services.AddBlazorBlueprintComponents(localizer => { localizer.Set("Sheet.Close", "بستن"); localizer.Set("Dialog.Close", "بستن"); });
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<PreviewStore>();
@@ -14,6 +14,7 @@ var app = builder.Build();
 if (!app.Environment.IsDevelopment()) throw new InvalidOperationException("The sample preview must only run in Development.");
 app.Use(async (context, next) => { try { await next(); } catch (ArgumentException ex) { context.Response.StatusCode = 400; await context.Response.WriteAsJsonAsync(new { message = ex.Message }); } });
 app.UseStaticFiles();
+app.MapStaticAssets();
 app.UseAntiforgery();
 app.MapOpenApi();
 app.MapScalarApiReference();
@@ -25,7 +26,7 @@ api.MapPost("/cart/add", (HttpContext http, SelectionRequest r, PreviewStore sto
 api.MapPost("/cart/quantity", (HttpContext http, QuantityRequest r, PreviewStore store) => store.Quantity(http, r));
 api.MapPost("/otp/send", (HttpContext http, PhoneRequest r, PreviewStore store) => store.Send(http, r));
 api.MapPost("/otp/verify", (HttpContext http, VerifyRequest r, PreviewStore store) => store.Verify(http, r));
-app.MapRazorComponents<App>().AddInteractiveServerRenderMode().AddAdditionalAssemblies(typeof(StorefrontRoot).Assembly);
+app.MapRazorComponents<App>().AddInteractiveServerRenderMode().AddInteractiveWebAssemblyRenderMode().AddAdditionalAssemblies(typeof(StorefrontRoot).Assembly);
 app.MapGet("/contactus", () => Results.Redirect("/stationery/catalog"));
 app.MapGet("/shipping-returns", () => Results.Content("<html lang='fa' dir='rtl'><meta charset='utf-8'><p>روش‌های ارسال در فاز بعد متصل می‌شوند.</p><a href='/'>بازگشت</a></html>", "text/html"));
 app.Run();

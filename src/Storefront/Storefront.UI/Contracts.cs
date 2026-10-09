@@ -4,9 +4,13 @@ public record ProductOption(int Id, string Name, string Color, decimal Adjustmen
 public record ProductAttribute(int Id, string Name, List<ProductOption> Options);
 public record StoreProduct(int Id, string Name, string Category, string Brand, decimal Price, decimal OldPrice,
     string Image, string Description, bool Available, List<ProductAttribute> Attributes, string Label = "");
-public record CartLine(int Id, int ProductId, string Name, string Image, string Options, int Quantity, decimal UnitPrice);
+public record CartLine(int Id, int ProductId, string Name, string Image, string Options, int Quantity, decimal UnitPrice)
+{
+    public CartLine() : this(0, 0, "", "", "", 0, 0m) { }
+}
 public record CartSnapshot(List<CartLine> Lines, bool SignedIn = false, string Phone = "")
 {
+    public CartSnapshot() : this([]) { }
     public decimal Total => Lines.Sum(x => x.Quantity * x.UnitPrice);
     public int Count => Lines.Sum(x => x.Quantity);
 }
@@ -16,7 +20,10 @@ public record Quote(decimal Price, bool Available, string Message = "");
 public record QuantityRequest(int LineId, int Quantity);
 public record PhoneRequest(string Phone);
 public record VerifyRequest(string Phone, string Code);
-public record OtpResult(bool Success, string Message, string? TestCode = null);
+public record OtpResult(bool Success, string Message, string? TestCode = null)
+{
+    public OtpResult() : this(false, "") { }
+}
 
 // Shared sample catalogue for the isolated preview and explicit development seeding only.
 public static class SampleCatalog

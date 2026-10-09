@@ -2,7 +2,9 @@
 @page "/stationery/catalog"
 @page "/stationery/cart"
 @page "/stationery/product/{Id:int}"
+@page "/renderer/auto"
 @using Microsoft.AspNetCore.Components
+@using Storefront.UI.Components
 @inject PreviewStore Store
 @inject IHttpContextAccessor Context
 <!DOCTYPE html>
@@ -18,22 +20,32 @@
     <link rel="stylesheet" href="_content/Storefront.UI/storefront.css" />
     <link rel="stylesheet" href="_content/BlazorBlueprint.Components/blazorblueprint.css" />
     <HeadOutlet />
+    <ImportMap />
 </head>
 
 <body>
-    <StorefrontRoot Initial="initial" Page="@(page)" ProductId="productId" @rendermode="InteractiveServer" />
-    <script src="_framework/blazor.web.js"></script>
+    @if (autoProbe)
+    {
+        <RendererProbe @rendermode="InteractiveAuto" />
+    }
+    else
+    {
+        <StorefrontRoot Initial="initial" Page="@(page)" ProductId="productId" @rendermode="InteractiveServer" />
+    }
+    <script src="@Assets["_framework/blazor.web.js"]"></script>
 </body>
 
 </html>
 @code {
     [Parameter] public int Id { get; set; }
     private Bootstrap initial = default!; private string page = "home"; private int productId;
+    private bool autoProbe;
     protected override void OnInitialized()
     {
         var http = Context.HttpContext!; var
    path = http.Request.Path.Value ?? "/"; page = path.Contains("/catalog") ? "catalog" : path.Contains("/product/") ?
 "product" : path.Contains("/cart") ? "cart" : "home"; int.TryParse(path.Split('/').Last(), out
    productId); initial = new(SampleCatalog.Products, Store.Snapshot(http), true);
+        autoProbe = path == "/renderer/auto";
     }
 }

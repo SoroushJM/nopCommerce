@@ -1,0 +1,25 @@
+@model Storefront.UI.StoreNavigation
+@using Storefront.UI.Components
+@using Nop.Web.Components
+@using Nop.Web.Framework.Infrastructure
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderBefore })
+@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderSelectors })
+@await Component.InvokeAsync(typeof(WidgetViewComponent), new
+{
+    widgetZone = PublicWidgetZones.HeaderLinksBefore,
+    additionalData = ViewData["HeaderLinksModel"]
+})
+@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderMiddle })
+@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderMenuBefore })
+@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.MobHeaderMenuBefore })
+<component type="typeof(NativeHeader)" render-mode="WebAssemblyPrerendered" param-Initial="Model" />
+@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.MobHeaderMenuAfter })
+@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderMenuAfter })
+@await Component.InvokeAsync(typeof(WidgetViewComponent), new
+{
+    widgetZone = PublicWidgetZones.HeaderLinksAfter,
+    additionalData = ViewData["HeaderLinksModel"]
+})
+@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderAfter })

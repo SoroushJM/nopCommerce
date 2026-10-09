@@ -1,0 +1,13 @@
+@model Storefront.UI.StoreNavigation
+@using Storefront.UI.Components
+@using Nop.Web.Components
+@using Nop.Web.Framework.Infrastructure
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<component type="typeof(StorefrontFooter)" render-mode="Static" param-Menus="Model.Footer" />
+@await Component.InvokeAsync(typeof(WidgetViewComponent), new
+{
+    widgetZone = PublicWidgetZones.Footer,
+    additionalData =
+ViewData["FooterModel"]
+})

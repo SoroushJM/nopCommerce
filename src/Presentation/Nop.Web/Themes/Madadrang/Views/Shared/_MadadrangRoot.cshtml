@@ -1,0 +1,17 @@
+@{
+    Layout = "_Root.Head";
+    NopHtml.AppendCssFileParts("~/_content/Storefront.UI/storefront.css");
+    NopHtml.AppendCssFileParts("~/_content/BlazorBlueprint.Components/blazorblueprint.css");
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/_framework/blazor.webassembly.js", excludeFromBundle: true);
+}
+@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.BodyStartHtmlTagAfter })
+<div class="storefront" dir="rtl">
+    @await Component.InvokeAsync("MadadrangHeader")
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ContentBefore })
+    @await RenderSectionAsync("Breadcrumb", false)
+    @RenderBody()
+    <persist-component-state />
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ContentAfter })
+    @await Component.InvokeAsync("MadadrangFooter")
+</div>
+@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.BodyEndHtmlTagBefore })

@@ -1,4 +1,4 @@
 <Project Sdk="Microsoft.NET.Sdk.Web">
   <PropertyGroup><TargetFramework>net10.0</TargetFramework><Nullable>enable</Nullable><ImplicitUsings>enable</ImplicitUsings></PropertyGroup>
-  <ItemGroup><ProjectReference Include="../Storefront.UI/Storefront.UI.csproj" /><PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9"/><PackageReference Include="Scalar.AspNetCore" Version="2.8.9"/><PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.0.1"/></ItemGroup>
+  <ItemGroup><ProjectReference Include="../Storefront.UI/Storefront.UI.csproj" /><ProjectReference Include="../Storefront.Client/Storefront.Client.csproj" /><PackageReference Include="Microsoft.AspNetCore.Components.WebAssembly.Server" Version="10.0.12" /><PackageReference Include="Microsoft.AspNetCore.OpenApi" Version="10.0.9"/><PackageReference Include="Scalar.AspNetCore" Version="2.8.9"/><PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.0.1"/></ItemGroup>
 </Project>

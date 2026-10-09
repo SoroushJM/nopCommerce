@@ -1,0 +1,35 @@
+<BbDirectionProvider Direction="TextDirection.RightToLeft">
+    <BbPortalHost />
+    <div class="storefront wrap py-7" dir="rtl">
+        <h1 class="text-2xl font-bold">آزمایش رندر BB</h1>
+        <p class="my-5" data-testid="renderer">محل اجرای تعامل: @Execution</p>
+        <BbSelect TValue="string" @bind-Value="_color">
+            <BbSelectTrigger Class="sf-select">
+                <BbSelectValue />
+            </BbSelectTrigger>
+            <BbSelectContent>
+                <BbSelectItem Value="@("blue")">آبی</BbSelectItem>
+                <BbSelectItem Value="@("green")">سبز</BbSelectItem>
+            </BbSelectContent>
+        </BbSelect>
+        <p class="my-5">انتخاب: @_color</p>
+        <BbButton OnClick="() => _count++" Class="sf-button">شمارنده: @_count</BbButton>
+        <BbButton OnClick="() => _open = true" Class="sf-button mr-3">باز کردن پنل</BbButton>
+        <BbSheet Open="_open" OpenChanged="value => _open = value" Side="SheetSide.Left">
+            <BbSheetContent>
+                <BbSheetHeader>
+                    <BbSheetTitle>پنل آزمایشی</BbSheetTitle>
+                    <BbSheetDescription>تعامل BB با رندر خودکار</BbSheetDescription>
+                </BbSheetHeader>
+                <p class="my-5">شمارنده: @_count</p>
+            </BbSheetContent>
+        </BbSheet>
+    </div>
+</BbDirectionProvider>
+
+@code {
+    private string _color = "blue";
+    private int _count;
+    private bool _open;
+    private static string Execution => OperatingSystem.IsBrowser() ? "مرورگر" : "سرور";
+}
