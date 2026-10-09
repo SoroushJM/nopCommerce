@@ -16,8 +16,55 @@ public sealed class StorefrontService(IWorkContext work, IStoreContext store, IP
  IProductAttributeService attributes, IProductAttributeParser parser, IShoppingCartService carts, IPictureService pictures,
  ICategoryService categories, IManufacturerService manufacturers, ICustomerService customers, IAclService acl, IStoreMappingService mappings)
 {
-    public async Task<List<StoreProduct>> Catalog() { var context = await store.GetCurrentStoreAsync(); var list = await products.SearchProductsAsync(pageSize: 200, storeId: context.Id, visibleIndividuallyOnly: true); var result = new List<StoreProduct>(); foreach (var p in list) { if (!await acl.AuthorizeAsync(p)) continue; var attrs = new List<AttributeModel>(); foreach (var mapping in await attributes.GetProductAttributeMappingsByProductIdAsync(p.Id)) { var attribute = await attributes.GetProductAttributeByIdAsync(mapping.ProductAttributeId); attrs.Add(new(mapping.Id, attribute.Name, (await attributes.GetProductAttributeValuesAsync(mapping.Id)).Select(v => new ProductOption(v.Id, v.Name, string.IsNullOrWhiteSpace(v.ColorSquaresRgb) ? "#96a9bd" : v.ColorSquaresRgb, v.PriceAdjustment)).ToList())); } var cat = (await categories.GetProductCategoriesByProductIdAsync(p.Id)).FirstOrDefault(); var brand = (await manufacturers.GetProductManufacturersByProductIdAsync(p.Id)).FirstOrDefault(); var image = (await pictures.GetPicturesByProductIdAsync(p.Id, 1)).FirstOrDefault(); var imageUrl = image == null ? "/_content/Storefront.UI/images/notebook.jpg" : (await pictures.GetPictureUrlAsync(image, 800)).Url; var (unitPrice, discountAmount, appliedDiscounts) = await carts.GetUnitPriceAsync(p, await work.GetCurrentCustomerAsync(), context, ShoppingCartType.ShoppingCart, 1, "", 0, null, null, true); result.Add(new(p.Id, p.Name, cat == null ? "نوشت‌افزار" : (await categories.GetCategoryByIdAsync(cat.CategoryId)).Name, brand == null ? "مدادرنگ" : (await manufacturers.GetManufacturerByIdAsync(brand.ManufacturerId)).Name, unitPrice, p.OldPrice, imageUrl, p.ShortDescription ?? "", !p.DisableBuyButton && (p.ManageInventoryMethod != ManageInventoryMethod.ManageStock || p.StockQuantity > 0), attrs, p.OldPrice > p.Price ? "پیشنهاد رنگی" : "")); } return result; }
-    private async Task<(Product Product, string Xml)> Selection(SelectionRequest r) { if (r.Quantity is < 1 or > 20) throw new ArgumentException("تعداد معتبر نیست"); var p = await products.GetProductByIdAsync(r.ProductId); if (p == null || p.Deleted || !p.Published || !await acl.AuthorizeAsync(p) || !await mappings.AuthorizeAsync(p)) throw new ArgumentException("محصول پیدا نشد"); var xml = ""; var known = await attributes.GetProductAttributeMappingsByProductIdAsync(p.Id); if (r.Values.Keys.Any(id => known.All(x => x.Id != id))) throw new ArgumentException("ویژگی معتبر نیست"); foreach (var m in known) { if (!r.Values.TryGetValue(m.Id, out var value)) { if (m.IsRequired) throw new ArgumentException("ویژگی محصول را انتخاب کن"); continue; } if ((await attributes.GetProductAttributeValuesAsync(m.Id)).All(v => v.Id != value)) throw new ArgumentException("انتخاب معتبر نیست"); xml = parser.AddProductAttribute(xml, m, value.ToString()); } return (p, xml); }
+    public async Task<List<StoreProduct>> Catalog()
+    {
+        var context = await store.GetCurrentStoreAsync();
+        var list = await products.SearchProductsAsync(pageSize: 200, storeId: context.Id, visibleIndividuallyOnly: true);
+        var result = new List<StoreProduct>();
+        foreach (var p in list)
+        {
+            if (!await acl.AuthorizeAsync(p))
+                continue;
+            var attrs = new List<AttributeModel>();
+            foreach (var mapping in await attributes.GetProductAttributeMappingsByProductIdAsync(p.Id))
+            {
+                var attribute = await attributes.GetProductAttributeByIdAsync(mapping.ProductAttributeId);
+                attrs.Add(new(mapping.Id, attribute.Name, (await attributes.GetProductAttributeValuesAsync(mapping.Id)).Select(v => new ProductOption(v.Id, v.Name, string.IsNullOrWhiteSpace(v.ColorSquaresRgb) ? "#96a9bd" : v.ColorSquaresRgb, v.PriceAdjustment)).ToList()));
+            }
+            var cat = (await categories.GetProductCategoriesByProductIdAsync(p.Id)).FirstOrDefault();
+            var brand = (await manufacturers.GetProductManufacturersByProductIdAsync(p.Id)).FirstOrDefault();
+            var image = (await pictures.GetPicturesByProductIdAsync(p.Id, 1)).FirstOrDefault();
+            var imageUrl = image == null ? "/_content/Storefront.UI/images/notebook.jpg" : (await pictures.GetPictureUrlAsync(image, 800)).Url;
+            var (unitPrice, discountAmount, appliedDiscounts) = await carts.GetUnitPriceAsync(p, await work.GetCurrentCustomerAsync(), context, ShoppingCartType.ShoppingCart, 1, "", 0, null, null, true);
+            result.Add(new(p.Id, p.Name, cat == null ? "نوشت‌افزار" : (await categories.GetCategoryByIdAsync(cat.CategoryId)).Name, brand == null ? "مدادرنگ" : (await manufacturers.GetManufacturerByIdAsync(brand.ManufacturerId)).Name, unitPrice, p.OldPrice, imageUrl, p.ShortDescription ?? "", !p.DisableBuyButton && (p.ManageInventoryMethod != ManageInventoryMethod.ManageStock || p.StockQuantity > 0), attrs, p.OldPrice > p.Price ? "پیشنهاد رنگی" : ""));
+        }
+        return result;
+    }
+    private async Task<(Product Product, string Xml)> Selection(SelectionRequest r)
+    {
+        if (r.Quantity is < 1 or > 20)
+            throw new ArgumentException("تعداد معتبر نیست");
+        var p = await products.GetProductByIdAsync(r.ProductId);
+        if (p == null || p.Deleted || !p.Published || !await acl.AuthorizeAsync(p) || !await mappings.AuthorizeAsync(p))
+            throw new ArgumentException("محصول پیدا نشد");
+        var xml = "";
+        var known = await attributes.GetProductAttributeMappingsByProductIdAsync(p.Id);
+        if (r.Values.Keys.Any(id => known.All(x => x.Id != id)))
+            throw new ArgumentException("ویژگی معتبر نیست");
+        foreach (var m in known)
+        {
+            if (!r.Values.TryGetValue(m.Id, out var value))
+            {
+                if (m.IsRequired)
+                    throw new ArgumentException("ویژگی محصول را انتخاب کن");
+                continue;
+            }
+            if ((await attributes.GetProductAttributeValuesAsync(m.Id)).All(v => v.Id != value))
+                throw new ArgumentException("انتخاب معتبر نیست");
+            xml = parser.AddProductAttribute(xml, m, value.ToString());
+        }
+        return (p, xml);
+    }
     public async Task<Quote> Quote(SelectionRequest r)
     {
         var (p, xml) = await Selection(r);
@@ -27,7 +74,46 @@ public sealed class StorefrontService(IWorkContext work, IStoreContext store, IP
         var warnings = await carts.GetShoppingCartItemWarningsAsync(customer, ShoppingCartType.ShoppingCart, p, context.Id, xml, 0, quantity: r.Quantity);
         return new(unitPrice, warnings.Count == 0, warnings.Count == 0 ? "" : "این انتخاب در حال حاضر قابل خرید نیست.");
     }
-    public async Task<CartSnapshot> Cart() { var customer = await work.GetCurrentCustomerAsync(); var context = await store.GetCurrentStoreAsync(); var result = new List<CartLine>(); foreach (var line in await carts.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, context.Id)) { var product = await products.GetProductByIdAsync(line.ProductId); var image = (await pictures.GetPicturesByProductIdAsync(product.Id, 1)).FirstOrDefault(); var imageUrl = image == null ? "/_content/Storefront.UI/images/notebook.jpg" : (await pictures.GetPictureUrlAsync(image, 200)).Url; var options = await parser.ParseProductAttributeValuesAsync(line.AttributesXml); var (unitPrice, discountAmount, appliedDiscounts) = await carts.GetUnitPriceAsync(line, true); result.Add(new(line.Id, product.Id, product.Name, imageUrl, string.Join(" · ", options.Select(x => x.Name)), line.Quantity, unitPrice)); } return new(result, await customers.IsRegisteredAsync(customer), customer.Phone ?? ""); }
-    public async Task<CartSnapshot> Add(SelectionRequest r) { var (p, xml) = await Selection(r); var warnings = await carts.AddToCartAsync(await work.GetCurrentCustomerAsync(), p, ShoppingCartType.ShoppingCart, (await store.GetCurrentStoreAsync()).Id, xml, quantity: r.Quantity); if (warnings.Count > 0) throw new ArgumentException("این انتخاب قابل افزودن به سبد نیست؛ موجودی و تعداد را بررسی کن."); return await Cart(); }
-    public async Task<CartSnapshot> Quantity(QuantityRequest r) { if (r.Quantity is < 0 or > 20) throw new ArgumentException("تعداد معتبر نیست"); var customer = await work.GetCurrentCustomerAsync(); var line = (await carts.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, (await store.GetCurrentStoreAsync()).Id)).FirstOrDefault(x => x.Id == r.LineId) ?? throw new ArgumentException("کالا پیدا نشد"); if (r.Quantity == 0) { await carts.DeleteShoppingCartItemAsync(line); } else { var warnings = await carts.UpdateShoppingCartItemAsync(customer, line.Id, line.AttributesXml, line.CustomerEnteredPrice, line.RentalStartDateUtc, line.RentalEndDateUtc, r.Quantity); if (warnings.Count > 0) throw new ArgumentException("تعداد درخواستی موجود نیست."); } return await Cart(); }
+    public async Task<CartSnapshot> Cart()
+    {
+        var customer = await work.GetCurrentCustomerAsync();
+        var context = await store.GetCurrentStoreAsync();
+        var result = new List<CartLine>();
+        foreach (var line in await carts.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, context.Id))
+        {
+            var product = await products.GetProductByIdAsync(line.ProductId);
+            var image = (await pictures.GetPicturesByProductIdAsync(product.Id, 1)).FirstOrDefault();
+            var imageUrl = image == null ? "/_content/Storefront.UI/images/notebook.jpg" : (await pictures.GetPictureUrlAsync(image, 200)).Url;
+            var options = await parser.ParseProductAttributeValuesAsync(line.AttributesXml);
+            var (unitPrice, discountAmount, appliedDiscounts) = await carts.GetUnitPriceAsync(line, true);
+            result.Add(new(line.Id, product.Id, product.Name, imageUrl, string.Join(" · ", options.Select(x => x.Name)), line.Quantity, unitPrice));
+        }
+        return new(result, await customers.IsRegisteredAsync(customer), customer.Phone ?? "");
+    }
+    public async Task<CartSnapshot> Add(SelectionRequest r)
+    {
+        var (p, xml) = await Selection(r);
+        var warnings = await carts.AddToCartAsync(await work.GetCurrentCustomerAsync(), p, ShoppingCartType.ShoppingCart, (await store.GetCurrentStoreAsync()).Id, xml, quantity: r.Quantity);
+        if (warnings.Count > 0)
+            throw new ArgumentException("این انتخاب قابل افزودن به سبد نیست؛ موجودی و تعداد را بررسی کن.");
+        return await Cart();
+    }
+    public async Task<CartSnapshot> Quantity(QuantityRequest r)
+    {
+        if (r.Quantity is < 0 or > 20)
+            throw new ArgumentException("تعداد معتبر نیست");
+        var customer = await work.GetCurrentCustomerAsync();
+        var line = (await carts.GetShoppingCartAsync(customer, ShoppingCartType.ShoppingCart, (await store.GetCurrentStoreAsync()).Id)).FirstOrDefault(x => x.Id == r.LineId) ?? throw new ArgumentException("کالا پیدا نشد");
+        if (r.Quantity == 0)
+        {
+            await carts.DeleteShoppingCartItemAsync(line);
+        }
+        else
+        {
+            var warnings = await carts.UpdateShoppingCartItemAsync(customer, line.Id, line.AttributesXml, line.CustomerEnteredPrice, line.RentalStartDateUtc, line.RentalEndDateUtc, r.Quantity);
+            if (warnings.Count > 0)
+                throw new ArgumentException("تعداد درخواستی موجود نیست.");
+        }
+        return await Cart();
+    }
 }

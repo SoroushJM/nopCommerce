@@ -13,7 +13,9 @@ public sealed class StorefrontClientStartup : INopStartup
 {
     public int Order => 98;
 
-    public void ConfigureServices(IServiceCollection services, IConfiguration configuration) { }
+    public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+    {
+    }
 
     public void Configure(IApplicationBuilder app)
     {

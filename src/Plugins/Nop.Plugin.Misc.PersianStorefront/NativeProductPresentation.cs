@@ -45,9 +45,18 @@ public static class NativeProductPresentation
                 attribute.Values.Select(value => new NativeOption(value.Id, value.Name, value.ColorSquaresRgb,
                     value.ImageSquaresPictureModel.ImageUrl, value.IsPreSelected)).ToList())).ToList(),
             ChangeUrl = url.RouteUrl(NopRouteNames.Ajax.PRODUCT_DETAILS_ATTRIBUTE_CHANGE,
-                new { productId = model.Id, validateAttributeConditions = true, loadPicture = true })!,
+                new
+                {
+                    productId = model.Id,
+                    validateAttributeConditions = true,
+                    loadPicture = true
+                })!,
             AddUrl = url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_CART_DETAILS,
-                new { productId = model.Id, shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart })!,
+                new
+                {
+                    productId = model.Id,
+                    shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart
+                })!,
             CombinationsUrl = url.RouteUrl(NopRouteNames.Ajax.GET_PRODUCT_COMBINATIONS, new { productId = model.Id })!
         };
     }

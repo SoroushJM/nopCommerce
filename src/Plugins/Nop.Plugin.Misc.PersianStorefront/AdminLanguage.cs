@@ -102,7 +102,10 @@ public sealed class AdminLanguageWorkContext : WebWorkContext
     {
         var context = _httpContextAccessor.HttpContext;
         if (context == null || !IsAdminRequest(context.Request))
-        { await base.SetWorkingLanguageAsync(language); return; }
+        {
+            await base.SetWorkingLanguageAsync(language);
+            return;
+        }
         if (language == null)
             return;
         var customer = await GetCurrentCustomerAsync();
@@ -128,7 +131,9 @@ public sealed class AdminFallbackLocalizationService : LocalizationService
         ILogger logger, IRepository<LocaleStringResource> resources, ISettingService settings,
         IStaticCacheManager cache, IWorkContext context, LocalizationSettings localization,
         IHttpContextAccessor accessor) : base(languages, entities, logger, resources, settings, cache, context, localization)
-    { _accessor = accessor; }
+    {
+        _accessor = accessor;
+    }
 
     public override async Task<string> GetResourceAsync(string resourceKey, int languageId,
         bool logIfNotFound = true, string defaultValue = "", bool returnEmptyIfNotFound = false)
@@ -158,7 +163,9 @@ public sealed class AdminFallbackLocalizationService : LocalizationService
 public sealed class AdminCultureStartup : INopStartup
 {
     public int Order => 110;
-    public void ConfigureServices(IServiceCollection services, IConfiguration configuration) { }
+    public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+    {
+    }
     public void Configure(IApplicationBuilder app)
     {
         app.Use(async (context, next) =>
@@ -190,5 +197,7 @@ public sealed class AdminLanguageRegistration : INopStartup
         services.AddScoped<IWorkContext, AdminLanguageWorkContext>();
         services.AddScoped<ILocalizationService, AdminFallbackLocalizationService>();
     }
-    public void Configure(IApplicationBuilder app) { }
+    public void Configure(IApplicationBuilder app)
+    {
+    }
 }
