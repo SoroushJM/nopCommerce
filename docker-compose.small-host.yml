@@ -3,9 +3,9 @@
 services:
   nopcommerce_web:
     # Give Razor/localization enough headroom without letting the app thrash swap.
-    # Web + PostgreSQL + certificate helper remain capped at 432 MiB of RAM.
-    mem_limit: 352m
-    memswap_limit: 352m
+    # Web + PostgreSQL + certificate helper remain capped at 464 MiB of RAM.
+    mem_limit: 384m
+    memswap_limit: 384m
     cpus: 0.35
   nopcommerce_database:
     mem_limit: 64m

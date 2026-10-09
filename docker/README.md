@@ -78,9 +78,9 @@ docker compose -f docker-compose.yml -f docker-compose.small-host.yml up -d --no
 ```
 
 This overlay limits the web
-service to 352 MiB and 0.35 CPU, and PostgreSQL to 64 MiB and 0.15 CPU.
-The running RAM ceiling is 416 MiB; including the temporary certificate helper it
-is 432 MiB (452.98 MB). Web swap is disabled to avoid prolonged memory reclaim;
+service to 384 MiB and 0.35 CPU, and PostgreSQL to 64 MiB and 0.15 CPU.
+The running RAM ceiling is 448 MiB; including the temporary certificate helper it
+is 464 MiB (486.54 MB). Web swap is disabled to avoid prolonged memory reclaim;
 up to 32 MiB database swap is permitted if the host has swap configured.
 Use this profile only for light test traffic.
 The shared test server installs a `docker-compose.override.yml` symlink to this
@@ -88,9 +88,10 @@ overlay, so normal `docker compose` commands keep these tighter limits.
 It caps usage; it does not guarantee arbitrary traffic or large catalogs will fit.
 An exhausted limit can cause an OOM kill. This profile is intended for light test use.
 
-.NET uses workstation GC, a managed heap budget of 50% of its container limit
-(176 MiB), aggressive memory conservation, and disabled diagnostic IPC.
-The GC percentage environment variable is hexadecimal (`0x32`).
+.NET uses workstation GC, a managed heap budget of 40% of its container limit
+(about 141 MiB in the base profile and 154 MiB on the shared host), aggressive
+memory conservation, and disabled diagnostic IPC.
+The GC percentage environment variable is hexadecimal (`0x28`).
 Application cache entries default to five minutes and LINQ query caching is disabled.
 WebOptimizer stores generated bundles on disk instead of keeping them in memory.
 PostgreSQL uses 16 MB shared buffers, 1 MB work memory, 16 MB maintenance memory,
