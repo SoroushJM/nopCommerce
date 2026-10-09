@@ -12,6 +12,7 @@ COPY src/Libraries/Nop.Data/Nop.Data.csproj src/Libraries/Nop.Data/
 COPY src/Libraries/Nop.Services/Nop.Services.csproj src/Libraries/Nop.Services/
 COPY src/Presentation/Nop.Web.Framework/Nop.Web.Framework.csproj src/Presentation/Nop.Web.Framework/
 COPY src/Presentation/Nop.Web/Nop.Web.csproj src/Presentation/Nop.Web/
+COPY src/Presentation/Nop.Docker.Views/Nop.Docker.Views.csproj src/Presentation/Nop.Docker.Views/
 COPY src/Storefront/Storefront.UI/Storefront.UI.csproj src/Storefront/Storefront.UI/
 COPY src/Storefront/Storefront.Client/Storefront.Client.csproj src/Storefront/Storefront.Client/
 COPY src/Plugins/Nop.Plugin.Misc.PersianStorefront/Nop.Plugin.Misc.PersianStorefront.csproj src/Plugins/Nop.Plugin.Misc.PersianStorefront/
@@ -37,7 +38,9 @@ RUN --mount=type=cache,id=nop-nuget,target=/root/.nuget/packages,sharing=locked 
     dotnet /source/src/Build/ClearPluginAssemblies.dll \
       "OutputPath=/source/src/Presentation/Nop.Web/bin/Release|PluginPath=/source/src/Presentation/Nop.Web/Plugins/Misc.PersianStorefront|SaveLocalesFolders=true" && \
     dotnet publish src/Presentation/Nop.Web/Nop.Web.csproj -c Release --no-build --no-restore -r "$RUNTIME_IDENTIFIER" --self-contained false \
-      -p:DockerRuntimeIdentifier="$RUNTIME_IDENTIFIER" -p:DebugType=None -p:DebugSymbols=false -o /app/published && \
+      -p:DockerRuntimeIdentifier="$RUNTIME_IDENTIFIER" -p:DebugType=None -p:DebugSymbols=false \
+      -p:PreserveCompilationContext=false -p:PreserveCompilationReferences=false -o /app/published && \
+    cp /source/src/Presentation/Nop.Docker.Views/bin/Release/net10.0/"$RUNTIME_IDENTIFIER"/Nop.Docker.Views.dll /app/published/ && \
     find /app/published -type f -name '*.pdb' -delete && \
     mkdir -p /app/published/logs /app/published/bin /app/published/App_Data/DataProtectionKeys
 COPY docker/compact-publish.sh /tmp/compact-publish.sh
@@ -53,6 +56,7 @@ FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine AS runtime
 RUN apk add --no-cache icu-libs icu-data-full tzdata gcompat libgdiplus tiff
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
     ASPNETCORE_HTTP_PORTS=8080 \
+    CommonConfig__UsePrecompiledViews=true \
     DOTNET_GCServer=0 \
     DOTNET_GCHeapHardLimitPercent=0x1E \
     DOTNET_GCConserveMemory=9 \

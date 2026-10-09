@@ -1,0 +1,26 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <EnableDefaultContentItems>false</EnableDefaultContentItems>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="../Nop.Web/Nop.Web.csproj" />
+    <ProjectReference Include="../../Plugins/Nop.Plugin.Misc.PersianStorefront/Nop.Plugin.Misc.PersianStorefront.csproj" />
+    <ProjectReference Include="../../Plugins/Nop.Plugin.Payments.CheckMoneyOrder/Nop.Plugin.Payments.CheckMoneyOrder.csproj" />
+    <ProjectReference Include="../../Plugins/Nop.Plugin.Shipping.FixedByWeightByTotal/Nop.Plugin.Shipping.FixedByWeightByTotal.csproj" />
+    <ProjectReference Include="../../Plugins/Nop.Plugin.Tax.FixedOrByCountryStateZip/Nop.Plugin.Tax.FixedOrByCountryStateZip.csproj" />
+    <ProjectReference Include="../../Plugins/Nop.Plugin.Widgets.Swiper/Nop.Plugin.Widgets.Swiper.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="../Nop.Web/Views/**/*.cshtml" Link="Views/%(RecursiveDir)%(Filename)%(Extension)" />
+    <Content Include="../Nop.Web/Areas/Admin/Views/**/*.cshtml" Link="Areas/Admin/Views/%(RecursiveDir)%(Filename)%(Extension)" />
+    <Content Include="../Nop.Web/Themes/**/*.cshtml" Link="Themes/%(RecursiveDir)%(Filename)%(Extension)" />
+    <Content Include="../../Plugins/Nop.Plugin.Misc.PersianStorefront/Views/**/*.cshtml" Link="Plugins/Misc.PersianStorefront/Views/%(RecursiveDir)%(Filename)%(Extension)" />
+    <Content Include="../../Plugins/Nop.Plugin.Payments.CheckMoneyOrder/Views/**/*.cshtml" Link="Plugins/Payments.CheckMoneyOrder/Views/%(RecursiveDir)%(Filename)%(Extension)" />
+    <Content Include="../../Plugins/Nop.Plugin.Shipping.FixedByWeightByTotal/Views/**/*.cshtml" Link="Plugins/Shipping.FixedByWeightByTotal/Views/%(RecursiveDir)%(Filename)%(Extension)" />
+    <Content Include="../../Plugins/Nop.Plugin.Tax.FixedOrByCountryStateZip/Views/**/*.cshtml" Link="Plugins/Tax.FixedOrByCountryStateZip/Views/%(RecursiveDir)%(Filename)%(Extension)" />
+    <Content Include="../../Plugins/Nop.Plugin.Widgets.Swiper/Views/**/*.cshtml" Link="Plugins/Widgets.Swiper/Views/%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+</Project>

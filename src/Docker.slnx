@@ -4,6 +4,7 @@
   <Project Path="Libraries/Nop.Services/Nop.Services.csproj" />
   <Project Path="Presentation/Nop.Web.Framework/Nop.Web.Framework.csproj" />
   <Project Path="Presentation/Nop.Web/Nop.Web.csproj" />
+  <Project Path="Presentation/Nop.Docker.Views/Nop.Docker.Views.csproj" />
   <Project Path="Storefront/Storefront.UI/Storefront.UI.csproj" />
   <Project Path="Plugins/Nop.Plugin.Misc.PersianStorefront/Nop.Plugin.Misc.PersianStorefront.csproj" />
   <Project Path="Plugins/Nop.Plugin.Payments.CheckMoneyOrder/Nop.Plugin.Payments.CheckMoneyOrder.csproj" />

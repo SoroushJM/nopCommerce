@@ -6,6 +6,11 @@
 public partial class CommonConfig : IConfig
 {
     /// <summary>
+    /// Use the view assembly built for the fixed Docker plugin set instead of compiling views on the host.
+    /// </summary>
+    public bool UsePrecompiledViews { get; set; }
+
+    /// <summary>
     /// Gets or sets the external HTTP port used when switching from HTTPS.
     /// Leave both ports unset to preserve the request host's port.
     /// </summary>

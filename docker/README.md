@@ -98,6 +98,15 @@ PostgreSQL uses 16 MB shared buffers, 1 MB work memory, 16 MB maintenance memory
 20 connections, one autovacuum worker, and no parallel workers or JIT.
 Keep application pools at 10 connections as shown above.
 
+The Docker build compiles MVC, administration, theme and included plugin views into
+`Nop.Docker.Views.dll`. The image enables `CommonConfig.UsePrecompiledViews`, so
+Razor compilation and its compiler memory are kept off the small host. Rebuild the
+image after changing views. If adding a plugin to this image, also add its project
+reference and linked views to `src/Presentation/Nop.Docker.Views/Nop.Docker.Views.csproj`.
+Normal development keeps runtime compilation enabled by default.
+Compiler reference assemblies are omitted from the image because this profile
+executes precompiled views.
+
 ```powershell
 docker compose ps
 docker stats --no-stream
