@@ -26,19 +26,19 @@ public partial class NativeProductPage
     private bool _restoreZoomFocus;
     private bool _restoreQuantityFocus;
     private bool _ready, _busy, _updating, _zoomOpen, _freeShipping, _quantityChanged;
-    private string PurchaseLabel => Available ? Initial.PurchaseLabel : "فعلاً ناموجود";
-    private string StockLabel => _stock.Length > 0 ? _stock : Available ? "" : "این انتخاب فعلاً ناموجود است";
+    private string PurchaseLabel => StockAvailable ? Initial.PurchaseLabel : "فعلاً ناموجود";
+    private string StockLabel => _stock.Length > 0 ? _stock : StockAvailable ? "" : "این انتخاب فعلاً ناموجود است";
     private IEnumerable<NativeProductPicture> VisiblePictures => Initial.Pictures.Where(picture =>
         !Initial.CombinationImagesOnly || _pictureIds.Count == 0 || _pictureIds.Contains(picture.Id));
     private bool DisplayTierPrices => !Initial.HidePrices && !Initial.CallForPrice && Initial.TierPrices.Count > 0
         && !(Initial.TierPrices.Count == 1 && Initial.TierPrices[0].Quantity <= 1);
 
-    private bool Available
+    private bool Available => !Initial.DisableBuy && StockAvailable;
+
+    private bool StockAvailable
     {
         get
         {
-            if (Initial.DisableBuy)
-                return false;
             if (!Initial.StockByAttributes)
                 return Initial.InStock;
             var active = _selected.Where(item => item.Value > 0 && !_disabledAttributes.Contains(item.Key)).ToList();

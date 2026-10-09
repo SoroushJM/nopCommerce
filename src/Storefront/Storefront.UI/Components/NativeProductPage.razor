@@ -64,9 +64,9 @@
                         @if (StockLabel.Length > 0)
                         {
                         <div
-                            class="sf-product-stock flex items-center gap-2 mt-5 text-xs @(Available ? "text-emerald-600" : "text-orange-600")">
+                            class="sf-product-stock flex items-center gap-2 mt-5 text-xs @(StockAvailable ? "text-emerald-600" : "text-orange-600")">
                             <span
-                            class="size-1.5 rounded-full @(Available ? "bg-emerald-500" : "bg-orange-500")"></span>@StockLabel
+                            class="size-1.5 rounded-full @(StockAvailable ? "bg-emerald-500" : "bg-orange-500")"></span>@StockLabel
                         </div>
                         }
                         <dl class="sf-product-metadata">
@@ -151,6 +151,8 @@
                                 }
                             </fieldset>
                         }
+                        @if (!Initial.DisableBuy)
+                        {
                         <div class="flex items-center gap-5 mb-6">
                             <span class="text-sm">تعداد</span>
                             @if (Initial.Quantities.Count > 0)
@@ -183,6 +185,7 @@
                 {
                     <p class="text-xs text-slate-500 mb-4">@Initial.MinimumQuantityNotification</p>
                 }
+                        }
                 @if (DisplayTierPrices)
                 {
                     <div class="sf-product-tiers">
@@ -196,6 +199,8 @@
                         <p>قیمت نهایی با تعداد و انتخاب شما در سبد خرید محاسبه می‌شود.</p>
                     </div>
                 }
+                @if (!Initial.HidePrices || !Initial.DisableBuy)
+                {
                 <BbCard Class="sf-price-card bg-slate-50 border border-slate-100 rounded-2xl p-5">
                     @if (!Initial.HidePrices)
                     {
@@ -227,11 +232,15 @@
                     }
                     }
                     }
+                @if (!Initial.DisableBuy)
+                {
                 <BbButton Class="sf-button w-full" Disabled="@(!Available || _busy || _updating || !_ready)"
                           Loading="_busy" OnClick="AddToCart">
                     <SfIcon Name="bag" Size="18" /><span class="mr-2">@PurchaseLabel</span>
                 </BbButton>
+                }
             </BbCard>
+                }
             @if (Initial.PreOrderDate.Length > 0)
             {
                 <p class="text-xs text-slate-500 mt-4">زمان عرضهٔ پیش‌سفارش: @Initial.PreOrderDate</p>
