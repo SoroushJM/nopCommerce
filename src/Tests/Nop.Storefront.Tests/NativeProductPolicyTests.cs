@@ -95,7 +95,11 @@ public sealed class NativeProductPolicyTests
                             await DeleteAsync(admin, "Product", products[1]);
                     }
                 }
-                finally { if (discountId > 0) await DeleteAsync(admin, "Discount", discountId); }
+                finally
+                {
+                    if (discountId > 0)
+                        await DeleteAsync(admin, "Discount", discountId);
+                }
             }
         }
     }
@@ -178,7 +182,11 @@ public sealed class NativeProductPolicyTests
                     await Assert.That(row.GetProperty("SelectedCustomerRoleIds").EnumerateArray().Select(id => id.GetInt32())).IsEquivalentTo(original);
                 }
             }
-            finally { if (productId > 0) await DeleteAsync(admin, "Product", productId); }
+            finally
+            {
+                if (productId > 0)
+                    await DeleteAsync(admin, "Product", productId);
+            }
         }
     }
 
@@ -301,7 +309,11 @@ public sealed class NativeProductPolicyTests
                         if (attributeId > 0)
                             await DeleteAsync(admin, "ProductAttribute", attributeId);
                     }
-                    finally { if (productId > 0) await DeleteAsync(admin, "Product", productId); }
+                    finally
+                    {
+                        if (productId > 0)
+                            await DeleteAsync(admin, "Product", productId);
+                    }
                 }
             }
         }
