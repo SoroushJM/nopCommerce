@@ -1,0 +1,43 @@
+@using Nop.Core
+@using Nop.Services.Localization
+@inject ILocalizationService localizationService
+@inject IStoreContext storeContext
+@{
+    Layout = "_MadadrangRoot";
+    Context.Items["Madadrang.NativePage"] = true;
+    var store = await storeContext.GetCurrentStoreAsync();
+    var title = await localizationService.GetLocalizedAsync(store, item => item.HomepageTitle);
+    if (!string.IsNullOrEmpty(title))
+        NopHtml.AddTitleParts(title);
+    var description = await localizationService.GetLocalizedAsync(store, item => item.HomepageDescription);
+    if (!string.IsNullOrEmpty(description))
+        NopHtml.AddMetaDescriptionParts(description);
+    NopHtml.AppendPageCssClassParts("html-home-page");
+}
+<main id="main-content" class="wrap pt-7 max-md:pt-5">
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageTop })
+    @await Component.InvokeAsync("MadadrangHero")
+    @await Component.InvokeAsync(typeof(TopicBlockViewComponent), new { systemName = "HomepageText" })
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new
+    {
+        widgetZone =
+    PublicWidgetZones.HomepageBeforeCategories
+    })
+    @await Component.InvokeAsync(typeof(HomepageCategoriesViewComponent))
+    @await Component.InvokeAsync(typeof(FilterLevelValueSearchViewComponent))
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new
+    {
+        widgetZone =
+    PublicWidgetZones.HomepageBeforeProducts
+    })
+    @await Component.InvokeAsync(typeof(HomepageProductsViewComponent))
+    @await Component.InvokeAsync("MadadrangHomepageBanners")
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new
+    {
+        widgetZone =
+    PublicWidgetZones.HomepageBeforeBestSellers
+    })
+    @await Component.InvokeAsync(typeof(HomepageBestSellersViewComponent))
+    @await Component.InvokeAsync("MadadrangNewProducts")
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBottom })
+</main>

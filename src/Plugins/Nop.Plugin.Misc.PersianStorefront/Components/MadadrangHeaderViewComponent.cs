@@ -1,4 +1,4 @@
-using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc;
 using Nop.Web.Factories;
 using Nop.Web.Framework.Components;
 
@@ -8,9 +8,10 @@ public sealed class MadadrangHeaderViewComponent(StorefrontNavigation navigation
 {
     public async Task<IViewComponentResult> InvokeAsync()
     {
-        var model = await navigation.PrepareAsync();
+        var header = await common.PrepareHeaderLinksModelAsync();
+        var model = await navigation.PrepareAsync(header);
         HttpContext.Items["Madadrang.Navigation"] = model;
-        ViewData["HeaderLinksModel"] = await common.PrepareHeaderLinksModelAsync();
+        ViewData["HeaderLinksModel"] = header;
         return await ViewAsync("~/Plugins/Misc.PersianStorefront/Views/NativeHeader.cshtml", model);
     }
 }

@@ -1,0 +1,37 @@
+@if (ArtUrl.Length > 0 || NotebookUrl.Length > 0)
+{
+    <section class="grid md:grid-cols-2 gap-5 mt-9">
+        @if (ArtUrl.Length > 0)
+        {
+            <a href="@ArtUrl" class="bg-[#f0f6ed] rounded-2xl p-7 flex justify-between items-center overflow-hidden">
+                <div><span class="text-[10px] text-[#71926a]">برای خیال‌های بی‌مرز</span>
+                    <h2 class="text-xl font-extrabold mt-2">رنگی‌تر فکر کن.</h2>
+                    <p class="text-xs text-slate-500 mt-2">ابزارهای هنر و خلاقیت</p><span
+                    class="inline-flex items-center gap-2 text-xs mt-5">بزن بریم
+                    <SfIcon Name="arrow" Size="15" />
+                </span>
+            </div>
+            <img class="w-32 h-32 rounded-full object-cover" src="/_content/Storefront.UI/images/pencils.jpg"
+                 alt="مدادهای رنگی" loading="lazy" />
+        </a>
+    }
+    @if (NotebookUrl.Length > 0)
+    {
+        <a href="@NotebookUrl" class="bg-[#fff1e6] rounded-2xl p-7 flex justify-between items-center overflow-hidden">
+            <div><span class="text-[10px] text-orange-500">یک صفحهٔ تازه برای تو</span>
+                <h2 class="text-xl font-extrabold mt-2">بنویس، برنامه بریز، بساز.</h2>
+                <p class="text-xs text-slate-500 mt-2">دفترها و کاغذهای دوست‌داشتنی</p><span
+                class="inline-flex items-center gap-2 text-xs mt-5">انتخاب دفتر
+                <SfIcon Name="arrow" Size="15" />
+            </span>
+        </div>
+        <img class="w-32 h-32 rounded-full object-cover" src="/_content/Storefront.UI/images/notebook.jpg"
+             alt="دفتر یادداشت" loading="lazy" />
+    </a>
+}
+</section>
+}
+@code {
+    [Parameter] public string ArtUrl { get; set; } = "";
+    [Parameter] public string NotebookUrl { get; set; } = "";
+}

@@ -1,0 +1,16 @@
+@model IList<Nop.Web.Models.Catalog.ProductOverviewModel>
+@if (Model.Count > 0)
+{
+    <section class="mt-10 mb-9">
+        <div class="flex items-center justify-between mb-5">
+            <h2 class="section-title">تازه‌های مدادرنگ</h2><a href="/newproducts" class="text-xs text-slate-500">دیدن همه
+            ←</a>
+        </div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 max-md:gap-3">
+            @foreach (var product in Model)
+            {
+                @await Component.InvokeAsync("MadadrangProductCard", new { model = product })
+            }
+        </div>
+    </section>
+}

@@ -1,0 +1,62 @@
+@model Nop.Web.Models.Catalog.ProductOverviewModel
+@using Nop.Core
+@using Nop.Core.Domain.Catalog
+@using Nop.Core.Domain.Tax
+@using Nop.Web.Components
+@using Nop.Web.Framework.Infrastructure
+@using Nop.Web.Framework.Mvc.Routing
+@using Storefront.UI
+@inherits Nop.Web.Framework.Mvc.Razor.NopRazorPage<TModel>
+@inject Nop.Web.Framework.Mvc.Routing.INopUrlHelper NopUrl
+@inject IWorkContext workContext
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    var url = await NopUrl.RouteGenericUrlAsync<Product>(new { SeName = Model.SeName });
+    var picture = Model.PictureModels.FirstOrDefault();
+    var label = Model.ProductPrice.DisableBuyButton ? "خرید غیرفعال" : Model.MarkAsNew ? "تازه رسیده" : !string.IsNullOrEmpty(Model.ProductPrice.OldPrice) ? "پیشنهاد رنگی" : "";
+}
+<article class="product-card" data-productid="@Model.Id">
+    <a href="@url" aria-label="@Model.Name">
+        <div class="product-photo">
+            <img src="@picture?.ImageUrl" alt="@picture?.AlternateText" title="@picture?.Title" loading="lazy" />
+            @if (label.Length > 0)
+            {
+                <span class="tag absolute right-3 top-3">@label</span>
+            }
+        </div>
+        <div class="p-4 pb-2">
+            <p class="text-[10px] text-slate-400 mb-2">@ViewData["Caption"]</p>
+            <h3 class="text-[13px] font-bold leading-6 min-h-12">@Model.Name</h3>
+            <div class="flex gap-1.5 mt-2" aria-label="رنگ‌های محصول">
+                @foreach (var color in (List<string>)ViewData["Colors"]!)
+                {
+                    <span style="background:@color" class="size-2.5 rounded-full border border-white ring-1 ring-slate-100"></span>
+                }
+            </div>
+        </div>
+    </a>
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductBoxAddinfoBefore, additionalData = Model })
+    <div class="px-4 pb-4 flex items-end justify-between gap-2">
+        <div>
+            @if (!string.IsNullOrEmpty(Model.ProductPrice.OldPrice))
+            {
+                <del class="text-[11px] text-slate-400 block mb-1 price">@Model.ProductPrice.OldPrice</del>
+            }
+            <p class="text-sm font-bold price">@Model.ProductPrice.Price</p>
+            @if (Model.ProductPrice.DisplayTaxShippingInfo)
+            {
+                var inclTax = await workContext.GetTaxDisplayTypeAsync() == TaxDisplayType.IncludingTax;
+                <small>@T(inclTax ? "Products.Price.TaxShipping.InclTax" : "Products.Price.TaxShipping.ExclTax", await NopUrl.RouteTopicUrlAsync("shippinginfo"))</small>
+            }
+            @if (!string.IsNullOrEmpty(Model.ProductPrice.BasePricePAngV))
+            {
+                <small class="block">@Model.ProductPrice.BasePricePAngV</small>
+            }
+        </div>
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductBoxAddinfoMiddle, additionalData = Model })
+        <a href="@url" aria-label="مشاهدهٔ @Model.Name" class="size-8 rounded-lg bg-slate-50 text-slate-500 grid place-items-center">
+            <component type="typeof(SfIcon)" render-mode="Static" param-Name='@("arrow")' param-Size="16" />
+        </a>
+    </div>
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductBoxAddinfoAfter, additionalData = Model })
+</article>

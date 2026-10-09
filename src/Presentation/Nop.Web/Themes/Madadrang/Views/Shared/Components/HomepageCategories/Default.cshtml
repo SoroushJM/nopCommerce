@@ -1,0 +1,10 @@
+@model IList<CategoryModel>
+@if (Model.Count > 0)
+{
+    <section class="grid grid-cols-2 md:grid-cols-4 gap-3 mt-6" aria-label="دسته‌های محصولات">
+        @foreach (var category in Model)
+        {
+            @await Component.InvokeAsync("MadadrangCategoryTile", new { model = category })
+        }
+    </section>
+}

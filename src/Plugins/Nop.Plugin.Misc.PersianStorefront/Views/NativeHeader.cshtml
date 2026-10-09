@@ -1,25 +1,69 @@
 @model Storefront.UI.StoreNavigation
+@using Storefront.UI
 @using Storefront.UI.Components
 @using Nop.Web.Components
 @using Nop.Web.Framework.Infrastructure
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-
-@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderBefore })
-@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderSelectors })
-@await Component.InvokeAsync(typeof(WidgetViewComponent), new
-{
-    widgetZone = PublicWidgetZones.HeaderLinksBefore,
-    additionalData = ViewData["HeaderLinksModel"]
-})
-@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderMiddle })
-@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderMenuBefore })
-@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.MobHeaderMenuBefore })
-<component type="typeof(NativeHeader)" render-mode="WebAssemblyPrerendered" param-Initial="Model" />
-@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.MobHeaderMenuAfter })
-@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderMenuAfter })
-@await Component.InvokeAsync(typeof(WidgetViewComponent), new
-{
-    widgetZone = PublicWidgetZones.HeaderLinksAfter,
-    additionalData = ViewData["HeaderLinksModel"]
-})
-@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderAfter })
+<div class="bg-[#eaf1fd] text-[#46628b] text-center text-[11px] py-2.5 px-4">یک شروع رنگی برای روزهای تازه <span
+    class="mx-2 text-blue-300">✦</span> لوازم‌تحریری که دوستشان داری</div>
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderBefore })
+    <header class="sf-header">
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderSelectors })
+        <div class="wrap flex items-center justify-between gap-7 py-5 max-md:py-4">
+            <a href="/" class="sf-brand shrink-0" aria-label="مدادرنگ، صفحه اصلی">
+                <span class="brand-mark">
+                    <component type="typeof(SfIcon)" render-mode="Static" param-Size="23" />
+                </span>
+                <span class="brand-word">مداد<span class="text-primary">رنگ</span><small
+                    class="block text-[9px] font-normal tracking-normal text-slate-400 mt-0.5">دنیای کوچکِ ایده‌های
+                    بزرگ</small></span>
+                </a>
+                <form action="/search" class="search-field max-md:hidden" method="get">
+                    <component type="typeof(SfIcon)" render-mode="Static" param-Name='@("search")' param-Size="19" />
+                    <input name="q" aria-label="جست‌وجوی محصولات" placeholder="دنبال چی می‌گردی؟ دفتر، مداد، یک ایده تازه..." />
+                    <button type="submit" class="sr-only">جست‌وجو</button>
+                </form>
+                <div class="flex items-center gap-2">
+                    <div class="md:hidden">
+                        @await Component.InvokeAsync(typeof(WidgetViewComponent), new
+                        {
+                            widgetZone =
+                        PublicWidgetZones.MobHeaderMenuBefore
+                        })
+                        <component type="typeof(StorefrontMainMenu)" render-mode="WebAssemblyPrerendered"
+                                   param-Menu="Model.Main" param-Mobile="true" />
+                        @await Component.InvokeAsync(typeof(WidgetViewComponent), new
+                        {
+                            widgetZone =
+                        PublicWidgetZones.MobHeaderMenuAfter
+                        })
+                    </div>
+                    @await Component.InvokeAsync(typeof(WidgetViewComponent), new
+                    {
+                        widgetZone =
+                    PublicWidgetZones.HeaderLinksBefore,
+                        additionalData = ViewData["HeaderLinksModel"]
+                    })
+                    <component type="typeof(NativeHeader)" render-mode="WebAssemblyPrerendered" param-Initial="Model" />
+                    @await Component.InvokeAsync(typeof(WidgetViewComponent), new
+                    {
+                        widgetZone =
+                    PublicWidgetZones.HeaderLinksAfter,
+                        additionalData = ViewData["HeaderLinksModel"]
+                    })
+                </div>
+            </div>
+            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderMiddle })
+            <div class="wrap border-t border-slate-100 max-md:hidden">
+                @await Component.InvokeAsync(typeof(WidgetViewComponent), new
+                {
+                    widgetZone = PublicWidgetZones.HeaderMenuBefore
+                })
+                <component type="typeof(StorefrontMainMenu)" render-mode="WebAssemblyPrerendered" param-Menu="Model.Main" />
+                @await Component.InvokeAsync(typeof(WidgetViewComponent), new
+                {
+                    widgetZone = PublicWidgetZones.HeaderMenuAfter
+                })
+            </div>
+            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderAfter })
+        </header>

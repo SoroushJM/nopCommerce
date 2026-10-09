@@ -1,0 +1,18 @@
+@model Nop.Web.Models.Catalog.CategoryModel
+@using Nop.Core.Domain.Catalog
+@using Storefront.UI
+@inject Nop.Web.Framework.Mvc.Routing.INopUrlHelper NopUrl
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    var styles = new[] { (Bg: "#edf3ff", Color: "#6284c8", Icon: "menu"), (Bg: "#fff1e5", Color: "#cd8754", Icon: "pencil"),
+(Bg: "#f1edf9", Color: "#9b86b6", Icon: "bag"), (Bg: "#ecf5ed", Color: "#79a27e", Icon: "leaf") };
+    var style = styles[(int)ViewData["Style"]!];
+}
+<a href="@(await NopUrl.RouteGenericUrlAsync<Category>(new { SeName = Model.SeName }))" class="category-tile"
+   data-categoryid="@Model.Id">
+    <span class="category-icon" style="background:@style.Bg;color:@style.Color">
+        <component type="typeof(SfIcon)" render-mode="Static" param-Name="style.Icon" param-Size="23" />
+    </span>
+    <div><strong class="text-[13px] max-md:text-xs block">@Model.Name</strong><span
+        class="text-[10px] text-slate-400">کشف کن <span class="mr-1">←</span></span></div>
+    </a>

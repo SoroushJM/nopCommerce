@@ -1,58 +1,79 @@
-<nav aria-label="دسته‌بندی‌های فروشگاه" class="wrap border-t border-slate-100">
-    <BbNavigationMenu Class="hidden md:flex" EnableKeyboardNavigation="true">
-        <BbNavigationMenuList Class="gap-8 flex-wrap">
-            @for (var index = 0; index < Menu.Items.Count; index++)
-            {
-                var item = Menu.Items[index];
-                <BbNavigationMenuItem Value="@($"menu-{Menu.Id}-{index}")">
-                    @if (item.Children.Count > 0)
-                    {
-                        <BbNavigationMenuTrigger Class="@($"nav-link bg-transparent {item.CssClass}")">@item.Title
-                        </BbNavigationMenuTrigger>
-                        <BbNavigationMenuContent>
-                            <div class="min-w-60 max-w-md p-3 max-h-96 overflow-y-auto">
-                                @if (item.Url.Length > 0)
-                                {
-                                    <a href="@item.Url" class="block px-3 py-2 text-primary font-bold">@item.Title</a>
-                                }
-                                @foreach (var child in item.Children)
-                                {
-                                    <StorefrontMenuBranch Item="child" />
-                                }
-                            </div>
-                        </BbNavigationMenuContent>
-                    }
-                    else if (item.Url.Length > 0)
-                    {
-                        <BbNavigationMenuLink Href="@item.Url" Class="@($"nav-link {item.CssClass}")">@item.Title
-                        </BbNavigationMenuLink>
-                    }
-                    else
-                    {
-                        <span class="nav-link @item.CssClass">@item.Title</span>
-                    }
-                </BbNavigationMenuItem>
-            }
-        </BbNavigationMenuList>
-    </BbNavigationMenu>
-    <div class="md:hidden">
-        <BbButton Variant="ButtonVariant.Ghost" Class="text-sm w-full justify-start" OnClick="() => _open = !_open"
-                  aria-expanded="@_open">
-            <SfIcon Name="menu" Size="17" /><span class="mr-2">دسته‌بندی‌ها</span>
+<BbDirectionProvider Direction="TextDirection.RightToLeft">
+    @if (Mobile)
+    {
+        <BbButton Variant="ButtonVariant.Ghost" Class="icon-btn" OnClick="() => _open = true" aria-label="دسته‌بندی‌ها">
+            <SfIcon Name="menu" Size="20" />
         </BbButton>
-        @if (_open)
-        {
-            <div class="max-h-80 overflow-y-auto pb-3">
-                @foreach (var item in Menu.Items)
+        <BbSheet Open="_open" OpenChanged="value => _open = value" Side="SheetSide.Right">
+            <BbSheetContent Class="sf-sheet" ShowClose="true">
+                <BbSheetHeader>
+                    <BbSheetTitle>دسته‌بندی‌های فروشگاه</BbSheetTitle>
+                    <BbSheetDescription>دنیای رنگی نوشت‌افزار را کشف کن.</BbSheetDescription>
+                </BbSheetHeader>
+                <nav aria-label="دسته‌بندی‌های موبایل" class="overflow-y-auto my-4">
+                    @foreach (var item in Menu.Items)
+                    {
+                        <StorefrontMenuBranch Item="item" />
+                    }
+                </nav>
+            </BbSheetContent>
+        </BbSheet>
+    }
+    else
+    {
+        <BbNavigationMenu Class="sf-native-menu flex max-w-none" EnableKeyboardNavigation="true"
+                          aria-label="دسته‌بندی‌های فروشگاه">
+            <BbNavigationMenuList Class="gap-8 w-full">
+                @for (var index = 0; index < Menu.Items.Count; index++)
                 {
-                    <StorefrontMenuBranch Item="item" />
+                    var item = Menu.Items[index];
+                    <BbNavigationMenuItem Value="@($"menu-{Menu.Id}-{index}")" Class="@item.CssClass">
+                        @if (item.Children.Count > 0)
+                        {
+                            <BbNavigationMenuTrigger Class="nav-link bg-transparent">@item.Title</BbNavigationMenuTrigger>
+                            <BbNavigationMenuContent>
+                                <div class="min-w-60 max-w-md p-3 max-h-96 overflow-y-auto">
+                                    @if (item.Url.Length > 0)
+                                    {
+                                        <a href="@item.Url" class="block px-3 py-2 text-primary font-bold">@item.Title</a>
+                                    }
+                                    @foreach (var child in item.Children)
+                                    {
+                                        <StorefrontMenuBranch Item="child" />
+                                    }
+                                </div>
+                            </BbNavigationMenuContent>
+                        }
+                        else if (item.Url.Length > 0)
+                        {
+                            <BbNavigationMenuLink Href="@item.Url" Class="nav-link flex items-center gap-2">
+                                @if (item.CssClass.Split(' ').Contains("sf-menu-all"))
+                                {
+                                    <SfIcon Name="menu" Size="17" />
+                                }
+                                @if (item.CssClass.Split(' ').Contains("sf-menu-offer"))
+                                {
+                                    <SfIcon Name="star" Size="15" />
+                                }
+                                @item.Title
+                            </BbNavigationMenuLink>
+                        }
+                        else
+                        {
+                            <span class="nav-link">@item.Title</span>
+                        }
+                    </BbNavigationMenuItem>
                 }
-            </div>
-        }
-    </div>
-</nav>
-
+            </BbNavigationMenuList>
+        </BbNavigationMenu>
+    }
+</BbDirectionProvider>
 @code {
     [Parameter] public StoreMenu Menu { get; set; } = new();
+    [Parameter]
+    public bool Mobile
+    {
+        get; set;
+    }
     private bool _open;
 }

@@ -1,0 +1,9 @@
+@model ProductOverviewModel
+@if (Context.Items["Madadrang.NativePage"] is true)
+{
+    @await Component.InvokeAsync("MadadrangProductCard", new { model = Model })
+}
+else
+{
+    @await Html.PartialAsync("~/Views/Shared/_ProductBox.cshtml", Model)
+}

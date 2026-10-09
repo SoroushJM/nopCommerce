@@ -1,7 +1,7 @@
 <footer class="sf-footer">
     <div class="wrap">
-        <div class="flex flex-wrap gap-8">
-            <div class="flex-[2] min-w-60"><a href="/" class="sf-brand mb-4"><span class="brand-mark">
+        <div class="grid md:grid-cols-[2fr_1fr_1fr] gap-8">
+            <div><a href="/" class="sf-brand mb-4"><span class="brand-mark">
                 <SfIcon />
             </span><span>مدادرنگ</span></a>
             <p class="text-xs text-slate-500 leading-7 max-w-sm">برای ما، لوازم‌تحریر فقط ابزار نیست؛ یک بهانهٔ کوچک
@@ -9,12 +9,12 @@
             </div>
             @foreach (var menu in Menus)
             {
-                <div class="flex-1 min-w-40">
+                <div>
                     <h2 class="text-sm font-bold mb-4">@menu.Name</h2>
                     <div class="flex flex-col gap-3 text-xs text-slate-500">
                         @foreach (var item in menu.Items)
                         {
-                            <StorefrontMenuBranch Item="item" />
+                            <StorefrontMenuBranch Item="item" Plain="true" />
                         }
                     </div>
                 </div>

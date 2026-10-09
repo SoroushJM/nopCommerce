@@ -1,0 +1,19 @@
+@model IList<ProductOverviewModel>
+@if (Model.Count > 0)
+{
+    <section class="mt-12 max-md:mt-8">
+        <div class="flex items-center justify-between mb-5">
+            <div>
+                <p class="text-[10px] text-orange-500 mb-1">کوچک، کاربردی، دوست‌داشتنی</p>
+                <h2 class="section-title">انتخاب‌های محبوب</h2>
+            </div>
+            <a href="/stationery/catalog" class="flex gap-2 text-xs text-slate-500">همهٔ محصولات ←</a>
+        </div>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 max-md:gap-3">
+            @foreach (var product in Model)
+            {
+                @await Html.PartialAsync("_ProductBox", product)
+            }
+        </div>
+    </section>
+}

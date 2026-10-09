@@ -5,7 +5,10 @@
     NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/_framework/blazor.webassembly.js", excludeFromBundle: true);
 }
 @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.BodyStartHtmlTagAfter })
+@await Html.PartialAsync("_Notifications")
+@await Html.PartialAsync("_JavaScriptDisabledWarning")
 <div class="storefront" dir="rtl">
+    @await Component.InvokeAsync(typeof(AdminHeaderLinksViewComponent))
     @await Component.InvokeAsync("MadadrangHeader")
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ContentBefore })
     @await RenderSectionAsync("Breadcrumb", false)
@@ -14,4 +17,5 @@
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ContentAfter })
     @await Component.InvokeAsync("MadadrangFooter")
 </div>
+@await Component.InvokeAsync(typeof(EuCookieLawViewComponent))
 @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.BodyEndHtmlTagBefore })

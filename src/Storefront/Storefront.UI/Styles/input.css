@@ -1,6 +1,8 @@
 @import "tailwindcss" source(none);
 @source "../*.razor";
 @source "../Components/*.razor";
+@source "../../../Plugins/Nop.Plugin.Misc.PersianStorefront/Views/**/*.cshtml";
+@source "../../../Presentation/Nop.Web/Themes/Madadrang/Views/**/*.cshtml";
 
 @theme inline {
   --color-primary: var(--primary);
@@ -160,6 +162,23 @@
 
   .nav-link:hover {
     color: var(--primary)
+  }
+
+  .sf-native-menu > div {
+    width: 100%
+  }
+
+  .sf-menu-all > a {
+    color: var(--primary);
+    font-weight: 700
+  }
+
+  .sf-menu-offer {
+    margin-inline-start: auto
+  }
+
+  .sf-menu-offer > a {
+    color: #ea580c
   }
 
   .hero {

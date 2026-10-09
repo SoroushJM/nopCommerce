@@ -1,0 +1,13 @@
+@model IList<ProductOverviewModel>
+@if (Model.Count > 0)
+{
+    <section class="mt-10">
+        <h2 class="section-title mb-5">@T("Bestsellers")</h2>
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4 max-md:gap-3">
+            @foreach (var product in Model)
+            {
+                @await Html.PartialAsync("_ProductBox", product)
+            }
+        </div>
+    </section>
+}

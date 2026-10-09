@@ -8,11 +8,11 @@ namespace Nop.Plugin.Misc.PersianStorefront;
 public sealed class StorefrontNavigation(IMenuModelFactory menus,
     ICommonModelFactory common)
 {
-    public async Task<StoreNavigation> PrepareAsync()
+    public async Task<StoreNavigation> PrepareAsync(Nop.Web.Models.Common.HeaderLinksModel? header = null)
     {
         var main = (await menus.PrepareMenuModelsAsync(MenuType.Main)).FirstOrDefault();
         var footer = await menus.PrepareMenuModelsAsync(MenuType.Footer);
-        var header = await common.PrepareHeaderLinksModelAsync();
+        header ??= await common.PrepareHeaderLinksModelAsync();
         return new StoreNavigation
         {
             Main = main == null ? new() : From(main),
@@ -35,9 +35,9 @@ public sealed class StorefrontNavigation(IMenuModelFactory menus,
             Id = model.Id,
             EntityId = model.EntityId,
             EntityType = (int)model.MenuItemType,
-            Title = model.Title,
-            Url = model.Url,
-            CssClass = model.CssClass,
+            Title = model.Title ?? "",
+            Url = model.Url ?? "",
+            CssClass = model.CssClass ?? "",
             Children = model.ChildrenItems.Select(From).ToList()
         };
     }
