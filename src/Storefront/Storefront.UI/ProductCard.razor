@@ -33,7 +33,3 @@
             </div>
         </a>
     </article>
-@code {
-    [Parameter, EditorRequired] public StoreProduct Product { get; set; } = default!;
-    private static string Money(decimal value) => value.ToString("N0", CultureInfo.InvariantCulture);
-}

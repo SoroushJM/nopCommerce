@@ -19,13 +19,3 @@
     @((Line.UnitPrice * Line.Quantity).ToString("N0", CultureInfo.InvariantCulture)) <small
     class="font-normal text-[10px] text-slate-500">تومان</small></div>
 </article>
-@code {
-    [Parameter, EditorRequired] public CartLine Line { get; set; } = default!; [Parameter]
-    public
-    EventCallback<QuantityRequest> OnQuantity
-    {
-        get; set;
-    }
-    private Task SetQuantity(int quantity) => OnQuantity.InvokeAsync(new
-    QuantityRequest(Line.Id, quantity));
-}
