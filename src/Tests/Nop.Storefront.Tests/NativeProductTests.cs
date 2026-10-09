@@ -87,6 +87,45 @@ public sealed class NativeProductTests
         return (combinations.EnumerateArray().First(item => item.GetProperty("InStock").GetBoolean()), combinations.EnumerateArray().First(item => !item.GetProperty("InStock").GetBoolean()));
     }
 
+    [Test]
+    public async Task NativeEditRestoresAttributesAndMergesMatchingSelection()
+    {
+        await using var client = new StorefrontClient();
+        await client.InitializeAsync(Page);
+        var combinations = await client.GetJsonAsync($"product/combinations?productId={StorefrontClient.ProductId}");
+        var available = combinations.EnumerateArray().Where(item => item.GetProperty("InStock").GetBoolean()).Take(2).ToArray();
+        await Assert.That(available.Length).IsEqualTo(2);
+        try
+        {
+            using var first = await client.PostFormAsync(Add, Form(client, available[0]));
+            await Assert.That((await StorefrontClient.ReadJsonAsync(first)).GetProperty("success").GetBoolean()).IsTrue();
+            var firstId = (await client.NativeCartAsync()).GetProperty("Lines")[0].GetProperty("Id").GetInt32();
+            using var second = await client.PostFormAsync(Add, Form(client, available[1]));
+            await Assert.That((await StorefrontClient.ReadJsonAsync(second)).GetProperty("success").GetBoolean()).IsTrue();
+            await Assert.That((await client.NativeCartAsync()).GetProperty("Lines").GetArrayLength()).IsEqualTo(2);
+            var edit = await client.InitializeAsync(Page + "&updatecartitemid=" + firstId);
+            foreach (var attribute in available[0].GetProperty("Attributes").EnumerateArray())
+            {
+                var mappingId = attribute.GetProperty("Id").GetInt32();
+                var valueId = attribute.GetProperty("ValueIds")[0].GetInt32();
+                await Assert.That(edit.Contains($"name=\"product_attribute_{mappingId}\" value=\"{valueId}\"", StringComparison.Ordinal)).IsTrue();
+            }
+            var fields = Form(client, available[1]);
+            fields[$"addtocart_{StorefrontClient.ProductId}.EnteredQuantity"] = "2";
+            fields[$"addtocart_{StorefrontClient.ProductId}.UpdatedShoppingCartItemId"] = firstId.ToString();
+            using var updated = await client.PostFormAsync(Add, fields);
+            await Assert.That((await StorefrontClient.ReadJsonAsync(updated)).GetProperty("success").GetBoolean()).IsTrue();
+            var merged = (await client.NativeCartAsync()).GetProperty("Lines");
+            await Assert.That(merged.GetArrayLength()).IsEqualTo(1);
+            await Assert.That(merged[0].GetProperty("Id").GetInt32()).IsEqualTo(firstId);
+            await Assert.That(merged[0].GetProperty("Quantity").GetInt32()).IsEqualTo(3);
+        }
+        finally
+        {
+            await client.ClearCartAsync();
+        }
+    }
+
     private static Dictionary<string, string> Form(StorefrontClient client, JsonElement combination, bool includeToken = true)
     {
         var fields = new Dictionary<string, string>

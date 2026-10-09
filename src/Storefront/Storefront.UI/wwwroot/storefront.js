@@ -74,6 +74,27 @@ export function notifyCartChanged(open = false) {
   );
 }
 
+export function notifyProductChanged(productId, attributes, quantity) {
+  if (!window.jQuery) return;
+  if (attributes) {
+    const event = window.jQuery.Event("product_attributes_changed");
+    event.changedData = { ...attributes, productId };
+    window.jQuery(document).trigger(event);
+  }
+  if (quantity !== null) {
+    const event = window.jQuery.Event("product_quantity_changed");
+    event.changedData = { productId, quantity };
+    window.jQuery(document).trigger(event);
+  }
+}
+
+export function focusProductZoomTrigger(gallery) {
+  // Restore after BB removes the overlay and releases its focus trap.
+  requestAnimationFrame(() => {
+    gallery.querySelector(".sf-product-zoom")?.focus({ preventScroll: true });
+  });
+}
+
 export function submitNativeSelect(input, value, submitName) {
   input.value = value;
   const form = input.form;

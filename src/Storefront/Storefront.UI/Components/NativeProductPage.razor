@@ -3,31 +3,101 @@
 @inject NavigationManager Navigation
 
 <BbDirectionProvider Direction="TextDirection.RightToLeft">
+<BbDialog Open="_zoomOpen" OpenChanged="SetZoomOpen">
     <div class="storefront" dir="rtl">
+        @foreach (var field in FormFields())
+        {
+            <input type="hidden" id="@field.Key.Replace('.', '_')" name="@field.Key" value="@field.Value" />
+        }
         <main id="main-content">
             <section class="wrap py-7">
+                @if (Initial.BreadcrumbEnabled)
+                {
                 <p class="text-xs text-slate-400 mb-7"><a href="/">خانه</a> / @foreach (var link in Initial.Breadcrumb)
                     {
                         <a href="@link.Url">@link.Name</a><span> / </span>
                     }
                     @Initial.Name
                 </p>
+                }
                 @if (_error.Length > 0)
                 {
                     <BbAlert Class="sf-notice notice mb-5">@_error</BbAlert>
                 }
-                <div class="grid md:grid-cols-2 gap-12 max-md:gap-7">
-                    <BbCard Class="sf-product-image product-image"><img src="@_image" alt="@Initial.ImageAlt" />
-                    </BbCard>
-                    <div>
-                        <p class="text-xs text-primary mb-3">@Initial.Brand</p>
-                        <h1 class="text-3xl max-md:text-2xl font-extrabold leading-relaxed">@Initial.Name</h1>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-md:gap-7">
+                    <div @ref="_gallery" class="sf-product-gallery">
+                        <BbCard Class="sf-product-image product-image">
+                            @if (Initial.ZoomEnabled && !string.IsNullOrEmpty(_fullSizeImage))
+                            {
+                                <BbDialogTrigger AsChild="false" class="sf-product-zoom" aria-label="بزرگ‌نمایی تصویر محصول">
+                                    <img src="@_image" alt="@_imageAlt" title="@_imageTitle" />
+                                </BbDialogTrigger>
+                            }
+                            else
+                            {
+                                <img src="@_image" alt="@_imageAlt" title="@_imageTitle" />
+                            }
+                        </BbCard>
+                        @if (Initial.Pictures.Count > 1)
+                        {
+                            <div class="sf-product-thumbnails" aria-label="تصاویر محصول">
+                                @foreach (var picture in VisiblePictures)
+                                {
+                                    <button type="button" class="@(_image == picture.Image ? "selected" : "")"
+                                            aria-label="@picture.Title" aria-pressed="@((_image == picture.Image).ToString().ToLowerInvariant())"
+                                            @onclick="() => SelectPicture(picture)">
+                                        <img src="@picture.Thumbnail" alt="@picture.Alt" loading="lazy" />
+                                    </button>
+                                }
+                            </div>
+                        }
+                    </div>
+                    <div class="min-w-0">
+                        <p class="text-xs text-primary mb-3">
+                            @foreach (var manufacturer in Initial.Manufacturers)
+                            {
+                                <a class="mr-2" href="@manufacturer.Url">@manufacturer.Name</a>
+                            }
+                        </p>
+                        <h1 class="sf-product-name text-3xl max-md:text-2xl font-extrabold leading-relaxed">@Initial.Name</h1>
                         <p class="text-sm text-slate-500 leading-8 mt-4">@((MarkupString)Initial.Description)</p>
+                        @if (StockLabel.Length > 0)
+                        {
                         <div
-                            class="flex items-center gap-2 mt-5 text-xs @(Available ? "text-emerald-600" : "text-orange-600")">
+                            class="sf-product-stock flex items-center gap-2 mt-5 text-xs @(Available ? "text-emerald-600" : "text-orange-600")">
                             <span
                             class="size-1.5 rounded-full @(Available ? "bg-emerald-500" : "bg-orange-500")"></span>@StockLabel
                         </div>
+                        }
+                        <dl class="sf-product-metadata">
+                            @if (Initial.ShowSku && _sku.Length > 0)
+                            {
+                                <div><dt>کد محصول</dt><dd data-product-sku>@_sku</dd></div>
+                            }
+                            @if (Initial.ShowMpn && _mpn.Length > 0)
+                            {
+                                <div><dt>کد تولیدکننده</dt><dd>@_mpn</dd></div>
+                            }
+                            @if (Initial.ShowGtin && _gtin.Length > 0)
+                            {
+                                <div><dt>شناسهٔ کالا</dt><dd>@_gtin</dd></div>
+                            }
+                            @if (Initial.ShowVendor && Initial.Vendor != null)
+                            {
+                                <div><dt>فروشنده</dt><dd><a href="@Initial.Vendor.Url">@Initial.Vendor.Name</a></dd></div>
+                            }
+                        </dl>
+                        @if (Initial.IsShipEnabled)
+                        {
+                            @if (_freeShipping && Initial.FreeShippingNotificationEnabled)
+                            {
+                                <p class="sf-product-delivery">ارسال رایگان</p>
+                            }
+                            @if (Initial.DeliveryDate.Length > 0)
+                            {
+                                <p class="sf-product-delivery">زمان تحویل: @Initial.DeliveryDate</p>
+                            }
+                        }
                         <BbSeparator Class="sf-product-separator my-6" />
                         @foreach (var attribute in Initial.Attributes.Where(item =>
                         !_disabledAttributes.Contains(item.Id)))
@@ -60,7 +130,7 @@
                                                     class="@(attribute.ControlType is 40 or 45 ? "color-choice" : "filter-pill") @(_selected.GetValueOrDefault(attribute.Id) == option.Id ? "selected" : "")"
                                                     style="@(attribute.ControlType == 40 ? "background:" + option.Color : "")"
                                                     aria-label="@($"{attribute.Name} {option.Name}")"
-                                                    aria-pressed="@(_selected.GetValueOrDefault(attribute.Id) == option.Id)"
+                                                    aria-pressed="@((_selected.GetValueOrDefault(attribute.Id) == option.Id).ToString().ToLowerInvariant())"
                                                     @onclick="() => SelectOption(attribute.Id, option.Id)">
                                                 @if (attribute.ControlType == 45)
                                                 {
@@ -98,29 +168,74 @@
                             else
                         {
                             <BbButtonGroup Class="sf-quantity qty"><button aria-label="کاهش تعداد"
-                                                                           disabled="@(_quantity <= 1 || _updating)"
+                                                                           disabled="@(_quantity <= Initial.MinimumQuantity || _updating)"
                                                                            @onclick="() => ChangeQuantity(_quantity - 1)">
                                 <SfIcon Name="minus" Size="14" />
-                            </button><span>@_quantity</span><button aria-label="افزایش تعداد" disabled="@_updating"
+                            </button><input @key="_quantityInputRevision" @ref="_quantityInput" class="sf-product-quantity-input" type="number" aria-label="تعداد محصول"
+                                            min="@Initial.MinimumQuantity" step="1" value="@_quantity" @onchange="EnterQuantity"
+                                            disabled="@_updating" /><button aria-label="افزایش تعداد" disabled="@_updating"
                                                                 @onclick="() => ChangeQuantity(_quantity + 1)">
                             <SfIcon Name="plus" Size="14" />
                         </button></BbButtonGroup>
                     }
                 </div>
+                @if (Initial.MinimumQuantityNotification.Length > 0)
+                {
+                    <p class="text-xs text-slate-500 mb-4">@Initial.MinimumQuantityNotification</p>
+                }
+                @if (DisplayTierPrices)
+                {
+                    <div class="sf-product-tiers">
+                        <h2>قیمت خرید تعدادی</h2>
+                        <table><thead><tr><th>تعداد</th><th>قیمت هر عدد</th></tr></thead><tbody>
+                            @foreach (var tier in Initial.TierPrices)
+                            {
+                                <tr><td>@(tier.Quantity)+</td><td>@tier.Price</td></tr>
+                            }
+                        </tbody></table>
+                        <p>قیمت نهایی با تعداد و انتخاب شما در سبد خرید محاسبه می‌شود.</p>
+                    </div>
+                }
                 <BbCard Class="sf-price-card bg-slate-50 border border-slate-100 rounded-2xl p-5">
+                    @if (!Initial.HidePrices)
+                    {
+                    @if (Initial.CallForPrice)
+                    {
+                        <p class="mb-5 font-bold">@Initial.CallForPriceLabel</p>
+                    }
+                    else
+                    {
                     <div class="flex items-end justify-between mb-5"><span class="text-xs text-slate-500">قیمت
                         هر عدد</span>
                         <div class="text-left">@if (!string.IsNullOrWhiteSpace(Initial.OldPrice)) {
                             <del class="text-xs text-slate-400 block mb-1">@Initial.OldPrice</del>
                         }
                         <strong class="text-2xl price">@_price</strong>
+                        @if (Initial.ReferencePrice.Length > 0)
+                        {
+                            <del class="text-xs text-slate-400 block">@Initial.ReferencePrice</del>
+                        }
                     </div>
                 </div>
+                    @if (_basePrice.Length > 0)
+                    {
+                        <p class="text-xs text-slate-500 mb-4">@_basePrice</p>
+                    }
+                    @if (Initial.TaxShippingInfo.Length > 0)
+                    {
+                        <p class="text-xs text-slate-500 mb-4">@((MarkupString)Initial.TaxShippingInfo)</p>
+                    }
+                    }
+                    }
                 <BbButton Class="sf-button w-full" Disabled="@(!Available || _busy || _updating || !_ready)"
                           Loading="_busy" OnClick="AddToCart">
                     <SfIcon Name="bag" Size="18" /><span class="mr-2">@PurchaseLabel</span>
                 </BbButton>
             </BbCard>
+            @if (Initial.PreOrderDate.Length > 0)
+            {
+                <p class="text-xs text-slate-500 mt-4">زمان عرضهٔ پیش‌سفارش: @Initial.PreOrderDate</p>
+            }
             <p class="text-[11px] text-slate-400 mt-5 flex gap-2">
                 <SfIcon Name="shield" Size="15" />انتخاب‌ها و موجودی هنگام افزودن به سبد دوباره بررسی
                 می‌شوند.
@@ -131,4 +246,12 @@
 </main>
 
 </div>
+    <BbDialogContent Class="sf-product-image-dialog" ShowClose="true">
+        <BbDialogHeader>
+            <BbDialogTitle>@Initial.Name</BbDialogTitle>
+            <BbDialogDescription>تصویر بزرگ محصول</BbDialogDescription>
+        </BbDialogHeader>
+        <img src="@_fullSizeImage" alt="@_imageAlt" title="@_imageTitle" />
+    </BbDialogContent>
+</BbDialog>
 </BbDirectionProvider>

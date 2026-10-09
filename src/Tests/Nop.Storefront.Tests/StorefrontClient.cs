@@ -88,6 +88,17 @@ internal sealed class StorefrontClient : IAsyncDisposable
         return await ReadJsonAsync(response);
     }
 
+    public async Task<JsonElement> UploadProductPictureAsync(int productId, string imageName)
+    {
+        var bytes = await _http.GetByteArrayAsync("_content/Storefront.UI/images/" + imageName);
+        using var body = new MultipartFormDataContent();
+        var file = new ByteArrayContent(bytes);
+        file.Headers.ContentType = new System.Net.Http.Headers.MediaTypeHeaderValue("image/jpeg");
+        body.Add(file, "file", imageName);
+        using var response = await _http.PostAsync($"Admin/Product/ProductPictureAdd?productId={productId}", body);
+        return await ReadJsonAsync(response);
+    }
+
     public static async Task<JsonElement> ReadJsonAsync(HttpResponseMessage response)
     {
         response.EnsureSuccessStatusCode();

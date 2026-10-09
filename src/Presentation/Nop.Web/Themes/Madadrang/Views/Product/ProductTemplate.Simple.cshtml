@@ -54,5 +54,7 @@ Html.Encode(htmlFormatter.StripTags(Model.MetaDescription)) + "\" />");
     }
 
     NopHtml.AddJsonLdParts(Model.JsonLd);
+    if (Model.Breadcrumb.Enabled)
+        NopHtml.AddJsonLdParts(Model.Breadcrumb.JsonLd);
 }
 @await Component.InvokeAsync("MadadrangProduct", new { model = Model })
