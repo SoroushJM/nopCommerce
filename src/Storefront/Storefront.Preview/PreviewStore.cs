@@ -8,17 +8,167 @@ namespace Storefront.Preview;
 
 public sealed partial class PreviewStore
 {
-    private sealed class Session { public List<CartLine> Lines = []; public string Phone = ""; public string PendingPhone = ""; public byte[] Hash = []; public DateTimeOffset Sent; public int Attempts; }
+    private sealed class Session
+    {
+        public List<CartLine> Lines = [];
+        public string Phone = "";
+        public string PendingPhone = "";
+        public byte[] Hash = [];
+        public DateTimeOffset Sent;
+        public int Attempts;
+    }
+
     private readonly ConcurrentDictionary<string, Session> sessions = new();
     private readonly ConcurrentDictionary<string, List<CartLine>> accounts = new();
-    private Session Get(HttpContext http) { var id = http.Request.Cookies["stationery-preview"]; if (id == null || !sessions.ContainsKey(id)) { id = Guid.NewGuid().ToString("N"); http.Response.Cookies.Append("stationery-preview", id, new CookieOptions { HttpOnly = true, SameSite = SameSiteMode.Strict, IsEssential = true, MaxAge = TimeSpan.FromDays(7) }); } return sessions.GetOrAdd(id, _ => new()); }
-    public CartSnapshot Snapshot(HttpContext http) { var s = Get(http); lock (s) return new([.. s.Lines], s.Phone != "", s.Phone); }
-    public Quote Quote(SelectionRequest r) { var p = SampleCatalog.Products.FirstOrDefault(x => x.Id == r.ProductId) ?? throw new ArgumentException("محصول پیدا نشد"); if (r.Quantity is < 1 or > 20) throw new ArgumentException("تعداد باید بین 1 و 20 باشد"); var price = p.Price; var available = p.Available; foreach (var a in p.Attributes) { var o = a.Options.FirstOrDefault(x => x.Id == r.Values.GetValueOrDefault(a.Id)) ?? throw new ArgumentException("ویژگی محصول را انتخاب کن"); price += o.Adjustment; available &= o.Available; } return new(price, available); }
-    public CartSnapshot Add(HttpContext http, SelectionRequest r) { var quote = Quote(r); if (!quote.Available) throw new ArgumentException("این انتخاب ناموجود است"); var p = SampleCatalog.Products.Single(x => x.Id == r.ProductId); var options = string.Join(" · ", p.Attributes.Select(a => $"{a.Name}: {a.Options.Single(o => o.Id == r.Values[a.Id]).Name}")); var s = Get(http); lock (s) { var line = s.Lines.FirstOrDefault(x => x.ProductId == p.Id && x.Options == options); if (line != null) { if (line.Quantity + r.Quantity > 20) throw new ArgumentException("حداکثر تعداد هر کالا 20 است"); s.Lines[s.Lines.IndexOf(line)] = line with { Quantity = line.Quantity + r.Quantity }; } else { s.Lines.Add(new(s.Lines.Select(x => x.Id).DefaultIfEmpty().Max() + 1, p.Id, p.Name, p.Image, options, r.Quantity, quote.Price)); } } return Snapshot(http); }
-    public CartSnapshot Quantity(HttpContext http, QuantityRequest r) { if (r.Quantity is < 0 or > 20) throw new ArgumentException("تعداد معتبر نیست"); var s = Get(http); lock (s) { var line = s.Lines.SingleOrDefault(x => x.Id == r.LineId) ?? throw new ArgumentException("کالا در سبد پیدا نشد"); if (r.Quantity == 0) s.Lines.Remove(line); else s.Lines[s.Lines.IndexOf(line)] = line with { Quantity = r.Quantity }; } return Snapshot(http); }
-    public OtpResult Send(HttpContext http, PhoneRequest r) { var phone = NormalizePhone(r.Phone); if (!MyRegex().IsMatch(phone)) return new(false, "شمارهٔ موبایل را به شکل 09123456789 وارد کن."); var s = Get(http); lock (s) { if (DateTimeOffset.UtcNow - s.Sent < TimeSpan.FromSeconds(60)) return new(false, "برای درخواست دوبارهٔ کد، یک دقیقه صبر کن."); var code = RandomNumberGenerator.GetInt32(100000, 1000000).ToString(); s.PendingPhone = phone; s.Hash = SHA256.HashData(Encoding.UTF8.GetBytes(code)); s.Sent = DateTimeOffset.UtcNow; s.Attempts = 0; return new(true, "کد آزمایشی آماده است.", code); } }
-    public OtpResult Verify(HttpContext http, VerifyRequest r) { var s = Get(http); lock (s) { if (s.Hash.Length == 0 || s.PendingPhone != NormalizePhone(r.Phone) || DateTimeOffset.UtcNow - s.Sent > TimeSpan.FromMinutes(2) || s.Attempts++ >= 5) return new(false, "کد منقضی شده؛ دوباره درخواست کن."); if (!CryptographicOperations.FixedTimeEquals(s.Hash, SHA256.HashData(Encoding.UTF8.GetBytes(r.Code)))) return new(false, "کد ورود صحیح نیست."); s.Phone = s.PendingPhone; s.Hash = []; var existing = accounts.GetOrAdd(s.Phone, _ => []); lock (existing) { foreach (var line in s.Lines) { var old = existing.FirstOrDefault(x => x.ProductId == line.ProductId && x.Options == line.Options); if (old != null) existing[existing.IndexOf(old)] = old with { Quantity = Math.Min(20, old.Quantity + line.Quantity) }; else existing.Add(line with { Id = existing.Select(x => x.Id).DefaultIfEmpty().Max() + 1 }); } s.Lines = existing; } return new(true, "با موفقیت وارد شدی."); } }
-    public static string NormalizePhone(string phone) { var s = phone.Trim(); for (var i = 0; i < 10; i++) { s = s.Replace((char)('۰' + i), (char)('0' + i)).Replace((char)('٠' + i), (char)('0' + i)); } if (s.StartsWith("+98")) s = "0" + s[3..]; return s; }
+    private Session Get(HttpContext http)
+    {
+        var id = http.Request.Cookies["stationery-preview"];
+        if (id == null || !sessions.ContainsKey(id))
+        {
+            id = Guid.NewGuid().ToString("N");
+            http.Response.Cookies.Append("stationery-preview", id, new CookieOptions { HttpOnly = true, SameSite = SameSiteMode.Strict, IsEssential = true, MaxAge = TimeSpan.FromDays(7) });
+        }
+
+        return sessions.GetOrAdd(id, _ => new());
+    }
+
+    public CartSnapshot Snapshot(HttpContext http)
+    {
+        var s = Get(http);
+        lock (s)
+            return new([.. s.Lines], s.Phone != "", s.Phone);
+    }
+
+    public Quote Quote(SelectionRequest r)
+    {
+        var p = SampleCatalog.Products.FirstOrDefault(x => x.Id == r.ProductId) ?? throw new ArgumentException("محصول پیدا نشد");
+        if (r.Quantity is < 1 or > 20)
+            throw new ArgumentException("تعداد باید بین 1 و 20 باشد");
+        var price = p.Price;
+        var available = p.Available;
+        foreach (var a in p.Attributes)
+        {
+            var o = a.Options.FirstOrDefault(x => x.Id == r.Values.GetValueOrDefault(a.Id)) ?? throw new ArgumentException("ویژگی محصول را انتخاب کن");
+            price += o.Adjustment;
+            available &= o.Available;
+        }
+
+        return new(price, available);
+    }
+
+    public CartSnapshot Add(HttpContext http, SelectionRequest r)
+    {
+        var quote = Quote(r);
+        if (!quote.Available)
+            throw new ArgumentException("این انتخاب ناموجود است");
+        var p = SampleCatalog.Products.Single(x => x.Id == r.ProductId);
+        var options = string.Join(" · ", p.Attributes.Select(a => $"{a.Name}: {a.Options.Single(o => o.Id == r.Values[a.Id]).Name}"));
+        var s = Get(http);
+        lock (s)
+        {
+            var line = s.Lines.FirstOrDefault(x => x.ProductId == p.Id && x.Options == options);
+            if (line != null)
+            {
+                if (line.Quantity + r.Quantity > 20)
+                    throw new ArgumentException("حداکثر تعداد هر کالا 20 است");
+                s.Lines[s.Lines.IndexOf(line)] = line with
+                {
+                    Quantity = line.Quantity + r.Quantity
+                };
+            }
+            else
+            {
+                s.Lines.Add(new(s.Lines.Select(x => x.Id).DefaultIfEmpty().Max() + 1, p.Id, p.Name, p.Image, options, r.Quantity, quote.Price));
+            }
+        }
+
+        return Snapshot(http);
+    }
+
+    public CartSnapshot Quantity(HttpContext http, QuantityRequest r)
+    {
+        if (r.Quantity is < 0 or > 20)
+            throw new ArgumentException("تعداد معتبر نیست");
+        var s = Get(http);
+        lock (s)
+        {
+            var line = s.Lines.SingleOrDefault(x => x.Id == r.LineId) ?? throw new ArgumentException("کالا در سبد پیدا نشد");
+            if (r.Quantity == 0)
+                s.Lines.Remove(line);
+            else
+                s.Lines[s.Lines.IndexOf(line)] = line with
+                {
+                    Quantity = r.Quantity
+                };
+        }
+
+        return Snapshot(http);
+    }
+
+    public OtpResult Send(HttpContext http, PhoneRequest r)
+    {
+        var phone = NormalizePhone(r.Phone);
+        if (!MyRegex().IsMatch(phone))
+            return new(false, "شمارهٔ موبایل را به شکل 09123456789 وارد کن.");
+        var s = Get(http);
+        lock (s)
+        {
+            if (DateTimeOffset.UtcNow - s.Sent < TimeSpan.FromSeconds(60))
+                return new(false, "برای درخواست دوبارهٔ کد، یک دقیقه صبر کن.");
+            var code = RandomNumberGenerator.GetInt32(100000, 1000000).ToString();
+            s.PendingPhone = phone;
+            s.Hash = SHA256.HashData(Encoding.UTF8.GetBytes(code));
+            s.Sent = DateTimeOffset.UtcNow;
+            s.Attempts = 0;
+            return new(true, "کد آزمایشی آماده است.", code);
+        }
+    }
+
+    public OtpResult Verify(HttpContext http, VerifyRequest r)
+    {
+        var s = Get(http);
+        lock (s)
+        {
+            if (s.Hash.Length == 0 || s.PendingPhone != NormalizePhone(r.Phone) || DateTimeOffset.UtcNow - s.Sent > TimeSpan.FromMinutes(2) || s.Attempts++ >= 5)
+                return new(false, "کد منقضی شده؛ دوباره درخواست کن.");
+            if (!CryptographicOperations.FixedTimeEquals(s.Hash, SHA256.HashData(Encoding.UTF8.GetBytes(r.Code))))
+                return new(false, "کد ورود صحیح نیست.");
+            s.Phone = s.PendingPhone;
+            s.Hash = [];
+            var existing = accounts.GetOrAdd(s.Phone, _ => []);
+            lock (existing)
+            {
+                foreach (var line in s.Lines)
+                {
+                    var old = existing.FirstOrDefault(x => x.ProductId == line.ProductId && x.Options == line.Options);
+                    if (old != null)
+                        existing[existing.IndexOf(old)] = old with
+                        {
+                            Quantity = Math.Min(20, old.Quantity + line.Quantity)
+                        };
+                    else
+                        existing.Add(line with { Id = existing.Select(x => x.Id).DefaultIfEmpty().Max() + 1 });
+                }
+
+                s.Lines = existing;
+            }
+
+            return new(true, "با موفقیت وارد شدی.");
+        }
+    }
+
+    public static string NormalizePhone(string phone)
+    {
+        var s = phone.Trim();
+        for (var i = 0; i < 10; i++)
+        {
+            s = s.Replace((char)('۰' + i), (char)('0' + i)).Replace((char)('٠' + i), (char)('0' + i));
+        }
+
+        if (s.StartsWith("+98"))
+            s = "0" + s[3..];
+        return s;
+    }
 
     [GeneratedRegex(@"^09\d{9}$")]
     private static partial Regex MyRegex();

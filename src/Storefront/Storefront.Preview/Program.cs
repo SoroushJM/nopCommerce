@@ -1,4 +1,4 @@
-using BlazorBlueprint.Components;
+﻿using BlazorBlueprint.Components;
 using Scalar.AspNetCore;
 using Storefront.Preview;
 using Storefront.Preview.Components;
@@ -6,13 +6,29 @@ using Storefront.UI;
 
 var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorComponents().AddInteractiveServerComponents().AddInteractiveWebAssemblyComponents();
-builder.Services.AddBlazorBlueprintComponents(localizer => { localizer.Set("Sheet.Close", "بستن"); localizer.Set("Dialog.Close", "بستن"); });
+builder.Services.AddBlazorBlueprintComponents(localizer =>
+{
+    localizer.Set("Sheet.Close", "بستن");
+    localizer.Set("Dialog.Close", "بستن");
+});
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<PreviewStore>();
 builder.Services.AddOpenApi();
 var app = builder.Build();
-if (!app.Environment.IsDevelopment()) throw new InvalidOperationException("The sample preview must only run in Development.");
-app.Use(async (context, next) => { try { await next(); } catch (ArgumentException ex) { context.Response.StatusCode = 400; await context.Response.WriteAsJsonAsync(new { message = ex.Message }); } });
+if (!app.Environment.IsDevelopment())
+    throw new InvalidOperationException("The sample preview must only run in Development.");
+app.Use(async (context, next) =>
+{
+    try
+    {
+        await next();
+    }
+    catch (ArgumentException ex)
+    {
+        context.Response.StatusCode = 400;
+        await context.Response.WriteAsJsonAsync(new { message = ex.Message });
+    }
+});
 app.UseStaticFiles();
 app.MapStaticAssets();
 app.UseAntiforgery();

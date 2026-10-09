@@ -27,3 +27,11 @@ The plugin and tests style/whitespace verification passed. UI style verification
 The formatter left the three empty forwarding record constructors in `Contracts.cs` on one line. `SfIcon.razor` contains only two short auto-properties; the previously tested Microsoft Razor provider was a stable no-op there. No JS formatter is configured in the storefront package (its only scripts build/watch Tailwind CSS); storefront JavaScript functions were already multiline. Inline Razor event lambdas in the root/header components were left unchanged.
 
 The root agent subsequently built `Storefront.UI` with zero warnings and errors.
+
+## 2026-10-09 Preview compact-function follow-up
+
+Luna audited authored storefront, plugin, and TUnit source for remaining compressed function bodies. The remaining substantive cases were `Storefront.Preview/PreviewStore.cs` and the startup/lambda blocks in `Storefront.Preview/Program.cs`. Microsoft `dotnet format whitespace` expanded the preview methods, and the existing private Microsoft Roslyn `NormalizeWhitespace` helper expanded the nested session declarations and startup blocks that the whitespace pass preserved. No manual source formatting or behavioral refactoring was performed. The temporary Preview `.editorconfig` used during inspection was removed; repository settings remain authoritative.
+
+Roslyn confirmed identical token kinds/text and comments for `PreviewStore.cs` (1,321 tokens, zero comments) and `Program.cs` (475 tokens, zero comments), with no syntax errors before or after. Targeted whitespace verification passed for `PreviewStore.cs`. For `Program.cs`, verification reports conflicting end-of-file changes (`WHITESPACE` requests a CRLF while `FINALNEWLINE` requests its deletion under `insert_final_newline = false`); the applied formatter leaves the file without a final newline. This remaining diagnostic concerns the file ending, not the expanded function bodies.
+
+`dotnet build Storefront.Preview.csproj --no-restore` succeeded with zero warnings and errors, and `git diff --check` passed. The remaining audit matches were empty forwarding constructors, auto-properties, and previously retained inline Razor event lambdas. No compact block-bodied C# functions were found in the audited authored source. Changes remain local and uncommitted.
