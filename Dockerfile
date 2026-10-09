@@ -21,9 +21,9 @@ COPY src/Plugins/Nop.Plugin.Tax.FixedOrByCountryStateZip/Nop.Plugin.Tax.FixedOrB
 COPY src/Plugins/Nop.Plugin.Widgets.Swiper/Nop.Plugin.Widgets.Swiper.csproj src/Plugins/Nop.Plugin.Widgets.Swiper/
 COPY src/Build/src/ClearPluginAssemblies/ClearPluginAssemblies.csproj src/Build/src/ClearPluginAssemblies/
 RUN --mount=type=cache,id=nop-nuget,target=/root/.nuget/packages,sharing=locked \
+    dotnet restore src/Storefront/Storefront.Client/Storefront.Client.csproj && \
     dotnet restore src/Docker.slnx -p:DockerRuntimeIdentifier="$RUNTIME_IDENTIFIER" && \
-    dotnet restore src/Build/src/ClearPluginAssemblies/ClearPluginAssemblies.csproj && \
-    dotnet restore src/Storefront/Storefront.Client/Storefront.Client.csproj
+    dotnet restore src/Build/src/ClearPluginAssemblies/ClearPluginAssemblies.csproj
 COPY src/Storefront/Storefront.UI/package*.json src/Storefront/Storefront.UI/
 RUN --mount=type=cache,id=nop-npm,target=/root/.npm,sharing=locked \
     cd src/Storefront/Storefront.UI && npm ci --no-audit --no-fund
