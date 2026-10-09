@@ -13,6 +13,7 @@ COPY src/Libraries/Nop.Services/Nop.Services.csproj src/Libraries/Nop.Services/
 COPY src/Presentation/Nop.Web.Framework/Nop.Web.Framework.csproj src/Presentation/Nop.Web.Framework/
 COPY src/Presentation/Nop.Web/Nop.Web.csproj src/Presentation/Nop.Web/
 COPY src/Storefront/Storefront.UI/Storefront.UI.csproj src/Storefront/Storefront.UI/
+COPY src/Storefront/Storefront.Client/Storefront.Client.csproj src/Storefront/Storefront.Client/
 COPY src/Plugins/Nop.Plugin.Misc.PersianStorefront/Nop.Plugin.Misc.PersianStorefront.csproj src/Plugins/Nop.Plugin.Misc.PersianStorefront/
 COPY src/Plugins/Nop.Plugin.Payments.CheckMoneyOrder/Nop.Plugin.Payments.CheckMoneyOrder.csproj src/Plugins/Nop.Plugin.Payments.CheckMoneyOrder/
 COPY src/Plugins/Nop.Plugin.Shipping.FixedByWeightByTotal/Nop.Plugin.Shipping.FixedByWeightByTotal.csproj src/Plugins/Nop.Plugin.Shipping.FixedByWeightByTotal/
@@ -21,7 +22,8 @@ COPY src/Plugins/Nop.Plugin.Widgets.Swiper/Nop.Plugin.Widgets.Swiper.csproj src/
 COPY src/Build/src/ClearPluginAssemblies/ClearPluginAssemblies.csproj src/Build/src/ClearPluginAssemblies/
 RUN --mount=type=cache,id=nop-nuget,target=/root/.nuget/packages,sharing=locked \
     dotnet restore src/Docker.slnx -p:DockerRuntimeIdentifier="$RUNTIME_IDENTIFIER" && \
-    dotnet restore src/Build/src/ClearPluginAssemblies/ClearPluginAssemblies.csproj
+    dotnet restore src/Build/src/ClearPluginAssemblies/ClearPluginAssemblies.csproj && \
+    dotnet restore src/Storefront/Storefront.Client/Storefront.Client.csproj
 COPY src/Storefront/Storefront.UI/package*.json src/Storefront/Storefront.UI/
 RUN --mount=type=cache,id=nop-npm,target=/root/.npm,sharing=locked \
     cd src/Storefront/Storefront.UI && npm ci --no-audit --no-fund

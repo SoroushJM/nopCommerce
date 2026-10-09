@@ -2,8 +2,10 @@
 # docker compose -f docker-compose.yml -f docker-compose.small-host.yml up -d --no-build
 services:
   nopcommerce_web:
-    mem_limit: 256m
-    memswap_limit: 384m
+    # Give Razor/localization enough headroom without letting the app thrash swap.
+    # Web + PostgreSQL + certificate helper remain capped at 432 MiB of RAM.
+    mem_limit: 352m
+    memswap_limit: 352m
     cpus: 0.35
   nopcommerce_database:
     mem_limit: 64m

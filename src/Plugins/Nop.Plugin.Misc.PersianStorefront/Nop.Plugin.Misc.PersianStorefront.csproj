@@ -4,7 +4,7 @@
  <ItemGroup><Content Update="plugin.json" CopyToOutputDirectory="PreserveNewest"/><Content Update="Views/**/*.cshtml" CopyToOutputDirectory="PreserveNewest"/></ItemGroup>
  <Target Name="BuildStorefrontClient" AfterTargets="Build" BeforeTargets="CopyStorefrontAssets">
   <MSBuild Projects="../../Storefront/Storefront.Client/Storefront.Client.csproj" Targets="Restore;Publish"
-           RemoveProperties="RuntimeIdentifier;SelfContained;OutputPath;OutDir"
+           RemoveProperties="DockerRuntimeIdentifier;RuntimeIdentifier;SelfContained;OutputPath;OutDir"
            Properties="Configuration=$(Configuration);PublishDir=$(MSBuildProjectDirectory)/$(OutDir)/Content/Client/;GenerateCompressedFiles=false" />
  </Target>
  <Target Name="CopyStorefrontAssets" AfterTargets="Build">

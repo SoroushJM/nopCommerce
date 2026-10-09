@@ -78,10 +78,11 @@ docker compose -f docker-compose.yml -f docker-compose.small-host.yml up -d --no
 ```
 
 This overlay limits the web
-service to 256 MiB and 0.35 CPU, and PostgreSQL to 64 MiB and 0.15 CPU.
-The running RAM ceiling is 320 MiB; including the temporary certificate helper it
-is 336 MiB. Up to 128 MiB web swap and 32 MiB database swap are permitted if the
-host has swap configured. Use this profile only for light test traffic.
+service to 352 MiB and 0.35 CPU, and PostgreSQL to 64 MiB and 0.15 CPU.
+The running RAM ceiling is 416 MiB; including the temporary certificate helper it
+is 432 MiB (452.98 MB). Web swap is disabled to avoid prolonged memory reclaim;
+up to 32 MiB database swap is permitted if the host has swap configured.
+Use this profile only for light test traffic.
 The shared test server installs a `docker-compose.override.yml` symlink to this
 overlay, so normal `docker compose` commands keep these tighter limits.
 It caps usage; it does not guarantee arbitrary traffic or large catalogs will fit.

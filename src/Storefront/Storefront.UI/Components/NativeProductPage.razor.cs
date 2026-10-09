@@ -39,7 +39,7 @@ public partial class NativeProductPage
     {
         get
         {
-            if (!Initial.StockByAttributes)
+            if (!Initial.StockByAttributes || !_ready)
                 return Initial.InStock;
             var active = _selected.Where(item => item.Value > 0 && !_disabledAttributes.Contains(item.Key)).ToList();
             var match = _combinations.FirstOrDefault(combination => combination.Attributes.Count == active.Count && combination.Attributes.All(attribute => active.Any(item => item.Key == attribute.Id && attribute.ValueIds.Contains(item.Value))));
@@ -63,6 +63,7 @@ public partial class NativeProductPage
         _basePrice = Initial.BasePrice ?? "";
         _freeShipping = Initial.IsFreeShipping;
         _quantity = Initial.Quantity;
+        _disabledAttributes.UnionWith(Initial.Attributes.Where(attribute => attribute.HasCondition).Select(attribute => attribute.Id));
         foreach (var attribute in Initial.Attributes)
         {
             var option = attribute.Options.FirstOrDefault(item => item.Selected);
