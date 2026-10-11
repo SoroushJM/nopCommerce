@@ -1,0 +1,12 @@
+@model string
+@using BlazorBlueprint.Components
+@using Storefront.UI.Components
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@if (ViewData["Warning"] is true)
+{
+    <component type="typeof(StorefrontWarning)" render-mode="Static" param-Message="Model" />
+}
+else
+{
+    <component type="typeof(BbEmpty)" render-mode="Static" param-Title="Model" param-Description='@("جست‌وجو یا فیلترها را تغییر بده.")' />
+}

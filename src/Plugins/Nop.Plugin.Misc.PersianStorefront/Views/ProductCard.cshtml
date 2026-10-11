@@ -26,12 +26,12 @@
             }
         </div>
         <div class="p-4 pb-2">
-            <p class="text-[10px] text-slate-400 mb-2">@ViewData["Caption"]</p>
-            <h3 class="text-[13px] font-bold leading-6 min-h-12">@Model.Name</h3>
+            <p class="text-xs text-muted-foreground mb-2">@ViewData["Caption"]</p>
+            <h3 class="text-sm font-bold leading-6 min-h-12">@Model.Name</h3>
             <div class="flex gap-1.5 mt-2" aria-label="رنگ‌های محصول">
                 @foreach (var color in (List<string>)ViewData["Colors"]!)
                 {
-                    <span style="background:@color" class="size-2.5 rounded-full border border-white ring-1 ring-slate-100"></span>
+                    <span style="background:@color" class="size-2.5 rounded-full border border-background ring-1 ring-border"></span>
                 }
             </div>
         </div>
@@ -41,7 +41,7 @@
         <div>
             @if (!string.IsNullOrEmpty(Model.ProductPrice.OldPrice))
             {
-                <del class="text-[11px] text-slate-400 block mb-1 price">@Model.ProductPrice.OldPrice</del>
+                <del class="text-xs text-muted-foreground block mb-1 price">@Model.ProductPrice.OldPrice</del>
             }
             <p class="text-sm font-bold price">@Model.ProductPrice.Price</p>
             @if (Model.ProductPrice.DisplayTaxShippingInfo)
@@ -55,7 +55,7 @@
             }
         </div>
         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductBoxAddinfoMiddle, additionalData = Model })
-        <a href="@url" aria-label="مشاهدهٔ @Model.Name" class="size-8 rounded-lg bg-slate-50 text-slate-500 grid place-items-center">
+        <a href="@url" aria-label="مشاهدهٔ @Model.Name" class="size-8 rounded-lg bg-muted text-muted-foreground grid place-items-center">
             <component type="typeof(SfIcon)" render-mode="Static" param-Name='@("arrow")' param-Size="16" />
         </a>
     </div>

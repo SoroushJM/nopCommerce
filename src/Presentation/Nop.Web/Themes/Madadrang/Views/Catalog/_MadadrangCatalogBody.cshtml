@@ -3,8 +3,8 @@
     var allProducts = ViewData["AllProducts"] as bool? == true;
     var products = Model.CatalogProductsModel;
 }
-<form method="get" action="@(Context.Request.PathBase + Context.Request.Path)" class="search-field mt-6" role="search">
-    <input type="search" name="q" value="@Model.q" aria-label="جست‌وجو در فروشگاه" placeholder="نام محصول یا برند..." />
+<form method="get" action="@(Context.Request.PathBase + Context.Request.Path)" class="sf-input-group mt-6" role="search">
+    <input data-slot="input-group-control" type="search" name="q" value="@Model.q" aria-label="جست‌وجو در فروشگاه" placeholder="نام محصول یا برند..." />
     @foreach (var key in new[] { "advs", "cid", "isc", "mid", "vid", "sid", "sit", "price", "ms", "specs", "orderby", "pagesize", "viewmode" })
     {
         if (Context.Request.Query.TryGetValue(key, out var value))
@@ -12,7 +12,7 @@
             <input type="hidden" name="@key" value="@value" />
         }
     }
-    <button type="submit" class="text-xs text-primary">بگرد</button>
+    <span data-slot="input-group-addon"><button type="submit" class="icon-btn text-primary">بگرد</button></span>
     @if (!allProducts)
     {
         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductSearchPageBasic, additionalData = Model })

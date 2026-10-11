@@ -439,10 +439,18 @@ public sealed class NativeProductPolicyTests
     }
     private static string PriceCard(string html)
     {
-        var match = Regex.Match(html, "<div[^>]*class=\"[^\"]*\\bsf-price-card\\b[^\"]*\"[^>]*>(.*?)</button>\\s*</div>", RegexOptions.Singleline);
+        var match = Regex.Match(html, "<div[^>]*class=\"[^\"]*\\bsf-price-card\\b[^\"]*\"[^>]*>");
         if (!match.Success)
             throw new InvalidOperationException("Native BB price card missing.");
-        return match.Groups[1].Value;
+        var contentStart = match.Index + match.Length;
+        var depth = 1;
+        foreach (Match tag in Regex.Matches(html[contentStart..], "</?div\\b[^>]*>", RegexOptions.IgnoreCase))
+        {
+            depth += tag.Value.StartsWith("</", StringComparison.Ordinal) ? -1 : 1;
+            if (depth == 0)
+                return html.Substring(contentStart, tag.Index);
+        }
+        throw new InvalidOperationException("Native BB price card was not closed.");
     }
 
     private static Dictionary<string, string> PurchaseFields(StorefrontClient client, int id)

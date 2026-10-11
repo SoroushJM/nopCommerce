@@ -55,7 +55,7 @@
                 <div class="common-buttons">
                     @if (Model.IsEditable)
                     {
-                        <button type="submit" name="updatecart" id="updatecart" class="sf-button update-cart-button">@T("ShoppingCart.UpdateCart")</button>
+                        <button type="submit" name="updatecart" id="updatecart" class="update-cart-button">@T("ShoppingCart.UpdateCart")</button>
                         <button type="submit" name="continueshopping" class="button-2 continue-shopping-button">@T("ShoppingCart.ContinueShopping")</button>
                         @await Component.InvokeAsync(typeof(ShoppingCartEstimateShippingViewComponent))
                     }

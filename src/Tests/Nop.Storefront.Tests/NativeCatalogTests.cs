@@ -7,6 +7,21 @@ namespace Nop.Storefront.Tests;
 public sealed class NativeCatalogTests
 {
     [Test]
+    public async Task ShortSearchShowsItsNativeValidationWarning()
+    {
+        await using var client = new StorefrontClient();
+        using var response = await client.GetAsync("search?q=a");
+        await Assert.That(response.StatusCode).IsEqualTo(HttpStatusCode.OK);
+        var html = await response.Content.ReadAsStringAsync();
+        var catalogStart = html.IndexOf("data-catalog-total=", StringComparison.Ordinal);
+        await Assert.That(catalogStart).IsGreaterThanOrEqualTo(0);
+        var alert = Regex.Match(html[catalogStart..], "<div[^>]*role=\"alert\"[^>]*>(.*?)</div>", RegexOptions.Singleline);
+        await Assert.That(alert.Success).IsTrue();
+        var warning = WebUtility.HtmlDecode(Regex.Replace(alert.Groups[1].Value, "<[^>]*>", "")).Trim();
+        await Assert.That(string.IsNullOrWhiteSpace(warning)).IsFalse();
+    }
+
+    [Test]
     public async Task GlobalCatalogFiltersAndNativeSearchUseTheSameProductDestinations()
     {
         await using var client = new StorefrontClient();

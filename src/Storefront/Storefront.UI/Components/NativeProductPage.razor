@@ -13,7 +13,7 @@
             <section class="wrap py-7">
                 @if (Initial.BreadcrumbEnabled)
                 {
-                <p class="text-xs text-slate-400 mb-7"><a href="/">خانه</a> / @foreach (var link in Initial.Breadcrumb)
+                <p class="text-xs text-muted-foreground mb-7"><a href="/">خانه</a> / @foreach (var link in Initial.Breadcrumb)
                     {
                         <a href="@link.Url">@link.Name</a><span> / </span>
                     }
@@ -22,11 +22,13 @@
                 }
                 @if (_error.Length > 0)
                 {
-                    <BbAlert Class="sf-notice notice mb-5">@_error</BbAlert>
+                    <BbAlert Variant="AlertVariant.Danger" Class="mb-5">@_error</BbAlert>
                 }
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-md:gap-7">
                     <div @ref="_gallery" class="sf-product-gallery">
-                        <BbCard Class="sf-product-image product-image">
+                        <BbCard Class="sf-product-image">
+                            <BbCardHeader Class="sr-only"><BbCardTitle>تصویر @Initial.Name</BbCardTitle></BbCardHeader>
+                            <BbCardContent Class="p-0">
                             @if (Initial.ZoomEnabled && !string.IsNullOrEmpty(_fullSizeImage))
                             {
                                 <BbDialogTrigger AsChild="false" class="sf-product-zoom" aria-label="بزرگ‌نمایی تصویر محصول">
@@ -37,6 +39,7 @@
                             {
                                 <img src="@_image" alt="@_imageAlt" title="@_imageTitle" />
                             }
+                            </BbCardContent>
                         </BbCard>
                         @if (Initial.Pictures.Count > 1)
                         {
@@ -59,15 +62,11 @@
                                 <a class="mr-2" href="@manufacturer.Url">@manufacturer.Name</a>
                             }
                         </p>
-                        <h1 class="sf-product-name text-3xl max-md:text-2xl font-extrabold leading-relaxed">@Initial.Name</h1>
-                        <p class="text-sm text-slate-500 leading-8 mt-4">@((MarkupString)Initial.Description)</p>
+                        <h1 class="sf-product-name text-3xl max-md:text-2xl font-bold leading-relaxed">@Initial.Name</h1>
+                        <p class="text-sm text-muted-foreground leading-8 mt-4">@((MarkupString)Initial.Description)</p>
                         @if (StockLabel.Length > 0)
                         {
-                        <div
-                            class="sf-product-stock flex items-center gap-2 mt-5 text-xs @(StockAvailable ? "text-emerald-600" : "text-orange-600")">
-                            <span
-                            class="size-1.5 rounded-full @(StockAvailable ? "bg-emerald-500" : "bg-orange-500")"></span>@StockLabel
-                        </div>
+                            <BbBadge Variant="@(StockAvailable ? BadgeVariant.SoftSuccess : BadgeVariant.SoftWarning)" Class="sf-product-stock mt-5">@StockLabel</BbBadge>
                         }
                         <dl class="sf-product-metadata">
                             @if (Initial.ShowSku && _sku.Length > 0)
@@ -104,20 +103,22 @@
                         {
                             <fieldset class="mb-6">
                                 <legend class="text-sm font-bold mb-3">@(attribute.Name): <span
-                                    class="font-normal text-slate-500">@(attribute.Options.FirstOrDefault(option =>
+                                    class="font-normal text-muted-foreground">@(attribute.Options.FirstOrDefault(option =>
                                     option.Id == _selected.GetValueOrDefault(attribute.Id))?.Name)</span></legend>
                                     @if (attribute.ControlType == 1)
                                     {
                                         <BbSelect TValue="int" Value="_selected.GetValueOrDefault(attribute.Id)"
                                                   ValueChanged="value => SelectOption(attribute.Id, value)">
-                                            <BbSelectTrigger Class="sf-select">
+                                            <BbSelectTrigger Class="sf-select h-11">
                                                 <BbSelectValue Placeholder="انتخاب کنید" />
                                             </BbSelectTrigger>
                                             <BbSelectContent>
+                                                <BbSelectGroup>
                                                 <BbSelectItem Value="0">@(attribute.Required ? "انتخاب کنید" : "بدون انتخاب")
                                                 </BbSelectItem>@foreach (var option in attribute.Options) {
                                                 <BbSelectItem Value="option.Id">@option.Name</BbSelectItem>
                                             }
+                                        </BbSelectGroup>
                                         </BbSelectContent>
                                     </BbSelect>
                                 }
@@ -127,7 +128,7 @@
                                         @foreach (var option in attribute.Options)
                                         {
                                             <button type="button"
-                                                    class="@(attribute.ControlType is 40 or 45 ? "color-choice" : "filter-pill") @(_selected.GetValueOrDefault(attribute.Id) == option.Id ? "selected" : "")"
+                                                    class="@ClassNames.cn(attribute.ControlType is 40 or 45 ? "color-choice" : "filter-pill", _selected.GetValueOrDefault(attribute.Id) == option.Id ? "selected" : null)"
                                                     style="@(attribute.ControlType == 40 ? "background:" + option.Color : "")"
                                                     aria-label="@($"{attribute.Name} {option.Name}")"
                                                     aria-pressed="@((_selected.GetValueOrDefault(attribute.Id) == option.Id).ToString().ToLowerInvariant())"
@@ -158,13 +159,15 @@
                             @if (Initial.Quantities.Count > 0)
                             {
                                 <BbSelect TValue="int" Value="_quantity" ValueChanged="ChangeQuantity">
-                                    <BbSelectTrigger Class="sf-select">
+                                    <BbSelectTrigger Class="sf-select h-11">
                                         <BbSelectValue />
                                     </BbSelectTrigger>
-                                    <BbSelectContent>@foreach (var value in Initial.Quantities) {
+                                    <BbSelectContent>
+                                                <BbSelectGroup>@foreach (var value in Initial.Quantities) {
                                         <BbSelectItem Value="value">@value</BbSelectItem>
                                     }
-                                </BbSelectContent>
+                                </BbSelectGroup>
+                                        </BbSelectContent>
                             </BbSelect>
                         }
                             else
@@ -183,7 +186,7 @@
                 </div>
                 @if (Initial.MinimumQuantityNotification.Length > 0)
                 {
-                    <p class="text-xs text-slate-500 mb-4">@Initial.MinimumQuantityNotification</p>
+                    <p class="text-xs text-muted-foreground mb-4">@Initial.MinimumQuantityNotification</p>
                 }
                         }
                 @if (DisplayTierPrices)
@@ -201,7 +204,9 @@
                 }
                 @if (!Initial.HidePrices || !Initial.DisableBuy)
                 {
-                <BbCard Class="sf-price-card bg-slate-50 border border-slate-100 rounded-2xl p-5">
+                <BbCard Class="sf-price-card">
+                    <BbCardHeader Class="sr-only"><BbCardTitle>انتخاب و خرید @Initial.Name</BbCardTitle></BbCardHeader>
+                    <BbCardContent Class="pt-6">
                     @if (!Initial.HidePrices)
                     {
                     @if (Initial.CallForPrice)
@@ -210,42 +215,45 @@
                     }
                     else
                     {
-                    <div class="flex items-end justify-between mb-5"><span class="text-xs text-slate-500">قیمت
+                    <div class="flex items-end justify-between mb-5"><span class="text-xs text-muted-foreground">قیمت
                         هر عدد</span>
                         <div class="text-left">@if (!string.IsNullOrWhiteSpace(Initial.OldPrice)) {
-                            <del class="text-xs text-slate-400 block mb-1">@Initial.OldPrice</del>
+                            <del class="text-xs text-muted-foreground block mb-1">@Initial.OldPrice</del>
                         }
                         <strong class="text-2xl price">@_price</strong>
                         @if (Initial.ReferencePrice.Length > 0)
                         {
-                            <del class="text-xs text-slate-400 block">@Initial.ReferencePrice</del>
+                            <del class="text-xs text-muted-foreground block">@Initial.ReferencePrice</del>
                         }
                     </div>
                 </div>
                     @if (_basePrice.Length > 0)
                     {
-                        <p class="text-xs text-slate-500 mb-4">@_basePrice</p>
+                        <p class="text-xs text-muted-foreground mb-4">@_basePrice</p>
                     }
                     @if (Initial.TaxShippingInfo.Length > 0)
                     {
-                        <p class="text-xs text-slate-500 mb-4">@((MarkupString)Initial.TaxShippingInfo)</p>
+                        <p class="text-xs text-muted-foreground mb-4">@((MarkupString)Initial.TaxShippingInfo)</p>
                     }
                     }
                     }
+                    </BbCardContent>
                 @if (!Initial.DisableBuy)
                 {
-                <BbButton Class="sf-button w-full" Disabled="@(!Available || _busy || _updating || !_ready)"
+                    <BbCardFooter>
+                <BbButton Size="ButtonSize.Large" Class="w-full" Disabled="@(!Available || _busy || _updating || !_ready)"
                           Loading="_busy" OnClick="AddToCart">
-                    <SfIcon Name="bag" Size="18" /><span class="mr-2">@PurchaseLabel</span>
+                    <SfIcon Name="bag" data-icon="inline-start" /><span>@PurchaseLabel</span>
                 </BbButton>
+                    </BbCardFooter>
                 }
             </BbCard>
                 }
             @if (Initial.PreOrderDate.Length > 0)
             {
-                <p class="text-xs text-slate-500 mt-4">زمان عرضهٔ پیش‌سفارش: @Initial.PreOrderDate</p>
+                <p class="text-xs text-muted-foreground mt-4">زمان عرضهٔ پیش‌سفارش: @Initial.PreOrderDate</p>
             }
-            <p class="text-[11px] text-slate-400 mt-5 flex gap-2">
+            <p class="text-xs text-muted-foreground mt-5 flex gap-2">
                 <SfIcon Name="shield" Size="15" />انتخاب‌ها و موجودی هنگام افزودن به سبد دوباره بررسی
                 می‌شوند.
             </p>

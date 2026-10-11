@@ -13,8 +13,8 @@
             </BbSelectContent>
         </BbSelect>
         <p class="my-5">انتخاب: @_color</p>
-        <BbButton OnClick="() => _count++" Class="sf-button">شمارنده: @_count</BbButton>
-        <BbButton OnClick="() => _open = true" Class="sf-button mr-3">باز کردن پنل</BbButton>
+        <BbButton OnClick="() => _count++">شمارنده: @_count</BbButton>
+        <BbButton OnClick="() => _open = true" Class="mr-3">باز کردن پنل</BbButton>
         <BbSheet Open="_open" OpenChanged="value => _open = value" Side="SheetSide.Left">
             <BbSheetContent>
                 <BbSheetHeader>

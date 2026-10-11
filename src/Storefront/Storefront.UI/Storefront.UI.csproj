@@ -6,7 +6,7 @@
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="10.0.12" />
     <PackageReference Include="BlazorBlueprint.Components" Version="4.1.0" />
   </ItemGroup>
-  <ItemGroup><Content Update="package.json;package-lock.json" CopyToPublishDirectory="Never" /></ItemGroup><ItemGroup><TailwindSources Include="**/*.razor;Styles/input.css;package-lock.json" /></ItemGroup>
+  <ItemGroup><Content Update="package.json;package-lock.json" CopyToPublishDirectory="Never" /></ItemGroup><ItemGroup><TailwindSources Include="**/*.razor;Styles/input.css;package-lock.json;../../Plugins/Nop.Plugin.Misc.PersianStorefront/Views/**/*.cshtml;../../Presentation/Nop.Web/Themes/Madadrang/Views/**/*.cshtml" /></ItemGroup>
   <Target Name="RestoreStorefrontNodeModules" BeforeTargets="PrepareForBuild" Inputs="package-lock.json" Outputs="node_modules/.package-lock.json">
     <Exec Command="npm ci --no-audit --no-fund" WorkingDirectory="$(MSBuildProjectDirectory)" />
   </Target>

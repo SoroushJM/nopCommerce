@@ -3,15 +3,15 @@
 <BbDirectionProvider Direction="TextDirection.RightToLeft">
     <BbPortalHost />
     <div class="flex items-center gap-4 max-md:gap-1">
-        <button class="icon-btn text-sm max-md:hidden" @onclick="ShowLogin">
-            <SfIcon Name="user" /><span>@(_signedIn ? "حساب من" : "ورود / عضویت")</span>
-        </button>
+        <BbButton Variant="ButtonVariant.Ghost" Size="ButtonSize.Large" Class="max-md:hidden" OnClick="ShowLogin">
+            <SfIcon Name="user" data-icon="inline-start" /><span>@(_signedIn ? "حساب من" : "ورود / عضویت")</span>
+        </BbButton>
         <BbSeparator Orientation="SeparatorOrientation.Vertical" Class="sf-header-separator max-md:hidden" />
         @if (Initial.CartEnabled)
         {
-            <button class="icon-btn relative" aria-label="باز کردن سبد خرید" @onclick="OpenCart">
-                <SfIcon Name="bag" Size="23" /><span class="absolute -top-0.5 -right-0.5 bg-primary text-white rounded-full min-w-4 h-4 text-[10px] px-1">@_count</span>
-            </button>
+            <BbButton Variant="ButtonVariant.Ghost" Size="ButtonSize.IconLarge" Class="relative" AriaLabel="باز کردن سبد خرید" OnClick="OpenCart">
+                <SfIcon Name="bag" data-icon="inline-start" /><span class="absolute -top-0.5 -right-0.5 bg-primary text-primary-foreground rounded-full min-w-4 h-4 text-xs px-1">@_count</span>
+            </BbButton>
         }
     </div>
     <nav class="mobile-nav" aria-label="منوی موبایل">
@@ -34,7 +34,7 @@
     @if (error.Length > 0)
     {
         <div class="wrap mt-4">
-            <BbAlert Class="sf-notice notice">@error</BbAlert>
+            <BbAlert Variant="AlertVariant.Danger">@error</BbAlert>
         </div>
     }
     <BbSheet Open="cartOpen" OpenChanged="value => cartOpen = value" Side="SheetSide.Left">
@@ -44,9 +44,9 @@
                 <BbSheetDescription>یک جای کوچک برای انتخاب‌های رنگی</BbSheetDescription>
             </BbSheetHeader>
             <div class="overflow-y-auto flex-1 min-h-0 my-4">@if(cart.Count==0) {
-                <div class="text-center py-12 text-sm text-slate-500">سبدت هنوز خالیه.<br /><a
-                    href="/stationery/catalog" class="text-primary inline-block mt-5">یک انتخاب تازه پیدا کن
-                    ←</a></div>
+                <BbEmpty Title="سبدت هنوز خالیه." Description="برای شروع، یک همراه رنگی انتخاب کن.">
+                    <BbButton Href="/stationery/catalog" Variant="ButtonVariant.Outline">یک انتخاب تازه پیدا کن</BbButton>
+                </BbEmpty>
                 } else
                 {
                     @foreach (var line in cart.Lines)
@@ -57,11 +57,11 @@
             </div>
             @foreach (var warning in cart.Warnings)
             {
-                <BbAlert Class="sf-notice notice mb-3">@warning</BbAlert>
+                <BbAlert Variant="AlertVariant.Warning" Class="mb-3">@warning</BbAlert>
             }
             @foreach (var item in cart.ItemWarnings)
             {
-                <BbAlert Class="sf-notice notice mb-3"><strong>@item.ProductName</strong>
+                <BbAlert Variant="AlertVariant.Warning" Class="mb-3"><strong>@item.ProductName</strong>
                     @foreach (var warning in item.Messages)
                     {
                         <p>@((MarkupString)warning)</p>
@@ -69,15 +69,16 @@
                 </BbAlert>
             }
             @if(cart.Count > 0) {
-            <div class="border-t pt-5">
+            <div class="flex flex-col gap-5">
+                    <BbSeparator />
                 <div class="flex justify-between font-bold mb-5"><span>جمع کالاها</span><span>@cart.MiniSubTotal</span></div>
                     @if (cart.DisplayShoppingCartButton)
                     {
-                        <BbButton Href="@cart.CartUrl" Class="sf-button w-full">دیدن سبد و ادامهٔ خرید</BbButton>
+                        <BbButton Href="@cart.CartUrl" Size="ButtonSize.Large" Class="w-full">دیدن سبد و ادامهٔ خرید</BbButton>
                     }
                     @if (cart.DisplayCheckoutButton)
                     {
-                        <BbButton Href="@cart.CheckoutUrl" Class="sf-button sf-soft w-full mt-3">ادامهٔ خرید</BbButton>
+                        <BbButton Href="@cart.CheckoutUrl" Variant="ButtonVariant.Secondary" Size="ButtonSize.Large" Class="w-full mt-3">ادامهٔ خرید</BbButton>
                     }
                 </div>
             }
@@ -93,31 +94,38 @@
             @if (cart.SignedIn)
             {
                 <p class="text-center text-lg py-6" dir="ltr">@cart.Phone</p>
-                <BbButton Href="@Initial.CartUrl" Class="sf-button w-full">دیدن سبد خرید</BbButton><a href="/logout"
-                                                                                                      class="block text-center text-xs text-slate-500 mt-5">خروج از حساب</a>
+                <BbButton Href="@Initial.CartUrl" Size="ButtonSize.Large" Class="w-full">دیدن سبد خرید</BbButton><a href="/logout"
+                                                                                                      class="block text-center text-xs text-muted-foreground mt-5">خروج از حساب</a>
             }
             else
             {
                 <form @onsubmit="SubmitLogin" @onsubmit:preventDefault class="mt-5">
-                    <BbLabel For="sf-phone" Class="sf-label text-xs block mb-2">شمارهٔ موبایل</BbLabel>
-                    <BbInput Id="sf-phone" Class="sf-input sf-bb-input text-left" dir="ltr" inputmode="tel"
+                    <BbFieldGroup>
+                    <BbField data-disabled="@(otpSent ? "true" : null)">
+                    <BbFieldLabel For="sf-phone">شمارهٔ موبایل</BbFieldLabel>
+                    <BbInput Id="sf-phone" Class="h-11 text-left" dir="ltr" inputmode="tel"
                              autocomplete="tel" placeholder="09123456789" maxlength="13" @bind-Value="phone"
-                             UpdateTiming="UpdateTiming.Immediate" Disabled="@otpSent" />@if(otpSent) {
-                    <BbLabel For="sf-code" Class="sf-label text-xs block mb-2 mt-5">کد یک‌بارمصرف</BbLabel>
-                    <BbInput Id="sf-code" Class="sf-input sf-bb-input text-center tracking-[.5em]" dir="ltr"
+                             UpdateTiming="UpdateTiming.Immediate" Disabled="@otpSent" />
+                    </BbField>
+                    @if(otpSent) {
+                    <BbField>
+                    <BbFieldLabel For="sf-code">کد یک‌بارمصرف</BbFieldLabel>
+                    <BbInput Id="sf-code" Class="h-11 text-center tracking-[.5em]" dir="ltr"
                              inputmode="numeric" autocomplete="one-time-code" maxlength="6" @bind-Value="code"
                              UpdateTiming="UpdateTiming.Immediate" />
+                    </BbField>
                 }
+                </BbFieldGroup>
                 @if (!string.IsNullOrEmpty(loginMessage))
                 {
-                    <p role="status" class="text-xs text-orange-600 leading-6 mt-4">@loginMessage</p>
+                    <p role="status" class="text-sm text-destructive leading-6 mt-4">@loginMessage</p>
                 }
                 @if (!string.IsNullOrEmpty(testCode))
                 {
-                    <p class="notice mt-4">محیط آزمایشی · کد ورود: <strong dir="ltr">@testCode</strong><br />پیامک واقعی
-                        ارسال نشده است.</p>
+                    <BbAlert Variant="AlertVariant.Info" Class="mt-4">محیط آزمایشی · کد ورود: <strong dir="ltr">@testCode</strong><br />پیامک واقعی
+                        ارسال نشده است.</BbAlert>
                     }
-                    <BbButton Type="ButtonType.Submit" Class="sf-button w-full mt-5" Loading="busy" Disabled="busy">
+                    <BbButton Type="ButtonType.Submit" Size="ButtonSize.Large" Class="w-full mt-5" Loading="busy" Disabled="busy">
                         @(otpSent ? "تأیید و ورود" : "دریافت کد ورود")</BbButton>@if(otpSent) {
                         <button type="button" class="text-xs text-primary mt-4"
                                 @onclick="() =>
@@ -128,7 +136,7 @@
                                     }">تغییر شمارهٔ
                             موبایل</button>
                         }
-                        <p class="text-[10px] text-slate-400 mt-5 leading-6">شمارهٔ موبایل فقط برای
+                        <p class="text-xs text-muted-foreground mt-5 leading-6">شمارهٔ موبایل فقط برای
                             ورود به حساب استفاده می‌شود.</p>
                         </form>
                     }

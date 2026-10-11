@@ -1,6 +1,6 @@
 @* Lucide icon paths, ISC license; see docs/design-references.md. *@
 <svg xmlns="http://www.w3.org/2000/svg" width="@Size" height="@Size" viewBox="0 0 24 24" fill="none"
-     stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+     stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" @attributes="AdditionalAttributes">
     @switch (Name)
     {
         case "search":
@@ -53,6 +53,9 @@
     }
 </svg>
 @code {
+    [Parameter(CaptureUnmatchedValues = true)]
+    public Dictionary<string, object>? AdditionalAttributes { get; set; }
+
     [Parameter]
     public string Name { get; set; } = "pencil";
 

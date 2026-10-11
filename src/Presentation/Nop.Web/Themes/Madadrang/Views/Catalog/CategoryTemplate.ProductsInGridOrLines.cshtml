@@ -24,14 +24,14 @@
 {
     @if (Model.DisplayCategoryBreadcrumb)
     {
-        <nav class="wrap pt-7 text-xs text-slate-400 flex items-center gap-2 flex-wrap" aria-label="مسیر دسته‌بندی">
+        <nav class="wrap pt-7 text-xs text-muted-foreground flex items-center gap-2 flex-wrap" aria-label="مسیر دسته‌بندی">
             <a href="@Url.RouteUrl(NopRouteNames.General.HOMEPAGE)">@T("Categories.Breadcrumb.Top")</a>
             @foreach (var category in Model.CategoryBreadcrumb)
             {
                 <span>@commonSettings.BreadcrumbDelimiter</span>
                 if (category.Id == Model.Id)
                 {
-                    <strong class="text-slate-600" aria-current="page">@category.Name</strong>
+                    <strong class="text-muted-foreground" aria-current="page">@category.Name</strong>
                 }
                 else
                 {

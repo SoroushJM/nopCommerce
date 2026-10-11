@@ -17,20 +17,20 @@
                 <a href="@productUrl"><img src="@item.Picture.ImageUrl" alt="@item.Picture.AlternateText" title="@item.Picture.Title" /></a>
             }
             <div class="min-w-0">
-                <a href="@productUrl" class="text-[13px] font-bold">@item.ProductName</a>
+                <a href="@productUrl" class="text-sm font-bold">@item.ProductName</a>
                 @if (Model.ShowSku)
                 {
-                    <p class="text-xs text-slate-400 mt-2">@T("ShoppingCart.SKU"): @item.Sku</p>
+                    <p class="text-xs text-muted-foreground mt-2">@T("ShoppingCart.SKU"): @item.Sku</p>
                 }
                 @if (Model.ShowVendorName)
                 {
-                    <p class="text-xs text-slate-400 mt-2">@item.VendorName</p>
+                    <p class="text-xs text-muted-foreground mt-2">@item.VendorName</p>
                 }
                 @foreach (var info in new[] { item.AttributeInfo, item.RecurringInfo, item.RentalInfo })
                 {
                     if (!string.IsNullOrEmpty(info))
                     {
-                        <div class="text-xs text-slate-500 mt-2">@Html.Raw(info)</div>
+                        <div class="text-xs text-muted-foreground mt-2">@Html.Raw(info)</div>
                     }
                 }
                 @if (item.AllowItemEditing)
@@ -53,17 +53,17 @@
                     }
                     @if (!item.DisableRemoval)
                     {
-                        <button type="button" class="icon-btn text-slate-400 sf-cart-remove" data-remove-cart-item="@item.Id" aria-label="حذف @item.ProductName"><span aria-hidden="true">×</span></button>
+                        <button type="button" class="icon-btn text-muted-foreground sf-cart-remove" data-remove-cart-item="@item.Id" aria-label="حذف @item.ProductName"><span aria-hidden="true">×</span></button>
                     }
                 </div>
                 @foreach (var warning in item.Warnings)
                 {
-                    <div role="alert" class="sf-notice notice mt-3">@Html.Raw(warning)</div>
+                    <div role="alert" class="sf-native-warning mt-3">@Html.Raw(warning)</div>
                 }
             </div>
             <div class="text-sm font-bold text-left price">
                 <span class="product-subtotal" data-cart-subtotal="@item.Id">@item.SubTotal</span>
-                <p class="text-[11px] font-normal text-slate-400 mt-2">هر عدد: <span class="product-unit-price">@item.UnitPrice</span></p>
+                <p class="text-xs font-normal text-muted-foreground mt-2">هر عدد: <span class="product-unit-price">@item.UnitPrice</span></p>
                 @if (Model.ShowItemDiscount && !string.IsNullOrEmpty(item.Discount))
                 {
                     <p class="text-xs font-normal text-primary mt-2">@T("ShoppingCart.ItemYouSave", item.Discount)</p>

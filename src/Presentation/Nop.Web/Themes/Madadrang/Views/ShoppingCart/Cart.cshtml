@@ -7,7 +7,7 @@
     NopHtml.AppendPageCssClassParts("html-shopping-cart-page");
 }
 <main id="main-content" class="wrap py-8 sf-native-cart">
-    <p class="text-xs text-slate-400 mb-5"><a href="@Url.RouteUrl(NopRouteNames.General.HOMEPAGE)">خانه</a> / سبد خرید</p>
+    <p class="text-xs text-muted-foreground mb-5"><a href="@Url.RouteUrl(NopRouteNames.General.HOMEPAGE)">خانه</a> / سبد خرید</p>
     <h1 class="page-heading mb-7">سبد خرید تو</h1>
     @if (!Model.OnePageCheckoutEnabled)
     {
@@ -16,6 +16,6 @@
     @await Component.InvokeAsync(typeof(OrderSummaryViewComponent), new { overriddenModel = Model })
     @if (Model.Items.Count == 0)
     {
-        <a class="sf-button inline-flex mt-6" href="@Url.RouteUrl("MadadrangAllProducts")">یک انتخاب تازه پیدا کن ←</a>
+        <a class="sf-primary-action inline-flex mt-6" href="@Url.RouteUrl("MadadrangAllProducts")">یک انتخاب تازه پیدا کن ←</a>
     }
 </main>
