@@ -24,14 +24,14 @@ public sealed class PersianStorefrontController : BasePublicController
 [AutoValidateAntiforgeryToken]
 [CheckAccessPublicStore]
 [CheckAccessClosedStore]
-public sealed class PersianStorefrontApiController(IWebHostEnvironment environment, IWorkContext work, IStoreContext store, ICustomerService customers, ICustomerRegistrationService registration, MockOtpStore otp) : ControllerBase
+public sealed class PersianStorefrontApiController(IWebHostEnvironment environment, IWorkContext work, IStoreContext store, ICustomerService customers, ICustomerRegistrationService registration, StorefrontOtpService otp) : ControllerBase
 {
     [HttpPost("otp/send")]
     public async Task<ActionResult<OtpResult>> Send([FromBody] PhoneRequest request)
     {
         if (!environment.IsDevelopment())
             return StatusCode(503, new OtpResult(false, "ورود پیامکی هنوز به سرویس واقعی متصل نشده است."));
-        return otp.Send((await work.GetCurrentCustomerAsync()).CustomerGuid, request.Phone);
+        return await otp.SendAsync((await work.GetCurrentCustomerAsync()).CustomerGuid, request.Phone);
     }
 
     [HttpPost("otp/verify")]
@@ -40,9 +40,9 @@ public sealed class PersianStorefrontApiController(IWebHostEnvironment environme
         if (!environment.IsDevelopment())
             return StatusCode(503, new OtpResult(false, "محیط آزمایشی غیرفعال است."));
         var guest = await work.GetCurrentCustomerAsync();
-        if (!otp.Verify(guest.CustomerGuid, request.Phone, request.Code))
+        var phone = await otp.VerifyAsync(guest.CustomerGuid, request.Phone, request.Code);
+        if (phone == null)
             return new OtpResult(false, "کد صحیح نیست یا منقضی شده است.");
-        var phone = MockOtpStore.Normalize(request.Phone);
         var customer = await customers.GetCustomerByPhoneAsync(phone);
         if (customer != null && (!customer.Active || customer.Deleted || await customers.IsAdminAsync(customer)))
             return new OtpResult(false, "ورود به این حساب از محیط آزمایشی مجاز نیست.");

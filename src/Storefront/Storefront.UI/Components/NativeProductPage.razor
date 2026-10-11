@@ -107,20 +107,9 @@
                                     option.Id == _selected.GetValueOrDefault(attribute.Id))?.Name)</span></legend>
                                     @if (attribute.ControlType == 1)
                                     {
-                                        <BbSelect TValue="int" Value="_selected.GetValueOrDefault(attribute.Id)"
-                                                  ValueChanged="value => SelectOption(attribute.Id, value)">
-                                            <BbSelectTrigger Class="sf-select h-11">
-                                                <BbSelectValue Placeholder="انتخاب کنید" />
-                                            </BbSelectTrigger>
-                                            <BbSelectContent>
-                                                <BbSelectGroup>
-                                                <BbSelectItem Value="0">@(attribute.Required ? "انتخاب کنید" : "بدون انتخاب")
-                                                </BbSelectItem>@foreach (var option in attribute.Options) {
-                                                <BbSelectItem Value="option.Id">@option.Name</BbSelectItem>
-                                            }
-                                        </BbSelectGroup>
-                                        </BbSelectContent>
-                                    </BbSelect>
+                                        <StoreSelect TValue="int" Label="@(attribute.Name)" Options="@AttributeOptions(attribute)"
+                                                     Value="_selected.GetValueOrDefault(attribute.Id)"
+                                                     ValueChanged="value => SelectOption(attribute.Id, value)" Disabled="@(!_ready || _busy)" />
                                 }
                                 else
                                 {
@@ -130,6 +119,7 @@
                                             <button type="button"
                                                     class="@ClassNames.cn(attribute.ControlType is 40 or 45 ? "color-choice" : "filter-pill", _selected.GetValueOrDefault(attribute.Id) == option.Id ? "selected" : null)"
                                                     style="@(attribute.ControlType == 40 ? "background:" + option.Color : "")"
+                                                    disabled="@(!_ready || _busy)"
                                                     aria-label="@($"{attribute.Name} {option.Name}")"
                                                     aria-pressed="@((_selected.GetValueOrDefault(attribute.Id) == option.Id).ToString().ToLowerInvariant())"
                                                     @onclick="() => SelectOption(attribute.Id, option.Id)">
@@ -158,7 +148,7 @@
                             <span class="text-sm">تعداد</span>
                             @if (Initial.Quantities.Count > 0)
                             {
-                                <BbSelect TValue="int" Value="_quantity" ValueChanged="ChangeQuantity">
+                                <BbSelect TValue="int" Value="_quantity" ValueChanged="ChangeQuantity" AriaLabel="تعداد محصول" Disabled="@(!_ready || _busy)">
                                     <BbSelectTrigger Class="sf-select h-11">
                                         <BbSelectValue />
                                     </BbSelectTrigger>
@@ -173,12 +163,12 @@
                             else
                         {
                             <BbButtonGroup Class="sf-quantity qty"><button aria-label="کاهش تعداد"
-                                                                           disabled="@(_quantity <= Initial.MinimumQuantity || _updating)"
+                                                                           disabled="@(_quantity <= Initial.MinimumQuantity || !_ready || _busy || _updating)"
                                                                            @onclick="() => ChangeQuantity(_quantity - 1)">
                                 <SfIcon Name="minus" Size="14" />
                             </button><input @key="_quantityInputRevision" @ref="_quantityInput" class="sf-product-quantity-input" type="number" aria-label="تعداد محصول"
                                             min="@Initial.MinimumQuantity" step="1" value="@_quantity" @onchange="EnterQuantity"
-                                            disabled="@_updating" /><button aria-label="افزایش تعداد" disabled="@_updating"
+                                            disabled="@(!_ready || _busy || _updating)" /><button aria-label="افزایش تعداد" disabled="@(!_ready || _busy || _updating)"
                                                                 @onclick="() => ChangeQuantity(_quantity + 1)">
                             <SfIcon Name="plus" Size="14" />
                         </button></BbButtonGroup>
@@ -241,7 +231,7 @@
                 @if (!Initial.DisableBuy)
                 {
                     <BbCardFooter>
-                <BbButton Size="ButtonSize.Large" Class="w-full" Disabled="@(!Available || _busy || _updating || !_ready)"
+                <BbButton Size="ButtonSize.Large" Class="w-full" Disabled="@(!Available || _busy || _updating || !_ready || !_selectionReady)"
                           Loading="_busy" OnClick="AddToCart">
                     <SfIcon Name="bag" data-icon="inline-start" /><span>@PurchaseLabel</span>
                 </BbButton>

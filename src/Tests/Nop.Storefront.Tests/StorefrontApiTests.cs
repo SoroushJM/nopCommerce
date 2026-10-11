@@ -111,6 +111,50 @@ public sealed class StorefrontApiTests
     }
 
     [Test]
+    public async Task OtpNormalizesPhoneAndLimitsAttemptsToTheRequestingGuest()
+    {
+        await using var guest = new StorefrontClient();
+        await using var outsider = new StorefrontClient();
+        await guest.InitializeAsync();
+        await outsider.InitializeAsync();
+        var phone = "0900" + RandomNumberGenerator.GetInt32(1000000, 10000000);
+        var international = "+98" + phone[1..];
+        var persianPhone = string.Concat(international.Select(value => char.IsAsciiDigit(value) ? (char)('۰' + value - '0') : value));
+        var sent = await guest.PostJsonAsync("stationery/api/otp/send", new
+        {
+            phone = persianPhone
+        });
+        await Assert.That(sent.GetProperty("Success").GetBoolean()).IsTrue();
+        var code = sent.GetProperty("TestCode").GetString()!;
+        var blocked = await guest.PostJsonAsync("stationery/api/otp/send", new
+        {
+            phone
+        });
+        await Assert.That(blocked.GetProperty("Success").GetBoolean()).IsFalse();
+        var stolen = await outsider.PostJsonAsync("stationery/api/otp/verify", new
+        {
+            phone,
+            code
+        });
+        await Assert.That(stolen.GetProperty("Success").GetBoolean()).IsFalse();
+        for (var attempt = 0; attempt < 5; attempt++)
+        {
+            var wrong = await guest.PostJsonAsync("stationery/api/otp/verify", new
+            {
+                phone,
+                code = "000000"
+            });
+            await Assert.That(wrong.GetProperty("Success").GetBoolean()).IsFalse();
+        }
+        var exhausted = await guest.PostJsonAsync("stationery/api/otp/verify", new
+        {
+            phone,
+            code
+        });
+        await Assert.That(exhausted.GetProperty("Success").GetBoolean()).IsFalse();
+    }
+
+    [Test]
     [Arguments("stationery/swagger", "/stationery/swagger/index.html", HttpStatusCode.MovedPermanently)]
     [Arguments("stationery/scalar", "/stationery/scalar/", HttpStatusCode.Found)]
     public async Task DevelopmentApiExplorerServesHtml(string path, string canonicalPath, HttpStatusCode redirectStatus)

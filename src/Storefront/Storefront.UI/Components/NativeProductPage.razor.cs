@@ -1,5 +1,6 @@
 ﻿using System.Globalization;
 using Microsoft.AspNetCore.Components;
+using BlazorBlueprint.Primitives;
 using Microsoft.JSInterop;
 using Microsoft.AspNetCore.Components.Web;
 using Storefront.UI;
@@ -25,7 +26,7 @@ public partial class NativeProductPage
     private ElementReference _gallery;
     private bool _restoreZoomFocus;
     private bool _restoreQuantityFocus;
-    private bool _ready, _busy, _updating, _zoomOpen, _freeShipping, _quantityChanged;
+    private bool _ready, _selectionReady, _busy, _updating, _zoomOpen, _freeShipping, _quantityChanged;
     private string PurchaseLabel => StockAvailable ? Initial.PurchaseLabel : "فعلاً ناموجود";
     private string StockLabel => _stock.Length > 0 ? _stock : StockAvailable ? "" : "این انتخاب فعلاً ناموجود است";
     private IEnumerable<NativeProductPicture> VisiblePictures => Initial.Pictures.Where(picture =>
@@ -39,7 +40,7 @@ public partial class NativeProductPage
     {
         get
         {
-            if (!Initial.StockByAttributes || !_ready)
+            if (!Initial.StockByAttributes || !_selectionReady)
                 return Initial.InStock;
             var active = _selected.Where(item => item.Value > 0 && !_disabledAttributes.Contains(item.Key)).ToList();
             var match = _combinations.FirstOrDefault(combination => combination.Attributes.Count == active.Count && combination.Attributes.All(attribute => active.Any(item => item.Key == attribute.Id && attribute.ValueIds.Contains(item.Value))));
@@ -63,7 +64,7 @@ public partial class NativeProductPage
         _basePrice = Initial.BasePrice ?? "";
         _freeShipping = Initial.IsFreeShipping;
         _quantity = Initial.Quantity;
-        _disabledAttributes.UnionWith(Initial.Attributes.Where(attribute => attribute.HasCondition).Select(attribute => attribute.Id));
+        _disabledAttributes.UnionWith(Initial.InitialDisabledAttributeIds);
         foreach (var attribute in Initial.Attributes)
         {
             var option = attribute.Options.FirstOrDefault(item => item.Selected);
@@ -100,8 +101,8 @@ public partial class NativeProductPage
         {
             _module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/Storefront.UI/storefront.js");
             _combinations = await _module.InvokeAsync<List<NativeCombination>>("request", Initial.CombinationsUrl);
-            await RefreshSelection();
             _ready = true;
+            await RefreshSelection();
         }
         catch (Exception exception)
         {
@@ -123,15 +124,10 @@ public partial class NativeProductPage
 
     private async Task SelectOption(int attributeId, int valueId)
     {
+        if (!_ready || _busy)
+            return;
         _selected[attributeId] = valueId;
-        try
-        {
-            await RefreshSelection();
-        }
-        catch (Exception)
-        {
-            _error = "به‌روزرسانی انتخاب انجام نشد. دوباره تلاش کنید.";
-        }
+        await RefreshSelection();
     }
 
     private async Task RefreshSelection()
@@ -139,6 +135,7 @@ public partial class NativeProductPage
         if (_module == null)
             return;
         var version = ++_selectionVersion;
+        _selectionReady = false;
         _updating = true;
         try
         {
@@ -166,6 +163,12 @@ public partial class NativeProductPage
             _disabledAttributes.UnionWith(result.DisabledAttributeMappingIds);
             _error = string.Join(" ", result.Message ?? []);
             _pendingAttributes = result;
+            _selectionReady = true;
+        }
+        catch (Exception)
+        {
+            if (version == _selectionVersion)
+                _error = "به‌روزرسانی انتخاب و تعداد انجام نشد. دوباره تلاش کنید.";
         }
         finally
         {
@@ -176,16 +179,11 @@ public partial class NativeProductPage
 
     private async Task ChangeQuantity(int quantity)
     {
+        if (!_ready || _busy)
+            return;
         _quantity = quantity;
         _quantityChanged = true;
-        try
-        {
-            await RefreshSelection();
-        }
-        catch (Exception)
-        {
-            _error = "به‌روزرسانی تعداد انجام نشد. دوباره تلاش کنید.";
-        }
+        await RefreshSelection();
     }
 
     private async Task EnterQuantity(ChangeEventArgs args)
@@ -216,7 +214,7 @@ public partial class NativeProductPage
 
     private async Task AddToCart()
     {
-        if (_module == null || _busy || _updating || !_ready || !Available)
+        if (_module == null || _busy || _updating || !_ready || !_selectionReady || !Available)
             return;
         _busy = true;
         try
@@ -245,6 +243,13 @@ public partial class NativeProductPage
         {
             _busy = false;
         }
+    }
+
+    private static IEnumerable<SelectOption<int>> AttributeOptions(NativeAttribute attribute)
+    {
+        yield return new SelectOption<int>(0, attribute.Required ? "انتخاب کنید" : "بدون انتخاب");
+        foreach (var option in attribute.Options)
+            yield return new SelectOption<int>(option.Id, option.Name);
     }
 
     public async ValueTask DisposeAsync()

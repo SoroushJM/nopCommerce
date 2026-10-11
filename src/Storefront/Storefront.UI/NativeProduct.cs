@@ -113,6 +113,7 @@ public sealed record NativeProduct
     }
     public List<int> Quantities { get; init; } = [];
     public List<NativeAttribute> Attributes { get; init; } = [];
+    public List<int> InitialDisabledAttributeIds { get; init; } = [];
     public List<StoreLink> Breadcrumb { get; init; } = [];
     public string Brand { get; init; } = "";
     public string ChangeUrl { get; init; } = "";

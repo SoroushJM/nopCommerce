@@ -36,7 +36,8 @@ public sealed class StorefrontStartup : INopStartup
         services.AddScoped<NativeCatalogModelFactory>();
         services.AddScoped<NativeCartPresentation>();
         services.AddScoped<DevelopmentCatalogFiltersRepair>();
-        services.AddSingleton<MockOtpStore>();
+        services.AddSingleton<IStorefrontOtpSender, DevelopmentMockOtpSender>();
+        services.AddSingleton<StorefrontOtpService>();
         services.AddSwaggerGen(o =>
         {
             o.SwaggerDoc("v1", new OpenApiInfo { Title = "Persian storefront API", Version = "v1" });

@@ -25,7 +25,8 @@ public static class NativeProductPresentation
     }
 
     public static async Task<NativeProduct> FromAsync(ProductDetailsModel model, IUrlHelper url,
-        INopUrlHelper nopUrl, ILocalizationService localization, IWorkContext workContext, int minimumQuantity)
+        INopUrlHelper nopUrl, ILocalizationService localization, IWorkContext workContext, int minimumQuantity,
+        List<int> initialDisabledAttributeIds)
     {
         var breadcrumb = new List<StoreLink>();
         foreach (var category in model.Breadcrumb.CategoryBreadcrumb)
@@ -111,6 +112,7 @@ public static class NativeProductPresentation
                 attribute.Id, attribute.Name, (int)attribute.AttributeControlType, attribute.IsRequired, attribute.HasCondition,
                 attribute.Values.Select(value => new NativeOption(value.Id, value.Name, value.ColorSquaresRgb,
                     value.ImageSquaresPictureModel.ImageUrl, value.IsPreSelected)).ToList())).ToList(),
+            InitialDisabledAttributeIds = initialDisabledAttributeIds,
             ChangeUrl = url.RouteUrl(NopRouteNames.Ajax.PRODUCT_DETAILS_ATTRIBUTE_CHANGE,
                 new
                 {
