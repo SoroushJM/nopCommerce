@@ -24,6 +24,8 @@
     <RazorGenerate Remove="Views/HomeHero.cshtml;Views/HomepageBanners.cshtml;Views/NativeHeader.cshtml;Views/NativeFooter.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="../../Presentation/Nop.Web/App_Data/Localization/PersianPublic/fa-IR.public.xml"
+                      LogicalName="Nop.Plugin.Misc.PersianStorefront.Localization.fa-IR.public.xml" />
     <Content Update="plugin.json" CopyToOutputDirectory="PreserveNewest" />
     <Content Update="Views/**/*.cshtml" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
