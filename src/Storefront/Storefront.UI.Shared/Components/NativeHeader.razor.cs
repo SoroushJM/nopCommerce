@@ -101,6 +101,11 @@ public partial class NativeHeader
 
     private async Task OpenCart()
     {
+        if (module == null)
+        {
+            Navigation.NavigateTo(Initial.CartUrl, forceLoad: true);
+            return;
+        }
         await Run(RefreshCart);
         if (error.Length > 0)
             return;
