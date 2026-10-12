@@ -73,7 +73,13 @@
                 })
                 @if (nativeMenu)
                 {
+                    <div class="md:hidden">
+                        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.MobHeaderMenuBefore })
+                    </div>
                     @await Component.InvokeAsync(typeof(MainMenuViewComponent))
+                    <div class="md:hidden">
+                        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.MobHeaderMenuAfter })
+                    </div>
                 }
                 else
                 {
