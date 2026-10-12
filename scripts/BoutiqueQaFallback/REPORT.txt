@@ -1,0 +1,41 @@
+Boutique native fallback fixtures — checkpoint 2026-10-12
+
+Exact isolated database: nop_themeqa_boutique_20261012185304.
+Existing QA app/host: the fixed app in ../BoutiqueQaSeed/Invoke-QaSql.ps1, HTTP6250.
+The existing helper verifies PostgreSQL, exact database and loopback host. No credentials
+are copied or printed. SQL independently refuses every other database before mutations.
+No source or Madadrang database, server/config/plugin settings or port5090 was changed.
+
+Created Product3595 BTQ-QA-FALLBACK-GIFT from native Product2 gift-card fields.
+Route when host is up: http://127.0.0.1:6250/boutique-qa-gift-card
+Created Product3596 BTQ-QA-FALLBACK-RENTAL from native Product3 rental fields.
+Route when host is up: http://127.0.0.1:6250/boutique-qa-rental
+Both are Published=true, VisibleIndividually=false, ShowOnHomepage=false, ParentGroupedProductId0.
+They have neutral QA labels/descriptions, no stationery category/manufacturer/picture mappings,
+inventory method1/quantity8 and order quantity1..5. Gift is virtual; rental period stays native1day.
+No attribute definitions/values, orders/payments, messages or uploads were created.
+No file/grouped/customer-price feature is proven by these two fixtures.
+
+create.sql is transactional, has a timeout/advisory lock and validates native baseline2/3.
+Foreign SKU or slug collisions throw. Idempotent repeat retained IDs3595/3596 and both
+original product MD5 signatures. baseline-snapshot.txt records untouched original product data;
+manifest.json records clone IDs/flags/slugs, owner stamp and original product signatures.
+cleanup.sql performs native soft deletion and deactivates URL records only for the exact
+two SKUs AND owner stamp; it preserves later cart/order/history references. It was NOT run:
+fixtures remain available for the parent's browser verification. Creation refuses silent
+reactivation if a prior cleanup marked the fixture deleted/unpublished.
+
+Runtime attempt:
+Storefront.Theme.Tests ConfiguredUnsupportedProductsKeepTheirNativeControls("BOUTIQUE")
+was explicitly configured with HTTP6250 and expectations.json, and did NOT skip.
+Result: failed1, passed0, skipped0, connection refused127.0.0.1:6250 (Socket10061), while
+the QA hosts were stopped for coordinated maintenance. Test project build succeeded.
+No HTML markers or HTTP200 were observed; the marker strings are native-source expectations.
+No subsequent retry/server restart/workaround was attempted at parent checkpoint request.
+TRX retained locally in test-results/BoutiqueFallback.trx.
+
+To resume: set STOREFRONT_QA_BOUTIQUE_URL to the existing HTTP6250 host, set
+STOREFRONT_QA_BOUTIQUE_FALLBACKS to expectations.json raw content, and run ONLY the
+ConfiguredUnsupportedProductsKeepTheirNativeControls case with Name~BOUTIQUE.
+The case is read-only GET, checks native product-name/form/CSRF and all configured fields.
+Use ../BoutiqueQaSeed/Invoke-QaSql.ps1 -SqlFile ./cleanup.sql only when parent is done.

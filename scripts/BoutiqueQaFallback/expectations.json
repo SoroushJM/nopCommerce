@@ -1,0 +1,4 @@
+[
+  {"productId":3595,"markers":["giftcard_3595.RecipientName","giftcard_3595.RecipientEmail","giftcard_3595.SenderName","giftcard_3595.SenderEmail","giftcard_3595.Message"]},
+  {"productId":3596,"markers":["rental_start_date_3596","rental_end_date_3596","datepicker"]}
+]

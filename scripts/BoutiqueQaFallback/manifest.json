@@ -1,0 +1,40 @@
+{
+  "database": "nop_themeqa_boutique_20261012185304",
+  "fixtures": [
+    {
+      "id": 3595,
+      "sku": "BTQ-QA-FALLBACK-GIFT",
+      "name": "کارت هدیهٔ آزمون بوتیک",
+      "slug": "boutique-qa-gift-card",
+      "stock": 8,
+      "isRental": false,
+      "published": true,
+      "isGiftCard": true,
+      "visibleIndividually": false
+    },
+    {
+      "id": 3596,
+      "sku": "BTQ-QA-FALLBACK-RENTAL",
+      "name": "اجارهٔ پوشاک — نمونهٔ آزمون",
+      "slug": "boutique-qa-rental",
+      "stock": 8,
+      "isRental": true,
+      "published": true,
+      "isGiftCard": false,
+      "visibleIndividually": false
+    }
+  ],
+  "ownerStamp": "Boutique QA fallback fixture v1",
+  "baseSignatures": [
+    {
+      "id": 2,
+      "md5": "27da825bff2cbc32922a0a35f31d9f6f",
+      "sku": "MRG-2"
+    },
+    {
+      "id": 3,
+      "md5": "b70a6d637cfa63dfe21f6c1e4b0f0150",
+      "sku": "MRG-3"
+    }
+  ]
+}

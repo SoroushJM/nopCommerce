@@ -1,0 +1,239 @@
+BEGIN
+DO
+                                                 jsonb_pretty                                                  
+---------------------------------------------------------------------------------------------------------------
+ [                                                                                                            +
+     {                                                                                                        +
+         "Id": 2,                                                                                             +
+         "Sku": "MRG-2",                                                                                      +
+         "Gtin": null,                                                                                        +
+         "Name": "مداد رنگی ۲۴ رنگ",                                                                          +
+         "Price": 495000.0000,                                                                                +
+         "Width": 0.0000,                                                                                     +
+         "Height": 0.0000,                                                                                    +
+         "Length": 0.0000,                                                                                    +
+         "Weight": 0.2000,                                                                                    +
+         "Deleted": false,                                                                                    +
+         "IsRental": false,                                                                                   +
+         "OldPrice": 560000.0000,                                                                             +
+         "VendorId": 0,                                                                                       +
+         "MarkAsNew": false,                                                                                  +
+         "MetaTitle": null,                                                                                   +
+         "Published": false,                                                                                  +
+         "DownloadId": 0,                                                                                     +
+         "IsDownload": false,                                                                                 +
+         "IsGiftCard": true,                                                                                  +
+         "IsRecurring": false,                                                                                +
+         "IsTaxExempt": false,                                                                                +
+         "ProductCost": 0.0000,                                                                               +
+         "WarehouseId": 0,                                                                                    +
+         "AdminComment": null,                                                                                +
+         "CallForPrice": false,                                                                               +
+         "CreatedOnUtc": "2026-10-03T15:00:14.344416",                                                        +
+         "DisplayOrder": 2,                                                                                   +
+         "MetaKeywords": null,                                                                                +
+         "SubjectToAcl": false,                                                                               +
+         "UpdatedOnUtc": "2026-10-12T16:33:17.307824",                                                        +
+         "IsShipEnabled": true,                                                                               +
+         "NotReturnable": false,                                                                              +
+         "ProductTypeId": 5,                                                                                  +
+         "StockQuantity": 30,                                                                                 +
+         "TaxCategoryId": 0,                                                                                  +
+         "DeliveryDateId": 0,                                                                                 +
+         "GiftCardTypeId": 0,                                                                                 +
+         "IsFreeShipping": false,                                                                             +
+         "ShipSeparately": false,                                                                             +
+         "ShowOnHomepage": false,                                                                             +
+         "AgeVerification": false,                                                                            +
+         "BackorderModeId": 0,                                                                                +
+         "BasepriceAmount": 0.0000,                                                                           +
+         "BasepriceUnitId": 0,                                                                                +
+         "FullDescription": "۲۴ رنگ برای خیال‌های بی‌مرز. مدادهای نرم با رنگ‌دانهٔ غنی، مناسب طراحی و رنگ‌آمیزی.", +
+         "LimitedToStores": false,                                                                            +
+         "MetaDescription": null,                                                                             +
+         "BasepriceEnabled": false,                                                                           +
+         "DisableBuyButton": false,                                                                           +
+         "HasUserAgreement": false,                                                                           +
+         "MinStockQuantity": 0,                                                                               +
+         "SampleDownloadId": 0,                                                                               +
+         "ShortDescription": "۲۴ رنگ برای خیال‌های بی‌مرز. مدادهای نرم با رنگ‌دانهٔ غنی، مناسب طراحی و رنگ‌آمیزی.",+
+         "AllowedQuantities": null,                                                                           +
+         "ApprovedRatingSum": 0,                                                                              +
+         "HasSampleDownload": false,                                                                          +
+         "ProductTemplateId": 1,                                                                              +
+         "RentalPriceLength": 0,                                                                              +
+         "UserAgreementText": null,                                                                           +
+         "LowStockActivityId": 0,                                                                             +
+         "RequiredProductIds": null,                                                                          +
+         "UnlimitedDownloads": false,                                                                         +
+         "BasepriceBaseAmount": 0.0000,                                                                       +
+         "BasepriceBaseUnitId": 0,                                                                            +
+         "CustomerEntersPrice": false,                                                                        +
+         "RentalPricePeriodId": 0,                                                                            +
+         "VisibleIndividually": true,                                                                         +
+         "AllowCustomerReviews": false,                                                                       +
+         "ApprovedTotalReviews": 0,                                                                           +
+         "AvailableForPreOrder": false,                                                                       +
+         "DisplayStockQuantity": false,                                                                       +
+         "MaxNumberOfDownloads": 0,                                                                           +
+         "MinimumAgeToPurchase": 0,                                                                           +
+         "NotApprovedRatingSum": 0,                                                                           +
+         "OrderMaximumQuantity": 20,                                                                          +
+         "OrderMinimumQuantity": 1,                                                                           +
+         "RecurringCycleLength": 0,                                                                           +
+         "RecurringTotalCycles": 0,                                                                           +
+         "RequireOtherProducts": false,                                                                       +
+         "DisableWishlistButton": false,                                                                      +
+         "UseMultipleWarehouses": false,                                                                      +
+         "DownloadExpirationDays": null,                                                                      +
+         "ManufacturerPartNumber": null,                                                                      +
+         "ParentGroupedProductId": 0,                                                                         +
+         "RecurringCyclePeriodId": 0,                                                                         +
+         "AvailableEndDateTimeUtc": null,                                                                     +
+         "ManageInventoryMethodId": 2,                                                                        +
+         "MarkAsNewEndDateTimeUtc": null,                                                                     +
+         "NotApprovedTotalReviews": 0,                                                                        +
+         "AdditionalShippingCharge": 0.0000,                                                                  +
+         "DisplayStockAvailability": false,                                                                   +
+         "DownloadActivationTypeId": 0,                                                                       +
+         "OverriddenGiftCardAmount": null,                                                                    +
+         "AvailableStartDateTimeUtc": null,                                                                   +
+         "MarkAsNewStartDateTimeUtc": null,                                                                   +
+         "ProductAvailabilityRangeId": 0,                                                                     +
+         "MaximumCustomerEnteredPrice": 0.0000,                                                               +
+         "MinimumCustomerEnteredPrice": 0.0000,                                                               +
+         "NotifyAdminForQuantityBelow": 0,                                                                    +
+         "AllowBackInStockSubscriptions": false,                                                              +
+         "AutomaticallyAddRequiredProducts": false,                                                           +
+         "PreOrderAvailabilityStartDateTimeUtc": null,                                                        +
+         "DisplayAttributeCombinationImagesOnly": false,                                                      +
+         "AllowAddingOnlyExistingAttributeCombinations": false                                                +
+     },                                                                                                       +
+     {                                                                                                        +
+         "Id": 3,                                                                                             +
+         "Sku": "MRG-3",                                                                                      +
+         "Gtin": null,                                                                                        +
+         "Name": "خودکار ژلی ۰.۵ میلی‌متر",                                                                    +
+         "Price": 89000.0000,                                                                                 +
+         "Width": 0.0000,                                                                                     +
+         "Height": 0.0000,                                                                                    +
+         "Length": 0.0000,                                                                                    +
+         "Weight": 0.2000,                                                                                    +
+         "Deleted": false,                                                                                    +
+         "IsRental": true,                                                                                    +
+         "OldPrice": 0.0000,                                                                                  +
+         "VendorId": 0,                                                                                       +
+         "MarkAsNew": false,                                                                                  +
+         "MetaTitle": null,                                                                                   +
+         "Published": false,                                                                                  +
+         "DownloadId": 0,                                                                                     +
+         "IsDownload": false,                                                                                 +
+         "IsGiftCard": false,                                                                                 +
+         "IsRecurring": false,                                                                                +
+         "IsTaxExempt": false,                                                                                +
+         "ProductCost": 0.0000,                                                                               +
+         "WarehouseId": 0,                                                                                    +
+         "AdminComment": null,                                                                                +
+         "CallForPrice": false,                                                                               +
+         "CreatedOnUtc": "2026-10-03T15:00:14.344416",                                                        +
+         "DisplayOrder": 3,                                                                                   +
+         "MetaKeywords": null,                                                                                +
+         "SubjectToAcl": false,                                                                               +
+         "UpdatedOnUtc": "2026-10-12T16:33:17.307824",                                                        +
+         "IsShipEnabled": true,                                                                               +
+         "NotReturnable": false,                                                                              +
+         "ProductTypeId": 5,                                                                                  +
+         "StockQuantity": 30,                                                                                 +
+         "TaxCategoryId": 0,                                                                                  +
+         "DeliveryDateId": 0,                                                                                 +
+         "GiftCardTypeId": 0,                                                                                 +
+         "IsFreeShipping": false,                                                                             +
+         "ShipSeparately": false,                                                                             +
+         "ShowOnHomepage": false,                                                                             +
+         "AgeVerification": false,                                                                            +
+         "BackorderModeId": 0,                                                                                +
+         "BasepriceAmount": 0.0000,                                                                           +
+         "BasepriceUnitId": 0,                                                                                +
+         "FullDescription": "نوشتن روان و تمیز برای یادداشت‌های روزانه، با نوک ظریف و طراحی راحت.",            +
+         "LimitedToStores": false,                                                                            +
+         "MetaDescription": null,                                                                             +
+         "BasepriceEnabled": false,                                                                           +
+         "DisableBuyButton": false,                                                                           +
+         "HasUserAgreement": false,                                                                           +
+         "MinStockQuantity": 0,                                                                               +
+         "SampleDownloadId": 0,                                                                               +
+         "ShortDescription": "نوشتن روان و تمیز برای یادداشت‌های روزانه، با نوک ظریف و طراحی راحت.",           +
+         "AllowedQuantities": null,                                                                           +
+         "ApprovedRatingSum": 0,                                                                              +
+         "HasSampleDownload": false,                                                                          +
+         "ProductTemplateId": 1,                                                                              +
+         "RentalPriceLength": 1,                                                                              +
+         "UserAgreementText": null,                                                                           +
+         "LowStockActivityId": 0,                                                                             +
+         "RequiredProductIds": null,                                                                          +
+         "UnlimitedDownloads": false,                                                                         +
+         "BasepriceBaseAmount": 0.0000,                                                                       +
+         "BasepriceBaseUnitId": 0,                                                                            +
+         "CustomerEntersPrice": false,                                                                        +
+         "RentalPricePeriodId": 0,                                                                            +
+         "VisibleIndividually": true,                                                                         +
+         "AllowCustomerReviews": false,                                                                       +
+         "ApprovedTotalReviews": 0,                                                                           +
+         "AvailableForPreOrder": false,                                                                       +
+         "DisplayStockQuantity": false,                                                                       +
+         "MaxNumberOfDownloads": 0,                                                                           +
+         "MinimumAgeToPurchase": 0,                                                                           +
+         "NotApprovedRatingSum": 0,                                                                           +
+         "OrderMaximumQuantity": 20,                                                                          +
+         "OrderMinimumQuantity": 1,                                                                           +
+         "RecurringCycleLength": 0,                                                                           +
+         "RecurringTotalCycles": 0,                                                                           +
+         "RequireOtherProducts": false,                                                                       +
+         "DisableWishlistButton": false,                                                                      +
+         "UseMultipleWarehouses": false,                                                                      +
+         "DownloadExpirationDays": null,                                                                      +
+         "ManufacturerPartNumber": null,                                                                      +
+         "ParentGroupedProductId": 0,                                                                         +
+         "RecurringCyclePeriodId": 0,                                                                         +
+         "AvailableEndDateTimeUtc": null,                                                                     +
+         "ManageInventoryMethodId": 2,                                                                        +
+         "MarkAsNewEndDateTimeUtc": null,                                                                     +
+         "NotApprovedTotalReviews": 0,                                                                        +
+         "AdditionalShippingCharge": 0.0000,                                                                  +
+         "DisplayStockAvailability": false,                                                                   +
+         "DownloadActivationTypeId": 0,                                                                       +
+         "OverriddenGiftCardAmount": null,                                                                    +
+         "AvailableStartDateTimeUtc": null,                                                                   +
+         "MarkAsNewStartDateTimeUtc": null,                                                                   +
+         "ProductAvailabilityRangeId": 0,                                                                     +
+         "MaximumCustomerEnteredPrice": 0.0000,                                                               +
+         "MinimumCustomerEnteredPrice": 0.0000,                                                               +
+         "NotifyAdminForQuantityBelow": 0,                                                                    +
+         "AllowBackInStockSubscriptions": false,                                                              +
+         "AutomaticallyAddRequiredProducts": false,                                                           +
+         "PreOrderAvailabilityStartDateTimeUtc": null,                                                        +
+         "DisplayAttributeCombinationImagesOnly": false,                                                      +
+         "AllowAddingOnlyExistingAttributeCombinations": false                                                +
+     }                                                                                                        +
+ ]
+(1 row)
+
+                                                                                                                                                                to_jsonb                                                                                                                                                                
+----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"Id": 2, "ProductId": 2, "IsRequired": true, "TextPrompt": null, "DefaultValue": null, "DisplayOrder": 0, "ProductAttributeId": 1, "ValidationMaxLength": null, "ValidationMinLength": null, "ConditionAttributeXml": null, "AttributeControlTypeId": 40, "ValidationFileMaximumSize": null, "ValidationFileAllowedExtensions": null}
+ {"Id": 3, "ProductId": 3, "IsRequired": true, "TextPrompt": null, "DefaultValue": null, "DisplayOrder": 0, "ProductAttributeId": 1, "ValidationMaxLength": null, "ValidationMinLength": null, "ConditionAttributeXml": null, "AttributeControlTypeId": 40, "ValidationFileMaximumSize": null, "ValidationFileAllowedExtensions": null}
+(2 rows)
+
+                                                                                                                                                                                      to_jsonb                                                                                                                                                                                      
+------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
+ {"Id": 5, "Cost": 0.0000, "Name": "آبی", "Quantity": 1, "DisplayOrder": 1, "IsPreSelected": true, "ColorSquaresRgb": "#4c75dc", "PriceAdjustment": 0.0000, "WeightAdjustment": 0.0000, "CustomerEntersQty": false, "AssociatedProductId": 0, "AttributeValueTypeId": 0, "ImageSquaresPictureId": 0, "ProductAttributeMappingId": 2, "PriceAdjustmentUsePercentage": false}
+ {"Id": 6, "Cost": 0.0000, "Name": "سبز", "Quantity": 1, "DisplayOrder": 2, "IsPreSelected": false, "ColorSquaresRgb": "#7cae91", "PriceAdjustment": 10000.0000, "WeightAdjustment": 0.0000, "CustomerEntersQty": false, "AssociatedProductId": 0, "AttributeValueTypeId": 0, "ImageSquaresPictureId": 0, "ProductAttributeMappingId": 2, "PriceAdjustmentUsePercentage": false}
+ {"Id": 7, "Cost": 0.0000, "Name": "صورتی", "Quantity": 1, "DisplayOrder": 3, "IsPreSelected": false, "ColorSquaresRgb": "#eaa3b6", "PriceAdjustment": 15000.0000, "WeightAdjustment": 0.0000, "CustomerEntersQty": false, "AssociatedProductId": 0, "AttributeValueTypeId": 0, "ImageSquaresPictureId": 0, "ProductAttributeMappingId": 2, "PriceAdjustmentUsePercentage": false}
+ {"Id": 8, "Cost": 0.0000, "Name": "نارنجی", "Quantity": 1, "DisplayOrder": 4, "IsPreSelected": false, "ColorSquaresRgb": "#ee965d", "PriceAdjustment": 0.0000, "WeightAdjustment": 0.0000, "CustomerEntersQty": false, "AssociatedProductId": 0, "AttributeValueTypeId": 0, "ImageSquaresPictureId": 0, "ProductAttributeMappingId": 2, "PriceAdjustmentUsePercentage": false}
+ {"Id": 9, "Cost": 0.0000, "Name": "آبی", "Quantity": 1, "DisplayOrder": 1, "IsPreSelected": true, "ColorSquaresRgb": "#4c75dc", "PriceAdjustment": 0.0000, "WeightAdjustment": 0.0000, "CustomerEntersQty": false, "AssociatedProductId": 0, "AttributeValueTypeId": 0, "ImageSquaresPictureId": 0, "ProductAttributeMappingId": 3, "PriceAdjustmentUsePercentage": false}
+ {"Id": 10, "Cost": 0.0000, "Name": "سبز", "Quantity": 1, "DisplayOrder": 2, "IsPreSelected": false, "ColorSquaresRgb": "#7cae91", "PriceAdjustment": 10000.0000, "WeightAdjustment": 0.0000, "CustomerEntersQty": false, "AssociatedProductId": 0, "AttributeValueTypeId": 0, "ImageSquaresPictureId": 0, "ProductAttributeMappingId": 3, "PriceAdjustmentUsePercentage": false}
+ {"Id": 11, "Cost": 0.0000, "Name": "صورتی", "Quantity": 1, "DisplayOrder": 3, "IsPreSelected": false, "ColorSquaresRgb": "#eaa3b6", "PriceAdjustment": 15000.0000, "WeightAdjustment": 0.0000, "CustomerEntersQty": false, "AssociatedProductId": 0, "AttributeValueTypeId": 0, "ImageSquaresPictureId": 0, "ProductAttributeMappingId": 3, "PriceAdjustmentUsePercentage": false}
+ {"Id": 12, "Cost": 0.0000, "Name": "نارنجی", "Quantity": 1, "DisplayOrder": 4, "IsPreSelected": false, "ColorSquaresRgb": "#ee965d", "PriceAdjustment": 0.0000, "WeightAdjustment": 0.0000, "CustomerEntersQty": false, "AssociatedProductId": 0, "AttributeValueTypeId": 0, "ImageSquaresPictureId": 0, "ProductAttributeMappingId": 3, "PriceAdjustmentUsePercentage": false}
+(8 rows)
+
+COMMIT
