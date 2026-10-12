@@ -1,5 +1,7 @@
 # Formatting the authored storefront files
 
+Current scope after the 2026-10-12 split: `scripts/format-storefront.ps1` targets the PersianStorefront plugin, Shared, Madadrang, Boutique, browser Client and Preview projects. The deleted `Storefront.UI.csproj` is no longer a formatter target. Historical pass records below concern their stated revisions; changing this project list does not assert that all current files pass full formatting verification. Use `-Verify` for review before applying broad formatter changes.
+
 The storefront uses Microsoft's C# and Razor formatting tools with the repository's `.editorconfig`. Two scoped `.editorconfig` files, in the storefront UI and PersianStorefront plugin directories, set `csharp_preserve_single_line_blocks` and `csharp_preserve_single_line_statements` to `false`. Upstream project rules are unchanged.
 
 Luna ran SDK 10.0.401 `dotnet format whitespace` on the authored C# files. This expands compact method blocks. The scoped C# settings also set `csharp_style_expression_bodied_methods = false:suggestion`; Microsoft's `dotnet format style --diagnostics IDE0022 --severity info` converts expression-bodied methods into block bodies. Expression-bodied properties, lambdas and automatic properties retain the repository's existing rules.

@@ -8,11 +8,11 @@ Validation for the guard change: the integration test project builds successfull
 
 `StorefrontClient` now requires `STOREFRONT_TEST_URL` and `STOREFRONT_TEST_ISOLATED=1`. Only HTTP loopback hosts with a non-default explicit port are accepted; port 5090 is always rejected, including IPv4 and IPv6 spellings. Credentials, query strings, and fragments in the base URL are rejected. A trailing slash is normalized to preserve a path base. Each outgoing request is checked against the configured scheme, host, and port before reaching the transport; absolute links cannot escape to a different server. Automatic redirects remain disabled.
 
-Ports 5202 and 5230 are the current independent QA endpoints; they are not hard-coded requirements. The isolation environment flag is an operator declaration, not proof of the server's database connection. Verify the effective server database configuration independently before running HTTP tests. Do not run both theme suites against the same database concurrently: `NotInParallel("storefront-http")` serializes inside a test process, not across two processes.
+Ports 5202 and 5230 were the initial independent QA endpoints. The later package clones use 6240 and 6250; see [the current completion audit](qa/storefront-completion-audit.md) for health and fixture status before running tests. No port is a hard-coded requirement beyond the 5090 rejection. The isolation environment flag is an operator declaration, not proof of the server's database connection. Verify the effective server database configuration independently before running HTTP tests. Do not run both theme suites against the same database concurrently: `NotInParallel("storefront-http")` serializes inside a test process, not across two processes.
 
 ```powershell
 $env:STOREFRONT_TEST_ISOLATED = '1'
-$env:STOREFRONT_TEST_URL = 'http://localhost:5202/'
+$env:STOREFRONT_TEST_URL = 'http://127.0.0.1:6240/'
 $env:STOREFRONT_TEST_PRODUCT_ID = '<actual fixture product ID in this database copy>'
 dotnet run --project src/Tests/Nop.Storefront.Tests -- --treenode-filter '/*/*/NativeProductTests/*' --report-trx
 ```

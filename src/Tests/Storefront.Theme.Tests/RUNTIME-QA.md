@@ -5,10 +5,10 @@ Each theme must run from its own package against its own isolated copied databas
 Example PowerShell setup (use the actual host URLs and a published, supported fixture product with stock for quantity 2):
 
 ```powershell
-$env:STOREFRONT_QA_MADADRANG_URL = 'http://localhost:2020/'
-$env:STOREFRONT_QA_BOUTIQUE_URL = 'http://localhost:2030/'
+$env:STOREFRONT_QA_MADADRANG_URL = 'http://127.0.0.1:6240/'
+$env:STOREFRONT_QA_BOUTIQUE_URL = 'http://127.0.0.1:6250/'
 $env:STOREFRONT_QA_MADADRANG_PRODUCT_ID = '1'
-$env:STOREFRONT_QA_BOUTIQUE_PRODUCT_ID = '1'
+$env:STOREFRONT_QA_BOUTIQUE_PRODUCT_ID = '3583'
 dotnet test src/Tests/Storefront.Theme.Tests/Storefront.Theme.Tests.csproj --filter 'TestCategory=Runtime&TestCategory!=IsolatedCart'
 # Only after verifying both URLs use isolated copied QA databases:
 $env:STOREFRONT_QA_ISOLATED = '1'
@@ -16,6 +16,8 @@ dotnet test src/Tests/Storefront.Theme.Tests/Storefront.Theme.Tests.csproj --fil
 ```
 
 `*_PRODUCT_MARKERS` may contain a JSON string array of expected controls for the chosen product, for example `["add-to-wishlist-button","compare-products-button","product-reviews"]`. These assertions should reflect enabled native settings and the specific fixture. `*_FALLBACKS` may contain JSON `[{"productId":2,"markers":["giftcard_2.RecipientName"]}]`. Supply actual gift/rental/file/customer-price/grouped fixture IDs and native HTML markers. No fallback fixture is created by these tests.
+
+The example above matches the separate local copies recorded on 2026-10-12, not a portable fixture contract. Boutique's clothing seed publishes product 3583 and unpublishes the old stationery products 1–8; do not reuse Boutique fallback IDs 2/3 or an old `*_FALLBACKS` environment value. Madadrang keeps its own product 1 and separately prepared gift/rental fixtures. Ports 2020/2030 fall inside an excluded TCP range on this Windows host. The existing 6240/6250 processes still ran the older Head assembly at the last audit and returned Home 500; run HTTP cases only after a healthy corrected package is observed.
 
 ## Automated HTTP checks in this project
 
@@ -44,4 +46,4 @@ Run each row on both independent QA hosts. Use native administrative fixtures on
 | Checkout | On isolated fixtures, traverse guest/registered billing, shipping/address/pickup, shipping method and payment method selection, checkout attribute validation and order review. A deliberate test order requires an explicitly configured offline/test payment flow; never assume a production payment method is safe |
 | Independent deployment | Launch each published package without the other theme's assets; verify own selected theme and DB; unsupported native pages keep readable styles; no alternate store's brand/assets leak |
 
-Existing `Nop.Storefront.Tests` provides deeper useful coverage in `NativeProductTests`, `NativeCartTests`, `NativeProductConditionTests`, `NativeProductPolicyTests`, `NativeCheckoutAttributesTests`, and native catalog/cart settings tests. Its `StorefrontClient` defaults to port 5090, uses the old `X-Madadrang-Cart` alias, and several administrative fixtures temporarily change products/settings/menus. Do not run that suite unchanged against the active installation. Reuse the assertions on explicit isolated hosts and preserve each test's cleanup semantics; the new theme tests use the neutral header and have no 5090 fallback.
+Existing `Nop.Storefront.Tests` provides deeper useful coverage in `NativeProductTests`, `NativeCartTests`, `NativeProductConditionTests`, `NativeProductPolicyTests`, `NativeCheckoutAttributesTests`, and native catalog/cart settings tests. Its guarded `StorefrontClient` now requires `STOREFRONT_TEST_URL` and `STOREFRONT_TEST_ISOLATED=1`, accepts HTTP loopback only and rejects port 5090 and requests escaping the selected origin. It still uses the supported old `X-Madadrang-Cart` alias; some assertions and uploaded asset paths describe the previous Shared UI. Several administrator fixtures temporarily change products/settings/menus and their existing maintenance gate rejects independent QA database names. See [the native test audit](../../../docs/storefront-native-test-audit.md) before opting into those fixtures. Neither a target flag nor passing source tests proves a database is isolated; inspect effective host configuration and preserve cleanup semantics. The new theme tests use the neutral header and have no 5090 fallback.

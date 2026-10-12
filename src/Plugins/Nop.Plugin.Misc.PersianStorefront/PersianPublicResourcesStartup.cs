@@ -12,6 +12,18 @@ namespace Nop.Plugin.Misc.PersianStorefront;
 /// <summary>Fills missing public Persian labels without changing merchant translations.</summary>
 public sealed class PersianPublicResourcesStartup : INopStartup
 {
+    internal const string ResourceName = "Nop.Plugin.Misc.PersianStorefront.Localization.fa-IR.public.xml";
+
+    // App_Data can be an older persistent container volume. Prefer the pack shipped
+    // with this plugin revision while keeping file-only development hosts usable.
+    internal static StreamReader? OpenResourcePack(string path)
+    {
+        var embedded = typeof(PersianPublicResourcesStartup).Assembly.GetManifestResourceStream(ResourceName);
+        if (embedded != null)
+            return new StreamReader(embedded);
+        return File.Exists(path) ? File.OpenText(path) : null;
+    }
+
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
     }
@@ -28,7 +40,8 @@ public sealed class PersianPublicResourcesStartup : INopStartup
     {
         var environment = services.GetRequiredService<IWebHostEnvironment>();
         var path = Path.Combine(environment.ContentRootPath, "App_Data", "Localization", "PersianPublic", "fa-IR.public.xml");
-        if (!File.Exists(path))
+        using var reader = OpenResourcePack(path);
+        if (reader == null)
         {
             services.GetRequiredService<ILogger<PersianPublicResourcesStartup>>()
                 .LogWarning("The Persian public resource pack is missing at {Path}; existing translations remain available.", path);
@@ -40,7 +53,6 @@ public sealed class PersianPublicResourcesStartup : INopStartup
         if (persian == null)
             return;
 
-        using var reader = File.OpenText(path);
         await services.GetRequiredService<ILocalizationService>()
             .ImportResourcesFromXmlAsync(persian, reader, updateExistingResources: false);
     }

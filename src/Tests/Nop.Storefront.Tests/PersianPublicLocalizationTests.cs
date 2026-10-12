@@ -6,6 +6,29 @@ namespace Nop.Storefront.Tests;
 // Source-pack contracts only; no website or database required.
 public sealed class PersianPublicLocalizationTests
 {
+    [Test]
+    [Arguments(true)]
+    [Arguments(false)]
+    public async Task ShippedPublicPackWinsOverAnOldOrMissingPersistentFile(bool oldFileExists)
+    {
+        var path = Path.Combine(Path.GetTempPath(), $"storefront-locale-{Guid.NewGuid():N}.xml");
+        try
+        {
+            if (oldFileExists)
+                await File.WriteAllTextAsync(path, "<Language><LocaleResource Name=\"OldMountedPack\"><Value>old</Value></LocaleResource></Language>");
+            using var reader = Nop.Plugin.Misc.PersianStorefront.PersianPublicResourcesStartup.OpenResourcePack(path);
+            await Assert.That(reader).IsNotNull();
+            var resources = XDocument.Load(reader!).Root!.Elements("LocaleResource").ToArray();
+            await Assert.That(resources.Length).IsEqualTo(_translations.Length);
+            await Assert.That(resources.Any(item => item.Attribute("Name")!.Value == "OldMountedPack")).IsFalse();
+        }
+        finally
+        {
+            if (File.Exists(path))
+                File.Delete(path);
+        }
+    }
+
     private static readonly string _directory = Path.Combine(AppContext.BaseDirectory, "Localization");
     private static readonly XElement[] _translations = XDocument.Load(Path.Combine(_directory, "PersianPublic", "fa-IR.public.xml"))
         .Root!.Elements("LocaleResource").ToArray();

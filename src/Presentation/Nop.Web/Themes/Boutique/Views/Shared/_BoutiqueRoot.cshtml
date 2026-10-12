@@ -9,7 +9,7 @@
 @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.BodyStartHtmlTagAfter })
 @await Html.PartialAsync("_Notifications")
 @await Html.PartialAsync("_JavaScriptDisabledWarning")
-<div class="storefront boutique-shell" dir="rtl">
+<div class="storefront boutique-shell" dir="@Html.GetUIDirection(!await Html.ShouldUseRtlThemeAsync())">
     <a class="skip" href="#main">@T("Header.SkipNavigation.Text")</a>
     @await Component.InvokeAsync(typeof(AdminHeaderLinksViewComponent))
     @await Component.InvokeAsync("BoutiqueHeader")

@@ -21,5 +21,6 @@
     <Content Include="../../Presentation/Nop.Web/App_Data/Localization/defaultResources.nopres.xml" Link="Localization/defaultResources.nopres.xml" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="../../Presentation/Nop.Web/App_Data/Localization/PersianAdmin/*.xml" Link="Localization/PersianAdmin/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="../../Presentation/Nop.Web/App_Data/Localization/PersianPublic/*.xml" Link="Localization/PersianPublic/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <EmbeddedResource Include="../../Presentation/Nop.Web/App_Data/Localization/PersianPublic/fa-IR.public.xml" LogicalName="Nop.Plugin.Misc.PersianStorefront.Localization.fa-IR.public.xml" />
   </ItemGroup>
 </Project>
