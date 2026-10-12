@@ -2,7 +2,7 @@
 @{
     Layout = "";
     // The native base keeps every third-party/plugin form and advanced control usable.
-    NopHtml.AppendCssFileParts("~/Themes/DefaultClean/Content/css/styles.rtl.css");
+    <link rel="stylesheet" href="@Url.Content("~/css/storefront-native-base.rtl.css")" asp-append-version="true" />
     NopHtml.AppendCssFileParts("~/lib_npm/jquery-ui-dist/jquery-ui.min.css");
     if (catalogSettings.DisplayAllPicturesOnCatalogPages)
     {

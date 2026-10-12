@@ -5,7 +5,7 @@
 <base href="@Url.Content("~/")" />
 @{
     var rtl = await Html.ShouldUseRtlThemeAsync();
-    NopHtml.AppendCssFileParts($"~/Themes/DefaultClean/Content/css/styles{(rtl ? ".rtl" : "")}.css");
+    <link rel="stylesheet" href="@Url.Content($"~/css/storefront-native-base{(rtl ? ".rtl" : "")}.css")" asp-append-version="true" />
     NopHtml.AppendCssFileParts("~/lib_npm/jquery-ui-dist/jquery-ui.min.css");
     if (catalogSettings.DisplayAllPicturesOnCatalogPages)
     {

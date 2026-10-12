@@ -1,4 +1,4 @@
-@layer properties, theme, base, components, bb-utilities, utilities, bb;
+@layer properties, theme, base, native, components, bb-utilities, utilities, bb;
 @import "tailwindcss" source(none);
 @source "../*.razor";
 @source "../Components/**/*.razor";

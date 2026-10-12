@@ -1,4 +1,4 @@
-@layer properties, theme, base, components, bb-utilities, utilities, bb;
+@layer properties, theme, base, native, components, bb-utilities, utilities, bb;
 @import "tailwindcss" source(none);
 @source "../*.razor";
 @source "../Components/*.razor";
@@ -906,6 +906,8 @@
 .sf-native-header-links .header-links ul { display: flex; flex-wrap: wrap; gap: 14px; align-items: center }
 .sf-native-header-links .header-links li { margin: 0; padding: 0 }
 .sf-native-header-links .header-links a { color: var(--muted-foreground); font-size: .75rem }
+.sf-native-header-links #topcartlink { margin: 0; padding: 0; background: transparent; min-width: 0 }
+.sf-native-header-links .header-links a { text-transform: none }
 .sf-native-header-links #flyout-cart { inset-inline-start: 0; inset-inline-end: auto; font-size: .875rem }
 .sf-native-menu { padding-block: 12px }
 .sf-native-menu .menu-container { margin: 0; max-width: none }
