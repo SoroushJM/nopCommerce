@@ -96,6 +96,10 @@ C:/Users/s_jamili/Desktop/nopcomerce/runtime-verification/boutique-clothing-seed
 C:/Users/s_jamili/Desktop/nopcomerce/runtime-verification/boutique-clothing-media-http.json
 C:/Users/s_jamili/Desktop/nopcomerce/runtime-verification/boutique-clothing-native-picture-http.json
 C:/Users/s_jamili/Desktop/nopcomerce/runtime-verification/boutique-clothing-combinations-http.json
+Final read-only recheck on 2026-10-12: exact QA database and all native mapping/count assertions passed again.
+C:/Users/s_jamili/Desktop/nopcomerce/runtime-verification/boutique-clothing-seed-final-verification.txt
+C:/Users/s_jamili/Desktop/nopcomerce/runtime-verification/boutique-clothing-combinations-final-http.json
+The final API response remained HTTP200 with six combinations, five available and one unavailable.
 
 Remaining runtime limitation:
 This host still runs the older package whose Head view raises HTTP500. Product details rendering
