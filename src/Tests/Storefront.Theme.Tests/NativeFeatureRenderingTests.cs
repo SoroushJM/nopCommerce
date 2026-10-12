@@ -121,7 +121,7 @@ public sealed class NativeFeatureRenderingTests
             Assert.That(WebUtility.HtmlDecode(html), Does.Contain("<em>Natural</em> (+15%)"));
             Assert.That(html, Does.Contain("&lt;em&gt;Natural&lt;/em&gt;"));
             Assert.That(html, Does.Contain("<b>Prepared native sizing guide</b>"));
-            Assert.That(html, Does.Contain("class=\"required\">*</span>"));
+            Assert.That(html, Does.Match("""<span\b[^>]*class="required"[^>]*>\*</span>"""));
             Assert.That(html, Does.Contain("Fallback prompt"));
             Assert.That(html, Does.Contain("Plain option"));
             Assert.That(html, Does.Not.Contain("<strong>Choose fit</strong>"));
