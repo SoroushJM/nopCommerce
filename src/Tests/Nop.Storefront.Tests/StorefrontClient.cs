@@ -13,10 +13,9 @@ internal sealed class StorefrontClient : IAsyncDisposable
 
     public StorefrontClient()
     {
-        var url = new Uri(Environment.GetEnvironmentVariable("STOREFRONT_TEST_URL") ?? "http://localhost:5090/");
-        if (!url.IsLoopback || url.Scheme != "http" || url.UserInfo.Length > 0)
-            throw new InvalidOperationException("Storefront integration tests require an HTTP loopback development host.");
-        _http = new HttpClient(new HttpClientHandler { CookieContainer = new CookieContainer(), AllowAutoRedirect = false })
+        var url = StorefrontTestTarget.Resolve(Environment.GetEnvironmentVariable("STOREFRONT_TEST_URL"),
+            Environment.GetEnvironmentVariable("STOREFRONT_TEST_ISOLATED"));
+        _http = new HttpClient(new StorefrontTargetHandler(url))
         {
             BaseAddress = url,
             Timeout = TimeSpan.FromSeconds(30)
