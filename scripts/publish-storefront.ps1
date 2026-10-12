@@ -68,8 +68,13 @@ try {
     $activeAssets = Join-Path $publishRoot "Plugins/Misc.PersianStorefront/Content/Storefront.UI.$Theme/$themeCss"
     $wasmAssets = Join-Path $publishRoot 'Plugins/Misc.PersianStorefront/Content/Client/wwwroot/_framework'
     if (!(Test-Path -LiteralPath $activeAssets) -or !(Test-Path -LiteralPath $wasmAssets)) { throw 'The selected theme CSS or browser app was not packaged.' }
+    if (!(Get-ChildItem -LiteralPath $wasmAssets -Filter "Storefront.UI.$Theme*.wasm" -File) -or
+        !(Get-ChildItem -LiteralPath $wasmAssets -Filter 'Storefront.UI.Shared*.wasm' -File) -or
+        !(Test-Path -LiteralPath (Join-Path $publishRoot "Plugins/Misc.PersianStorefront/Storefront.UI.$Theme.dll")) -or
+        !(Test-Path -LiteralPath (Join-Path $publishRoot "Themes/$Theme")) -or
+        !(Test-Path -LiteralPath (Join-Path $publishRoot 'Themes/DefaultClean'))) { throw 'The selected brand/shared assemblies or native theme folders are missing.' }
     $inactiveTheme = if ($Theme -eq 'Madadrang') { 'Boutique' } else { 'Madadrang' }
-    $inactiveFiles = Get-ChildItem -LiteralPath $publishRoot -Recurse -File | Where-Object { $_.Name -like "Storefront.UI.$inactiveTheme*" -or $_.FullName -match "[\\/](Themes|Content)[\\/]($inactiveTheme|Storefront\.UI\.$inactiveTheme)[\\/]" }
+    $inactiveFiles = Get-ChildItem -LiteralPath $publishRoot -Recurse -File | Where-Object { $_.Name -like "Storefront.UI.$inactiveTheme*" -or $_.FullName -match "[\\/](Themes[\\/]$inactiveTheme|Storefront\.UI\.$inactiveTheme)[\\/]" }
     if ($inactiveFiles) { throw "The release contains inactive $inactiveTheme artifacts; refusing to label this package as isolated." }
     New-Item -ItemType Directory -Path (Join-Path $publishRoot 'logs'), (Join-Path $publishRoot 'bin'), (Join-Path $publishRoot 'App_Data/DataProtectionKeys') -Force | Out-Null
 }
