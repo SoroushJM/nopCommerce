@@ -76,7 +76,8 @@ try {
     if (!(Test-Path -LiteralPath $activeAssets) -or !(Test-Path -LiteralPath $wasmAssets)) { throw 'The selected theme CSS or browser app was not packaged.' }
     if (!(Get-ChildItem -LiteralPath $wasmAssets -Filter "Storefront.UI.$Theme*.wasm" -File) -or
         !(Get-ChildItem -LiteralPath $wasmAssets -Filter 'Storefront.UI.Shared*.wasm' -File) -or
-        !(Test-Path -LiteralPath (Join-Path $publishRoot "Plugins/Misc.PersianStorefront/Storefront.UI.$Theme.dll")) -or
+        (!(Test-Path -LiteralPath (Join-Path $publishRoot "Plugins/Misc.PersianStorefront/Storefront.UI.$Theme.dll")) -and
+         !(Test-Path -LiteralPath (Join-Path $publishRoot "Storefront.UI.$Theme.dll"))) -or
         !(Test-Path -LiteralPath (Join-Path $publishRoot "Themes/$Theme")) -or
         !(Test-Path -LiteralPath (Join-Path $publishRoot 'Themes/DefaultClean'))) { throw 'The selected brand/shared assemblies or native theme folders are missing.' }
     $inactiveTheme = if ($Theme -eq 'Madadrang') { 'Boutique' } else { 'Madadrang' }
