@@ -18,4 +18,4 @@ Visual inspection was performed in the Terra review session against the public d
 
 ## Result
 
-No additional static-layout regression was found in these desktop/mobile Home and native-menu paths. Native forms, navigation, and product controls remain present. This bounded report does not close DSN-008: the shared Blueprint Sheet/Dialog exit lifecycle repair and its interactive acceptance remain in progress, tracked in `storefront-design-open.md`.
+No additional static-layout regression was found in these desktop/mobile Home and native-menu paths. Native forms, navigation, and product controls remain present. The subsequent shared Blueprint lifecycle repair passed isolated and deployed acceptance, documented in `storefront-modal-live-review-20261013.md` and resolved DSN-008. Final cookie-prefix releases also passed the small menu/Sheet regression recorded in `storefront-cookie-and-release-review-20261013.md`.
