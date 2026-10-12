@@ -6,7 +6,7 @@
     NopHtml.AppendPageCssClassParts("html-search-page");
 }
 <main id="main-content" class="wrap py-8 sf-catalog">
-    <p class="text-xs text-muted-foreground mb-5"><a href="@Url.Content("~/")">خانه</a> / جست‌وجو</p>
-    <h1 class="page-heading">جست‌وجوی نوشت‌افزار</h1>
+    <p class="text-xs text-muted-foreground mb-5"><a href="@Url.RouteUrl(NopRouteNames.General.HOMEPAGE)">@T("Homepage")</a> / @T("Search")</p>
+    <h1 class="page-heading">@T("Search")</h1>
     @await Html.PartialAsync("_MadadrangCatalogBody", Model)
 </main>

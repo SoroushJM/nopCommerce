@@ -3,6 +3,8 @@
     var allProducts = ViewData["AllProducts"] as bool? == true;
     var products = Model.CatalogProductsModel;
 }
+@if (allProducts)
+{
 <form method="get" action="@(Context.Request.PathBase + Context.Request.Path)" class="sf-input-group mt-6" role="search">
     <input data-slot="input-group-control" type="search" name="q" value="@Model.q" aria-label="جست‌وجو در فروشگاه" placeholder="نام محصول یا برند..." />
     @foreach (var key in new[] { "advs", "cid", "isc", "mid", "vid", "sid", "sit", "price", "ms", "specs", "orderby", "pagesize", "viewmode" })
@@ -13,12 +15,82 @@
         }
     }
     <span data-slot="input-group-addon"><button type="submit" class="icon-btn text-primary">بگرد</button></span>
-    @if (!allProducts)
-    {
-        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductSearchPageBasic, additionalData = Model })
-        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductSearchPageAdvanced, additionalData = Model })
-    }
 </form>
+}
+else
+{
+<form method="get" action="@Url.RouteUrl(NopRouteNames.General.SEARCH)" class="mt-6" role="search">
+    <label asp-for="q" class="text-sm font-bold">@T("Search.SearchTerm")</label>
+    <div class="sf-input-group mt-3">
+        <input asp-for="q" data-slot="input-group-control" type="search" placeholder="@T("Search.SearchTerm")" />
+        <span data-slot="input-group-addon"><button type="submit" class="icon-btn text-primary">@T("Search.Button")</button></span>
+    </div>
+    @foreach (var key in new[] { "price", "orderby", "pagesize", "viewmode" })
+    {
+        if (Context.Request.Query.TryGetValue(key, out var value))
+        {
+            <input type="hidden" name="@key" value="@value" />
+        }
+    }
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductSearchPageBasic, additionalData = Model })
+    <div class="flex items-center gap-2 mt-4">
+        <input asp-for="advs" id="sf-search-advanced" aria-controls="sf-search-advanced-fields" aria-expanded="@Model.advs.ToString().ToLowerInvariant()" />
+        <label asp-for="advs" for="sf-search-advanced">@T("Search.AdvancedSearch")</label>
+    </div>
+    <fieldset id="sf-search-advanced-fields" class="mt-4" hidden="@(!Model.advs)">
+        <legend class="sr-only">@T("Search.AdvancedSearch")</legend>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            @if (Model.AvailableCategories.Count > 0)
+            {
+                <div>
+                    <label asp-for="cid" class="block text-sm mb-2">@T("Search.Category")</label>
+                    <select asp-for="cid" asp-items="Model.AvailableCategories" class="sf-select h-11 w-full"></select>
+                </div>
+                <div class="flex items-center gap-2">
+                    <input asp-for="isc" />
+                    <label asp-for="isc">@T("Search.IncludeSubCategories")</label>
+                </div>
+            }
+            @if (Model.AvailableManufacturers.Count > 0)
+            {
+                <div>
+                    <label asp-for="mid" class="block text-sm mb-2">@T("Search.Manufacturer")</label>
+                    <select asp-for="mid" asp-items="Model.AvailableManufacturers" class="sf-select h-11 w-full"></select>
+                </div>
+            }
+            @if (Model.asv && Model.AvailableVendors.Count > 0)
+            {
+                <div>
+                    <label asp-for="vid" class="block text-sm mb-2">@T("Search.Vendor")</label>
+                    <select asp-for="vid" asp-items="Model.AvailableVendors" class="sf-select h-11 w-full"></select>
+                </div>
+            }
+            <div class="flex items-center gap-2">
+                <input asp-for="sid" />
+                <label asp-for="sid">@T("Search.SearchInDescriptions")</label>
+            </div>
+            <div class="flex items-center gap-2">
+                <input asp-for="sit" />
+                <label asp-for="sit">@T("Search.SearchInTags")</label>
+            </div>
+        </div>
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductSearchPageAdvanced, additionalData = Model })
+        <button type="submit" class="rounded-lg bg-primary text-primary-foreground px-4 py-2 mt-4">@T("Search.Button")</button>
+    </fieldset>
+</form>
+<script asp-location="Footer">
+    $(function () {
+        var advanced = $('#sf-search-advanced');
+        function updateAdvancedSearch() {
+            var expanded = advanced.is(':checked');
+            $('#sf-search-advanced-fields').prop('hidden', !expanded);
+            advanced.attr('aria-expanded', String(expanded));
+        }
+        advanced.on('change', updateAdvancedSearch);
+        updateAdvancedSearch();
+    });
+</script>
+}
 <div class="py-6 border-b mb-7">
     @await Component.InvokeAsync("MadadrangCatalogControls", new { model = products, placement = "toolbar", search = Model, allProducts })
 </div>
