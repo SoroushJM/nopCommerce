@@ -1,6 +1,7 @@
 ﻿using BlazorBlueprint.Components;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +21,8 @@ public sealed class StorefrontStartup : INopStartup
 
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
+        services.Configure<RazorViewEngineOptions>(options =>
+            options.ViewLocationExpanders.Add(new StorefrontCatalogViewLocationExpander()));
         services.Configure<Microsoft.AspNetCore.Mvc.MvcOptions>(options =>
         {
             options.Filters.Add<NativeProductFallbackFilter>();
