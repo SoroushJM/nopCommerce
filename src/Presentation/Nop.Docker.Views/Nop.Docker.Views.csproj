@@ -32,9 +32,17 @@
     <ItemGroup>
       <PrecompiledViewPluginDependency Include="@(ReferenceCopyLocalPaths)"
           Condition="$([System.String]::Copy('%(ReferenceCopyLocalPaths.Filename)').StartsWith('Nop.Plugin.')) and '%(ReferenceCopyLocalPaths.Extension)' == '.dll'" />
+      <PrecompiledStorefrontPlugin Include="@(PrecompiledViewPluginDependency)"
+          Condition="'%(PrecompiledViewPluginDependency.Filename)' == 'Nop.Plugin.Misc.PersianStorefront'" />
+      <!-- The compiled views expose the storefront startup before a fresh installation has
+           registered plugin folders. Its startup dependencies must also resolve beside the host. -->
+      <PrecompiledViewRuntimeDependency Include="@(PrecompiledStorefrontPlugin->'%(RootDir)%(Directory)Microsoft.OpenApi.dll');@(PrecompiledStorefrontPlugin->'%(RootDir)%(Directory)Scalar.AspNetCore.dll');@(PrecompiledStorefrontPlugin->'%(RootDir)%(Directory)Swashbuckle.AspNetCore.Swagger.dll');@(PrecompiledStorefrontPlugin->'%(RootDir)%(Directory)Swashbuckle.AspNetCore.SwaggerGen.dll');@(PrecompiledStorefrontPlugin->'%(RootDir)%(Directory)Swashbuckle.AspNetCore.SwaggerUI.dll')" />
     </ItemGroup>
     <Error Condition="'@(PrecompiledViewPluginDependency)' == ''" Text="No plugin model dependencies were resolved for the precompiled native views." />
     <Copy SourceFiles="@(PrecompiledViewPluginDependency)"
           DestinationFolder="$(TargetDir)PrecompiledViewPluginDependencies/" SkipUnchangedFiles="true" />
+    <Error Condition="'@(PrecompiledViewRuntimeDependency)' == ''" Text="No storefront startup dependencies were resolved for the precompiled native views." />
+    <Copy SourceFiles="@(PrecompiledViewRuntimeDependency)"
+          DestinationFolder="$(TargetDir)PrecompiledViewRuntimeDependencies/" SkipUnchangedFiles="true" />
   </Target>
 </Project>

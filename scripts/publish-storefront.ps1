@@ -66,6 +66,9 @@ try {
     $viewPluginDependencies = @(Get-ChildItem -LiteralPath (Join-Path (Split-Path -Parent $viewsAssembly) 'PrecompiledViewPluginDependencies') -Filter '*.dll' -File)
     if ($viewPluginDependencies.Count -eq 0) { throw 'Missing plugin model dependencies for precompiled native views.' }
     $viewPluginDependencies | Copy-Item -Destination $publishRoot
+    $viewRuntimeDependencies = @(Get-ChildItem -LiteralPath (Join-Path (Split-Path -Parent $viewsAssembly) 'PrecompiledViewRuntimeDependencies') -Filter '*.dll' -File)
+    if ($viewRuntimeDependencies.Count -ne 5) { throw 'Missing storefront startup dependencies for a fresh native installation.' }
+    $viewRuntimeDependencies | Copy-Item -Destination $publishRoot
 
     $themeCss = if ($Theme -eq 'Boutique') { 'boutique.css' } else { 'storefront.css' }
     $activeAssets = Join-Path $publishRoot "Plugins/Misc.PersianStorefront/Content/Storefront.UI.$Theme/$themeCss"
@@ -100,6 +103,7 @@ ADMIN_EMAIL=admin@example.com
 [System.IO.File]::WriteAllText((Join-Path $packageRoot 'deployment.env.example'), $composeTemplate)
 $manifest = [ordered]@{ Theme = $Theme; Environment = $Environment; RuntimeIdentifier = $RuntimeIdentifier; Instance = $instanceName; HttpPort = $HttpPort; HttpsPort = $HttpsPort; PublishedAtUtc = [DateTime]::UtcNow.ToString('o'); AppPath = $publishRoot; SourceSnapshot = $sourceRoot }
 $manifest.PrecompiledViewPluginDependencies = @($viewPluginDependencies.Name)
+$manifest.PrecompiledViewRuntimeDependencies = @($viewRuntimeDependencies.Name)
 $manifest | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $packageRoot 'package.json') -Encoding utf8
 Write-Output "Prepared $Theme/$Environment package: $publishRoot"
 Write-Output "Compose template: $(Join-Path $packageRoot 'deployment.env.example')"

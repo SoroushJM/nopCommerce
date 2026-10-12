@@ -1,0 +1,8 @@
+{
+  "host": "10.11.11.223",
+  "username": "web",
+  "handoffPath": "C:/Users/s_jamili/Desktop/nopcomerce/server-deployment-handoff-2026-10-12.txt",
+  "adminCredentialsPath": "C:/Users/s_jamili/Desktop/nopcomerce/dual-store-deployment-20261012/private-admin.json",
+  "knownHostsPath": "C:/Users/s_jamili/Desktop/nopcomerce/dual-store-deployment-20261012/known_hosts",
+  "remoteRoot": "/home/web/nop-dual-store-20261012"
+}
