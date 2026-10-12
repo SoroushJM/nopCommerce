@@ -54,7 +54,7 @@ Write-Output "Building $Theme in isolated source snapshot."
 $previousLocation = Get-Location
 try {
     Set-Location -LiteralPath $sourceRoot
-    $buildArguments = @('-c', 'Release', "-p:StorefrontTheme=$Theme", "-p:DockerRuntimeIdentifier=$RuntimeIdentifier", '-p:DebugType=None', '-p:DebugSymbols=false')
+    $buildArguments = @('-c', 'Release', "-p:StorefrontTheme=$Theme", "-p:DockerRuntimeIdentifier=$RuntimeIdentifier", '-p:ShouldUnsetParentConfigurationAndPlatform=false', '-p:DebugType=None', '-p:DebugSymbols=false')
     $helperOutput = Join-Path $packageRoot 'build-helper'
     Invoke-Dotnet -Arguments (@('build', 'src/Build/src/ClearPluginAssemblies/ClearPluginAssemblies.csproj', '-c', 'Release', '-o', $helperOutput))
     Get-ChildItem -LiteralPath $helperOutput -Filter 'ClearPluginAssemblies.*' -File | Copy-Item -Destination (Join-Path $sourceRoot 'src/Build')

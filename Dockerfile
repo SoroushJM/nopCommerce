@@ -38,12 +38,12 @@ RUN --mount=type=cache,id=nop-nuget,target=/root/.nuget/packages,sharing=locked 
     dotnet build src/Build/src/ClearPluginAssemblies/ClearPluginAssemblies.csproj \
       -c Release --no-restore -o /tmp/clear-helper && \
     cp /tmp/clear-helper/ClearPluginAssemblies.* /source/src/Build/ && \
-    dotnet build src/Docker.slnx -c Release --no-restore -p:StorefrontTheme="$STOREFRONT_THEME" -p:DockerRuntimeIdentifier="$RUNTIME_IDENTIFIER" -p:DebugType=None -p:DebugSymbols=false
+    dotnet build src/Docker.slnx -c Release --no-restore -p:StorefrontTheme="$STOREFRONT_THEME" -p:DockerRuntimeIdentifier="$RUNTIME_IDENTIFIER" -p:ShouldUnsetParentConfigurationAndPlatform=false -p:DebugType=None -p:DebugSymbols=false
 RUN --mount=type=cache,id=nop-nuget,target=/root/.nuget/packages,sharing=locked \
     dotnet /source/src/Build/ClearPluginAssemblies.dll \
       "OutputPath=/source/src/Presentation/Nop.Web/bin/Release|PluginPath=/source/src/Presentation/Nop.Web/Plugins/Misc.PersianStorefront|SaveLocalesFolders=true" && \
     dotnet publish src/Presentation/Nop.Web/Nop.Web.csproj -c Release --no-build --no-restore -r "$RUNTIME_IDENTIFIER" --self-contained false \
-      -p:StorefrontTheme="$STOREFRONT_THEME" -p:DockerRuntimeIdentifier="$RUNTIME_IDENTIFIER" -p:DebugType=None -p:DebugSymbols=false \
+      -p:StorefrontTheme="$STOREFRONT_THEME" -p:DockerRuntimeIdentifier="$RUNTIME_IDENTIFIER" -p:ShouldUnsetParentConfigurationAndPlatform=false -p:DebugType=None -p:DebugSymbols=false \
       -p:PreserveCompilationContext=false -p:PreserveCompilationReferences=false -o /app/published && \
     cp /source/src/Presentation/Nop.Docker.Views/bin/Release/net10.0/"$RUNTIME_IDENTIFIER"/Nop.Docker.Views.dll /app/published/ && \
     find /app/published -type f -name '*.pdb' -delete && \
