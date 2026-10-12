@@ -120,8 +120,16 @@ public sealed class DevelopmentPresentationRepair(IProductService products, ICat
 
     private async Task CreateMenuAsync(string marker, string name, MenuType type, List<MenuItem> items)
     {
-        if ((await menus.GetAllMenusAsync(showHidden: true)).Any(menu => menu.CssClass == marker))
+        var existing = (await menus.GetAllMenusAsync(showHidden: true)).FirstOrDefault(menu => menu.CssClass == marker);
+        if (existing != null)
+        {
+            if (marker == "madadrang-footer-shop" && existing.Name is "دنیای مدادرنگ" or "دنیای مداد رنگ")
+            {
+                existing.Name = name;
+                await menus.UpdateMenuAsync(existing);
+            }
             return;
+        }
         var menu = new Menu { Name = name, MenuType = type, CssClass = marker, Published = true, DisplayOrder = -10 };
         await menus.InsertMenuAsync(menu);
         for (var index = 0; index < items.Count; index++)
