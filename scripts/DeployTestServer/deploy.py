@@ -68,7 +68,7 @@ for target in [pathlib.Path(release)/'app/wwwroot/_content'/('Storefront.UI.'+br
 subprocess.run(['docker','build','-t',tag,'.'],cwd=release,check=True)
 override=root/'images.override.yml'
 images={{s:before[s]['Image'] for s in ['madadrang','boutique']}}; images[theme]=tag
-override.write_text('services:\\n'+''.join('  '+s+':\\n    image: '+images[s]+'\\n' for s in images))
+override.write_text('services:\\n'+''.join('  '+s+':\\n    image: '+images[s]+'\\n    environment:\\n      NOP_COOKIE_PREFIX: .Nop.'+s+'\\n' for s in images))
 subprocess.run(['docker','compose','-f','compose.yml','-f',str(override),'up','-d','--no-build','--no-deps','--force-recreate',theme],check=True)
 native_icons=pathlib.Path(release)/'app/wwwroot/icons/icons_0'
 if native_icons.is_dir():
