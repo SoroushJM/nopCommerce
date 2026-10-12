@@ -26,6 +26,7 @@ public sealed class PersianPublicLocalizationTests
     [Test]
     [Arguments(@"\{\d+[^}]*\}", true)]
     [Arguments(@"<[^>]+>", false)]
+    [Arguments(@"%[A-Za-z][A-Za-z0-9_.]*%", true)]
     public async Task TranslationsPreserveNativeFormattingTokensAndLinkMarkup(string pattern, bool sort)
     {
         foreach (var item in _translations)
@@ -50,5 +51,21 @@ public sealed class PersianPublicLocalizationTests
             "Catalog.Products.NoResult", "Checkout.Button", "Account.CustomerInfo", "Products.Compare.Title"];
         var names = _translations.Select(item => item.Attribute("Name")!.Value).ToHashSet(StringComparer.OrdinalIgnoreCase);
         await Assert.That(required.Where(name => !names.Contains(name))).IsEmpty();
+    }
+
+    [Test]
+    public async Task EveryNativePublicResourceHasAPersianTranslationInTheSharedPacks()
+    {
+        var admin = XDocument.Load(Path.Combine(_directory, "PersianAdmin", "fa-IR.admin.xml"))
+            .Root!.Elements("LocaleResource");
+        var translated = _translations.Concat(admin)
+            .Where(item => !string.IsNullOrWhiteSpace(item.Element("Value")?.Value))
+            .Select(item => item.Attribute("Name")!.Value)
+            .ToHashSet(StringComparer.OrdinalIgnoreCase);
+        // The exact native source is authoritative, including root labels, route literals,
+        // validation, accessibility text and technical keys outside the Admin. namespace.
+        var nativePublic = _source.Keys.Where(name => !name.StartsWith("Admin.", StringComparison.OrdinalIgnoreCase)).ToArray();
+        await Assert.That(nativePublic.Where(name => !translated.Contains(name))).IsEmpty();
+        await Assert.That(nativePublic.Length).IsEqualTo(1718);
     }
 }

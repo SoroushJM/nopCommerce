@@ -1588,4 +1588,1774 @@
   <LocaleResource Name="Address.Fields.Address2.Required">
     <Value>ادامهٔ نشانی الزامی است.</Value>
   </LocaleResource>
+  <LocaleResource Name="Account.AccountActivation">
+    <Value>فعال‌سازی حساب</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.AccountActivation.Activated">
+    <Value>حساب شما فعال شد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.AccountActivation.AlreadyActivated">
+    <Value>حساب شما قبلاً فعال شده است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.AssociatedExternalAuth">
+    <Value>ورود با سرویس‌های دیگر</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.AssociatedExternalAuth.AccountAlreadyAssigned">
+    <Value>حساب قبلاً متصل شده است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.AssociatedExternalAuth.AddMoreRecords">
+    <Value>می‌توانید حساب خود را به سرویس‌های ورود زیر متصل کنید؛ کافی است یک بار با آن‌ها وارد شوید:</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.AssociatedExternalAuth.AuthMethodName">
+    <Value>روش احراز هویت</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.AssociatedExternalAuth.Email">
+    <Value>ایمیل</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.AssociatedExternalAuth.EmailAlreadyExists">
+    <Value>کاربری با این ایمیل قبلاً ثبت‌نام کرده است. اگر این حساب متعلق به شماست و می‌خواهید آن را به حساب «{0}» متصل کنید، ابتدا وارد شوید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.AssociatedExternalAuth.ExternalIdentifier">
+    <Value>شناسهٔ سرویس خارجی</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.AssociatedExternalAuth.Or">
+    <Value>ـ یا ـ</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.AssociatedExternalAuth.Remove">
+    <Value>حذف</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Avatar">
+    <Value>تصویر حساب</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Avatar.MaximumUploadedFileSize">
+    <Value>حداکثر اندازهٔ تصویر حساب {0} بایت است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Avatar.RemoveAvatar">
+    <Value>حذف تصویر حساب</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Avatar.UploadRules">
+    <Value>تصویر حساب باید با قالب GIF یا JPEG و حداکثر اندازهٔ ۲۰ کیلوبایت باشد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.ChangePassword.Errors.EmailIsNotProvided">
+    <Value>ایمیل وارد نشده است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.ChangePassword.Errors.EmailNotFound">
+    <Value>ایمیل واردشده پیدا نشد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.ChangePassword.Errors.OldPasswordDoesntMatch">
+    <Value>گذرواژهٔ فعلی صحیح نیست</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.ChangePassword.Errors.PasswordIsNotProvided">
+    <Value>گذرواژه وارد نشده است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.ChangePassword.Errors.PasswordMatchesWithPrevious">
+    <Value>این گذرواژه با یکی از گذرواژه‌های اخیر شما یکسان است. گذرواژهٔ جدیدی انتخاب کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.ChangePassword.Fields.ConfirmNewPassword.Required">
+    <Value>گذرواژه الزامی است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.ChangePassword.Fields.NewPassword.EnteredPasswordsDoNotMatch">
+    <Value>گذرواژهٔ جدید و تکرار آن یکسان نیستند.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.ChangePassword.Fields.OldPassword.Required">
+    <Value>گذرواژهٔ فعلی الزامی است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.ChangePassword.MustBeChanged">
+    <Value>برای حفظ امنیت، باید گذرواژهٔ خود را تغییر دهید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.ChangePassword.PasswordIsExpired">
+    <Value>گذرواژهٔ شما منقضی شده است؛ گذرواژهٔ جدیدی انتخاب کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.CheckUsernameAvailability.Available">
+    <Value>نام کاربری در دسترس است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.CheckUsernameAvailability.Button">
+    <Value>بررسی دسترسی</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.CheckUsernameAvailability.CurrentUsername">
+    <Value>نام کاربری فعلی</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.CheckUsernameAvailability.EnterUsername">
+    <Value>نام کاربری را وارد کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.CheckUsernameAvailability.NotAvailable">
+    <Value>نام کاربری در دسترس نیست</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.CustomerInfo.VerifyPhoneNumber">
+    <Value>تأیید شمارهٔ تلفن</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.CustomerReturnRequests.Withdrawal.Title">
+    <Value>انصراف شمارهٔ {0} ـ {1}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.CustomerReturnRequests.Withdrawals">
+    <Value>درخواست‌های انصراف</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.EmailRevalidation">
+    <Value>تأیید ایمیل</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.EmailRevalidation.AlreadyChanged">
+    <Value>ایمیل شما قبلاً تأیید شده است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.EmailRevalidation.Changed">
+    <Value>ایمیل شما تأیید شد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.EmailUsernameErrors.EmailAlreadyExists">
+    <Value>این ایمیل قبلاً استفاده شده است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.EmailUsernameErrors.EmailTooLong">
+    <Value>نشانی ایمیل بیش از حد طولانی است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.EmailUsernameErrors.NewEmailIsNotValid">
+    <Value>ایمیل جدید معتبر نیست</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.EmailUsernameErrors.UsernameAlreadyExists">
+    <Value>این نام کاربری قبلاً استفاده شده است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.EmailUsernameErrors.UsernameTooLong">
+    <Value>نام کاربری بیش از حد طولانی است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Fields.DateOfBirth.MinimumAge">
+    <Value>حداقل سن شما باید {0} باشد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Fields.Email.EnteredEmailsDoNotMatch">
+    <Value>ایمیل و تکرار آن یکسان نیستند.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Fields.EmailToRevalidate">
+    <Value>ایمیل جدید</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Fields.EmailToRevalidate.Note">
+    <Value>(هنوز تأیید نشده است)</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Fields.Password.EnteredPasswordsDoNotMatch">
+    <Value>گذرواژه و تکرار آن یکسان نیستند.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Fields.Phone.Status.NotVerified">
+    <Value>شمارهٔ تلفن تأیید نشده است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Fields.Signature">
+    <Value>امضا</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Fields.Timezone">
+    <Value>منطقهٔ زمانی</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Fields.VatNumber">
+    <Value>شمارهٔ مالیات بر ارزش افزوده</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Fields.VatNumber.Note">
+    <Value>شمارهٔ مالیات بر ارزش افزوده را همراه کد کشور وارد کنید؛ مانند GB 111 111 11</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Fields.VatNumber.Required">
+    <Value>شمارهٔ مالیات بر ارزش افزوده الزامی است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Gdpr">
+    <Value>ابزارهای حفاظت از داده‌های شخصی</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Gdpr.Delete">
+    <Value>حق حذف اطلاعات شخصی</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Gdpr.Delete.Button">
+    <Value>حذف حساب</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Gdpr.Delete.Hint">
+    <Value>با دکمهٔ زیر می‌توانید اطلاعات شخصی و سایر داده‌های خود را از فروشگاه حذف کنید. این کار حساب شما را حذف می‌کند و پس از آن دیگر نمی‌توانید به حساب دسترسی داشته باشید یا از آن استفاده کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Gdpr.Export">
+    <Value>دریافت اطلاعات شخصی</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Gdpr.Export.Button">
+    <Value>دریافت</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Gdpr.Export.Hint">
+    <Value>با دکمهٔ زیر می‌توانید همهٔ اطلاعاتی را دریافت کنید که برای ارائهٔ تجربهٔ بهتر در فروشگاه ذخیره و استفاده می‌کنیم.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.ImpersonatedAs">
+    <Value>ورود به نمایندگی از {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.ImpersonatedAs.Finish">
+    <Value>پایان نشست نمایندگی</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.ImpersonatedAs.Finish.Hint">
+    <Value>برای پایان نشست نمایندگی اینجا کلیک کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.IsAlreadyExistsVerifiedPhoneNumber">
+    <Value>کاربری با این شمارهٔ تلفن تأییدشده وجود دارد.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.MultiFactorAuthentication.Description">
+    <Value>&lt;p&gt;برای فعال‌سازی احراز هویت چندعاملی حساب خود، این مراحل را انجام دهید: &lt;/p&gt;&lt;/br&gt;&lt;ol&gt;&lt;li&gt;۱. گزینهٔ «فعال است» را روشن کنید.&lt;/li&gt;&lt;li&gt;۲. یکی از ارائه‌دهندگان احراز هویت چندعاملی را انتخاب کنید.&lt;/li&gt;&lt;li&gt;۳. تنظیمات را ذخیره کنید.&lt;/li&gt;&lt;li&gt;۴. ارائه‌دهندهٔ انتخاب‌شده را طبق دستورالعمل صفحهٔ تنظیمات اختصاصی آن پیکربندی کنید.&lt;/li&gt;&lt;/ol&gt;&lt;/br&gt;&lt;p&gt; هشدار: پس از ذخیرهٔ ارائه‌دهنده، حتماً آن را پیکربندی کنید؛ در غیر این صورت ورود بعدی به حساب شما ممکن نخواهد بود.&lt;/p&gt;</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.MultiFactorAuthentication.Fields.IsEnabled">
+    <Value>فعال است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.MultiFactorAuthentication.Providers">
+    <Value>ارائه‌دهندگان احراز هویت</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.MultiFactorAuthentication.Providers.NoActive">
+    <Value>ارائه‌دهندهٔ فعالی وجود ندارد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.MultiFactorAuthentication.Settings">
+    <Value>تنظیمات</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.MultiFactorAuthentication.Warning.ForceActivation">
+    <Value>الزام احراز هویت چندعاملی برای همهٔ کاربران فعال است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.OtpPhoneVerification.OtpUpdatePhoneSmsText">
+    <Value>برای تأیید تغییر شمارهٔ تلفن، یک کد برای شما پیامک می‌کنیم.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.PasswordRecovery.ConfirmNewPassword.Required">
+    <Value>گذرواژه الزامی است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.PasswordRecovery.NewPassword.EnteredPasswordsDoNotMatch">
+    <Value>گذرواژهٔ جدید و تکرار آن یکسان نیستند.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.PasswordRecovery.PasswordAlreadyHasBeenChanged">
+    <Value>گذرواژهٔ شما قبلاً تغییر کرده است. برای تغییر دوباره، باید مجدداً درخواست بازیابی گذرواژه بدهید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.PasswordRecovery.WrongToken">
+    <Value>توکن بازیابی گذرواژه معتبر نیست</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Register.Errors.EmailAlreadyExists">
+    <Value>این ایمیل قبلاً ثبت شده است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Register.Errors.EmailIsNotProvided">
+    <Value>ایمیل الزامی است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Register.Errors.PasswordIsNotProvided">
+    <Value>گذرواژه وارد نشده است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Register.Errors.UsernameAlreadyExists">
+    <Value>این نام کاربری قبلاً ثبت شده است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Register.Errors.UsernameIsNotProvided">
+    <Value>نام کاربری الزامی است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Register.OtpRegisterSmsText">
+    <Value>برای تکمیل ثبت‌نام، یک کد برای شما پیامک می‌کنیم.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Register.Result.AdminApproval">
+    <Value>حساب شما پس از تأیید مدیر فعال خواهد شد.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Register.Result.Continue">
+    <Value>ادامه</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Register.Result.EmailValidation">
+    <Value>ثبت‌نام شما با موفقیت انجام شد. ایمیلی با راهنمای فعال‌سازی حساب برای شما ارسال شده است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.Register.Result.Standard">
+    <Value>ثبت‌نام شما تکمیل شد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.UserAgreement">
+    <Value>توافق‌نامهٔ کاربر</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.VendorInfo">
+    <Value>اطلاعات فروشنده</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.VendorInfo.Description">
+    <Value>توضیحات</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.VendorInfo.Email">
+    <Value>ایمیل</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.VendorInfo.Email.Required">
+    <Value>ایمیل الزامی است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.VendorInfo.Name">
+    <Value>نام</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.VendorInfo.Name.Required">
+    <Value>نام فروشنده الزامی است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.VendorInfo.Picture">
+    <Value>تصویر</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.VendorInfo.Picture.ErrorMessage">
+    <Value>فقط می‌توانید فایل تصویر اضافه کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="Account.VendorInfo.Picture.Remove">
+    <Value>حذف تصویر</Value>
+  </LocaleResource>
+  <LocaleResource Name="Address">
+    <Value>نشانی</Value>
+  </LocaleResource>
+  <LocaleResource Name="Address.LineFormat">
+    <Value>{0}{1}{2}{3}{4}{5}{6}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Admin">
+    <Value>مدیریت</Value>
+  </LocaleResource>
+  <LocaleResource Name="RewardPoints.Expired">
+    <Value>امتیازهای استفاده‌نشدهٔ تاریخ {0} منقضی شده‌اند</Value>
+  </LocaleResource>
+  <LocaleResource Name="AjaxCart.Failure">
+    <Value>افزودن محصول انجام نشد. صفحه را تازه‌سازی کنید و دوباره تلاش کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ArtificialIntelligence.CreateProductFailed">
+    <Value>&lt;p style='color:red'&gt;درخواست به سرویس هوش مصنوعی با خطای \"&lt;strong&gt;{0}&lt;/strong&gt;\" پایان یافت. جزئیات را در &lt;a href='/Admin/Log/List' target='_blank'&gt;گزارش‌ها&lt;/a&gt; ببینید.&lt;p&gt;</Value>
+  </LocaleResource>
+  <LocaleResource Name="ArtificialIntelligence.ToneOfVoice.Expert">
+    <Value>لحن تخصصی و قاطع</Value>
+  </LocaleResource>
+  <LocaleResource Name="ArtificialIntelligence.ToneOfVoice.Supportive">
+    <Value>لحن همراه و مؤدبانه</Value>
+  </LocaleResource>
+  <LocaleResource Name="BackInStockSubscriptions.AlreadySubscribed">
+    <Value>قبلاً برای اعلان موجودشدن این محصول ثبت‌نام کرده‌اید</Value>
+  </LocaleResource>
+  <LocaleResource Name="BackInStockSubscriptions.MaxSubscriptions">
+    <Value>امکان ثبت‌نام نیست. حداکثر تعداد اعلان‌های مجاز {0} است</Value>
+  </LocaleResource>
+  <LocaleResource Name="BackInStockSubscriptions.NotAllowed">
+    <Value>ثبت‌نام برای اعلان این محصول مجاز نیست</Value>
+  </LocaleResource>
+  <LocaleResource Name="BackInStockSubscriptions.Notification.Subscribed">
+    <Value>ثبت‌نام شما با موفقیت انجام شد</Value>
+  </LocaleResource>
+  <LocaleResource Name="BackInStockSubscriptions.Notification.Unsubscribed">
+    <Value>ثبت‌نام شما با موفقیت لغو شد</Value>
+  </LocaleResource>
+  <LocaleResource Name="BackInStockSubscriptions.NotifyMe">
+    <Value>به من اطلاع بده</Value>
+  </LocaleResource>
+  <LocaleResource Name="BackInStockSubscriptions.NotifyMeWhenAvailable">
+    <Value>هنگام موجودشدن اطلاع بده</Value>
+  </LocaleResource>
+  <LocaleResource Name="BackInStockSubscriptions.OnlyRegistered">
+    <Value>فقط کاربران ثبت‌نام‌شده می‌توانند از این قابلیت استفاده کنند</Value>
+  </LocaleResource>
+  <LocaleResource Name="BackInStockSubscriptions.PopupTitle">
+    <Value>هنگام موجودشدن این محصول، ایمیل دریافت کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="BackInStockSubscriptions.Tooltip">
+    <Value>هنگامی که این محصول دوباره قابل سفارش شود، فقط یک بار ایمیل دریافت می‌کنید. ایمیل دیگری ارسال نمی‌کنیم و شما را عضو خبرنامه نمی‌کنیم؛ این اعلان فقط دربارهٔ همین محصول است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="BackInStockSubscriptions.Unsubscribe">
+    <Value>لغو ثبت‌نام</Value>
+  </LocaleResource>
+  <LocaleResource Name="Bestsellers">
+    <Value>پرفروش‌ترین‌ها</Value>
+  </LocaleResource>
+  <LocaleResource Name="Blog">
+    <Value>وبلاگ</Value>
+  </LocaleResource>
+  <LocaleResource Name="Blog.Archive">
+    <Value>بایگانی وبلاگ</Value>
+  </LocaleResource>
+  <LocaleResource Name="Blog.Comments">
+    <Value>دیدگاه‌ها</Value>
+  </LocaleResource>
+  <LocaleResource Name="Blog.Comments.CommentText">
+    <Value>دیدگاه</Value>
+  </LocaleResource>
+  <LocaleResource Name="Blog.Comments.CommentText.Required">
+    <Value>دیدگاه را وارد کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="Blog.Comments.CreatedOn">
+    <Value>تاریخ ثبت</Value>
+  </LocaleResource>
+  <LocaleResource Name="Blog.Comments.LeaveYourComment">
+    <Value>دیدگاه خود را بنویسید</Value>
+  </LocaleResource>
+  <LocaleResource Name="Blog.Comments.OnlyRegisteredUsersLeaveComments">
+    <Value>فقط کاربران ثبت‌نام‌شده می‌توانند دیدگاه بنویسند.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Blog.Comments.SeeAfterApproving">
+    <Value>دیدگاه با موفقیت افزوده شد و پس از تأیید مدیر فروشگاه نمایش داده می‌شود.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Blog.Comments.SubmitButton">
+    <Value>دیدگاه جدید</Value>
+  </LocaleResource>
+  <LocaleResource Name="Blog.Comments.SuccessfullyAdded">
+    <Value>دیدگاه با موفقیت افزوده شد.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Blog.CommentsLink">
+    <Value>دیدگاه‌ها ({0:d})</Value>
+  </LocaleResource>
+  <LocaleResource Name="Blog.FilteredByMonth">
+    <Value>نوشته‌های وبلاگ در «{0}» «{1}»</Value>
+  </LocaleResource>
+  <LocaleResource Name="Blog.MoreInfo">
+    <Value>جزئیات</Value>
+  </LocaleResource>
+  <LocaleResource Name="Blog.RSS">
+    <Value>خوراک RSS</Value>
+  </LocaleResource>
+  <LocaleResource Name="Blog.RSS.Hint">
+    <Value>برای دریافت خودکار خبر افزودن مطالب جدید به سایت، اینجا کلیک کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Blog.TagCloud">
+    <Value>برچسب‌های محبوب وبلاگ</Value>
+  </LocaleResource>
+  <LocaleResource Name="Blog.TaggedWith">
+    <Value>نوشته‌های وبلاگ با برچسب «{0}»</Value>
+  </LocaleResource>
+  <LocaleResource Name="Blog.Tags">
+    <Value>برچسب‌ها</Value>
+  </LocaleResource>
+  <LocaleResource Name="Categories">
+    <Value>دسته‌ها</Value>
+  </LocaleResource>
+  <LocaleResource Name="Categories.Breadcrumb.Top">
+    <Value>خانه</Value>
+  </LocaleResource>
+  <LocaleResource Name="Categories.TotalProducts">
+    <Value>({0})</Value>
+  </LocaleResource>
+  <LocaleResource Name="CheckGiftCard.GiftCardCouponCode.Button">
+    <Value>بررسی کارت هدیه</Value>
+  </LocaleResource>
+  <LocaleResource Name="CheckGiftCardBalance">
+    <Value>بررسی موجودی کارت هدیه</Value>
+  </LocaleResource>
+  <LocaleResource Name="CheckGiftCardBalance.GiftCardCouponCode.Empty">
+    <Value>کد وارد نشده است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="CheckGiftCardBalance.GiftCardCouponCode.Invalid">
+    <Value>کد معتبر نیست.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout">
+    <Value>تسویهٔ حساب</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.Address.NotFound">
+    <Value>نشانی بارگذاری نشد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.Addresses.Invalid">
+    <Value>{0} نشانی نامعتبر دارید</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.MinOrderPlacementInterval">
+    <Value>پیش از ثبت سفارش جدید، چند ثانیه صبر کنید؛ به‌تازگی سفارش دیگری ثبت کرده‌اید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.SelectBillingAddressOrEnterNewOne">
+    <Value>نشانی صورت‌حساب را از نشانی‌های ثبت‌شده انتخاب کنید یا نشانی جدیدی وارد کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.SelectDesiredDeliveryDate">
+    <Value>تاریخ تحویل موردنظر را انتخاب کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.SelectPaymentMethod.MethodAndFee">
+    <Value>{0} ({1})</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.SelectShippingAddressOrEnterNewOne">
+    <Value>نشانی تحویل را از نشانی‌های ثبت‌شده انتخاب کنید یا نشانی جدیدی وارد کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.SelectShippingMethod.MethodAndFee">
+    <Value>{0} ({1})</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.ShippingMethod.ShippingFromMultipleLocations">
+    <Value>سفارش شما از چند محل مختلف ارسال خواهد شد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.VatNumber">
+    <Value>شمارهٔ مالیات بر ارزش افزوده</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.VatNumber.Disabled">
+    <Value>شمارهٔ مالیات بر ارزش افزوده فقط پس از ثبت‌نام، در &lt;a href="{0}"&gt;صفحهٔ اطلاعات حساب&lt;/a&gt; قابل ثبت و استفاده است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Checkout.VatNumber.Warning">
+    <Value>شمارهٔ مالیات بر ارزش افزوده {0} است</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactUs">
+    <Value>تماس با ما</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactUs.Email.Hint">
+    <Value>نشانی ایمیل خود را وارد کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactUs.Email.Required">
+    <Value>ایمیل را وارد کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactUs.Enquiry.Hint">
+    <Value>پیام خود را وارد کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactUs.Enquiry.Required">
+    <Value>پیام را وارد کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactUs.FullName.Hint">
+    <Value>نام خود را وارد کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactUs.FullName.Required">
+    <Value>نام خود را وارد کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactUs.SelectAttribute">
+    <Value>لطفاً {0} را انتخاب کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactUs.Subject.Hint">
+    <Value>موضوع را وارد کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactUs.Subject.Required">
+    <Value>موضوع را وارد کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactVendor">
+    <Value>تماس با فروشنده</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactVendor.Button">
+    <Value>ارسال</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactVendor.Email">
+    <Value>ایمیل شما</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactVendor.Email.Hint">
+    <Value>نشانی ایمیل خود را وارد کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactVendor.Email.Required">
+    <Value>ایمیل را وارد کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactVendor.Enquiry">
+    <Value>پیام</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactVendor.Enquiry.Hint">
+    <Value>پیام خود را وارد کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactVendor.Enquiry.Required">
+    <Value>پیام را وارد کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactVendor.FullName">
+    <Value>نام شما</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactVendor.FullName.Hint">
+    <Value>نام خود را وارد کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactVendor.FullName.Required">
+    <Value>نام خود را وارد کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactVendor.Subject">
+    <Value>موضوع</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactVendor.Subject.Hint">
+    <Value>موضوع را وارد کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactVendor.Subject.Required">
+    <Value>موضوع را وارد کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="ContactVendor.YourEnquiryHasBeenSent">
+    <Value>پیام شما با موفقیت برای فروشنده ارسال شد.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Currencies">
+    <Value>واحدهای پول</Value>
+  </LocaleResource>
+  <LocaleResource Name="Currency.Selector.Label">
+    <Value>انتخاب واحد پول</Value>
+  </LocaleResource>
+  <LocaleResource Name="Currency.Selector.Text.Pattern">
+    <Value>{0}، {1}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Customer.FullNameFormat">
+    <Value>{0} {1}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Customer.Guest">
+    <Value>مهمان</Value>
+  </LocaleResource>
+  <LocaleResource Name="DownloadableProducts.Fields.Date">
+    <Value>تاریخ</Value>
+  </LocaleResource>
+  <LocaleResource Name="DownloadableProducts.Fields.Download">
+    <Value>دریافت</Value>
+  </LocaleResource>
+  <LocaleResource Name="DownloadableProducts.Fields.Download.NA">
+    <Value>در دسترس نیست</Value>
+  </LocaleResource>
+  <LocaleResource Name="DownloadableProducts.Fields.DownloadLicense">
+    <Value>دریافت مجوز</Value>
+  </LocaleResource>
+  <LocaleResource Name="DownloadableProducts.Fields.Order">
+    <Value>شمارهٔ سفارش</Value>
+  </LocaleResource>
+  <LocaleResource Name="DownloadableProducts.Fields.Product">
+    <Value>محصول</Value>
+  </LocaleResource>
+  <LocaleResource Name="DownloadableProducts.IAgree">
+    <Value>می‌پذیرم</Value>
+  </LocaleResource>
+  <LocaleResource Name="DownloadableProducts.NoItems">
+    <Value>محصول دانلودی وجود ندارد</Value>
+  </LocaleResource>
+  <LocaleResource Name="DownloadableProducts.ReachedMaximumNumber">
+    <Value>به حداکثر تعداد مجاز دریافت، یعنی {0} بار رسیده‌اید</Value>
+  </LocaleResource>
+  <LocaleResource Name="DownloadableProducts.UserAgreement">
+    <Value>توافق‌نامهٔ کاربر</Value>
+  </LocaleResource>
+  <LocaleResource Name="EUCookieLaw.Description">
+    <Value>از ۲۶ مه ۲۰۱۱، قوانین استفاده از کوکی‌ها در وب‌سایت‌ها تغییر کرده است. این سایت از کوکی استفاده می‌کند. برخی کوکی‌ها برای کارکرد بخش‌های سایت ضروری‌اند و از پیش تنظیم شده‌اند. می‌توانید همهٔ کوکی‌های این سایت را حذف یا مسدود کنید، اما در این صورت بعضی بخش‌ها کار نخواهند کرد. برای آشنایی با کوکی‌های این وب‌سایت و روش حذف آن‌ها، سیاست حفظ حریم خصوصی را بخوانید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="EUCookieLaw.Description2">
+    <Value>کوکی‌ها به ارائهٔ خدمات ما کمک می‌کنند. با استفاده از خدمات ما، استفاده از کوکی‌ها را می‌پذیرید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="EUCookieLaw.LearnMore">
+    <Value>اطلاعات بیشتر</Value>
+  </LocaleResource>
+  <LocaleResource Name="FormattedAttributes.PriceAdjustment">
+    <Value> [{0}{1}{2}]</Value>
+  </LocaleResource>
+  <LocaleResource Name="Gdpr.Consent.Newsletter">
+    <Value>خبرنامه</Value>
+  </LocaleResource>
+  <LocaleResource Name="Gdpr.Consent.PrivacyPolicy">
+    <Value>سیاست حفظ حریم خصوصی</Value>
+  </LocaleResource>
+  <LocaleResource Name="Gdpr.DeleteRequested">
+    <Value>درخواست حذف حساب ثبت شد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Gdpr.DeleteRequested.Success">
+    <Value>درخواست شما را در اولین فرصت بررسی می‌کنیم</Value>
+  </LocaleResource>
+  <LocaleResource Name="Gdpr.Exported">
+    <Value>اطلاعات شخصی دریافت شد</Value>
+  </LocaleResource>
+  <LocaleResource Name="GiftCardAttribute.For.Physical">
+    <Value>برای: {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="GiftCardAttribute.For.Virtual">
+    <Value>برای: {0} &lt;{1}&gt;</Value>
+  </LocaleResource>
+  <LocaleResource Name="GiftCardAttribute.From.Physical">
+    <Value>از: {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="GiftCardAttribute.From.Virtual">
+    <Value>از: {0} &lt;{1}&gt;</Value>
+  </LocaleResource>
+  <LocaleResource Name="Header.SkipNavigation.Text">
+    <Value>رفتن به محتوای اصلی</Value>
+  </LocaleResource>
+  <LocaleResource Name="Homepage">
+    <Value>صفحهٔ اصلی</Value>
+  </LocaleResource>
+  <LocaleResource Name="Honeypot.BotDetected">
+    <Value>ربات توسط تلهٔ ضدربات شناسایی شد.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Languages">
+    <Value>زبان‌ها</Value>
+  </LocaleResource>
+  <LocaleResource Name="Languages.Selector.Label">
+    <Value>انتخاب زبان</Value>
+  </LocaleResource>
+  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.ApplyVendorAccount">
+    <Value>درخواست حساب فروشنده</Value>
+  </LocaleResource>
+  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.CheckGiftCardBalance">
+    <Value>بررسی موجودی کارت هدیه</Value>
+  </LocaleResource>
+  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.Homepage">
+    <Value>صفحهٔ اصلی</Value>
+  </LocaleResource>
+  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.CompareProducts">
+    <Value>فهرست مقایسهٔ محصولات</Value>
+  </LocaleResource>
+  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.CustomerAddresses">
+    <Value>نشانی‌ها</Value>
+  </LocaleResource>
+  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.CustomerInfo">
+    <Value>حساب من</Value>
+  </LocaleResource>
+  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.CustomerOrders">
+    <Value>سفارش‌ها</Value>
+  </LocaleResource>
+  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.ContactUs">
+    <Value>تماس با ما</Value>
+  </LocaleResource>
+  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.Login">
+    <Value>ورود</Value>
+  </LocaleResource>
+  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.Search">
+    <Value>جست‌وجو</Value>
+  </LocaleResource>
+  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.RecentlyViewedProducts">
+    <Value>محصولات اخیراً دیده‌شده</Value>
+  </LocaleResource>
+  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.WithdrawalRequestForm">
+    <Value>انصراف از قرارداد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.NewProducts">
+    <Value>محصولات جدید</Value>
+  </LocaleResource>
+  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.Blog">
+    <Value>وبلاگ</Value>
+  </LocaleResource>
+  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.ProductTags">
+    <Value>برچسب‌های محصولات</Value>
+  </LocaleResource>
+  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.Manufacturers">
+    <Value>تولیدکنندگان</Value>
+  </LocaleResource>
+  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.Vendors">
+    <Value>فروشندگان</Value>
+  </LocaleResource>
+  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.Sitemap">
+    <Value>نقشهٔ سایت</Value>
+  </LocaleResource>
+  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.Cart">
+    <Value>سبد خرید</Value>
+  </LocaleResource>
+  <LocaleResource Name="Literals.Nop.Core.Http.NopRouteNames.General.Wishlist">
+    <Value>علاقه‌مندی‌ها</Value>
+  </LocaleResource>
+  <LocaleResource Name="Manufacturers">
+    <Value>تولیدکنندگان</Value>
+  </LocaleResource>
+  <LocaleResource Name="Manufacturers.List">
+    <Value>فهرست تولیدکنندگان</Value>
+  </LocaleResource>
+  <LocaleResource Name="Manufacturers.ViewAll">
+    <Value>نمایش همه</Value>
+  </LocaleResource>
+  <LocaleResource Name="MarkdownEditor.TabPreview">
+    <Value>پیش‌نمایش</Value>
+  </LocaleResource>
+  <LocaleResource Name="MarkdownEditor.TabWrite">
+    <Value>نوشتن</Value>
+  </LocaleResource>
+  <LocaleResource Name="Media.Category.ImageAlternateTextFormat">
+    <Value>تصویر دستهٔ {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Media.Category.ImageLinkTitleFormat">
+    <Value>نمایش محصولات دستهٔ {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Media.MagnificPopup.Close">
+    <Value>بستن (Esc)</Value>
+  </LocaleResource>
+  <LocaleResource Name="Media.MagnificPopup.Counter">
+    <Value>%curr% از %total%</Value>
+  </LocaleResource>
+  <LocaleResource Name="Media.MagnificPopup.Loading">
+    <Value>در حال بارگذاری…</Value>
+  </LocaleResource>
+  <LocaleResource Name="Media.MagnificPopup.Next">
+    <Value>بعدی (کلید پیکان راست)</Value>
+  </LocaleResource>
+  <LocaleResource Name="Media.MagnificPopup.Previous">
+    <Value>قبلی (کلید پیکان چپ)</Value>
+  </LocaleResource>
+  <LocaleResource Name="Media.Manufacturer.ImageAlternateTextFormat">
+    <Value>تصویر تولیدکنندهٔ {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Media.Manufacturer.ImageLinkTitleFormat">
+    <Value>نمایش محصولات تولیدشده توسط {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Media.Product.ImageAlternateTextFormat">
+    <Value>تصویر {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Media.Product.ImageAlternateTextFormat.Details">
+    <Value>تصویر {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Media.Product.ImageLinkTitleFormat">
+    <Value>نمایش جزئیات {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Media.Product.ImageLinkTitleFormat.Details">
+    <Value>تصویر {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Media.Product.VideoTitleFormat">
+    <Value>ویدئوی {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Media.Vendor.ImageAlternateTextFormat">
+    <Value>تصویر فروشندهٔ {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Media.Vendor.ImageLinkTitleFormat">
+    <Value>نمایش محصولات فروشندهٔ {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Menu">
+    <Value>منو</Value>
+  </LocaleResource>
+  <LocaleResource Name="Messages.Order.GiftCardInfo">
+    <Value>کارت هدیه ({0}):</Value>
+  </LocaleResource>
+  <LocaleResource Name="Messages.Order.OrderTotal">
+    <Value>مبلغ نهایی:</Value>
+  </LocaleResource>
+  <LocaleResource Name="Messages.Order.PaymentMethodAdditionalFee">
+    <Value>هزینهٔ روش پرداخت:</Value>
+  </LocaleResource>
+  <LocaleResource Name="Messages.Order.Product(s)">
+    <Value>محصولات</Value>
+  </LocaleResource>
+  <LocaleResource Name="Messages.Order.Product(s).Download">
+    <Value>دریافت</Value>
+  </LocaleResource>
+  <LocaleResource Name="Messages.Order.Product(s).License">
+    <Value>دریافت مجوز</Value>
+  </LocaleResource>
+  <LocaleResource Name="Messages.Order.Product(s).Name">
+    <Value>نام</Value>
+  </LocaleResource>
+  <LocaleResource Name="Messages.Order.Product(s).Price">
+    <Value>قیمت</Value>
+  </LocaleResource>
+  <LocaleResource Name="Messages.Order.Product(s).Quantity">
+    <Value>تعداد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Messages.Order.Product(s).SKU">
+    <Value>شناسهٔ کالا: {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Messages.Order.Product(s).Total">
+    <Value>مجموع</Value>
+  </LocaleResource>
+  <LocaleResource Name="Messages.Order.RewardPoints">
+    <Value>{0} امتیاز خرید:</Value>
+  </LocaleResource>
+  <LocaleResource Name="Messages.Order.Shipping">
+    <Value>ارسال:</Value>
+  </LocaleResource>
+  <LocaleResource Name="Messages.Order.SubTotal">
+    <Value>جمع کالاها:</Value>
+  </LocaleResource>
+  <LocaleResource Name="Messages.Order.SubTotalDiscount">
+    <Value>تخفیف:</Value>
+  </LocaleResource>
+  <LocaleResource Name="Messages.Order.Tax">
+    <Value>مالیات:</Value>
+  </LocaleResource>
+  <LocaleResource Name="Messages.Order.TaxRateLine">
+    <Value>مالیات {0}%:</Value>
+  </LocaleResource>
+  <LocaleResource Name="Messages.Order.TotalDiscount">
+    <Value>تخفیف:</Value>
+  </LocaleResource>
+  <LocaleResource Name="MultiFactorAuthentication.Notification.SelectedMethodIsNotActive">
+    <Value>ارائه‌دهندهٔ احراز هویت چندعاملی انتخاب‌شده در تنظیمات حساب شما غیرفعال شده است. با مدیر فروشگاه تماس بگیرید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Cancel.Failed">
+    <Value>لغو سفارش انجام نشد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Email">
+    <Value>ایمیل</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Fax">
+    <Value>فکس</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.GiftCardInfo">
+    <Value>کارت هدیه ({0})</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Payment">
+    <Value>پرداخت</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.PaymentMethodAdditionalFee">
+    <Value>هزینهٔ روش پرداخت</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Phone">
+    <Value>تلفن</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.PickupAddress">
+    <Value>نشانی تحویل حضوری</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Rental.FormattedDate">
+    <Value>تاریخ شروع: {0}. تاریخ پایان: {1}.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.RetryPayment.Hint">
+    <Value>این سفارش هنوز پرداخت نشده است. برای پرداخت، روی دکمهٔ «تلاش دوباره برای پرداخت» کلیک کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.RewardPoints">
+    <Value>{0} امتیاز خرید</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments">
+    <Value>مرسوله‌ها</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments.DeliveryDate">
+    <Value>تاریخ تحویل</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments.DeliveryDate.NotYet">
+    <Value>هنوز تحویل نشده است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments.Email">
+    <Value>ایمیل</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments.Fax">
+    <Value>فکس</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments.ID">
+    <Value>شمارهٔ مرسوله</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments.Information">
+    <Value>مرسولهٔ شمارهٔ {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments.Order#">
+    <Value>شمارهٔ سفارش</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments.Phone">
+    <Value>تلفن</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments.PickupAddress">
+    <Value>نشانی تحویل حضوری</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments.Product(s)">
+    <Value>محصولات ارسال‌شده</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments.Product(s).Name">
+    <Value>نام</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments.Product(s).Quantity">
+    <Value>تعداد ارسال‌شده</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments.Product(s).SKU">
+    <Value>شناسهٔ کالا</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments.ReadyForPickupDate">
+    <Value>تاریخ آماده‌شدن برای تحویل حضوری</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments.ReadyForPickupDate.NotYet">
+    <Value>هنوز آماده نیست</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments.ShippedDate">
+    <Value>تاریخ ارسال</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments.ShippedDate.NotYet">
+    <Value>هنوز ارسال نشده است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments.ShippingAddress">
+    <Value>نشانی تحویل</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments.ShippingMethod">
+    <Value>روش ارسال</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments.TrackingNumber">
+    <Value>شمارهٔ پیگیری</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipments.ViewDetails">
+    <Value>نمایش جزئیات</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.ShipmentStatusEvents">
+    <Value>رویدادهای وضعیت مرسوله</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.ShipmentStatusEvents.Country">
+    <Value>کشور</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.ShipmentStatusEvents.Date">
+    <Value>تاریخ</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.ShipmentStatusEvents.Event">
+    <Value>رویداد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.ShipmentStatusEvents.Location">
+    <Value>محل</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipping">
+    <Value>ارسال</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.Shipping.DesiredDeliveryDate">
+    <Value>تاریخ تحویل موردنظر</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.SubTotalDiscount">
+    <Value>تخفیف</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.TaxRateLine">
+    <Value>مالیات {0}%</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.TaxShipping.ExclTax">
+    <Value>قیمت‌ها بدون مالیات و بدون هزینهٔ &lt;a href="{0}"&gt;ارسال&lt;/a&gt; هستند</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.TaxShipping.InclTax">
+    <Value>قیمت‌ها شامل مالیات و بدون هزینهٔ &lt;a href="{0}"&gt;ارسال&lt;/a&gt; هستند</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.VATNumber">
+    <Value>شمارهٔ مالیات بر ارزش افزوده</Value>
+  </LocaleResource>
+  <LocaleResource Name="Order.WithdrawItems">
+    <Value>انصراف از قرارداد</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.AccountActivation">
+    <Value>فعال‌سازی حساب</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.AllProductTags">
+    <Value>همهٔ برچسب‌های محصولات</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.Blog">
+    <Value>وبلاگ</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.CheckGiftCardBalance">
+    <Value>بررسی موجودی کارت هدیه</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.ChangePhone">
+    <Value>تغییر شمارهٔ تلفن</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.LoginOtp">
+    <Value>تأیید شمارهٔ تلفن</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.MultiFactorAuthentication">
+    <Value>احراز هویت چندعاملی</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.MultiFactorVerification">
+    <Value>تأیید چندعاملی</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.PrivateMessages">
+    <Value>پیام‌های خصوصی</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.ProductEmailAFriend">
+    <Value>ارسال برای دوست</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.ProductReviews">
+    <Value>دیدگاه‌های محصول</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.ProductsByTag">
+    <Value>محصولات با برچسب «{0}»</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.Profile">
+    <Value>نمایه</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.RegisterOtp">
+    <Value>تأیید شمارهٔ تلفن</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.ReturnItems.Withdrawal">
+    <Value>انصراف از قرارداد</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.ReturnRequests.WithdrawalForm">
+    <Value>انصراف از قرارداد</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.SendPM">
+    <Value>ارسال پیام خصوصی</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.VendorInfo">
+    <Value>اطلاعات فروشنده</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.Vendors">
+    <Value>فروشندگان</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.Vendors.Apply">
+    <Value>درخواست حساب فروشنده</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.VendorReviews">
+    <Value>دیدگاه‌های محصولات فروشنده</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.ViewPM">
+    <Value>نمایش پیام خصوصی</Value>
+  </LocaleResource>
+  <LocaleResource Name="PageTitle.WishlistEmailAFriend">
+    <Value>ارسال علاقه‌مندی‌ها برای دوست</Value>
+  </LocaleResource>
+  <LocaleResource Name="PaymentMethod.NotAvailableMethodsError">
+    <Value>سفارش شما در حال حاضر قابل تکمیل نیست، زیرا روش پرداختی برای آن در دسترس نیست.</Value>
+  </LocaleResource>
+  <LocaleResource Name="PaymentMethod.SpecifyMethodError">
+    <Value>روش پرداخت را مشخص کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.Inbox">
+    <Value>صندوق ورودی</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.Inbox.DateColumn">
+    <Value>تاریخ</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.Inbox.DeleteSelected">
+    <Value>حذف انتخاب‌شده‌ها</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.Inbox.FromColumn">
+    <Value>از</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.Inbox.MarkAsUnread">
+    <Value>علامت‌گذاری انتخاب‌شده‌ها به‌عنوان خوانده‌نشده</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.Inbox.NoItems">
+    <Value>پیامی در صندوق ورودی نیست</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.Inbox.SubjectColumn">
+    <Value>موضوع</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.Inbox.ToColumn">
+    <Value>به</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.MessageCannotBeEmpty">
+    <Value>متن پیام نمی‌تواند خالی باشد</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.PM">
+    <Value>پیام خصوصی</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.PrivateMessages">
+    <Value>پیام‌های خصوصی</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.Send.CancelButton">
+    <Value>لغو</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.Send.Message">
+    <Value>پیام:</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.Send.PostMessage">
+    <Value>ارسال پیام خصوصی</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.Send.SendButton">
+    <Value>ارسال</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.Send.Subject">
+    <Value>موضوع:</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.Send.To">
+    <Value>به:</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.Sent.NoItems">
+    <Value>پیام ارسال‌شده‌ای وجود ندارد</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.SentItems">
+    <Value>ارسال‌شده‌ها</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.SubjectCannotBeEmpty">
+    <Value>موضوع نمی‌تواند خالی باشد</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.TotalUnread">
+    <Value>({0} خوانده‌نشده)</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.View.BackButton">
+    <Value>بازگشت به پیام‌ها</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.View.DeleteButton">
+    <Value>حذف</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.View.From">
+    <Value>از:</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.View.ReplyButton">
+    <Value>پاسخ</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.View.Subject">
+    <Value>موضوع:</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.View.To">
+    <Value>به:</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.View.ViewMessage">
+    <Value>نمایش پیام</Value>
+  </LocaleResource>
+  <LocaleResource Name="PrivateMessages.YouHaveUnreadPM">
+    <Value>{0} پیام خوانده‌نشده در صندوق ورودی دارید</Value>
+  </LocaleResource>
+  <LocaleResource Name="ProductAttributes.Quantity">
+    <Value> ـ تعداد {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.Availability.AvailabilityRange">
+    <Value>موجود در {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.Availability.Backordering">
+    <Value>ناموجود است؛ سفارش پذیرفته می‌شود و پس از موجودشدن ارسال خواهد شد.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.Availability.BackorderingWithDate">
+    <Value>ناموجود است؛ سفارش پذیرفته می‌شود و پس از موجودشدن ({0}) ارسال خواهد شد.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.CompatibleWith">
+    <Value>سازگار با</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.CompatibleWith.Items">
+    <Value>{0} کالا با این محصول سازگار است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.Discontinued">
+    <Value>این محصول دیگر در دسترس نیست</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.EmailAFriend">
+    <Value>ارسال برای دوست</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.EmailAFriend.Button">
+    <Value>ارسال ایمیل</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.EmailAFriend.FriendEmail">
+    <Value>ایمیل دوست</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.EmailAFriend.FriendEmail.Hint">
+    <Value>ایمیل دوست خود را وارد کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.EmailAFriend.FriendEmail.Required">
+    <Value>ایمیل دوست خود را وارد کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.EmailAFriend.OnlyRegisteredUsers">
+    <Value>فقط کاربران ثبت‌نام‌شده می‌توانند از قابلیت ارسال برای دوست استفاده کنند</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.EmailAFriend.PersonalMessage">
+    <Value>پیام شخصی</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.EmailAFriend.PersonalMessage.Hint">
+    <Value>پیام شخصی خود را وارد کنید (اختیاری).</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.EmailAFriend.SuccessfullySent">
+    <Value>پیام شما ارسال شد.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.EmailAFriend.Title">
+    <Value>ارسال برای دوست</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.EmailAFriend.YourEmailAddress">
+    <Value>نشانی ایمیل شما</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.EmailAFriend.YourEmailAddress.Hint">
+    <Value>نشانی ایمیل خود را وارد کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.EmailAFriend.YourEmailAddress.Required">
+    <Value>ایمیل خود را وارد کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.EstimateShipping.EstimatedDeliveryPrefix">
+    <Value>تحویل برآوردشده در</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.EstimateShipping.NoSelectedShippingOption">
+    <Value>نشانی تحویل موردنظر را انتخاب کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.EstimateShipping.PriceTitle">
+    <Value>ارسال:</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.EstimateShipping.ToAddress">
+    <Value>به</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.EstimateShipping.ViaProvider">
+    <Value>از طریق</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.Manufacturers.ElectronicAddress">
+    <Value>نشانی الکترونیکی تولیدکننده: {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.Manufacturers.PhysicalAddress">
+    <Value>نشانی پستی تولیدکننده: {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.Manufacturers.ResponsiblePerson">
+    <Value>نام مسئول: {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.Manufacturers.ResponsiblePersonElectronicAddress">
+    <Value>نشانی الکترونیکی مسئول: {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.Manufacturers.ResponsiblePersonPhysicalAddress">
+    <Value>نشانی پستی مسئول: {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.NewProducts.RSS">
+    <Value>خوراک RSS</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.NewProducts.RSS.Hint">
+    <Value>برای دریافت خودکار خبر افزودن محصولات جدید به سایت، اینجا کلیک کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.NoAssociatedProducts">
+    <Value>این محصول تمام شده است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.ProductAttributes.PriceAdjustment">
+    <Value>{0} [{1}{2}]</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.ProductHasBeenUpdatedInTheWishlist.Link">
+    <Value>محصول در &lt;a href="{0}"&gt;علاقه‌مندی‌های&lt;/a&gt; شما به‌روزرسانی شد.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.QuantityShouldBePositive">
+    <Value>تعداد باید بیشتر از صفر باشد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Products.Tags.Count">
+    <Value>({0})</Value>
+  </LocaleResource>
+  <LocaleResource Name="Profile.Country">
+    <Value>کشور</Value>
+  </LocaleResource>
+  <LocaleResource Name="Profile.DateOfBirth">
+    <Value>تاریخ تولد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Profile.JoinDate">
+    <Value>تاریخ عضویت</Value>
+  </LocaleResource>
+  <LocaleResource Name="Profile.PersonalInfo">
+    <Value>اطلاعات نمایه</Value>
+  </LocaleResource>
+  <LocaleResource Name="Profile.PostedOn">
+    <Value>تاریخ ارسال</Value>
+  </LocaleResource>
+  <LocaleResource Name="Profile.ProfileOf">
+    <Value>نمایه: {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Profile.Statistics">
+    <Value>آمار</Value>
+  </LocaleResource>
+  <LocaleResource Name="Profile.Topic">
+    <Value>موضوع</Value>
+  </LocaleResource>
+  <LocaleResource Name="Profile.TotalPosts">
+    <Value>تعداد نوشته‌ها</Value>
+  </LocaleResource>
+  <LocaleResource Name="ReturnRequests.NoItemsSubmitted">
+    <Value>درخواست مرجوعی ثبت نشد، زیرا کالایی انتخاب نکرده‌اید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ReturnRequests.Title">
+    <Value>مرجوع‌کردن کالاهای &lt;a href="{0}"&gt;سفارش شمارهٔ {1}&lt;/a&gt;</Value>
+  </LocaleResource>
+  <LocaleResource Name="ReturnRequests.Withdrawal.Fields.EmailAddress">
+    <Value>نشانی ایمیل</Value>
+  </LocaleResource>
+  <LocaleResource Name="ReturnRequests.Withdrawal.Fields.OrderNumber">
+    <Value>شمارهٔ سفارش</Value>
+  </LocaleResource>
+  <LocaleResource Name="ReturnRequests.Withdrawal.Submit">
+    <Value>ثبت درخواست انصراف</Value>
+  </LocaleResource>
+  <LocaleResource Name="ReturnRequests.Withdrawal.Submitted">
+    <Value>درخواست انصراف شما با موفقیت ثبت شد.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ReturnRequests.Withdrawal.Title">
+    <Value>انصراف از قرارداد برای &lt;a href=\"{0}\"&gt;سفارش شمارهٔ {1}&lt;/a&gt;</Value>
+  </LocaleResource>
+  <LocaleResource Name="ReturnRequests.WithdrawalForm">
+    <Value>پیداکردن سفارش</Value>
+  </LocaleResource>
+  <LocaleResource Name="ReturnRequests.WithdrawalForm.ConfirnationText">
+    <Value>اگر اطلاعات شما صحیح باشد، پیوند ادامهٔ درخواست را برای شما ارسال کرده‌ایم.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ReturnRequests.WithdrawalForm.EmailAddress.Required">
+    <Value>نشانی ایمیل الزامی است</Value>
+  </LocaleResource>
+  <LocaleResource Name="ReturnRequests.WithdrawalForm.OrderNumber.Required">
+    <Value>شمارهٔ سفارش الزامی است</Value>
+  </LocaleResource>
+  <LocaleResource Name="ReturnRequests.WithdrawalForm.Submit">
+    <Value>ادامه</Value>
+  </LocaleResource>
+  <LocaleResource Name="RewardPoints.ActivatedLater">
+    <Value>امتیازها در تاریخ {0} فعال خواهند شد</Value>
+  </LocaleResource>
+  <LocaleResource Name="RewardPoints.CurrentBalance">
+    <Value>موجودی فعلی شما {0} امتیاز خرید ({1}) است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="RewardPoints.Fields.CreatedDate">
+    <Value>تاریخ</Value>
+  </LocaleResource>
+  <LocaleResource Name="RewardPoints.Fields.EndDate">
+    <Value>تاریخ پایان</Value>
+  </LocaleResource>
+  <LocaleResource Name="RewardPoints.Fields.Message">
+    <Value>پیام</Value>
+  </LocaleResource>
+  <LocaleResource Name="RewardPoints.Fields.Points">
+    <Value>امتیاز</Value>
+  </LocaleResource>
+  <LocaleResource Name="RewardPoints.Fields.PointsBalance">
+    <Value>موجودی امتیاز</Value>
+  </LocaleResource>
+  <LocaleResource Name="RewardPoints.History">
+    <Value>سابقه</Value>
+  </LocaleResource>
+  <LocaleResource Name="RewardPoints.Message.EarnedForOrder">
+    <Value>امتیاز دریافت‌شده برای سفارش شمارهٔ {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="RewardPoints.Message.EarnedForRegistration">
+    <Value>ثبت‌نام به‌عنوان مشتری</Value>
+  </LocaleResource>
+  <LocaleResource Name="RewardPoints.Message.RedeemedForOrder">
+    <Value>امتیاز استفاده‌شده برای سفارش شمارهٔ {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="RewardPoints.Message.ReducedForOrder">
+    <Value>امتیاز کسرشده برای سفارش شمارهٔ {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="RewardPoints.Message.ReturnedForOrder">
+    <Value>امتیاز بازگردانده‌شده برای سفارش شمارهٔ {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="RewardPoints.MinimumBalance">
+    <Value>حداقل موجودی مجاز برای استفاده {0} امتیاز خرید ({1}) است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="RewardPoints.NoHistory">
+    <Value>هنوز سابقه‌ای برای موجودی امتیاز وجود ندارد</Value>
+  </LocaleResource>
+  <LocaleResource Name="ScheduleTasks.Error">
+    <Value>وظیفهٔ زمان‌بندی‌شدهٔ «{0}» با خطای «{1}» ناموفق بود (نوع وظیفه: «{2}». نام فروشگاه: «{3}». نشانی اجرای وظیفه: «{4}»).</Value>
+  </LocaleResource>
+  <LocaleResource Name="ScheduleTasks.TimeoutError">
+    <Value>وظیفهٔ زمان‌بندی‌شده لغو شد؛ زمان انتظار به پایان رسید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Search">
+    <Value>جست‌وجو</Value>
+  </LocaleResource>
+  <LocaleResource Name="Search.FilterLevelValues">
+    <Value>جست‌وجو بر اساس سال، سازنده و مدل</Value>
+  </LocaleResource>
+  <LocaleResource Name="SendPmToVendor">
+    <Value>ارسال پیام خصوصی</Value>
+  </LocaleResource>
+  <LocaleResource Name="Shipping.EstimateShipping.City.Required">
+    <Value>شهر الزامی است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Shipping.EstimateShipping.Country.Required">
+    <Value>کشور الزامی است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Shipping.EstimateShipping.ZipPostalCode.Required">
+    <Value>کد پستی الزامی است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Shipping.EstimateShippingPopUp.ChooseShippingTitle">
+    <Value>روش ارسال</Value>
+  </LocaleResource>
+  <LocaleResource Name="Shipping.EstimateShippingPopUp.City">
+    <Value>شهر</Value>
+  </LocaleResource>
+  <LocaleResource Name="Shipping.EstimateShippingPopUp.Country">
+    <Value>کشور</Value>
+  </LocaleResource>
+  <LocaleResource Name="Shipping.EstimateShippingPopUp.NoShippingOptions">
+    <Value>روش ارسالی وجود ندارد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Shipping.EstimateShippingPopUp.Pickup.PriceFrom">
+    <Value>از {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Shipping.EstimateShippingPopUp.Product.IsNotFound">
+    <Value>محصول پیدا نشد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Shipping.EstimateShippingPopUp.SelectShippingOption.Button">
+    <Value>اعمال</Value>
+  </LocaleResource>
+  <LocaleResource Name="Shipping.EstimateShippingPopUp.ShippingOption.EstimatedDelivery">
+    <Value>زمان تحویل برآوردشده</Value>
+  </LocaleResource>
+  <LocaleResource Name="Shipping.EstimateShippingPopUp.ShippingOption.IsNotFound">
+    <Value>روش ارسال انتخاب‌شده پیدا نشد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Shipping.EstimateShippingPopUp.ShippingOption.Name">
+    <Value>نام</Value>
+  </LocaleResource>
+  <LocaleResource Name="Shipping.EstimateShippingPopUp.ShippingOption.Price">
+    <Value>قیمت</Value>
+  </LocaleResource>
+  <LocaleResource Name="Shipping.EstimateShippingPopUp.ShipToTitle">
+    <Value>ارسال به</Value>
+  </LocaleResource>
+  <LocaleResource Name="Shipping.EstimateShippingPopUp.StateProvince">
+    <Value>استان</Value>
+  </LocaleResource>
+  <LocaleResource Name="Shipping.EstimateShippingPopUp.ZipPostalCode">
+    <Value>کد پستی</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShippingMethod.NotAvailableMethodsError">
+    <Value>سفارش شما در حال حاضر قابل تکمیل نیست، زیرا روش ارسالی برای آن در دسترس نیست. نشانی تحویل خود را بررسی و اصلاح کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShippingMethod.SpecifyMethodError">
+    <Value>روش ارسال را مشخص کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart">
+    <Value>سبد خرید</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.AssociatedAttributeWarning">
+    <Value>{0}. {1}. {2}</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.AvailabilityRange">
+    <Value>موجود در {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.BuyingDisabled">
+    <Value>خرید این محصول غیرفعال است</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.CannotLoadProduct">
+    <Value>محصول با شناسهٔ {0} بارگذاری نشد</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.CannotMixStandardAndAutoshipProducts">
+    <Value>سبد شما شامل کالاهای عادی و کالاهای با ارسال خودکار دوره‌ای است. در هر سفارش فقط یک نوع کالا مجاز است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.CheckoutAttributes.PriceAdjustment">
+    <Value>{0} [{1}]</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.ConflictingShipmentSchedules">
+    <Value>سبد شما شامل کالاهای با ارسال خودکار دوره‌ای با زمان‌بندی‌های متفاوت است. در هر سفارش فقط یک زمان‌بندی ارسال خودکار مجاز است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.CustomerEnteredPrice.RangeError">
+    <Value>قیمت باید بین {0} و {1} باشد</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.DateOfBirthRequired">
+    <Value>این محصول محدودیت سنی دارد. سن خود را در اطلاعات حساب مشخص کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.Discount.CannotBeUsed">
+    <Value>شرایط استفاده از این کد تخفیف برقرار نیست</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.Discount.CannotBeUsedAnymore">
+    <Value>قبلاً از این تخفیف استفاده کرده‌اید</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.Discount.CannotBeUsedWithGiftCards">
+    <Value>این تخفیف برای سبد دارای کارت هدیه قابل استفاده نیست</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.Discount.Expired">
+    <Value>این پیشنهاد منقضی شده است</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.Discount.NotStartedYet">
+    <Value>این پیشنهاد هنوز آغاز نشده است</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.DiscountCouponCode.Activated">
+    <Value>کد تخفیف ({0}) فعال شد. تخفیف روی سفارش شما اعمال خواهد شد.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.DiscountCouponCode.Applied">
+    <Value>کد تخفیف اعمال شد</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.DiscountCouponCode.CannotBeFound">
+    <Value>کد تخفیف پیدا نشد</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.DiscountCouponCode.WrongDiscount">
+    <Value>کد تخفیف واردشده برای سفارش شما قابل استفاده نیست</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.GiftCardCouponCode.Applied">
+    <Value>کد کارت هدیه اعمال شد</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.GiftCardCouponCode.DontWorkWithAutoshipProducts">
+    <Value>کارت هدیه برای کالاهای با ارسال خودکار دوره‌ای قابل استفاده نیست.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.GiftCardCouponCode.DontWorkWithGiftCards">
+    <Value>کارت هدیه برای خرید کارت هدیهٔ دیگر قابل استفاده نیست.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.GiftCardCouponCode.WrongGiftCard">
+    <Value>کد واردشده برای سفارش شما قابل استفاده نیست</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.MaximumDiscountedQty">
+    <Value>تعداد مشمول تخفیف: {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.MaximumShoppingCartItems">
+    <Value>حداکثر تعداد محصولات متفاوت مجاز در سبد {0} است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.MaximumUploadedFileSize">
+    <Value>حداکثر اندازهٔ فایل {0} کیلوبایت است</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.MaximumWishlistItems">
+    <Value>حداکثر تعداد محصولات متفاوت مجاز در علاقه‌مندی‌ها {0} است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.MinimumAgeToPurchase">
+    <Value>این محصول فقط برای مشتریان با سن {0} سال یا بیشتر قابل خرید است</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.NotAvailable">
+    <Value>محصول در دسترس نیست</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.PreOrder">
+    <Value>پیش‌سفارش</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.PreOrderAvailability">
+    <Value>زمان دسترسی پیش‌سفارش</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.ProductDeleted">
+    <Value>محصول حذف شده است</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.ProductUnpublished">
+    <Value>محصول منتشر نشده است</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.QuantityExceedsStock">
+    <Value>تعداد درخواستی از موجودی بیشتر است. حداکثر تعداد قابل افزودن {0} است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.RecipientEmailError">
+    <Value>ایمیل معتبر دریافت‌کننده را وارد کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.RecipientNameError">
+    <Value>نام معتبر دریافت‌کننده را وارد کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.RecurringPeriod">
+    <Value>[ارسال خودکار، هر {0} {1}]</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.Rent">
+    <Value>اجاره</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.Rental.EnterEndDate">
+    <Value>تاریخ پایان اجاره را وارد کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.Rental.EnterStartDate">
+    <Value>تاریخ شروع اجاره را وارد کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.Rental.FormattedDate">
+    <Value>تاریخ شروع: {0}. تاریخ پایان: {1}.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.Rental.StartDateLessEndDate">
+    <Value>تاریخ شروع اجاره باید پیش از تاریخ پایان باشد</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.Rental.StartDateShouldBeFuture">
+    <Value>تاریخ شروع اجاره باید در آینده باشد</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.ReorderWarning">
+    <Value>برخی محصولات دیگر در دسترس نیستند و به سبد اضافه نشدند.</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.RequiredProductUpdateWarning">
+    <Value>این محصول باید به تعداد {0} در سبد باشد</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.RequiredProductWarning">
+    <Value>برای خرید این محصول، باید کالای زیر به تعداد {1} به سبد افزوده شود: {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.SelectVendorToCheckout">
+    <Value>پیش از تسویهٔ حساب، یک فروشنده انتخاب کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.SenderEmailError">
+    <Value>ایمیل معتبر فرستنده را وارد کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.SenderNameError">
+    <Value>نام معتبر فرستنده را وارد کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.TextboxMaximumLength">
+    <Value>{0}: حداکثر طول {1} نویسه است</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.TextboxMinimumLength">
+    <Value>{0}: حداقل طول {1} نویسه است</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.Totals.GiftCardInfo">
+    <Value>کارت هدیه</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.Totals.GiftCardInfo.Code">
+    <Value>({0})</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.Totals.GiftCardInfo.Remaining">
+    <Value>{0} باقی‌مانده</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.Totals.RewardPoints.WillEarn">
+    <Value>امتیاز دریافتی شما</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.Totals.RewardPoints.WillEarn.Point">
+    <Value>{0} امتیاز</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.Totals.Shipping.Method">
+    <Value>({0})</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.Totals.TaxRateLine">
+    <Value>مالیات {0}%</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.VendorList">
+    <Value>فروشنده</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.VendorList.All">
+    <Value>همه</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.VendorName">
+    <Value>نام فروشنده</Value>
+  </LocaleResource>
+  <LocaleResource Name="ShoppingCart.WishlistDisabled">
+    <Value>علاقه‌مندی‌ها برای این محصول غیرفعال است</Value>
+  </LocaleResource>
+  <LocaleResource Name="Sitemap.Description">
+    <Value>نقشهٔ سایت در ادامه، پیوند هر صفحه و توضیح کوتاهی دربارهٔ محتوای هر بخش را نشان می‌دهد</Value>
+  </LocaleResource>
+  <LocaleResource Name="StoreClosed">
+    <Value>فروشگاه در حال حاضر بسته است</Value>
+  </LocaleResource>
+  <LocaleResource Name="StoreClosed.Hint">
+    <Value>کمی بعد دوباره مراجعه کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="StoreTheme">
+    <Value>انتخاب ظاهر فروشگاه</Value>
+  </LocaleResource>
+  <LocaleResource Name="Tax.Exclusive">
+    <Value>نمایش قیمت‌ها بدون مالیات</Value>
+  </LocaleResource>
+  <LocaleResource Name="Tax.Inclusive">
+    <Value>نمایش قیمت‌ها با مالیات</Value>
+  </LocaleResource>
+  <LocaleResource Name="Tax.Selector.Label">
+    <Value>انتخاب نمایش مالیات</Value>
+  </LocaleResource>
+  <LocaleResource Name="Topic.Button">
+    <Value>ورود</Value>
+  </LocaleResource>
+  <LocaleResource Name="Topic.EnterPassword">
+    <Value>برای دسترسی به این محتوا، گذرواژه را وارد کنید:</Value>
+  </LocaleResource>
+  <LocaleResource Name="Topic.WrongPassword">
+    <Value>گذرواژه صحیح نیست</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.Password.IsNotEmpty">
+    <Value>گذرواژه الزامی است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.Password.LengthValidation">
+    <Value>باید حداقل {0} و حداکثر {1} نویسه داشته باشد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.Password.RequireDigit">
+    <Value>باید حداقل یک رقم داشته باشد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.Password.RequireLowercase">
+    <Value>باید حداقل یک حرف کوچک داشته باشد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.Password.RequireNonAlphanumeric">
+    <Value>باید حداقل یک نویسهٔ ویژه داشته باشد؛ مانند #?!@$%^&amp;*-</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.Password.RequireUppercase">
+    <Value>باید حداقل یک حرف بزرگ داشته باشد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Validation.Password.Rule">
+    <Value>گذرواژه باید شرایط زیر را داشته باشد:</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors">
+    <Value>فروشندگان</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.ApplyAccount">
+    <Value>درخواست حساب فروشنده</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.ApplyAccount.AcceptTermsOfService">
+    <Value>شرایط استفاده را می‌پذیرم</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.ApplyAccount.AcceptTermsOfService.Read">
+    <Value>(مطالعه)</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.ApplyAccount.AcceptTermsOfService.Required">
+    <Value>شرایط استفاده را بپذیرید</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.ApplyAccount.AlreadyApplied">
+    <Value>قبلاً درخواست حساب فروشنده داده‌اید. برای درخواست حساب فروشندهٔ دیگر، به‌عنوان مشتری جدید ثبت‌نام کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.ApplyAccount.Button">
+    <Value>ارسال</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.ApplyAccount.Description">
+    <Value>توضیحات</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.ApplyAccount.Email">
+    <Value>ایمیل</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.ApplyAccount.Email.Hint">
+    <Value>نشانی ایمیل خود را وارد کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.ApplyAccount.Email.Required">
+    <Value>ایمیل الزامی است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.ApplyAccount.IsAdmin">
+    <Value>مدیر نمی‌تواند درخواست حساب فروشنده بدهد</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.ApplyAccount.Name">
+    <Value>نام فروشنده</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.ApplyAccount.Name.Hint">
+    <Value>نام فروشنده را وارد کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.ApplyAccount.Name.Required">
+    <Value>نام فروشنده الزامی است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.ApplyAccount.Picture">
+    <Value>تصویر</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.ApplyAccount.Picture.ErrorMessage">
+    <Value>فقط می‌توانید فایل تصویر اضافه کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.ApplyAccount.Submitted">
+    <Value>درخواست شما با موفقیت ثبت شد. به‌زودی با شما تماس می‌گیریم.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.ExistingReviews">
+    <Value>دیدگاه‌های کاربران</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.List">
+    <Value>فهرست فروشندگان</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.Reviews.All">
+    <Value>نمایش همه</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.Reviews.BackTo">
+    <Value>بازگشت به {0}</Value>
+  </LocaleResource>
+  <LocaleResource Name="Vendors.ViewAll">
+    <Value>نمایش همه</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist">
+    <Value>علاقه‌مندی‌ها</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.AddToCart.Error">
+    <Value>برخی محصولات علاقه‌مندی‌ها به سبد منتقل نشدند.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.Button">
+    <Value>ارسال ایمیل</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.FriendEmail">
+    <Value>ایمیل دوست</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.FriendEmail.Hint">
+    <Value>ایمیل دوست خود را وارد کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.FriendEmail.Required">
+    <Value>ایمیل دوست خود را وارد کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.OnlyRegisteredUsers">
+    <Value>فقط کاربران ثبت‌نام‌شده می‌توانند از قابلیت ارسال برای دوست استفاده کنند</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.PersonalMessage">
+    <Value>پیام شخصی</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.PersonalMessage.Hint">
+    <Value>پیام شخصی خود را وارد کنید (اختیاری).</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.SuccessfullySent">
+    <Value>پیام شما ارسال شد.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.Title">
+    <Value>ارسال علاقه‌مندی‌ها برای دوست</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.YourEmailAddress">
+    <Value>نشانی ایمیل شما</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.YourEmailAddress.Hint">
+    <Value>نشانی ایمیل خود را وارد کنید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.EmailAFriend.YourEmailAddress.Required">
+    <Value>ایمیل خود را وارد کنید</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.MaximumNumberReached">
+    <Value>نمی‌توانید بیش از {0} فهرست علاقه‌مندی دلخواه بسازید.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.MoveToCustomWishlist">
+    <Value>انتقال به علاقه‌مندی‌ها</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.MultipleWishlistNotForGuest">
+    <Value>استفاده از چند فهرست علاقه‌مندی فقط برای کاربران ثبت‌نام‌شده ممکن است.</Value>
+  </LocaleResource>
+  <LocaleResource Name="Wishlist.NotAllowMultipleWishlist">
+    <Value>قابلیت چند فهرست علاقه‌مندی غیرفعال است.</Value>
+  </LocaleResource>
 </Language>
