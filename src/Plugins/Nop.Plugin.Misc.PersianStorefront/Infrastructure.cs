@@ -21,7 +21,7 @@ public sealed class StorefrontStartup : INopStartup
 
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
-        services.Configure<RazorViewEngineOptions>(options =>
+        services.PostConfigure<RazorViewEngineOptions>(options =>
             options.ViewLocationExpanders.Add(new StorefrontCatalogViewLocationExpander()));
         services.Configure<Microsoft.AspNetCore.Mvc.MvcOptions>(options =>
         {
