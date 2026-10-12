@@ -50,6 +50,8 @@ During the resumed goal turn,5958 files from the final Boutique release were cop
 
 The subsequent `Start-Process` action received `blocked by policy` before execution; no new host exists. A guarded operator script was prepared at `C:/Users/s_jamili/Desktop/nopcomerce/runtime-verification/Start-BoutiqueQaServer.ps1`, with verified PowerShell syntax. It checks both ports, the exact isolated PostgreSQL database/loopback provider and release DLL hashes; then configures Development, Boutique and precompiled views. This script has not been executed by the agent. It records a new process identity if successfully run; a startup message alone does not prove Home200. Full runtime acceptance remains pending. The start rejection is the first occurrence of this blocker in the resumed audit.
 
+Read-only revalidation on the next two goal turns at17:57:41 and17:58:50 UTC confirmed no listener/host on6250. Thus the same startup blocker persists for three consecutive resumed goal turns. The preceding turn was no progress, not a verified wait: there is no live Boutique process/session to await. The full goal is unproven; source/build evidence cannot replace desktop/mobile, native cart/account/checkout or independent deployment evidence. No remaining planned offline source/package action resolves this operational dependency. The goal is blocked pending a permitted operator startup; the rejected start action has not been retried through the prepared file or another tool.
+
 ## Next acceptance work
 
 1. Run the corrected selected packages on their already isolated configurations through a permitted operator action; observe Home200 and correct theme/CSS/Blazor assets.
