@@ -31,8 +31,11 @@
   </ItemGroup>
   <Target Name="BuildStorefrontClient" AfterTargets="Build" BeforeTargets="CopyStorefrontAssets">
     <!-- A separate process reevaluates the WASM SDK after restore and keeps host RID/solution properties out of the browser build. -->
+    <PropertyGroup>
+      <StorefrontClientCompilerArguments Condition="'$(UseSharedCompilation)' != ''">-p:UseSharedCompilation=&quot;$(UseSharedCompilation)&quot;</StorefrontClientCompilerArguments>
+    </PropertyGroup>
     <Exec WorkingDirectory="$(MSBuildProjectDirectory)"
-          Command="dotnet publish &quot;../../Storefront/Storefront.Client/Storefront.Client.csproj&quot; --configuration &quot;$(Configuration)&quot; -p:StorefrontTheme=&quot;$(StorefrontTheme)&quot; -p:GenerateCompressedFiles=false --output &quot;$(OutDir)Content/Client/&quot; --nologo" />
+          Command="dotnet publish &quot;../../Storefront/Storefront.Client/Storefront.Client.csproj&quot; --configuration &quot;$(Configuration)&quot; -p:StorefrontTheme=&quot;$(StorefrontTheme)&quot; $(StorefrontClientCompilerArguments) -p:GenerateCompressedFiles=false --output &quot;$(OutDir)Content/Client/&quot; --nologo" />
   </Target>
   <Target Name="CopyStorefrontAssets" AfterTargets="Build">
     <ItemGroup>
