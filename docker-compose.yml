@@ -1,22 +1,25 @@
-name: nopcommerce-test
+name: nopcommerce-${STOREFRONT_THEME_SLUG:?Set STOREFRONT_THEME_SLUG to madadrang or boutique}-${STOREFRONT_ENVIRONMENT:?Set STOREFRONT_ENVIRONMENT to test or production}
 services:
   nopcommerce_web:
-    image: nopcommerce:low-memory
+    image: nopcommerce:${STOREFRONT_THEME_SLUG:?Set STOREFRONT_THEME_SLUG}-${STOREFRONT_ENVIRONMENT:?Set STOREFRONT_ENVIRONMENT}
     build:
       context: .
       target: runtime
+      args:
+        STOREFRONT_THEME: ${STOREFRONT_THEME:-Madadrang}
     restart: unless-stopped
     mem_limit: 352m
     memswap_limit: 352m
     cpus: 1.0
     ports:
-      - "${HTTP_PORT:-2020}:8080"
-      - "${HTTPS_PORT:-2021}:8443"
+      - "${HTTP_PORT:?Choose an unused HTTP_PORT for this theme and environment}:8080"
+      - "${HTTPS_PORT:?Choose an unused HTTPS_PORT for this theme and environment}:8443"
     environment:
       ASPNETCORE_ENVIRONMENT: Production
+      StorefrontThemeConfig__Theme: ${STOREFRONT_THEME:-Madadrang}
       Logging__LogLevel__Default: Warning
-      StorefrontHostConfig__HttpPort: ${HTTP_PORT:-2020}
-      StorefrontHostConfig__HttpsPort: ${HTTPS_PORT:-2021}
+      StorefrontHostConfig__HttpPort: ${HTTP_PORT:?Set HTTP_PORT}
+      StorefrontHostConfig__HttpsPort: ${HTTPS_PORT:?Set HTTPS_PORT}
       Kestrel__Endpoints__Http__Url: http://+:8080
       Kestrel__Endpoints__Https__Url: https://+:8443
       Kestrel__Endpoints__Https__Certificate__Path: /https/nopcommerce.pfx

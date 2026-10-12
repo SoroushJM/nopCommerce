@@ -1,9 +1,8 @@
 ﻿using BlazorBlueprint.Components;
 using Storefront.Preview.Components;
-using Storefront.UI.Components;
 
 var builder = WebApplication.CreateBuilder(args);
-builder.Services.AddRazorComponents().AddInteractiveServerComponents().AddInteractiveWebAssemblyComponents();
+builder.Services.AddRazorComponents().AddInteractiveServerComponents();
 builder.Services.AddBlazorBlueprintComponents(localizer =>
 {
     localizer.Set("Sheet.Close", "بستن");
@@ -15,6 +14,5 @@ if (!app.Environment.IsDevelopment())
 app.UseStaticFiles();
 app.MapStaticAssets();
 app.UseAntiforgery();
-app.MapRazorComponents<App>().AddInteractiveServerRenderMode().AddInteractiveWebAssemblyRenderMode()
-    .AddAdditionalAssemblies(typeof(RendererProbe).Assembly);
+app.MapRazorComponents<App>().AddInteractiveServerRenderMode();
 app.Run();

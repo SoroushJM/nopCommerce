@@ -1,16 +1,53 @@
 <Project Sdk="Microsoft.NET.Sdk.Razor">
- <PropertyGroup><TargetFramework>net10.0</TargetFramework><ImplicitUsings>enable</ImplicitUsings><Nullable>enable</Nullable><AddRazorSupportForMvc>true</AddRazorSupportForMvc><OutputPath>../../Presentation/Nop.Web/Plugins/Misc.PersianStorefront</OutputPath><OutDir>$(OutputPath)</OutDir><CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies></PropertyGroup>
- <ItemGroup><FrameworkReference Include="Microsoft.AspNetCore.App"/><ProjectReference Include="../../Presentation/Nop.Web/Nop.Web.csproj" Private="false"/><ProjectReference Include="../../Storefront/Storefront.UI/Storefront.UI.csproj"/><PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.2.3"/><PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.2.3"/><PackageReference Include="Scalar.AspNetCore" Version="2.17.13"/></ItemGroup>
- <ItemGroup><Content Update="plugin.json" CopyToOutputDirectory="PreserveNewest"/><Content Update="Views/**/*.cshtml" CopyToOutputDirectory="PreserveNewest"/></ItemGroup>
- <Target Name="BuildStorefrontClient" AfterTargets="Build" BeforeTargets="CopyStorefrontAssets">
-  <MSBuild Projects="../../Storefront/Storefront.Client/Storefront.Client.csproj" Targets="Restore;Publish"
-           RemoveProperties="DockerRuntimeIdentifier;RuntimeIdentifier;SelfContained;OutputPath;OutDir"
-           Properties="Configuration=$(Configuration);PublishDir=$(MSBuildProjectDirectory)/$(OutDir)/Content/Client/;GenerateCompressedFiles=false" />
- </Target>
- <Target Name="CopyStorefrontAssets" AfterTargets="Build">
-  <ItemGroup><UIAssets Include="../../Storefront/Storefront.UI/wwwroot/**/*"/><BBAssets Include="$(NuGetPackageRoot)blazorblueprint.components/4.1.0/staticwebassets/**/*"/><PrimitiveAssets Include="$(NuGetPackageRoot)blazorblueprint.primitives/4.1.0/staticwebassets/**/*"/></ItemGroup>
-  <Copy SourceFiles="@(UIAssets)" DestinationFiles="@(UIAssets->'$(OutDir)/Content/Storefront.UI/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true"/>
-  <Copy SourceFiles="@(BBAssets)" DestinationFiles="@(BBAssets->'$(OutDir)/Content/BlazorBlueprint.Components/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true"/>
-  <Copy SourceFiles="@(PrimitiveAssets)" DestinationFiles="@(PrimitiveAssets->'$(OutDir)/Content/BlazorBlueprint.Primitives/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true"/>
-</Target>
-<Target Name="PublishStorefrontAssets" AfterTargets="Publish"><ItemGroup><PublishedStorefrontAssets Include="$(OutDir)/Content/**/*" /></ItemGroup><Copy SourceFiles="@(PublishedStorefrontAssets)" DestinationFiles="@(PublishedStorefrontAssets->'$(PublishDir)/Content/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" /></Target></Project>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <OutputPath Condition="'$(StorefrontPluginOutputRoot)' == ''">../../Presentation/Nop.Web/Plugins/Misc.PersianStorefront/</OutputPath>
+    <OutputPath Condition="'$(StorefrontPluginOutputRoot)' != ''">$(StorefrontPluginOutputRoot)/Misc.PersianStorefront/</OutputPath>
+    <OutDir>$([System.IO.Path]::GetFullPath('$(OutputPath)', '$(MSBuildProjectDirectory)'))/</OutDir>
+    <CopyLocalLockFileAssemblies>true</CopyLocalLockFileAssemblies>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="../../Presentation/Nop.Web/Nop.Web.csproj" Private="false" />
+    <ProjectReference Include="../../Storefront/Storefront.UI.Shared/Storefront.UI.Shared.csproj" />
+    <ProjectReference Include="../../Storefront/Storefront.UI.Madadrang/Storefront.UI.Madadrang.csproj" Condition="'$(StorefrontTheme)' == 'Madadrang' Or '$(StorefrontTheme)' == 'All'" />
+    <ProjectReference Include="../../Storefront/Storefront.UI.Boutique/Storefront.UI.Boutique.csproj" Condition="'$(StorefrontTheme)' == 'Boutique' Or '$(StorefrontTheme)' == 'All'" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.2.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.2.3" />
+    <PackageReference Include="Scalar.AspNetCore" Version="2.17.13" />
+  </ItemGroup>
+  <ItemGroup Condition="'$(StorefrontTheme)' == 'Boutique'">
+    <Content Remove="Views/HomeHero.cshtml;Views/HomepageBanners.cshtml;Views/NativeHeader.cshtml;Views/NativeFooter.cshtml" />
+    <RazorGenerate Remove="Views/HomeHero.cshtml;Views/HomepageBanners.cshtml;Views/NativeHeader.cshtml;Views/NativeFooter.cshtml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="plugin.json" CopyToOutputDirectory="PreserveNewest" />
+    <Content Update="Views/**/*.cshtml" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+  <Target Name="BuildStorefrontClient" AfterTargets="Build" BeforeTargets="CopyStorefrontAssets">
+    <MSBuild Projects="../../Storefront/Storefront.Client/Storefront.Client.csproj" Targets="Restore;Publish"
+             RemoveProperties="DockerRuntimeIdentifier;RuntimeIdentifier;SelfContained;OutputPath;OutDir;PublishDir"
+             Properties="Configuration=$(Configuration);StorefrontTheme=$(StorefrontTheme);PublishDir=$(OutDir)Content/Client/;GenerateCompressedFiles=false" />
+  </Target>
+  <Target Name="CopyStorefrontAssets" AfterTargets="Build">
+    <ItemGroup>
+      <SharedAssets Include="../../Storefront/Storefront.UI.Shared/wwwroot/**/*" />
+      <MadadrangAssets Include="../../Storefront/Storefront.UI.Madadrang/wwwroot/**/*" Condition="'$(StorefrontTheme)' == 'Madadrang' Or '$(StorefrontTheme)' == 'All'" />
+      <BoutiqueAssets Include="../../Storefront/Storefront.UI.Boutique/wwwroot/**/*" Condition="'$(StorefrontTheme)' == 'Boutique' Or '$(StorefrontTheme)' == 'All'" />
+      <BBAssets Include="$(NuGetPackageRoot)blazorblueprint.components/4.1.0/staticwebassets/**/*" />
+      <PrimitiveAssets Include="$(NuGetPackageRoot)blazorblueprint.primitives/4.1.0/staticwebassets/**/*" />
+    </ItemGroup>
+    <Copy SourceFiles="@(SharedAssets)" DestinationFiles="@(SharedAssets->'$(OutDir)Content/Storefront.UI.Shared/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(MadadrangAssets)" DestinationFiles="@(MadadrangAssets->'$(OutDir)Content/Storefront.UI.Madadrang/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(BoutiqueAssets)" DestinationFiles="@(BoutiqueAssets->'$(OutDir)Content/Storefront.UI.Boutique/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(BBAssets)" DestinationFiles="@(BBAssets->'$(OutDir)Content/BlazorBlueprint.Components/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(PrimitiveAssets)" DestinationFiles="@(PrimitiveAssets->'$(OutDir)Content/BlazorBlueprint.Primitives/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+  <Target Name="PublishStorefrontAssets" AfterTargets="Publish">
+    <ItemGroup><PublishedStorefrontAssets Include="$(OutDir)Content/**/*" /></ItemGroup>
+    <Copy SourceFiles="@(PublishedStorefrontAssets)" DestinationFiles="@(PublishedStorefrontAssets->'$(PublishDir)/Content/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+  </Target>
+</Project>

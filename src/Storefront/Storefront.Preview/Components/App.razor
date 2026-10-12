@@ -1,6 +1,7 @@
 @page "/renderer/auto"
+@page "/renderer/server"
 @using Microsoft.AspNetCore.Components
-@using Storefront.UI.Components
+@using Storefront.Preview.Components
 <!DOCTYPE html>
 <html lang="fa" dir="rtl">
 
@@ -8,16 +9,20 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <base href="/" />
-    <title>Madadrang | Auto renderer experiment</title>
-    <link rel="stylesheet" href="_content/Storefront.UI/storefront.css" />
+    <title>Storefront renderer preview</title>
+    <link rel="stylesheet" href="_content/Storefront.UI.@ThemeName/storefront.css" />
     <link rel="stylesheet" href="_content/BlazorBlueprint.Components/blazorblueprint.css" />
     <HeadOutlet />
     <ImportMap />
 </head>
 
 <body>
-    <RendererProbe @rendermode="InteractiveAuto" />
+    <RendererProbe @rendermode="InteractiveServer" />
     <script src="@Assets["_framework/blazor.web.js"]"></script>
 </body>
 
 </html>
+@code {
+    [Inject] private IConfiguration Configuration { get; set; } = default!;
+    private string ThemeName => (Configuration["StorefrontTheme"] ?? typeof(App).Assembly.GetCustomAttributes(typeof(System.Reflection.AssemblyMetadataAttribute), false).Cast<System.Reflection.AssemblyMetadataAttribute>().FirstOrDefault(item => item.Key == "StorefrontTheme")?.Value) == "Boutique" ? "Boutique" : "Madadrang";
+}

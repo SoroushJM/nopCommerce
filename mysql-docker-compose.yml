@@ -1,17 +1,104 @@
+name: nopcommerce-${STOREFRONT_THEME_SLUG:?Set STOREFRONT_THEME_SLUG to madadrang or boutique}-${STOREFRONT_ENVIRONMENT:?Set STOREFRONT_ENVIRONMENT to test or production}
 services:
-    nopcommerce_web:
-        build: .
-        container_name: nopcommerce
-        ports:
-            - "80:80"
-        depends_on:
-            - nopcommerce_database
-    nopcommerce_database:
-        image: "mysql:latest"
-        container_name: nopcommerce_mysql_server
-        restart: "always"
-        environment:
-          MYSQL_ROOT_PASSWORD: "nopCommerce_db_password"
-
+  nopcommerce_web:
+    image: nopcommerce:${STOREFRONT_THEME_SLUG:?Set STOREFRONT_THEME_SLUG}-${STOREFRONT_ENVIRONMENT:?Set STOREFRONT_ENVIRONMENT}
+    build:
+      context: .
+      target: runtime
+      args:
+        STOREFRONT_THEME: ${STOREFRONT_THEME:-Madadrang}
+    restart: unless-stopped
+    mem_limit: 352m
+    memswap_limit: 352m
+    cpus: 1.0
+    ports:
+      - "${HTTP_PORT:?Choose an unused HTTP_PORT for this theme and environment}:8080"
+      - "${HTTPS_PORT:?Choose an unused HTTPS_PORT for this theme and environment}:8443"
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      StorefrontThemeConfig__Theme: ${STOREFRONT_THEME:-Madadrang}
+      Logging__LogLevel__Default: Warning
+      StorefrontHostConfig__HttpPort: ${HTTP_PORT:?Set HTTP_PORT}
+      StorefrontHostConfig__HttpsPort: ${HTTPS_PORT:?Set HTTPS_PORT}
+      Kestrel__Endpoints__Http__Url: http://+:8080
+      Kestrel__Endpoints__Https__Url: https://+:8443
+      Kestrel__Endpoints__Https__Certificate__Path: /https/nopcommerce.pfx
+      Kestrel__Endpoints__Https__Certificate__Password: ${HTTPS_CERT_PASSWORD:?Set HTTPS_CERT_PASSWORD in .env}
+      # Leave the connection string unset until the web installer creates the schema.
+      InstallationConfig__AdminEmail: ${ADMIN_EMAIL:-admin@example.com}
+      InstallationConfig__DataProvider: MySql
+      InstallationConfig__ServerName: nopcommerce_database
+      InstallationConfig__DatabaseName: ${MYSQL_DATABASE:-nopcommerce}
+      InstallationConfig__Username: ${MYSQL_USER:-nopcommerce}
+      InstallationConfig__Password: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
+      InstallationConfig__InstallRegionalResources: "false"
+      InstallationConfig__DisableSampleData: "true"
+      CacheConfig__DefaultCacheTime: "5"
+      CacheConfig__LinqDisableQueryCache: "true"
+      WebOptimizer__EnableMemoryCache: "false"
+      WebOptimizer__EnableDiskCache: "true"
+    depends_on:
+      nopcommerce_database:
+        condition: service_healthy
+      certificates:
+        condition: service_completed_successfully
+    volumes:
+      - app_data:/app/App_Data
+      - images:/app/wwwroot/images
+      - files:/app/wwwroot/files
+      - icons:/app/wwwroot/icons
+      - https:/https:ro
+    healthcheck:
+      # Static readiness avoids store-level SSL redirects on container-only ports.
+      test: ["CMD-SHELL", "wget -q --spider http://127.0.0.1:8080/favicon.ico || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 120s
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+  nopcommerce_database:
+    image: mysql:8.4
+    restart: unless-stopped
+    mem_limit: 96m
+    memswap_limit: 96m
+    cpus: 0.5
+    environment:
+      MYSQL_DATABASE: ${MYSQL_DATABASE:-nopcommerce}
+      MYSQL_USER: ${MYSQL_USER:-nopcommerce}
+      MYSQL_PASSWORD: ${MYSQL_PASSWORD:?Set MYSQL_PASSWORD in .env}
+      MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD:?Set MYSQL_ROOT_PASSWORD in .env}
+    volumes:
+      - mysql_data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h 127.0.0.1 -uroot -p\"$$MYSQL_ROOT_PASSWORD\" --silent"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    logging:
+      driver: json-file
+      options:
+        max-size: "5m"
+        max-file: "2"
+  certificates:
+    image: nopcommerce:certificate-helper
+    build:
+      context: .
+      target: certificates
+    restart: "no"
+    mem_limit: 16m
+    memswap_limit: 16m
+    environment:
+      HTTPS_CERT_PASSWORD: ${HTTPS_CERT_PASSWORD:?Set HTTPS_CERT_PASSWORD in .env}
+    volumes:
+      - https:/https
 volumes:
-  nopcommerce_data:            
+  mysql_data:
+  app_data:
+  images:
+  files:
+  icons:
+  https:

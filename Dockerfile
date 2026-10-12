@@ -3,6 +3,8 @@ FROM mcr.microsoft.com/dotnet/sdk:10.0-alpine AS build
 RUN apk add --no-cache nodejs npm
 WORKDIR /source
 ARG RUNTIME_IDENTIFIER=linux-musl-x64
+ARG STOREFRONT_THEME=Madadrang
+RUN case "$STOREFRONT_THEME" in Madadrang|Boutique) ;; *) echo "STOREFRONT_THEME must be Madadrang or Boutique" >&2; exit 1 ;; esac
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 DOTNET_NOLOGO=1
 # Restore metadata first: source edits do not invalidate the NuGet layer.
 COPY global.json ./
@@ -13,7 +15,9 @@ COPY src/Libraries/Nop.Services/Nop.Services.csproj src/Libraries/Nop.Services/
 COPY src/Presentation/Nop.Web.Framework/Nop.Web.Framework.csproj src/Presentation/Nop.Web.Framework/
 COPY src/Presentation/Nop.Web/Nop.Web.csproj src/Presentation/Nop.Web/
 COPY src/Presentation/Nop.Docker.Views/Nop.Docker.Views.csproj src/Presentation/Nop.Docker.Views/
-COPY src/Storefront/Storefront.UI/Storefront.UI.csproj src/Storefront/Storefront.UI/
+COPY src/Storefront/Storefront.UI.Shared/Storefront.UI.Shared.csproj src/Storefront/Storefront.UI.Shared/
+COPY src/Storefront/Storefront.UI.Madadrang/Storefront.UI.Madadrang.csproj src/Storefront/Storefront.UI.Madadrang/
+COPY src/Storefront/Storefront.UI.Boutique/Storefront.UI.Boutique.csproj src/Storefront/Storefront.UI.Boutique/
 COPY src/Storefront/Storefront.Client/Storefront.Client.csproj src/Storefront/Storefront.Client/
 COPY src/Plugins/Nop.Plugin.Misc.PersianStorefront/Nop.Plugin.Misc.PersianStorefront.csproj src/Plugins/Nop.Plugin.Misc.PersianStorefront/
 COPY src/Plugins/Nop.Plugin.Payments.CheckMoneyOrder/Nop.Plugin.Payments.CheckMoneyOrder.csproj src/Plugins/Nop.Plugin.Payments.CheckMoneyOrder/
@@ -22,23 +26,24 @@ COPY src/Plugins/Nop.Plugin.Tax.FixedOrByCountryStateZip/Nop.Plugin.Tax.FixedOrB
 COPY src/Plugins/Nop.Plugin.Widgets.Swiper/Nop.Plugin.Widgets.Swiper.csproj src/Plugins/Nop.Plugin.Widgets.Swiper/
 COPY src/Build/src/ClearPluginAssemblies/ClearPluginAssemblies.csproj src/Build/src/ClearPluginAssemblies/
 RUN --mount=type=cache,id=nop-nuget,target=/root/.nuget/packages,sharing=locked \
-    dotnet restore src/Storefront/Storefront.Client/Storefront.Client.csproj && \
-    dotnet restore src/Docker.slnx -p:DockerRuntimeIdentifier="$RUNTIME_IDENTIFIER" && \
+    dotnet restore src/Storefront/Storefront.Client/Storefront.Client.csproj -p:StorefrontTheme="$STOREFRONT_THEME" && \
+    dotnet restore src/Docker.slnx -p:StorefrontTheme="$STOREFRONT_THEME" -p:DockerRuntimeIdentifier="$RUNTIME_IDENTIFIER" && \
     dotnet restore src/Build/src/ClearPluginAssemblies/ClearPluginAssemblies.csproj
-COPY src/Storefront/Storefront.UI/package*.json src/Storefront/Storefront.UI/
+COPY src/Storefront/Storefront.UI.Madadrang/package*.json src/Storefront/Storefront.UI.Madadrang/
+COPY src/Storefront/Storefront.UI.Boutique/package*.json src/Storefront/Storefront.UI.Boutique/
 RUN --mount=type=cache,id=nop-npm,target=/root/.npm,sharing=locked \
-    cd src/Storefront/Storefront.UI && npm ci --no-audit --no-fund
+    cd "src/Storefront/Storefront.UI.$STOREFRONT_THEME" && npm ci --no-audit --no-fund
 COPY src/ src/
 RUN --mount=type=cache,id=nop-nuget,target=/root/.nuget/packages,sharing=locked \
     dotnet build src/Build/src/ClearPluginAssemblies/ClearPluginAssemblies.csproj \
       -c Release --no-restore -o /tmp/clear-helper && \
     cp /tmp/clear-helper/ClearPluginAssemblies.* /source/src/Build/ && \
-    dotnet build src/Docker.slnx -c Release --no-restore -p:DockerRuntimeIdentifier="$RUNTIME_IDENTIFIER" -p:DebugType=None -p:DebugSymbols=false
+    dotnet build src/Docker.slnx -c Release --no-restore -p:StorefrontTheme="$STOREFRONT_THEME" -p:DockerRuntimeIdentifier="$RUNTIME_IDENTIFIER" -p:DebugType=None -p:DebugSymbols=false
 RUN --mount=type=cache,id=nop-nuget,target=/root/.nuget/packages,sharing=locked \
     dotnet /source/src/Build/ClearPluginAssemblies.dll \
       "OutputPath=/source/src/Presentation/Nop.Web/bin/Release|PluginPath=/source/src/Presentation/Nop.Web/Plugins/Misc.PersianStorefront|SaveLocalesFolders=true" && \
     dotnet publish src/Presentation/Nop.Web/Nop.Web.csproj -c Release --no-build --no-restore -r "$RUNTIME_IDENTIFIER" --self-contained false \
-      -p:DockerRuntimeIdentifier="$RUNTIME_IDENTIFIER" -p:DebugType=None -p:DebugSymbols=false \
+      -p:StorefrontTheme="$STOREFRONT_THEME" -p:DockerRuntimeIdentifier="$RUNTIME_IDENTIFIER" -p:DebugType=None -p:DebugSymbols=false \
       -p:PreserveCompilationContext=false -p:PreserveCompilationReferences=false -o /app/published && \
     cp /source/src/Presentation/Nop.Docker.Views/bin/Release/net10.0/"$RUNTIME_IDENTIFIER"/Nop.Docker.Views.dll /app/published/ && \
     find /app/published -type f -name '*.pdb' -delete && \
