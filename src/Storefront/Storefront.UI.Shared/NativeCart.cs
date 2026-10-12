@@ -39,6 +39,7 @@ public sealed record NativeCart
     public List<NativeCartWarning> ItemWarnings { get; init; } = [];
     public List<NativeCartTotalRow> Totals { get; init; } = [];
     public List<NativeFormField> CheckoutFields { get; init; } = [];
+    public Dictionary<string, string> NativeSections { get; init; } = [];
     public string TokenField { get; init; } = "";
     public string Token { get; init; } = "";
 }

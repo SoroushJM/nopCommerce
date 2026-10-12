@@ -37,6 +37,9 @@ export async function postForm(url, fields) {
   if (!response.ok)
     throw new Error("درخواست فروشگاه انجام نشد. دوباره تلاش کنید.");
   const result = await response.json();
+  // Native add responses carry header/flyout HTML and the store's notification message.
+  // Attribute-change responses have no section keys and retain their inline validation.
+  if (hasNativeSections(result)) applyNativeResponse(result);
   if (typeof result.message === "string") {
     result.message = [
       new DOMParser().parseFromString(result.message, "text/html").body
@@ -48,7 +51,53 @@ export async function postForm(url, fields) {
 
 const cartListeners = new Map();
 let nextCartListener = 0;
+const nativeSuccessOriginal = Symbol.for("Storefront.AjaxCart.successOriginal");
+
+function hasNativeSections(response) {
+  return !!(response?.updatetopcartsectionhtml
+    || response?.updatetopwishlistsectionhtml
+    || response?.updateflyoutcartsectionhtml);
+}
+
+function installNativeCartBridge() {
+  const native = window.AjaxCart;
+  if (typeof native?.success_process !== "function") return;
+  if (native.success_process[nativeSuccessOriginal]) return;
+  const original = native.success_process;
+  const wrapped = function (response) {
+    const result = original.apply(this, arguments);
+    // Wishlist-only changes do not change the shopping cart. Never fetch from a GET sync.
+    if (response?.updatetopcartsectionhtml || response?.updateflyoutcartsectionhtml)
+      notifyCartChanged(false);
+    return result;
+  };
+  Object.defineProperty(wrapped, nativeSuccessOriginal, { value: original });
+  native.success_process = wrapped;
+}
+
+function applyNativeResponse(response) {
+  installNativeCartBridge();
+  const native = window.AjaxCart;
+  if (typeof native?.success_process !== "function") return;
+  // Shared callers already own their cart event. Skip the wrapper to avoid a second refresh.
+  const original = native.success_process[nativeSuccessOriginal] ?? native.success_process;
+  original.call(native, response);
+}
+
+export function syncNativeCart(cart) {
+  const sections = cart.NativeSections ?? cart.nativeSections;
+  if (!sections || !hasNativeSections(sections)) return;
+  // Server-rendered sections provide localized counts and all native flyout features.
+  // Omitting message/redirect makes a read or quantity update silent and cannot loop.
+  applyNativeResponse({
+    updatetopcartsectionhtml: sections.updatetopcartsectionhtml,
+    updatetopwishlistsectionhtml: sections.updatetopwishlistsectionhtml,
+    updateflyoutcartsectionhtml: sections.updateflyoutcartsectionhtml,
+  });
+}
+
 export function listenForCart(reference) {
+  installNativeCartBridge();
   const listener = (event) =>
     reference.invokeMethodAsync("CartChanged", !!event.detail?.open);
   const id = ++nextCartListener;
@@ -118,6 +167,7 @@ async function readNativeCart(response) {
     throw new Error("درخواست سبد خرید انجام نشد. دوباره تلاش کنید.");
   const cart = await response.json();
   refreshAntiforgery(cart);
+  syncNativeCart(cart);
   return cart;
 }
 
