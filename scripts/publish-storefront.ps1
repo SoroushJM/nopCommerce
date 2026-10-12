@@ -37,6 +37,7 @@ function Invoke-Dotnet {
 # are not copied; every native plugin can safely write into this private checkout.
 $sourceFiles = & git -C $repoRoot -c core.quotepath=false ls-files --cached --others --exclude-standard
 if ($LASTEXITCODE -ne 0) { throw 'The source snapshot requires a Git checkout.' }
+Write-Output "Preparing isolated $Theme source snapshot: $sourceRoot"
 foreach ($relativePath in ($sourceFiles | Sort-Object -Unique)) {
     if ($relativePath -match '(^|/)(bin|obj|node_modules|\.git|\.artifacts)(/|$)' -or
         $relativePath -match '^src/Presentation/Nop.Web/(Plugins/|App_Data/DataProtectionKeys/)' -or
@@ -45,9 +46,10 @@ foreach ($relativePath in ($sourceFiles | Sort-Object -Unique)) {
     $inputPath = Join-Path $repoRoot $relativePath
     if (!(Test-Path -LiteralPath $inputPath -PathType Leaf)) { continue }
     $destinationPath = Join-Path $sourceRoot $relativePath
-    New-Item -ItemType Directory -Path (Split-Path -Parent $destinationPath) -Force | Out-Null
-    Copy-Item -LiteralPath $inputPath -Destination $destinationPath
+    [System.IO.Directory]::CreateDirectory([System.IO.Path]::GetDirectoryName($destinationPath)) | Out-Null
+    [System.IO.File]::Copy($inputPath, $destinationPath)
 }
+Write-Output "Building $Theme in isolated source snapshot."
 
 $previousLocation = Get-Location
 try {
