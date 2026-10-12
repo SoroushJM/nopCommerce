@@ -46,6 +46,7 @@ RUN --mount=type=cache,id=nop-nuget,target=/root/.nuget/packages,sharing=locked 
       -p:StorefrontTheme="$STOREFRONT_THEME" -p:DockerRuntimeIdentifier="$RUNTIME_IDENTIFIER" -p:ShouldUnsetParentConfigurationAndPlatform=false -p:DebugType=None -p:DebugSymbols=false \
       -p:PreserveCompilationContext=false -p:PreserveCompilationReferences=false -o /app/published && \
     cp /source/src/Presentation/Nop.Docker.Views/bin/Release/net10.0/"$RUNTIME_IDENTIFIER"/Nop.Docker.Views.dll /app/published/ && \
+    cp /source/src/Presentation/Nop.Docker.Views/bin/Release/net10.0/"$RUNTIME_IDENTIFIER"/PrecompiledViewPluginDependencies/*.dll /app/published/ && \
     find /app/published -type f -name '*.pdb' -delete && \
     mkdir -p /app/published/logs /app/published/bin /app/published/App_Data/DataProtectionKeys
 COPY docker/compact-publish.sh /tmp/compact-publish.sh

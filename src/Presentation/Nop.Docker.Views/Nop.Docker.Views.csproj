@@ -26,4 +26,15 @@
     <Content Include="../../Plugins/Nop.Plugin.Tax.FixedOrByCountryStateZip/Views/**/*.cshtml" Link="Plugins/Tax.FixedOrByCountryStateZip/Views/%(RecursiveDir)%(Filename)%(Extension)" />
     <Content Include="../../Plugins/Nop.Plugin.Widgets.Swiper/Views/**/*.cshtml" Link="Plugins/Widgets.Swiper/Views/%(RecursiveDir)%(Filename)%(Extension)" />
   </ItemGroup>
+  <Target Name="CollectPrecompiledViewPluginDependencies" AfterTargets="Build">
+    <!-- Compiled views reference plugin model types even when that plugin is not installed.
+         Export the actual Release reference assemblies so the host can resolve them beside this library. -->
+    <ItemGroup>
+      <PrecompiledViewPluginDependency Include="@(ReferenceCopyLocalPaths)"
+          Condition="$([System.String]::Copy('%(ReferenceCopyLocalPaths.Filename)').StartsWith('Nop.Plugin.')) and '%(ReferenceCopyLocalPaths.Extension)' == '.dll'" />
+    </ItemGroup>
+    <Error Condition="'@(PrecompiledViewPluginDependency)' == ''" Text="No plugin model dependencies were resolved for the precompiled native views." />
+    <Copy SourceFiles="@(PrecompiledViewPluginDependency)"
+          DestinationFolder="$(TargetDir)PrecompiledViewPluginDependencies/" SkipUnchangedFiles="true" />
+  </Target>
 </Project>

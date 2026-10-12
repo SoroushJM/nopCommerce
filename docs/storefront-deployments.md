@@ -18,6 +18,8 @@ Invalid values fail the build. For selected-theme production builds use `src/Doc
 
 `StorefrontPluginOutputRoot` optionally redirects the Persian plugin output into `<root>/Misc.PersianStorefront/`. Other native plugins retain their normal nopCommerce output convention. The publish script therefore builds in a fresh source snapshot to keep every plugin away from a running checkout's `Nop.Web/Plugins` folder.
 
+`Nop.Docker.Views` exports its resolved plugin model DLL dependencies into `PrecompiledViewPluginDependencies` beside its build output. Both the publish script and Docker packaging put those Release assemblies beside `Nop.Docker.Views.dll` in the application root. This is required because MVC inspects compiled view types during startup, even when a referenced native plugin is available in `Plugins` but is not installed or loaded by nopCommerce yet. Plugin folders and installation metadata remain intact; publishing does not install those plugins. The package manifest lists the exact exported dependencies.
+
 ## Prepare a release
 
 From the repository root, with .NET 10 SDK, Node/npm, Git, and PowerShell installed:
