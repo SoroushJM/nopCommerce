@@ -12,6 +12,9 @@
 *.png   -text
 *.jpg   -text
 
+# Preserve the reviewed Git patch byte for byte, including upstream context spaces.
+vendor/blazorblueprint-primitives/sheet-dialog-exit.patch -text -whitespace
+
 #remove UI libraries from the statistic
 src/Presentation/Nop.Web/wwwroot/lib/** linguist-vendored
 src/Presentation/Nop.Web/wwwroot/lib_npm/** linguist-vendored
