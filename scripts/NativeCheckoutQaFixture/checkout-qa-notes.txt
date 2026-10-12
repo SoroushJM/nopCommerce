@@ -1,0 +1,50 @@
+Native checkout fixture — isolated QA only — 2026-10-12
+
+Targets are hardcoded in Invoke-Fixture.ps1:
+Boutique: nop_themeqa_boutique_20261012185304, existing app runtime-smoke-boutique-1e5498f14ffc47e486403f68e5162ca4/app, HTTP6250.
+Madadrang: nop_themeqa_madadrang_20261012185304, existing app runtime-smoke-madadrang-3dd9cb04406e46a6b1161eda95a9073b/app, HTTP6240.
+Never use these fixtures on source nop_stationery_dev, port5090, or remote Production.
+No appsettings/connection strings/passwords are copied or printed. Database name and loopback PostgreSQL host are asserted before execution; SQL separately checks the two exact QA names. Transactions use an ownership-commented snapshot table, advisory lock, lock timeout and bounded statement timeout.
+
+Preparation executed successfully for both databases:
+1. All 49 initially active MessageTemplate rows disabled, previous IsActive states snapshotted.
+2. QueuedMessagesSendTask disabled, prior Enabled state snapshotted. Two pre-existing pending emails retained untouched in each copy.
+3. Install.Plugin.Sample.Data absent in both baselines; existing true value would be set false and snapshotted.
+4. Only Payments.CheckMoneyOrder and Shipping.FixedByWeightByTotal queued in native App_Data/plugins.json. Original metadata retained under App_Data/native-checkout-qa-v1/plugins.before.json (contains plugin metadata, no connection secrets).
+5. Server owner restarted exact QA hosts. Native startup installed CheckMoneyOrder5.00.3 and FixedByWeightByTotal5.00.8; pending queue empty. This ran actual schema migration and InstallAsync, not a fabricated InstalledPlugins entry.
+
+Configuration executed successfully for both:
+Anonymous checkout temporarily enabled; cart/order Terms checkbox temporarily disabled so fictional QA checkout accepts no merchant contract. Native payment/shipping selection bypass disabled.
+Payment method restricted to native CheckMoneyOrder: additional fee zero, no percentage, payment instructions explicitly offline QA/do not send money. This native processor returns pending payment and has empty PostProcessPaymentAsync; no external payment endpoint exists in this plugin.
+Shipping restricted to native fixed-rate plugin. Existing native shipping methods1/2/3 retained; rates65000/120000/85000 and transit days3/1/2. Both primary currencies explicitly verified IRT/toman, Rate1, so these amounts use native store units. ShippingByWeightByTotalEnabled=False uses actual fixed-rate native service; migration-created rate table remains empty.
+Store-level overrides for owned settings are captured and updated consistently. No business code, products, carts, orders, customer accounts, addresses, menus, or currencies changed by this fixture.
+
+Operator sequence (run PowerShell from this folder; no restart performed by our script):
+Invoke-Fixture.ps1 -Theme Boutique -Phase Verify -Apply
+Invoke-Fixture.ps1 -Theme Madadrang -Phase Verify -Apply
+No -Apply means dry-run guards only. Prepare and Restore require QA HTTP/HTTPS ports free; the server-maintenance owner stops/starts exact processes. Configure requires both native plugins actually installed. A cache refresh is required after Configure.
+
+Browser acceptance, to perform on each isolated host after cache refresh:
+Use an isolated guest and a stock-bearing published shippable product (Boutique3583 with valid in-stock color/size; Madadrang existing normal fixture1). Preserve native attribute selection and native add-to-cart validation.
+Open native cart, confirm selected attributes/quantity and subtotal; Checkout -> guest checkout -> native billing form.
+Use fictional QA name/address and qa-boutique@example.invalid or qa-madadrang@example.invalid. CountryIran/IR106 and Tehran/state888 are existing copied native fixtures. Enter any required fictional fields shown by native address settings. Continue through native shipping-address step (same-address toggle or separate address), shipping selection, CheckMoneyOrder selection, explicit offline QA payment-information screen, and native final order review.
+For complete order proof, confirm only this fictional QA order, record native orderId/payment pending/shipping method and totals, and verify native completion plus emptied guest cart. Never enter a real card, phone requiring SMS, payment URL, or a real delivery/email address. If order cancellation is desired, use the native order service/admin so stock/events are respected; do not delete order rows by SQL.
+Record actual browser results separately. Fixture/setup success, Home200, migration checks, and static source inspection are not proof that the checkout UI completed.
+After either review or confirmation, Verify must still show active templates0, enabled email tasks0 and the original pending-email count2. No template or SMTP test should be enabled/run.
+
+Reversibility:
+Before snapshot stored in each exact QA DB table NativeCheckoutQaFixture, key native-checkout-v1. It contains only owned settings, relevant plugin locales/migration rows, shipping-table rows and template/task booleans; no customer credentials/messages/addresses.
+ValidateRestore executes actual Restore.sql, including settings/locales/schema restoration and equality verification against before snapshot, then ROLLBACK. It passed both databases, so fixtures remained configured; this is transaction-level rollback verification, not a committed teardown.
+For actual teardown, coordinate exact-host stop, run Invoke-Fixture.ps1 -Theme <theme> -Phase Restore -Apply, then maintenance owner restarts. Metadata guard requires unchanged baseline plugins plus exactly our two native plugins/versions and no unrelated pending maintenance. Database restore rejects any changed owned data instead of overwriting it, restores original settings/template/task states, removes only plugin-created locale/settings/migration rows, and drops only the originally absent native shipping table if still empty. Snapshot audit table retained. Unrelated products including fallback3595/3596, orders/carts/customer/address/email evidence remain intact.
+Restoration is not automatically run while browser acceptance is in progress. Re-running Configure on an unchanged configured fixture is supported. A restored fixture is terminal; review/explicitly create a new snapshot version for another install cycle.
+
+Production/export boundary:
+Never deploy this QA database wholesale or copy App_Data/native-checkout-qa-v1, NativeCheckoutQaFixture, pending QA plugin-install metadata, QA orders/customers/addresses/cart/email copies, guest/Terms overrides or disabled mail templates into Production. Clothing catalog-only seed assets/data are a separate task; migration or scoped export should target approved catalog/media records only. Production shipping/payment installation and merchant configuration must use its own native configuration, independently of these temporary QA rates/payment instructions.
+
+Source evidence (nopCommerce5.00):
+Nop.Services/Plugins/PluginService.cs InstallPluginsAsync: InsertPluginData(Installation), plugin.InstallAsync, then InstalledPlugins/pending changes. Native sample-data setting explicitly read before InstallSampleDataAsync.
+Nop.Plugin.Payments.CheckMoneyOrder/CheckMoneyOrderPaymentProcessor.cs ProcessPaymentAsync/PostProcessPaymentAsync/InstallAsync: offline pending result, no external postprocess, native description/default settings and locale registration.
+Nop.Plugin.Shipping.FixedByWeightByTotal/FixedByWeightByTotalComputationMethod.cs GetShippingOptionsAsync: fixed mode reads ShippingMethod IDs and setting keys; InstallAsync registers native settings/locales.
+Nop.Plugin.Shipping.FixedByWeightByTotal/Migrations/SchemaMigration.cs: actual native installation builds ShippingByWeightByTotalRecord.
+Nop.Services/Messages/WorkflowMessageService.cs: inactive templates excluded before email queue creation; scheduler also remains disabled as a second safeguard.
+
