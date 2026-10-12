@@ -232,7 +232,16 @@ body {background:var(--background);color:var(--foreground);font-family:Vazirmatn
 .boutique-shell .cart .product-picture img {width:70px;height:90px;object-fit:cover;border-radius:8px}
 .boutique-shell .cart .product-name {color:var(--foreground);font-size:13px;font-weight:500}
 .boutique-shell .cart .attributes {color:var(--muted-foreground);font-size:11px;line-height:2;margin-top:6px}
-.boutique-shell .cart .qty-input {width:52px;border:1px solid var(--border);border-radius:8px;padding:6px;background:var(--card);color:var(--foreground)}
+.boutique-shell .cart .qty-input, .boutique-shell .cart .qty-dropdown {width:52px;min-height:44px;border:1px solid var(--ring);border-radius:8px;padding:6px;background:var(--card);color:var(--foreground);text-align:center}
+.boutique-shell .cart .product-quantity {display:inline-grid;grid-template-columns:44px 52px 44px;align-items:center;gap:4px}
+.boutique-shell .cart .quantity.up, .boutique-shell .cart .quantity.down, .boutique-shell .cart .remove-btn {display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:1px solid var(--ring);border-radius:8px;background:var(--card);color:var(--primary);cursor:pointer}
+.boutique-shell .cart .quantity.up::before {content:"+";font-size:20px;line-height:1}
+.boutique-shell .cart .quantity.down::before {content:"−";font-size:20px;line-height:1}
+.boutique-shell .cart .remove-btn::before {content:"×";font-size:22px;line-height:1}
+.boutique-shell .cart .quantity.up:hover, .boutique-shell .cart .quantity.down:hover, .boutique-shell .cart .remove-btn:hover {background:var(--secondary);border-color:var(--primary)}
+.boutique-shell .cart .quantity.up:focus-visible, .boutique-shell .cart .quantity.down:focus-visible, .boutique-shell .cart .remove-btn:focus-visible, .boutique-shell .cart .qty-input:focus-visible, .boutique-shell .cart .qty-dropdown:focus-visible {outline:2px solid var(--ring);outline-offset:3px}
+.boutique-shell .cart .remove-from-cart input[type=checkbox] {position:absolute;inline-size:1px;block-size:1px;overflow:hidden;clip-path:inset(50%)}
+.boutique-shell .update-cart-button, .boutique-shell .continue-shopping-button {min-height:44px}
 .boutique-shell .cart-footer {padding:28px 0;background:none;border:0}
 .boutique-shell .cart-footer .totals {border:1px solid var(--border);border-radius:20px;background:var(--card);padding:24px}
 .boutique-shell .cart-footer .cart-collaterals {background:none;padding:0}
@@ -372,9 +381,19 @@ body {background:var(--background);color:var(--foreground);font-family:Vazirmatn
  .boutique-shell .overview .add-to-cart-button {width:100%;min-height:46px}
  .boutique-shell .overview .attributes .option-list li {padding:7px 12px}
  .boutique-accordion > summary {font-size:14px;padding:17px 0}
- .boutique-shell .cart td {padding:9px;font-size:11px}
- .boutique-shell .cart .product-picture img {width:50px;height:66px}
- .boutique-shell .cart .product-name {font-size:12px}
+ .boutique-shell .table-wrapper:has(.cart) {overflow-x:clip}
+ .boutique-shell .cart, .boutique-shell .cart tbody {display:block;width:100%}
+ .boutique-shell .cart thead {display:none}
+ .boutique-shell .cart tbody tr {display:grid;grid-template-columns:66px minmax(0,1fr);gap:0 12px;padding:14px;border-bottom:1px solid var(--border)}
+ .boutique-shell .cart td {min-width:0;border:0;padding:6px 0;background:transparent;font-size:12px}
+ .boutique-shell .cart td.product-picture {grid-column:1;grid-row:1 / span 2;align-self:start}
+ .boutique-shell .cart td.product-picture img {width:66px;height:84px}
+ .boutique-shell .cart td.product, .boutique-shell .cart td.sku, .boutique-shell .cart td.vendor {grid-column:2}
+ .boutique-shell .cart .product-name {font-size:13px;line-height:1.8}
+ .boutique-shell .cart td.unit-price, .boutique-shell .cart td.quantity, .boutique-shell .cart td.subtotal {grid-column:1 / -1;display:flex;align-items:center;justify-content:space-between;gap:12px}
+ .boutique-shell .cart td.remove-from-cart {grid-column:1 / -1;display:flex;justify-content:flex-start;padding-top:10px}
+ .boutique-shell .cart .td-title {display:inline;color:var(--muted-foreground);font-size:11px}
+ .boutique-shell .cart .product-quantity {grid-template-columns:44px 52px 44px}
  .boutique-shell .cart-footer .totals {width:100%;padding:20px;margin:20px 0 0}
  .boutique-shell .cart-footer .cart-collaterals {width:100%}
  .boutique-shell .checkout-page .section, .boutique-shell .checkout-page .step, .boutique-shell .checkout-page .order-summary-content {padding:18px;border-radius:16px}
