@@ -16,6 +16,8 @@ The default private configuration is `C:/Users/s_jamili/Desktop/nopcomerce/dual-
 
 Every deployment activates and unlocks the designated installed administrator, ensures the Registered role, and applies the native configured salted hash only if the password differs. Native HTTP login and an authorized `/Admin` response are required. Verification sends a normal browser user agent because nopCommerce assigns crawler requests a search-engine customer before processing authentication.
 
+Readiness and authentication verification use the configured public storefront host. The guarded selected-store media setting uses relative native thumbnail paths, and verification rejects rendered private-network image URLs. This prevents a container-address health request from filling native picture caches with inaccessible URLs. Missing native `icons_0` assets are copied into the selected persistent icon volume without replacing existing files.
+
 Server directory: `/home/web/nop-dual-store-20261012`. Compose project: `nop-dual-store-20261012`. Application services: `madadrang` and `boutique`; shared service: `database`. Databases: `nop_madadrang` owned by `madadrang`, and `nop_boutique` owned by `boutique`. PostgreSQL has no published port. The old `nginx-rdp-proxy` container is retained and stopped. GitLab is outside this project.
 
 Madadrang: http://80.75.5.82:9011/ (internal http://10.11.11.223:9011/).

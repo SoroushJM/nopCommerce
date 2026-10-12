@@ -1,0 +1,161 @@
+{
+  "provider": "Wikimedia Commons",
+  "providerLicenseInfoUrl": "https://commons.wikimedia.org/wiki/Commons:Licensing",
+  "selectionNotes": "Each asset was visually reviewed in the Terra review session. They show garments or accessories only, without a human model. The linked source page and its per-file license and attribution are retained for each asset.",
+  "hero": {
+    "path": "hero-clothing-rail.jpg",
+    "localFile": "hero-clothing-rail.jpg",
+    "mimeType": "image/jpeg",
+    "sourceUrl": "https://commons.wikimedia.org/wiki/File:Button_down_dress_shirts_for_men.jpg",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+    "license": "CC BY-SA 4.0",
+    "attribution": "Modern Fellows",
+    "description": "رگال لباس‌های دکمه‌دار با رنگ‌های خنثی؛ بدون حضور انسان."
+  },
+  "products": [
+    {
+      "sku": "BTQ-QA-001",
+      "productId": 9,
+      "path": "BTQ-QA-001-linen-shirt.jpg",
+      "localFile": "BTQ-QA-001-linen-shirt.jpg",
+      "mimeType": "image/jpeg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Button_down_dress_shirts_for_men.jpg",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "license": "CC BY-SA 4.0",
+      "attribution": "Modern Fellows",
+      "description": "Neutral and blue button-down shirts on a retail rail; no person visible."
+    },
+    {
+      "sku": "BTQ-QA-002",
+      "productId": 10,
+      "path": "BTQ-QA-002-poplin-shirt.jpg",
+      "localFile": "BTQ-QA-002-poplin-shirt.jpg",
+      "mimeType": "image/jpeg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Button_down_dress_shirts_for_men.jpg",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "license": "CC BY-SA 4.0",
+      "attribution": "Modern Fellows",
+      "description": "Button-down shirts on a retail rail; no person visible."
+    },
+    {
+      "sku": "BTQ-QA-003",
+      "productId": 11,
+      "path": "BTQ-QA-003-ribbed-top.jpg",
+      "localFile": "BTQ-QA-003-ribbed-top.jpg",
+      "mimeType": "image/jpeg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Clean-blank-shirt-hanger.jpg",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "license": "CC BY-SA 4.0",
+      "attribution": "Pajju12",
+      "description": "A black short-sleeve top on a hanger; no person visible."
+    },
+    {
+      "sku": "BTQ-QA-004",
+      "productId": 12,
+      "path": "BTQ-QA-004-knit-pullover.jpg",
+      "localFile": "BTQ-QA-004-knit-pullover.jpg",
+      "mimeType": "image/jpeg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Sweater_MET_14.134.18_B.jpg",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "license": "CC0",
+      "attribution": "See source page",
+      "description": "A green knitted pullover photographed as an object; no person visible."
+    },
+    {
+      "sku": "BTQ-QA-005",
+      "productId": 13,
+      "path": "BTQ-QA-005-knit-vest.jpg",
+      "localFile": "BTQ-QA-005-knit-vest.jpg",
+      "mimeType": "image/jpeg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Vest_MET_CI51.39.11_B.jpg",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "license": "CC0",
+      "attribution": "See source page",
+      "description": "A light vest photographed as an object; no person visible."
+    },
+    {
+      "sku": "BTQ-QA-006",
+      "productId": 14,
+      "path": "BTQ-QA-006-relaxed-blazer.jpg",
+      "localFile": "BTQ-QA-006-relaxed-blazer.jpg",
+      "mimeType": "image/jpeg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Blazer_Jackets_on_Rack_(Unsplash).jpg",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "license": "CC0",
+      "attribution": "Igor Ovsyannykov igorovsyannykov",
+      "description": "Blazer jackets on a clothing rail; no person visible."
+    },
+    {
+      "sku": "BTQ-QA-007",
+      "productId": 15,
+      "path": "BTQ-QA-007-trench-coat.jpg",
+      "localFile": "BTQ-QA-007-trench-coat.jpg",
+      "mimeType": "image/jpeg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Trenchcoat_worn_by_President_Gerald_R._Ford.jpg",
+      "licenseUrl": "https://commons.wikimedia.org/wiki/Commons:Licensing",
+      "license": "Public domain",
+      "attribution": "Unknown authorUnknown author",
+      "description": "A beige trench coat photographed as a museum object; no person visible."
+    },
+    {
+      "sku": "BTQ-QA-008",
+      "productId": 16,
+      "path": "BTQ-QA-008-wide-jeans.jpg",
+      "localFile": "BTQ-QA-008-wide-jeans.jpg",
+      "mimeType": "image/jpeg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:501xx-front.jpg",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "license": "CC BY-SA 4.0",
+      "attribution": "Tokunori",
+      "description": "Blue wide-leg jeans photographed flat; no person visible."
+    },
+    {
+      "sku": "BTQ-QA-009",
+      "productId": 17,
+      "path": "BTQ-QA-009-pleated-trousers.jpg",
+      "localFile": "BTQ-QA-009-pleated-trousers.jpg",
+      "mimeType": "image/jpeg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Trousers_MET_1988.261.2_d.jpg",
+      "licenseUrl": "http://creativecommons.org/publicdomain/zero/1.0/deed.en",
+      "license": "CC0",
+      "attribution": "See source page",
+      "description": "Light-coloured trousers photographed as an object; no person visible."
+    },
+    {
+      "sku": "BTQ-QA-010",
+      "productId": 18,
+      "path": "BTQ-QA-010-straight-jeans.jpg",
+      "localFile": "BTQ-QA-010-straight-jeans.jpg",
+      "mimeType": "image/jpeg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:Jeans.jpg",
+      "licenseUrl": "https://commons.wikimedia.org/wiki/Commons:Licensing",
+      "license": "Public domain",
+      "attribution": "uploaded by Juanmak",
+      "description": "Blue straight jeans photographed flat; no person visible."
+    },
+    {
+      "sku": "BTQ-QA-011",
+      "productId": 19,
+      "path": "BTQ-QA-011-shoulder-bag.jpg",
+      "localFile": "BTQ-QA-011-shoulder-bag.jpg",
+      "mimeType": "image/jpeg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:02-Product-Shots-1124x1406px_(1).jpg",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "license": "CC BY-SA 4.0",
+      "attribution": "Teeraza88",
+      "description": "Structured shoulder bags photographed as products; no person visible."
+    },
+    {
+      "sku": "BTQ-QA-012",
+      "productId": 20,
+      "path": "BTQ-QA-012-sunglasses.jpg",
+      "localFile": "BTQ-QA-012-sunglasses.jpg",
+      "mimeType": "image/jpeg",
+      "sourceUrl": "https://commons.wikimedia.org/wiki/File:2008-07-27_Sunglasses.jpg",
+      "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0",
+      "license": "CC BY-SA 4.0",
+      "attribution": "Ildar Sagdejev (Specious)",
+      "description": "Black sunglasses photographed without a person."
+    }
+  ]
+}

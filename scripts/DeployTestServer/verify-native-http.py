@@ -1,11 +1,8 @@
-import urllib.request,urllib.parse,http.cookiejar,html.parser,pathlib,json,subprocess,sys,re
+import urllib.request,urllib.parse,http.cookiejar,html.parser,pathlib,json,sys,re
 root=pathlib.Path('/home/web/nop-dual-store-20261012'); theme=sys.argv[1]
 if theme not in ['madadrang','boutique']: raise SystemExit('Unknown deployment')
 public=sys.argv[2] if len(sys.argv)>2 else None
-cid=subprocess.check_output(['docker','compose','-f',str(root/'compose.yml'),'ps','-q',theme],cwd=root,text=True).strip()
-item=json.loads(subprocess.check_output(['docker','inspect',cid],text=True))[0]
-ip=list(item['NetworkSettings']['Networks'].values())[0]['IPAddress']
-base=public or f'http://{ip}:8080'
+base=public or ('http://80.75.5.82:9011' if theme=='madadrang' else 'http://80.75.5.82:9012')
 jar=http.cookiejar.CookieJar(); opener=urllib.request.build_opener(urllib.request.ProxyHandler({}),urllib.request.HTTPCookieProcessor(jar))
 opener.addheaders=[('User-Agent','Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/130.0.0.0 Safari/537.36')]
 def get(path):
@@ -25,6 +22,7 @@ for path in ['/',slug,'/cart','/login','/register','/search?advs=true']:
   assert f'_content/Storefront.UI.{selected}/' in html
   assert f'_content/Storefront.UI.{opposite}/' not in html
   assert 'dir="rtl"' in html
+  assert not re.search(r'https?://(?:172\.(?:1[6-9]|2\d|3[01])\.|10\.|192\.168\.)[^\s"\']*/images/',html), 'Rendered media URL exposes an internal address'
   links=Inputs(); links.feed(html)
   matches=[x for x in links.styles if f'/_content/Storefront.UI.{selected}/' in x]
   cssurl=matches[0] if matches else f'/_content/Storefront.UI.{selected}/'+('storefront.css' if selected=='Madadrang' else 'boutique.css')

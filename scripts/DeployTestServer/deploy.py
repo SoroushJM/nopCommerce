@@ -36,7 +36,7 @@ try:
     tar.add(item,arcname='app/'+rel.as_posix(),recursive=False)
   digest=hashlib.sha256(archive.read_bytes()).hexdigest(); run(f'umask 077\nmkdir -p {q(remote)}\n')
   with client.open_sftp() as s:
-   uploads=[(here/'Dockerfile',remote+'/Dockerfile'),(here/'native-admin.py',root+'/native-admin.py'),(here/'verify-native-http.py',root+'/verify-native-http.py'),(pathlib.Path(c['adminCredentialsPath']),root+'/admin-credentials.json')]
+   uploads=[(here/'Dockerfile',remote+'/Dockerfile'),(here/'native-admin.py',root+'/native-admin.py'),(here/'verify-native-http.py',root+'/verify-native-http.py'),(here/'ensure-relative-media.sql',root+'/ensure-relative-media.sql'),(pathlib.Path(c['adminCredentialsPath']),root+'/admin-credentials.json')]
    if not a.resume_release: uploads.insert(0,(archive,remote+'/app.tar.gz'))
    for source,dest in uploads: s.put(str(source),dest); s.chmod(dest,0o600)
   if a.resume_release:
@@ -47,7 +47,7 @@ cd {q(root)}
 exec 9>.deploy.lock
 flock -n 9 || {{ echo 'Another deployment is active'; exit 1; }}
 python3 - {q(a.theme)} {q(tag)} {q(remote)} {q(digest)} <<'PY'
-import sys,json,subprocess,pathlib,hashlib,shutil
+import sys,json,subprocess,pathlib,hashlib,shutil,tarfile
 theme,tag,release,digest=sys.argv[1:]; root=pathlib.Path.cwd()
 def inspect(service):
  cid=subprocess.check_output(['docker','compose','ps','-q',service],text=True).strip()
@@ -58,6 +58,8 @@ assert hashlib.sha256((pathlib.Path(release)/'app.tar.gz').read_bytes()).hexdige
 backup=root/'backups'/pathlib.Path(release).name; backup.mkdir(parents=True,exist_ok=True)
 with (backup/(theme+'.sql')).open('wb') as f: subprocess.run(['docker','exec',before['database']['Id'],'pg_dump','-U','deployment_bootstrap','-d','nop_'+theme],stdout=f,check=True)
 with (backup/'App_Data.tar.gz').open('wb') as f: subprocess.run(['docker','exec',before[theme]['Id'],'tar','-czf','-','-C','/app','App_Data'],stdout=f,check=True)
+subprocess.run(['docker','cp',str(root/'ensure-relative-media.sql'),before['database']['Id']+':/tmp/ensure-relative-media.sql'],check=True)
+subprocess.run(['docker','exec',before['database']['Id'],'psql','-X','-v','ON_ERROR_STOP=1','-U','deployment_bootstrap','-d','nop_'+theme,'-f','/tmp/ensure-relative-media.sql'],check=True)
 subprocess.run(['tar','-xzf','app.tar.gz'],cwd=release,check=True)
 brand='Madadrang' if theme=='madadrang' else 'Boutique'; css='storefront.css' if theme=='madadrang' else 'boutique.css'
 content=pathlib.Path(release)/'app/Plugins/Misc.PersianStorefront/Content'; canonical=content/('Storefront.UI.'+brand)/css
@@ -68,20 +70,27 @@ override=root/'images.override.yml'
 images={{s:before[s]['Image'] for s in ['madadrang','boutique']}}; images[theme]=tag
 override.write_text('services:\\n'+''.join('  '+s+':\\n    image: '+images[s]+'\\n' for s in images))
 subprocess.run(['docker','compose','-f','compose.yml','-f',str(override),'up','-d','--no-build','--no-deps','--force-recreate',theme],check=True)
+native_icons=pathlib.Path(release)/'app/wwwroot/icons/icons_0'
+if native_icons.is_dir():
+ icons_archive=pathlib.Path(release)/'native-default-icons.tar.gz'
+ with tarfile.open(icons_archive,'w:gz') as tar: tar.add(native_icons,arcname='icons/icons_0')
+ app_id=inspect(theme)['Id']
+ subprocess.run(['docker','cp',str(icons_archive),app_id+':/tmp/native-default-icons.tar.gz'],check=True)
+ subprocess.run(['docker','exec',app_id,'tar','--skip-old-files','-xzf','/tmp/native-default-icons.tar.gz','-C','/app/wwwroot'],check=True)
 (pathlib.Path(release)/'before.json').write_text(json.dumps(before,indent=2))
 PY
 python3 native-admin.py {q(a.theme)}
 python3 - {q(a.theme)} <<'PY'
 import sys,time,urllib.request
-port='9011' if sys.argv[1]=='madadrang' else '9012'
+port='9011' if sys.argv[1]=='madadrang' else '9012'; public='http://80.75.5.82:'+port
 for attempt in range(60):
  try:
-  with urllib.request.build_opener(urllib.request.ProxyHandler({{}})).open('http://127.0.0.1:'+port+'/',timeout=10) as r:
+  with urllib.request.build_opener(urllib.request.ProxyHandler({{}})).open(public+'/',timeout=10) as r:
    if r.status==200: break
  except Exception: time.sleep(2)
 else: raise SystemExit('Application readiness failed')
 PY
-python3 verify-native-http.py {q(a.theme)} http://127.0.0.1:{'9011' if a.theme=='madadrang' else '9012'}
+python3 verify-native-http.py {q(a.theme)}
 python3 - {q(remote)} {q(a.theme)} <<'PY'
 import sys,pathlib,json,subprocess
 release=pathlib.Path(sys.argv[1]); theme=sys.argv[2]; before=json.loads((release/'before.json').read_text())
