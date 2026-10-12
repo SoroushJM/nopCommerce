@@ -10,7 +10,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <base href="/" />
     <title>Storefront renderer preview</title>
-    <link rel="stylesheet" href="_content/Storefront.UI.@ThemeName/storefront.css" />
+    <link rel="stylesheet" href="_content/Storefront.UI.@ThemeName/@ThemeCss" />
     <link rel="stylesheet" href="_content/BlazorBlueprint.Components/blazorblueprint.css" />
     <HeadOutlet />
     <ImportMap />
@@ -25,4 +25,5 @@
 @code {
     [Inject] private IConfiguration Configuration { get; set; } = default!;
     private string ThemeName => (Configuration["StorefrontTheme"] ?? typeof(App).Assembly.GetCustomAttributes(typeof(System.Reflection.AssemblyMetadataAttribute), false).Cast<System.Reflection.AssemblyMetadataAttribute>().FirstOrDefault(item => item.Key == "StorefrontTheme")?.Value) == "Boutique" ? "Boutique" : "Madadrang";
+    private string ThemeCss => ThemeName == "Boutique" ? "boutique.css" : "storefront.css";
 }

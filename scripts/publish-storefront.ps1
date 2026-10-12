@@ -60,7 +60,8 @@ try {
     if (!(Test-Path -LiteralPath $viewsAssembly)) { throw "Missing compiled native views: $viewsAssembly" }
     Copy-Item -LiteralPath $viewsAssembly -Destination $publishRoot
 
-    $activeAssets = Join-Path $publishRoot "Plugins/Misc.PersianStorefront/Content/Storefront.UI.$Theme/storefront.css"
+    $themeCss = if ($Theme -eq 'Boutique') { 'boutique.css' } else { 'storefront.css' }
+    $activeAssets = Join-Path $publishRoot "Plugins/Misc.PersianStorefront/Content/Storefront.UI.$Theme/$themeCss"
     $wasmAssets = Join-Path $publishRoot 'Plugins/Misc.PersianStorefront/Content/Client/wwwroot/_framework'
     if (!(Test-Path -LiteralPath $activeAssets) -or !(Test-Path -LiteralPath $wasmAssets)) { throw 'The selected theme CSS or browser app was not packaged.' }
     $inactiveTheme = if ($Theme -eq 'Madadrang') { 'Boutique' } else { 'Madadrang' }
