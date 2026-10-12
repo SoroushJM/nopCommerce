@@ -41,6 +41,8 @@
     <None Include="Plugins\**" CopyToPublishDirectory="PreserveNewest" Exclude="Plugins\**\runtimes\**;Plugins\**\ref\**;Plugins\**\*.pdb" />
 
     <Content Include="Themes\**" CopyToPublishDirectory="PreserveNewest" CopyToOutputDirectory="Never" />
+    <Content Remove="Themes\Boutique\**" Condition="'$(StorefrontTheme)' == 'Madadrang'" />
+    <Content Remove="Themes\Madadrang\**" Condition="'$(StorefrontTheme)' == 'Boutique'" />
 
     <!-- We copy the \Logs directory -->
     <Content Include="Logs\**" CopyToPublishDirectory="PreserveNewest" />

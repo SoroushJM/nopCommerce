@@ -32,6 +32,7 @@ public sealed class StorefrontStartup : INopStartup
             localizer.Set("Dialog.Close", "بستن");
         });
         services.AddScoped<StorefrontNavigation>();
+        services.AddScoped<StorefrontThemeService>();
         services.AddScoped<DevelopmentCatalogSeeder>();
         services.AddScoped<DevelopmentPresentationRepair>();
         services.AddScoped<NativeCatalogModelFactory>();
@@ -51,7 +52,9 @@ public sealed class StorefrontStartup : INopStartup
         var env = app.ApplicationServices.GetRequiredService<IWebHostEnvironment>();
         foreach (var name in new[]
         {
-            "Storefront.UI",
+            "Storefront.UI.Shared",
+            "Storefront.UI.Madadrang",
+            "Storefront.UI.Boutique",
             "BlazorBlueprint.Components",
             "BlazorBlueprint.Primitives"
         }

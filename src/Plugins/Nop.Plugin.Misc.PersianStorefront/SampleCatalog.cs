@@ -19,7 +19,7 @@ public static class SampleCatalog
     ];
     private static SeedProduct Make(int id, string name, string category, string brand, decimal price, decimal old, string image, string description, bool available = true)
     {
-        return new(id, name, category, brand, price, old, "_content/Storefront.UI/images/" + image, description, available,
+        return new(id, name, category, brand, price, old, "_content/Storefront.UI.Madadrang/images/" + image, description, available,
         [new(1, "آبی", "#4c75dc"), new(2, "سبز", "#7cae91", 10000), new(3, "صورتی", "#eaa3b6", 15000), new(4, "نارنجی", "#ee965d", 0, false)]);
     }
 }

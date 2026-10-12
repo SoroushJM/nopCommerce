@@ -1,6 +1,6 @@
 {
   "SystemName": "Madadrang",
-  "FriendlyName": "مدادرنگ",
+  "FriendlyName": "مداد رنگی",
   "SupportRTL": true,
   "PreviewImageUrl": "~/Themes/DefaultClean/preview.jpg",
   "PreviewText": "فروشگاه فارسی با Tailwind و Blazor Blueprint"

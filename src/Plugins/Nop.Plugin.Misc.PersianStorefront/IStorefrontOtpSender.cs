@@ -1,4 +1,4 @@
-﻿using Storefront.UI;
+using Storefront.UI.Shared;
 
 namespace Nop.Plugin.Misc.PersianStorefront;
 

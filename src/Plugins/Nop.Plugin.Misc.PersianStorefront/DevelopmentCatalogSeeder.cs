@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Configuration;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Orders;
@@ -12,16 +13,17 @@ using Nop.Services.Plugins;
 
 namespace Nop.Plugin.Misc.PersianStorefront;
 
-public sealed class PersianStorefrontPlugin(DevelopmentCatalogSeeder seeder, IWebHostEnvironment env, IWebHelper web) : BasePlugin
+public sealed class PersianStorefrontPlugin(DevelopmentCatalogSeeder seeder, IWebHostEnvironment env, IWebHelper web,
+    IConfiguration configuration) : BasePlugin
 {
     public override string GetConfigurationPageUrl()
     {
-        return web.GetStoreLocation() + "Admin/PersianStorefrontMaintenance/Configure";
+        return web.GetStoreLocation() + "Admin/StorefrontThemeSettings/Configure";
     }
 
     public override async Task InstallAsync()
     {
-        if (env.IsDevelopment())
+        if (env.IsDevelopment() && configuration["StorefrontThemeConfig:Theme"] != "Boutique")
             await seeder.Seed();
         await base.InstallAsync();
     }
@@ -81,7 +83,7 @@ public sealed class DevelopmentCatalogSeeder(IProductService products, ICategory
                 var xml = parser.AddProductAttribute("", mapping, value.Id.ToString());
                 await attributes.InsertProductAttributeCombinationAsync(new ProductAttributeCombination { ProductId = product.Id, AttributesXml = xml, StockQuantity = option.Available && sample.Available ? 10 : 0, AllowOutOfStockOrders = false, Sku = product.Sku + "-" + option.Id });
             }
-            var image = Path.Combine(environment.ContentRootPath, "Plugins", "Misc.PersianStorefront", "Content", "Storefront.UI", "images", Path.GetFileName(sample.Image));
+            var image = Path.Combine(environment.ContentRootPath, "Plugins", "Misc.PersianStorefront", "Content", "Storefront.UI.Madadrang", "images", Path.GetFileName(sample.Image));
             if (File.Exists(image))
             {
                 var picture = await pictures.InsertPictureAsync(await File.ReadAllBytesAsync(image), "image/jpeg", product.Sku);

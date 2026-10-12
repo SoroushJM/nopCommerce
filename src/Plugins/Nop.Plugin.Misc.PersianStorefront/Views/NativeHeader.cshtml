@@ -1,25 +1,46 @@
-@model Storefront.UI.StoreNavigation
-@using Storefront.UI
-@using Storefront.UI.Components
+@model Storefront.UI.Shared.StoreNavigation
+@using Storefront.UI.Shared
+@using Storefront.UI.Shared.Components
+@using Storefront.UI.Madadrang.Components
 @using Nop.Web.Components
 @using Nop.Web.Framework.Infrastructure
+@using Nop.Core.Domain
+@inject StoreInformationSettings storeSettings
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    var profile = (StorefrontThemeProfile)ViewData["ThemeProfile"]!;
+    var nativeMenu = ViewData["NativeMainMenu"] is true;
+}
 <div class="bg-secondary text-secondary-foreground text-center text-xs py-2.5 px-4">یک شروع رنگی برای روزهای تازه <span
     class="mx-2 text-primary">✦</span> لوازم‌تحریری که دوستشان داری</div>
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderBefore })
     <header class="sf-header">
-        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderSelectors })
+        <div class="wrap sf-native-selectors">
+            @await Component.InvokeAsync(typeof(TaxTypeSelectorViewComponent))
+            @await Component.InvokeAsync(typeof(CurrencySelectorViewComponent))
+            @await Component.InvokeAsync(typeof(LanguageSelectorViewComponent))
+            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderSelectors })
+        </div>
         <div class="wrap flex items-center justify-between gap-7 py-5 max-md:py-4">
-            <a href="/" class="sf-brand shrink-0" aria-label="مدادرنگ، صفحه اصلی">
+            @if (storeSettings.LogoPictureId > 0)
+            {
+                <div class="sf-brand sf-configured-logo shrink-0">@await Component.InvokeAsync(typeof(LogoViewComponent))</div>
+            }
+            else
+            {
+            <a href="@profile.HomeUrl" class="sf-brand shrink-0" aria-label="مداد رنگی، صفحه اصلی">
                 <span class="brand-mark">
                     <component type="typeof(SfIcon)" render-mode="Static" param-Size="23" />
                 </span>
-                <span class="brand-word">مداد<span class="text-primary">رنگ</span><small
+                <span class="brand-word">مداد <span class="text-primary">رنگی</span><small
                     class="block text-xs font-normal tracking-normal text-muted-foreground mt-0.5">دنیای کوچکِ ایده‌های
                     بزرگ</small></span>
                 </a>
-                <component type="typeof(StorefrontSearch)" render-mode="Static" />
+            }
+                <div class="sf-native-search">@await Component.InvokeAsync(typeof(SearchBoxViewComponent))</div>
                 <div class="flex items-center gap-2">
+                    @if (!nativeMenu)
+                    {
                     <div class="md:hidden">
                         @await Component.InvokeAsync(typeof(WidgetViewComponent), new
                         {
@@ -34,29 +55,30 @@
                         PublicWidgetZones.MobHeaderMenuAfter
                         })
                     </div>
-                    @await Component.InvokeAsync(typeof(WidgetViewComponent), new
-                    {
-                        widgetZone =
-                    PublicWidgetZones.HeaderLinksBefore,
-                        additionalData = ViewData["HeaderLinksModel"]
-                    })
+                    }
                     <component type="typeof(NativeHeader)" render-mode="WebAssemblyPrerendered" param-Initial="Model"
-                               param-OpenLoginOnLoad="@(Context.Items["Madadrang.OpenLogin"] is true)" />
-                    @await Component.InvokeAsync(typeof(WidgetViewComponent), new
-                    {
-                        widgetZone =
-                    PublicWidgetZones.HeaderLinksAfter,
-                        additionalData = ViewData["HeaderLinksModel"]
-                    })
+                               param-OpenLoginOnLoad="@(Context.Items["Madadrang.OpenLogin"] is true)"
+                               param-Theme="@profile" />
                 </div>
             </div>
+            <div class="wrap header-upper sf-native-header-links">
+                @await Component.InvokeAsync(typeof(HeaderLinksViewComponent))
+                @await Component.InvokeAsync(typeof(FlyoutShoppingCartViewComponent))
+            </div>
             @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderMiddle })
-            <div class="wrap border-t border-border max-md:hidden">
+            <div class="wrap border-t border-border @(nativeMenu ? "sf-native-menu" : "max-md:hidden")">
                 @await Component.InvokeAsync(typeof(WidgetViewComponent), new
                 {
                     widgetZone = PublicWidgetZones.HeaderMenuBefore
                 })
-                <component type="typeof(StorefrontMainMenu)" render-mode="WebAssemblyPrerendered" param-Menu="Model.Main" />
+                @if (nativeMenu)
+                {
+                    @await Component.InvokeAsync(typeof(MainMenuViewComponent))
+                }
+                else
+                {
+                    <component type="typeof(StorefrontMainMenu)" render-mode="WebAssemblyPrerendered" param-Menu="Model.Main" />
+                }
                 @await Component.InvokeAsync(typeof(WidgetViewComponent), new
                 {
                     widgetZone = PublicWidgetZones.HeaderMenuAfter

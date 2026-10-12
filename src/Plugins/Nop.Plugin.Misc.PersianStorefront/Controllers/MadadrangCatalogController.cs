@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.WebUtilities;
 using Nop.Core;
 using Nop.Services.Catalog;
 using Nop.Services.Localization;
+using Nop.Services.Themes;
 using Nop.Web.Controllers;
 using Nop.Web.Framework.Mvc.Filters;
 using Nop.Web.Framework.Mvc.Routing;
@@ -11,7 +12,7 @@ using Nop.Web.Models.Catalog;
 namespace Nop.Plugin.Misc.PersianStorefront.Controllers;
 
 public sealed class MadadrangCatalogController(NativeCatalogModelFactory factory, ICategoryService categories,
-    IStoreContext stores, ILocalizationService localization, INopUrlHelper nopUrl) : BasePublicController
+    IStoreContext stores, ILocalizationService localization, INopUrlHelper nopUrl, IThemeContext themes) : BasePublicController
 {
     [HttpGet]
     [SaveLastContinueShoppingPage]
@@ -20,7 +21,11 @@ public sealed class MadadrangCatalogController(NativeCatalogModelFactory factory
         var model = await factory.PrepareAsync(command, q, cid, isc);
         if (model == null)
             return NotFound();
-        return View("~/Plugins/Misc.PersianStorefront/Views/AllProducts.cshtml", model);
+        // Native search AJAX requires a search term; this endpoint also lists the entire catalogue.
+        model.CatalogProductsModel.UseAjaxLoading = false;
+        return View(await themes.GetWorkingThemeNameAsync() == "Boutique"
+            ? "~/Themes/Boutique/Views/Catalog/AllProducts.cshtml"
+            : "~/Plugins/Misc.PersianStorefront/Views/AllProducts.cshtml", model);
     }
 
     [HttpGet]

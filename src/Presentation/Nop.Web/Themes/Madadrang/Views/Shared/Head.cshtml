@@ -3,8 +3,7 @@
     Layout = "";
 }
 <base href="@Url.Content("~/")" />
-@if (Context.Items["Madadrang.NativePage"] is not true)
-{
+@{
     var rtl = await Html.ShouldUseRtlThemeAsync();
     NopHtml.AppendCssFileParts($"~/Themes/DefaultClean/Content/css/styles{(rtl ? ".rtl" : "")}.css");
     NopHtml.AppendCssFileParts("~/lib_npm/jquery-ui-dist/jquery-ui.min.css");

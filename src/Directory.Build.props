@@ -6,10 +6,15 @@
   </PropertyGroup>
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
+    <StorefrontTheme Condition="'$(StorefrontTheme)' == ''">Madadrang</StorefrontTheme>
     <RepositoryType>Git</RepositoryType>
     <!--The Implicit usings feature automatically adds common global using directives for the type of project you are building. For more information, see this implicit usings article https://aka.ms/csharp-implicit-usings.-->
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
+  <Target Name="ValidateStorefrontTheme" BeforeTargets="PrepareForBuild">
+    <Error Condition="'$(StorefrontTheme)' != 'Madadrang' and '$(StorefrontTheme)' != 'Boutique' and '$(StorefrontTheme)' != 'All'"
+           Text="StorefrontTheme must be Madadrang, Boutique or All." />
+  </Target>
 
   <PropertyGroup>
     <!-- Since we are constantly updating dependent packages, we decided to disable warnings: "A package restored for your project has a known vulnerability" (nu1901-nu1904). For more information, see this article https://learn.microsoft.com/nuget/reference/errors-and-warnings/nu1901-nu1904-->

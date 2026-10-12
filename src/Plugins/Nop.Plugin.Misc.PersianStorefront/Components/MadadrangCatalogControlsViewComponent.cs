@@ -1,11 +1,11 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Core;
 using Nop.Web.Framework.Components;
 using Nop.Web.Models.Catalog;
-using Storefront.UI;
+using Storefront.UI.Shared;
 
 namespace Nop.Plugin.Misc.PersianStorefront.Components;
 

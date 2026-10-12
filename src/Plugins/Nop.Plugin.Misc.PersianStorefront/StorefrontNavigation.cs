@@ -1,15 +1,24 @@
-﻿using Nop.Core.Domain.Menus;
+using Nop.Core.Domain.Menus;
 using Nop.Web.Factories;
 using Nop.Core.Http;
 using Nop.Web.Framework.Mvc.Routing;
 using Nop.Web.Models.Menus;
-using Storefront.UI;
+using Storefront.UI.Shared;
 
 namespace Nop.Plugin.Misc.PersianStorefront;
 
 public sealed class StorefrontNavigation(IMenuModelFactory menus,
     ICommonModelFactory common, INopUrlHelper urls)
 {
+    public async Task<bool> RequiresNativeMainMenuAsync()
+    {
+        var main = (await menus.PrepareMenuModelsAsync(MenuType.Main)).FirstOrDefault();
+        return main != null && main.Items.Any(RequiresNative);
+    }
+
+    private static bool RequiresNative(MenuItemModel item) =>
+        item.ChildrenItems.Count > 0 && item.Template == MenuItemTemplate.Grid || item.ChildrenItems.Any(RequiresNative);
+
     public async Task<StoreNavigation> PrepareAsync(Nop.Web.Models.Common.HeaderLinksModel? header = null)
     {
         var main = (await menus.PrepareMenuModelsAsync(MenuType.Main)).FirstOrDefault();

@@ -1,4 +1,4 @@
-﻿using Nop.Core;
+using Nop.Core;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Menus;
 using Nop.Core.Domain.Seo;
@@ -87,7 +87,7 @@ public sealed class DevelopmentPresentationRepair(IProductService products, ICat
              .. initialOrder.Where(fixtureCategories.ContainsKey).Select(name => new MenuItem
              { MenuItemType = MenuItemType.Category, EntityId = fixtureCategories[name].Id }),
              Link("پیشنهادهای رنگی", "/stationery/catalog?orderby=10", "sf-menu-offer")]);
-        await CreateMenuAsync("madadrang-footer-shop", "دنیای مدادرنگ", MenuType.Footer,
+        await CreateMenuAsync("madadrang-footer-shop", "دنیای مداد رنگی", MenuType.Footer,
             [Link("همهٔ محصولات", "/stationery/catalog"),
              .. initialOrder.Where(fixtureCategories.ContainsKey).Select(name => new MenuItem
              { MenuItemType = MenuItemType.Category, EntityId = fixtureCategories[name].Id })]);

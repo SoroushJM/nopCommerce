@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Orders;
 using Nop.Core;
@@ -8,7 +8,7 @@ using Nop.Core.Http;
 using Nop.Services.Localization;
 using Nop.Web.Framework.Mvc.Routing;
 using Nop.Web.Models.Catalog;
-using Storefront.UI;
+using Storefront.UI.Shared;
 
 namespace Nop.Plugin.Misc.PersianStorefront;
 
@@ -55,6 +55,7 @@ public static class NativeProductPresentation
                 ? "ShoppingCart.PreOrder" : "ShoppingCart.AddToCart";
         return new NativeProduct
         {
+            HomeUrl = url.RouteUrl(NopRouteNames.General.HOMEPAGE) ?? "/",
             Id = model.Id,
             Name = model.Name,
             Description = model.ShortDescription ?? "",

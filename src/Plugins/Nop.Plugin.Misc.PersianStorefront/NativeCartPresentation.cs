@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.WebUtilities;
@@ -12,7 +12,7 @@ using Nop.Services.Orders;
 using Nop.Web.Factories;
 using Nop.Web.Framework.Mvc.Routing;
 using Nop.Web.Models.ShoppingCart;
-using Storefront.UI;
+using Storefront.UI.Shared;
 
 namespace Nop.Plugin.Misc.PersianStorefront;
 
@@ -66,6 +66,10 @@ public sealed class NativeCartPresentation(IWorkContext work, IStoreContext stor
             SignedIn = await customers.IsRegisteredAsync(customer),
             Phone = customer.Phone ?? "",
             Count = mini.TotalProducts,
+            NativeSections = new Dictionary<string, string>
+            {
+                ["updatetopcartsectionhtml"] = string.Format(await localization.GetResourceAsync("ShoppingCart.HeaderQuantity"), mini.TotalProducts)
+            },
             CartUrl = cartUrl,
             CheckoutUrl = mini.AnonymousCheckoutAllowed && mini.CurrentCustomerIsGuest
                 ? urls.RouteUrl(NopRouteNames.Standard.LOGIN_CHECKOUT_AS_GUEST, new

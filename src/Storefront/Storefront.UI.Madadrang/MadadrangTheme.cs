@@ -6,7 +6,7 @@ public static class MadadrangTheme
 {
     public static StorefrontThemeProfile Profile { get; } = new()
     {
-        BrandName = "مدادرنگ",
+        BrandName = "مداد رنگی",
         CatalogUrl = "/stationery/catalog",
         LoginUrl = "/login",
         OtpApiBasePath = "/stationery/api/",

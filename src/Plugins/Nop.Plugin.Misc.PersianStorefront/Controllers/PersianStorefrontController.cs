@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using Nop.Core;
@@ -6,14 +6,18 @@ using Nop.Core.Domain.Customers;
 using Nop.Services.Customers;
 using Nop.Web.Controllers;
 using Nop.Web.Framework.Mvc.Filters;
-using Storefront.UI;
+using Storefront.UI.Shared;
+using Nop.Services.Themes;
+using Nop.Core.Http;
 
 namespace Nop.Plugin.Misc.PersianStorefront.Controllers;
 
-public sealed class PersianStorefrontController : BasePublicController
+public sealed class PersianStorefrontController(IThemeContext themes, IWebHostEnvironment environment) : BasePublicController
 {
-    public IActionResult Login()
+    public async Task<IActionResult> Login()
     {
+        if (await themes.GetWorkingThemeNameAsync() != "Madadrang" || !environment.IsDevelopment())
+            return RedirectToRoute(NopRouteNames.General.LOGIN);
         return View("~/Plugins/Misc.PersianStorefront/Views/Login.cshtml");
     }
 }

@@ -891,3 +891,33 @@
 .sf-search { width: 100%; max-width: 470px }
 .sf-search [data-slot="input-group"] { min-height: var(--control-height) }
 .storefront button [data-icon], .storefront a [data-icon] { width: 1rem; height: 1rem; flex-shrink: 0 }
+
+/* Keep nopCommerce's configurable controls usable within the stationery shell. */
+.sf-native-selectors { display: flex; justify-content: flex-end; align-items: center; gap: 12px; flex-wrap: wrap; font-size: .75rem }
+.sf-native-selectors select { min-height: 32px; padding: 4px 8px; border: 1px solid var(--border); border-radius: var(--radius); background: var(--background) }
+.sf-configured-logo img { max-width: 180px; max-height: 64px; object-fit: contain }
+.sf-native-search { width: 100%; max-width: 470px }
+.sf-native-search .search-box { float: none; width: 100%; margin: 0 }
+.sf-native-search form { display: flex; gap: 6px; width: 100% }
+.sf-native-search input[type="text"] { min-width: 0; width: 100%; height: var(--control-height); border: 1px solid var(--border); border-radius: var(--radius); background: var(--muted); padding: 8px 12px; font-family: inherit }
+.sf-native-search .search-box-button { min-width: 72px; height: var(--control-height); border-radius: var(--radius); background: var(--primary); color: var(--primary-foreground); font-family: inherit }
+.sf-native-header-links { position: relative; padding-bottom: 12px }
+.sf-native-header-links .header-links { float: none; width: 100%; margin: 0; padding: 0; text-align: start }
+.sf-native-header-links .header-links ul { display: flex; flex-wrap: wrap; gap: 14px; align-items: center }
+.sf-native-header-links .header-links li { margin: 0; padding: 0 }
+.sf-native-header-links .header-links a { color: var(--muted-foreground); font-size: .75rem }
+.sf-native-header-links #flyout-cart { inset-inline-start: 0; inset-inline-end: auto; font-size: .875rem }
+.sf-native-menu { padding-block: 12px }
+.sf-native-menu .menu-container { margin: 0; max-width: none }
+.sf-native-menu .menu__item-link { color: var(--foreground); font-family: inherit }
+.sf-native-footer .footer { background: var(--muted); color: var(--foreground); font-family: inherit }
+.sf-native-footer .footer a { color: var(--muted-foreground) }
+.sf-native-footer .newsletter-email { display: flex; gap: 6px; justify-content: center }
+.sf-native-footer .newsletter-email input { min-width: 0; background: var(--background); border-radius: var(--radius); border: 1px solid var(--border); font-family: inherit }
+.sf-native-footer .newsletter-subscribe-button { background: var(--primary); border-radius: var(--radius); font-family: inherit }
+@media (max-width: 767px) {
+  .sf-header > .wrap.flex { flex-wrap: wrap; gap: 12px; padding-block: 14px }
+  .sf-native-search { order: 3; max-width: none; flex-basis: 100% }
+  .sf-native-header-links .header-links ul { gap: 12px; justify-content: center }
+  .sf-configured-logo img { max-width: 135px; max-height: 48px }
+}
