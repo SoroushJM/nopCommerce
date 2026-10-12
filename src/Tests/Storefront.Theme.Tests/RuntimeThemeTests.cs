@@ -65,20 +65,36 @@ public sealed class RuntimeThemeTests
 
     [TestCase("MADADRANG")]
     [TestCase("BOUTIQUE")]
-    public async Task SharedProductPrerendersNativeSelectionAndSupplementalActions(string key)
+    public async Task ProductRendererPreservesNativeFormsSelectionAndSupplementalActions(string key)
     {
         using var client = Client(key);
         var productId = ProductId(key);
         var html = await Html(client, $"product/productdetails?productId={productId}");
         Assert.Multiple(() =>
         {
-            Assert.That(html, Does.Contain("\"type\":\"webassembly\""));
             Assert.That(html, Does.Not.Contain("\"type\":\"server\""));
-            Assert.That(html, Does.Contain("sf-product-name"));
             Assert.That(html, Does.Contain("product-details-form"));
             Assert.That(Controls(html).Any(item => Attribute(item, "name") == $"addtocart_{productId}.EnteredQuantity"), Is.True);
             Assert.That(Token(html), Is.Not.Empty);
         });
+        if (key == "MADADRANG")
+        {
+            Assert.That(html, Does.Contain("\"type\":\"webassembly\""), "Madadrang's supported product controls prerender their interactive Shared renderer.");
+            Assert.That(html, Does.Contain("sf-product-name"));
+        }
+        else
+        {
+            Assert.That(html, Does.Contain("class=\"product-name\""), "Boutique preserves the full native product renderer.");
+            Assert.That(html, Does.Contain($"add-to-cart-button-{productId}"));
+            Assert.That(html, Does.Contain("<details class=\"boutique-accordion\""), "The configured sample product includes native details/review content in accessible accordions.");
+            using var response = await client.GetAsync($"product/combinations?productId={productId}");
+            response.EnsureSuccessStatusCode();
+            using var combinations = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
+            foreach (var attribute in combinations.RootElement.EnumerateArray()
+                .SelectMany(item => item.GetProperty("Attributes").EnumerateArray()).Select(item => item.GetProperty("Id").GetInt32()).Distinct())
+                Assert.That(Controls(html).Any(item => Attribute(item, "name") == $"product_attribute_{attribute}"), Is.True,
+                    $"Native attribute {attribute} must retain an actual form control on Boutique.");
+        }
         var home = await Html(client, "");
         if (home.Contains("ico-wishlist", StringComparison.Ordinal))
             Assert.That(html, Does.Contain("add-to-wishlist-button"), "A wishlist-enabled fixture must preserve the native product action.");
@@ -101,7 +117,12 @@ public sealed class RuntimeThemeTests
         {
             var id = fixture.GetProperty("productId").GetInt32();
             var html = await Html(client, $"product/productdetails?productId={id}");
-            Assert.That(html, Does.Not.Contain("sf-product-name"), "Unsupported products must use the native product body.");
+            if (key == "MADADRANG")
+                Assert.That(html, Does.Not.Contain("sf-product-name"), "Unsupported Madadrang products must leave the Shared product body.");
+            else
+                Assert.That(html, Does.Contain("class=\"product-name\""), "Boutique retains native rendering for all attribute types.");
+            Assert.That(html, Does.Contain("product-details-form"));
+            Assert.That(Token(html), Is.Not.Empty);
             foreach (var marker in fixture.GetProperty("markers").EnumerateArray())
                 Assert.That(html, Does.Contain(marker.GetString()), $"Fallback product {id}");
         }

@@ -25,7 +25,7 @@ dotnet test src/Tests/Storefront.Theme.Tests/Storefront.Theme.Tests.csproj --fil
 | Header/footer | Native search control, HeaderLinks and AjaxCart initialization, native footer copyright | Currency/language/tax selectors depend on settings and number of configured choices |
 | Native navigation | Login password and CSRF, registration page, wishlist/compare/cart reachable | Does not register or authenticate a user |
 | Search | q/advs/sid/sit selectable, query booleans restored | Category/vendor choices depend on fixture data; browser interaction still required |
-| Supported product | WebAssembly prerender, no server-render marker, native details form, quantity field and CSRF, optional native action/review markers | Does not execute attribute-change requests or browser events |
+| Supported product | Madadrang: Shared WebAssembly prerender. Boutique: full native product body, actual native attribute controls and add action, accessible details/review accordion for the sample fixture. Both: native details form, quantity field and CSRF, optional native action/review markers | Does not execute attribute-change requests or browser events; sample fixture must include details/specification/review content for its accordion |
 | Unsupported product | Explicit fixture markers retained in native body and custom product body absent | Requires separately supplied fixture IDs |
 | Isolated guest cart | Missing-CSRF add rejected; native add; persistent own line; foreign guest cannot change it; mini quantity update/removal; formatted native count/flyout sections; full native cart totals | Requires normal quantity-1/2 product and visible mini line; does not place an order |
 
