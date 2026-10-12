@@ -18,6 +18,7 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.2.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.2.3" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.17.13" />
+    <PackageReference Include="BlazorBlueprint.Primitives" Version="$(StorefrontBlueprintPrimitivesVersion)" GeneratePathProperty="true" />
   </ItemGroup>
   <ItemGroup Condition="'$(StorefrontTheme)' == 'Boutique'">
     <Content Remove="Views/HomeHero.cshtml;Views/HomepageBanners.cshtml;Views/NativeHeader.cshtml;Views/NativeFooter.cshtml" />
@@ -43,7 +44,7 @@
       <MadadrangAssets Include="../../Storefront/Storefront.UI.Madadrang/wwwroot/**/*" Condition="'$(StorefrontTheme)' == 'Madadrang' Or '$(StorefrontTheme)' == 'All'" />
       <BoutiqueAssets Include="../../Storefront/Storefront.UI.Boutique/wwwroot/**/*" Condition="'$(StorefrontTheme)' == 'Boutique' Or '$(StorefrontTheme)' == 'All'" />
       <BBAssets Include="$(NuGetPackageRoot)blazorblueprint.components/4.1.0/staticwebassets/**/*" />
-      <PrimitiveAssets Include="$(NuGetPackageRoot)blazorblueprint.primitives/4.1.0/staticwebassets/**/*" />
+      <PrimitiveAssets Include="$(PkgBlazorBlueprint_Primitives)/staticwebassets/**/*" />
     </ItemGroup>
     <Copy SourceFiles="@(SharedAssets)" DestinationFiles="@(SharedAssets->'$(OutDir)Content/Storefront.UI.Shared/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
     <Copy SourceFiles="@(MadadrangAssets)" DestinationFiles="@(MadadrangAssets->'$(OutDir)Content/Storefront.UI.Madadrang/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />

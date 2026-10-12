@@ -74,6 +74,9 @@ try {
     $activeAssets = Join-Path $publishRoot "Plugins/Misc.PersianStorefront/Content/Storefront.UI.$Theme/$themeCss"
     $wasmAssets = Join-Path $publishRoot 'Plugins/Misc.PersianStorefront/Content/Client/wwwroot/_framework'
     if (!(Test-Path -LiteralPath $activeAssets) -or !(Test-Path -LiteralPath $wasmAssets)) { throw 'The selected theme CSS or browser app was not packaged.' }
+    $modalCoordinator = Join-Path $publishRoot 'Plugins/Misc.PersianStorefront/Content/BlazorBlueprint.Primitives/js/primitives/modal-exit.js'
+    if (!(Test-Path -LiteralPath $modalCoordinator -PathType Leaf) -or (Get-Item -LiteralPath $modalCoordinator).Length -eq 0 -or
+        !(Get-ChildItem -LiteralPath $wasmAssets -Filter 'BlazorBlueprint.Primitives*.wasm' -File)) { throw 'Patched modal coordinator or matching browser primitives are missing.' }
     if (!(Get-ChildItem -LiteralPath $wasmAssets -Filter "Storefront.UI.$Theme*.wasm" -File) -or
         !(Get-ChildItem -LiteralPath $wasmAssets -Filter 'Storefront.UI.Shared*.wasm' -File) -or
         (!(Test-Path -LiteralPath (Join-Path $publishRoot "Plugins/Misc.PersianStorefront/Storefront.UI.$Theme.dll")) -and

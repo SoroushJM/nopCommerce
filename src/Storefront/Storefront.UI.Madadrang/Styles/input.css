@@ -885,6 +885,7 @@
 .sf-native-product-content .button-2:hover { background: var(--accent); color: var(--accent-foreground) }
 @media (prefers-reduced-motion: reduce) {
   .product-card, .product-photo img, .estimate-shipping-popup-zoom-in .mfp-with-anim { transition: none; transform: none }
+  .storefront [data-bb-modal-exit-part] { animation: none !important; transition: none !important }
 }
 
 .sf-search { width: 100%; max-width: 470px }

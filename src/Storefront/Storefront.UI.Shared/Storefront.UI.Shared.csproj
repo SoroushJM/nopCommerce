@@ -9,5 +9,6 @@
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.12" />
     <PackageReference Include="Microsoft.AspNetCore.WebUtilities" Version="10.0.12" />
     <PackageReference Include="BlazorBlueprint.Components" Version="4.1.0" />
+    <PackageReference Include="BlazorBlueprint.Primitives" Version="$(StorefrontBlueprintPrimitivesVersion)" />
   </ItemGroup>
 </Project>

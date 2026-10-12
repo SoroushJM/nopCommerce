@@ -7,6 +7,8 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <StorefrontTheme Condition="'$(StorefrontTheme)' == ''">Madadrang</StorefrontTheme>
+    <StorefrontBlueprintPrimitivesVersion>4.1.1-storefront.1</StorefrontBlueprintPrimitivesVersion>
+    <RestoreAdditionalProjectSources>$(RestoreAdditionalProjectSources);$(MSBuildThisFileDirectory)../vendor/blazorblueprint-primitives/packages</RestoreAdditionalProjectSources>
     <RepositoryType>Git</RepositoryType>
     <!--The Implicit usings feature automatically adds common global using directives for the type of project you are building. For more information, see this implicit usings article https://aka.ms/csharp-implicit-usings.-->
     <ImplicitUsings>enable</ImplicitUsings>

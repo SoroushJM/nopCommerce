@@ -1,0 +1,15 @@
+# Storefront modal exit patch
+
+This directory carries a narrowly patched `BlazorBlueprint.Primitives` package for the storefronts. `BlazorBlueprint.Components` remains4.1.0. The primitive source is the official `primitives/v4.1.0` tag, exact commit `9534520512db530e640b7bca878d73f7c444874e`, from https://github.com/blazorblueprintui/ui.
+
+The local package version is `4.1.1-storefront.1`; this distinguishes our package from the published upstream package and satisfies Components' minimum4.1.0 dependency. Its assembly version remains the upstream `4.0.0.0`. It is not an upstream release or a general library upgrade.
+
+The patch retains Sheet and JavaScript-strategy Dialog content/overlay during a finite CSS exit animation, renders their closed state as inert, and unmounts after animation completion. Generation checks prevent an earlier closing callback from removing a reopened modal. Reduced motion, absent animation/portal, and disposal complete or cancel appropriately. Only the content/overlay's own finite animations are awaited; descendant widgets do not delay dismissal. Modal focus capture restores the original opener when it remains available and focus has not moved elsewhere. Native `<dialog>` retains its existing platform-close behavior; these storefronts use the JavaScript strategy.
+
+`sheet-dialog-exit.patch` contains the modified upstream source, including the new JavaScript module. `packages/` contains the reviewed package for reproducible restores without overwriting upstream NuGet caches. The source change and local package were prepared on2026-10-13. Upstream copyright, Apache-2.0 license, and NOTICE are preserved in this directory and inside the package. Changes are documented here in addition to the patch.
+
+To rebuild, run `Build-PatchedPrimitives.ps1 -WorkDirectory <new-directory-outside-this-checkout>`. The script refuses an existing destination, checks out the exact official source, applies the patch, and builds the local package using .NET10. It does not replace the checked-in package automatically. Review a rebuild and update the package/hash together; change the local package version when its content changes after distribution. Rebuilding source is reproducible in behavior and provenance; ZIP timestamps and build metadata may change the archive hash.
+
+The deployment publisher snapshots this local feed alongside tracked source. The selected plugin copies primitive assets from the resolved package path; both server assemblies and browser assets must come from this same package. Updating only the server DLL is insufficient.
+
+Interactive acceptance and current deployed status are recorded in `docs/qa/storefront-design-open.md` and `docs/qa/storefront-design-resolved.md`. A successful package build alone is not interactive acceptance.

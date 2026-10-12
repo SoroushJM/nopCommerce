@@ -1,0 +1,14 @@
+Blazor Blueprint
+Copyright 2025-present Mathew Taylor
+
+This project provides a Blazor Blueprint component library inspired by shadcn/ui.
+
+Original project: https://github.com/blazorblueprintui/ui
+
+If you use this software or create derivative works, you must include this
+NOTICE file (or its contents) in your distribution, as required by the
+Apache License 2.0.
+
+World map boundaries are derived from Natural Earth v5.1.2 (public domain).
+Source: https://www.naturalearthdata.com/
+Terms: https://www.naturalearthdata.com/about/terms-of-use/
