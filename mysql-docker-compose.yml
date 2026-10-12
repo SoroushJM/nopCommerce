@@ -63,8 +63,8 @@ services:
   nopcommerce_database:
     image: mysql:8.4
     restart: unless-stopped
-    mem_limit: 96m
-    memswap_limit: 96m
+    mem_limit: 768m
+    memswap_limit: 768m
     cpus: 0.5
     environment:
       MYSQL_DATABASE: ${MYSQL_DATABASE:-nopcommerce}

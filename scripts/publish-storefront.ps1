@@ -9,6 +9,8 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
+$Theme = if ($Theme -ieq 'Boutique') { 'Boutique' } else { 'Madadrang' }
+$Environment = $Environment.ToLowerInvariant()
 $repoRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $themeSlug = $Theme.ToLowerInvariant()
 $runId = [Guid]::NewGuid().ToString('N')
