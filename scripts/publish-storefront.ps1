@@ -55,7 +55,9 @@ $previousLocation = Get-Location
 try {
     Set-Location -LiteralPath $sourceRoot
     $buildArguments = @('-c', 'Release', "-p:StorefrontTheme=$Theme", "-p:DockerRuntimeIdentifier=$RuntimeIdentifier", '-p:DebugType=None', '-p:DebugSymbols=false')
-    Invoke-Dotnet -Arguments (@('build', 'src/Build/src/ClearPluginAssemblies/ClearPluginAssemblies.csproj', '-c', 'Release', '-o', 'src/Build'))
+    $helperOutput = Join-Path $packageRoot 'build-helper'
+    Invoke-Dotnet -Arguments (@('build', 'src/Build/src/ClearPluginAssemblies/ClearPluginAssemblies.csproj', '-c', 'Release', '-o', $helperOutput))
+    Get-ChildItem -LiteralPath $helperOutput -Filter 'ClearPluginAssemblies.*' -File | Copy-Item -Destination (Join-Path $sourceRoot 'src/Build')
     Invoke-Dotnet -Arguments (@('build', 'src/Docker.slnx') + $buildArguments)
     Invoke-Dotnet -Arguments (@('publish', 'src/Presentation/Nop.Web/Nop.Web.csproj', '--no-build', '--no-restore', '--self-contained', 'false', '-r', $RuntimeIdentifier, '-o', $publishRoot) + $buildArguments)
     $viewsAssembly = Join-Path $sourceRoot "src/Presentation/Nop.Docker.Views/bin/Release/net10.0/$RuntimeIdentifier/Nop.Docker.Views.dll"
