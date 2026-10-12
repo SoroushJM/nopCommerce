@@ -6,6 +6,8 @@ namespace Storefront.UI.Shared.Components;
 
 public partial class NativeCartItem
 {
+    [Parameter]
+    public NativeUiLabels Labels { get; set; } = new();
     [Inject]
     private IFocusManager FocusManager { get; set; } = default!;
     [Parameter, EditorRequired]

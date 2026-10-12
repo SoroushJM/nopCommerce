@@ -2,18 +2,18 @@
     @if (Initial.Categories.Count > 0)
     {
         <BbField>
-            <BbFieldLabel>دسته‌بندی</BbFieldLabel>
-            <StoreSelect TValue="string" Label="دسته‌بندی محصولات" Options="Options(Initial.Categories)"
+            <BbFieldLabel>@Initial.Labels.Get("Search.Category")</BbFieldLabel>
+            <StoreSelect TValue="string" Label="@Initial.Labels.Get("Search.Category")" Options="Options(Initial.Categories)"
                          Value="Selected(Initial.Categories)" ValueChanged='value => Change.InvokeAsync(new("cid", value))' />
         </BbField>
     }
     @if (Initial.Manufacturers.Count > 0)
     {
         <BbFieldSet>
-            <BbFieldLegend>برند</BbFieldLegend>
+            <BbFieldLegend>@Initial.Labels.Get("Search.Manufacturer")</BbFieldLegend>
             @if (Initial.NativeSearch)
             {
-                <StoreSelect TValue="string" Label="فیلتر برند" Options="Options(Initial.Manufacturers)"
+                <StoreSelect TValue="string" Label="@Initial.Labels.Get("Filtering.ManufacturerFilter")" Options="Options(Initial.Manufacturers)"
                              Value="Selected(Initial.Manufacturers)" ValueChanged='value => Change.InvokeAsync(new("mid", value))' />
             }
             else
@@ -34,17 +34,17 @@
     @if (Initial.PriceEnabled)
     {
         <BbFieldSet>
-            <BbFieldLegend>بازهٔ قیمت (@Initial.Currency)</BbFieldLegend>
+            <BbFieldLegend>@Initial.Labels.Get("Filtering.PriceRangeFilter") (@Initial.Currency)</BbFieldLegend>
             <BbFieldDescription><span dir="ltr">@Initial.AvailableFrom – @Initial.AvailableTo</span></BbFieldDescription>
             <BbFieldGroup Class="grid grid-cols-2 gap-2">
                 <BbField IsInvalid="@(_error.Length > 0)">
-                    <BbFieldLabel For="@(InstanceId + "-from")">از</BbFieldLabel>
+                    <BbFieldLabel For="@(InstanceId + "-from")">≥ @Initial.Labels.Get("Products.Price")</BbFieldLabel>
                     <BbInput Id="@(InstanceId + "-from")" Class="h-11 text-left" dir="ltr" inputmode="decimal"
                              AriaInvalid="@(_error.Length > 0)" AriaDescribedBy="@(InstanceId + "-price-error")"
                              @bind-Value="_from" UpdateTiming="UpdateTiming.Immediate" />
                 </BbField>
                 <BbField IsInvalid="@(_error.Length > 0)">
-                    <BbFieldLabel For="@(InstanceId + "-to")">تا</BbFieldLabel>
+                    <BbFieldLabel For="@(InstanceId + "-to")">≤ @Initial.Labels.Get("Products.Price")</BbFieldLabel>
                     <BbInput Id="@(InstanceId + "-to")" Class="h-11 text-left" dir="ltr" inputmode="decimal"
                              AriaInvalid="@(_error.Length > 0)" AriaDescribedBy="@(InstanceId + "-price-error")"
                              @bind-Value="_to" UpdateTiming="UpdateTiming.Immediate" />
@@ -54,7 +54,7 @@
             {
                 <BbFieldError Id="@(InstanceId + "-price-error")" role="alert">@_error</BbFieldError>
             }
-            <BbButton Size="ButtonSize.Large" Class="w-full" OnClick="ApplyPrice">اعمال قیمت</BbButton>
+            <BbButton Size="ButtonSize.Large" Class="w-full" OnClick="ApplyPrice">@Initial.Labels.Get("Common.Confirm")</BbButton>
         </BbFieldSet>
     }
     @foreach (var group in Initial.Specifications)
@@ -79,5 +79,5 @@
             </BbFieldGroup>
         </BbFieldSet>
     }
-    <BbButton Variant="ButtonVariant.Ghost" Class="w-full" OnClick='() => Change.InvokeAsync(new("reset", null))'>پاک کردن فیلترها</BbButton>
+    <BbButton Variant="ButtonVariant.Ghost" Class="w-full" OnClick='() => Change.InvokeAsync(new("reset", null))'>@Initial.Labels.Get("Common.Remove")</BbButton>
 </BbFieldGroup>

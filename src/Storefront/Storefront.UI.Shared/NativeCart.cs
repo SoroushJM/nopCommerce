@@ -6,6 +6,7 @@ public sealed record NativeCartTotalRow(string Label, string Value, string Detai
 
 public sealed record NativeCart
 {
+    public NativeUiLabels Labels { get; init; } = new();
     public bool MiniEnabled
     {
         get; init;

@@ -1,52 +1,52 @@
 @implements IAsyncDisposable
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
-<BbDirectionProvider Direction="TextDirection.RightToLeft">
+<BbDirectionProvider Direction="@(Labels.Rtl ? TextDirection.RightToLeft : TextDirection.LeftToRight)">
     <BbPortalHost />
     <div class="flex items-center gap-4 max-md:gap-1">
         @if (Theme.EnableOtp)
         {
             <BbButton Variant="ButtonVariant.Ghost" Size="ButtonSize.Large" Class="max-md:hidden" OnClick="ShowLogin">
-                <SfIcon Name="user" data-icon="inline-start" /><span>@(_signedIn ? "حساب من" : "ورود / عضویت")</span>
+                <SfIcon Name="user" data-icon="inline-start" /><span>@Labels.Get(_signedIn ? "Account.MyAccount" : "Account.Login")</span>
             </BbButton>
         }
         else
         {
             <BbButton Href="@AccountUrl" Variant="ButtonVariant.Ghost" Size="ButtonSize.Large" Class="max-md:hidden">
-                <SfIcon Name="user" data-icon="inline-start" /><span>@(_signedIn ? "حساب من" : "ورود / عضویت")</span>
+                <SfIcon Name="user" data-icon="inline-start" /><span>@Labels.Get(_signedIn ? "Account.MyAccount" : "Account.Login")</span>
             </BbButton>
         }
         <BbSeparator Orientation="SeparatorOrientation.Vertical" Class="sf-header-separator max-md:hidden" />
         @if (Initial.CartEnabled)
         {
-            <BbButton Variant="ButtonVariant.Ghost" Size="ButtonSize.IconLarge" Class="relative" AriaLabel="باز کردن سبد خرید" OnClick="OpenCart">
-                <SfIcon Name="bag" data-icon="inline-start" /><span class="absolute -top-0.5 -right-0.5 bg-primary text-primary-foreground rounded-full min-w-4 h-4 text-xs px-1">@_count</span>
+            <BbButton Variant="ButtonVariant.Ghost" Size="ButtonSize.IconLarge" Class="relative" AriaLabel="@Labels.Get("ShoppingCart")" OnClick="OpenCart">
+                <SfIcon Name="bag" data-icon="inline-start" /><span class="absolute -top-0.5 -end-0.5 bg-primary text-primary-foreground rounded-full min-w-4 h-4 text-xs px-1">@_count</span>
             </BbButton>
         }
     </div>
-    <nav class="mobile-nav" aria-label="منوی موبایل">
+    <nav class="mobile-nav" aria-label="@Labels.Get("Menu")">
         <a href="@Theme.HomeUrl">
-            <SfIcon Name="@Theme.HomeIcon" /><span>خانه</span>
+            <SfIcon Name="@Theme.HomeIcon" /><span>@Labels.Get("Homepage")</span>
         </a>
         <a href="@Theme.CatalogUrl">
-            <SfIcon Name="search" /><span>فروشگاه</span>
+            <SfIcon Name="search" /><span>@Labels.Get("Homepage.Products")</span>
         </a>
         @if (Initial.CartEnabled)
         {
             <button @onclick="OpenCart">
-                <SfIcon Name="bag" /><span>سبد (@_count)</span>
+                <SfIcon Name="bag" /><span>@Labels.Get("ShoppingCart") @Labels.Format("ShoppingCart.HeaderQuantity", _count)</span>
             </button>
         }
         @if (Theme.EnableOtp)
         {
             <button @onclick="ShowLogin">
-                <SfIcon Name="user" /><span>حساب من</span>
+                <SfIcon Name="user" /><span>@Labels.Get("Account.MyAccount")</span>
             </button>
         }
         else
         {
             <a href="@AccountUrl">
-                <SfIcon Name="user" /><span>حساب من</span>
+                <SfIcon Name="user" /><span>@Labels.Get("Account.MyAccount")</span>
             </a>
         }
     </nav>
@@ -56,21 +56,22 @@
             <BbAlert Variant="AlertVariant.Danger">@error</BbAlert>
         </div>
     }
-    <BbSheet Open="cartOpen" OpenChanged="value => cartOpen = value" Side="SheetSide.Left">
-        <BbSheetContent Class="sf-sheet" ShowClose="true">
+    <BbSheet Open="cartOpen" OpenChanged="value => cartOpen = value" Side="@(Labels.Rtl ? SheetSide.Left : SheetSide.Right)">
+        <BbSheetContent Class="sf-sheet" ShowClose="false" dir="@Labels.Direction">
+            <BbSheetClose AsChild="false" class="absolute top-4 end-4" aria-label="@Labels.Get("Common.Close")"><SfIcon Name="x" /></BbSheetClose>
             <BbSheetHeader>
-                <BbSheetTitle>سبد خرید تو (@cart.Count)</BbSheetTitle>
+                <BbSheetTitle>@Labels.Get("ShoppingCart") @Labels.Format("ShoppingCart.HeaderQuantity", cart.Count)</BbSheetTitle>
                 <BbSheetDescription>@Theme.CartDescription</BbSheetDescription>
             </BbSheetHeader>
             <div class="overflow-y-auto flex-1 min-h-0 my-4">@if(cart.Count==0) {
-                <BbEmpty Title="سبدت هنوز خالیه." Description="@Theme.EmptyCartDescription">
-                    <BbButton Href="@Theme.CatalogUrl" Variant="ButtonVariant.Outline">یک انتخاب تازه پیدا کن</BbButton>
+                <BbEmpty Title="@Labels.Get("ShoppingCart.CartIsEmpty")" Description="@Theme.EmptyCartDescription">
+                    <BbButton Href="@Theme.CatalogUrl" Variant="ButtonVariant.Outline">@Labels.Get("ShoppingCart.ContinueShopping")</BbButton>
                 </BbEmpty>
                 } else
                 {
                     @foreach (var line in cart.Lines)
                     {
-                        <NativeCartItem Line="line" ShowImage="cart.ShowProductImages" Busy="busy" OnQuantity="UpdateQuantity" />
+                        <NativeCartItem Line="line" Labels="cart.Labels" ShowImage="cart.ShowProductImages" Busy="busy" OnQuantity="UpdateQuantity" />
                     }
                 }
             </div>
@@ -90,14 +91,14 @@
             @if(cart.Count > 0) {
             <div class="flex flex-col gap-5">
                     <BbSeparator />
-                <div class="flex justify-between font-bold mb-5"><span>جمع کالاها</span><span>@cart.MiniSubTotal</span></div>
+                <div class="flex justify-between font-bold mb-5"><span>@Labels.Get("ShoppingCart.Totals.SubTotal")</span><span>@cart.MiniSubTotal</span></div>
                     @if (cart.DisplayShoppingCartButton)
                     {
-                        <BbButton Href="@cart.CartUrl" Size="ButtonSize.Large" Class="w-full">دیدن سبد و ادامهٔ خرید</BbButton>
+                        <BbButton Href="@cart.CartUrl" Size="ButtonSize.Large" Class="w-full">@Labels.Get("ShoppingCart.Mini.ViewCart")</BbButton>
                     }
                     @if (cart.DisplayCheckoutButton)
                     {
-                        <BbButton Href="@cart.CheckoutUrl" Variant="ButtonVariant.Secondary" Size="ButtonSize.Large" Class="w-full mt-3">ادامهٔ خرید</BbButton>
+                        <BbButton Href="@cart.CheckoutUrl" Variant="ButtonVariant.Secondary" Size="ButtonSize.Large" Class="w-full mt-3">@Labels.Get("Checkout.Button")</BbButton>
                     }
                 </div>
             }
@@ -115,9 +116,9 @@
             @if (cart.SignedIn)
             {
                 <p class="text-center text-lg py-6" dir="ltr">@cart.Phone</p>
-                <BbButton Href="@Theme.AccountUrl" Size="ButtonSize.Large" Class="w-full mb-3">حساب من</BbButton>
-                <BbButton Href="@Initial.CartUrl" Size="ButtonSize.Large" Class="w-full">دیدن سبد خرید</BbButton><a href="@Theme.LogoutUrl"
-                                                                                                      class="block text-center text-xs text-muted-foreground mt-5">خروج از حساب</a>
+                <BbButton Href="@Theme.AccountUrl" Size="ButtonSize.Large" Class="w-full mb-3">@Labels.Get("Account.MyAccount")</BbButton>
+                <BbButton Href="@Initial.CartUrl" Size="ButtonSize.Large" Class="w-full">@Labels.Get("ShoppingCart.Mini.ViewCart")</BbButton><a href="@Theme.LogoutUrl"
+                                                                                                      class="block text-center text-xs text-muted-foreground mt-5">@Labels.Get("Account.Logout")</a>
             }
             else
             {

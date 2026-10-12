@@ -1,6 +1,6 @@
 @implements IAsyncDisposable
 @inject IJSRuntime JS
-<BbDirectionProvider Direction="TextDirection.RightToLeft">
+<BbDirectionProvider Direction="@(Initial.Rtl ? TextDirection.RightToLeft : TextDirection.LeftToRight)">
     <input type="hidden" name="@Initial.Name" id="@Initial.Name" value="@_value" @ref="_input" />
     <StoreSelect TValue="string" Label="@Initial.Label" Options="Options" Value="@_value" ValueChanged="SetValue" />
 </BbDirectionProvider>

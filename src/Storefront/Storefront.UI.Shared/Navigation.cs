@@ -2,6 +2,8 @@ namespace Storefront.UI.Shared;
 
 public sealed record StoreMenu
 {
+    public bool Rtl { get; init; } = true;
+    public NativeUiLabels Labels { get; init; } = new();
     public int Id { get; init; }
     public string Name { get; init; } = "";
     public List<StoreMenuItem> Items { get; init; } = [];

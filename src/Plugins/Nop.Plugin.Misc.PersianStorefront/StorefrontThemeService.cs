@@ -23,19 +23,21 @@ public sealed class BoutiqueThemeSettings : ISettings
 }
 
 public sealed class StorefrontThemeService(IThemeContext themes, IStoreContext stores,
-    ILocalizationService localization, IWebHostEnvironment environment, INopUrlHelper urls)
+    ILocalizationService localization, IWebHostEnvironment environment, INopUrlHelper urls, IWorkContext work)
 {
     public static bool IsSupported(string theme) => theme is "Madadrang" or "Boutique";
 
     public async Task<StorefrontThemeProfile> GetProfileAsync()
     {
         var theme = await themes.GetWorkingThemeNameAsync();
+        var labels = await NativeUiLocalization.PrepareAsync(localization, work);
         if (theme == "Boutique")
         {
             var store = await stores.GetCurrentStoreAsync();
             var name = await localization.GetLocalizedAsync(store, item => item.Name);
             return new StorefrontThemeProfile
             {
+                Labels = labels,
                 BrandName = string.IsNullOrWhiteSpace(name) ? "فروشگاه" : name,
                 HomeUrl = urls.RouteUrl(NopRouteNames.General.HOMEPAGE),
                 AccountUrl = urls.RouteUrl(NopRouteNames.General.CUSTOMER_INFO),
@@ -49,6 +51,7 @@ public sealed class StorefrontThemeService(IThemeContext themes, IStoreContext s
 
         return new StorefrontThemeProfile
         {
+            Labels = labels,
             BrandName = "مداد رنگی",
             HomeUrl = urls.RouteUrl(NopRouteNames.General.HOMEPAGE),
             AccountUrl = urls.RouteUrl(NopRouteNames.General.CUSTOMER_INFO),
@@ -56,7 +59,8 @@ public sealed class StorefrontThemeService(IThemeContext themes, IStoreContext s
             CatalogUrl = urls.RouteUrl("StationeryCatalog"),
             LoginUrl = urls.RouteUrl(NopRouteNames.General.LOGIN),
             OtpApiBasePath = urls.RouteUrl("StationeryLogin").Replace("/login", "/api/"),
-            EnableOtp = environment.IsDevelopment(),
+            EnableOtp = environment.IsDevelopment()
+                && (await work.GetWorkingLanguageAsync()).LanguageCulture.StartsWith("fa", StringComparison.OrdinalIgnoreCase),
             CartDescription = "یک جای کوچک برای انتخاب‌های رنگی",
             EmptyCartDescription = "برای شروع، یک همراه رنگی انتخاب کن.", HomeIcon = "pencil",
             SearchPlaceholder = "دنبال چی می‌گردی؟ دفتر، مداد، یک ایده تازه..."

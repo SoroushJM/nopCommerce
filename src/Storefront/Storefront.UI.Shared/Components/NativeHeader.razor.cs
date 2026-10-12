@@ -14,6 +14,7 @@ public partial class NativeHeader
     public StorefrontThemeProfile Theme { get; set; } = new();
 
     private string AccountUrl => _signedIn ? Theme.AccountUrl : Theme.LoginUrl;
+    private NativeUiLabels Labels => Theme.Labels;
 
     [Parameter]
     public bool OpenLoginOnLoad
@@ -34,7 +35,8 @@ public partial class NativeHeader
         _signedIn = Initial.SignedIn;
         cart = new NativeCart
         {
-            SignedIn = Initial.SignedIn
+            SignedIn = Initial.SignedIn,
+            Labels = Theme.Labels
         };
     }
 
@@ -52,7 +54,7 @@ public partial class NativeHeader
         }
         catch (Exception)
         {
-            error = "بارگذاری سبد خرید انجام نشد. دوباره تلاش کنید.";
+            error = Labels.Get("Common.Error");
         }
 
         StateHasChanged();
@@ -82,7 +84,7 @@ public partial class NativeHeader
         }
         catch (Exception)
         {
-            error = "درخواست انجام نشد. دوباره تلاش کنید.";
+            error = Labels.Get("Common.Error");
         }
         finally
         {

@@ -1,4 +1,4 @@
-<article class="@ClassNames.cn("cart-row", ShowImage ? null : "sf-cart-no-picture")" data-native-cart-line="@Line.Id">
+<article class="@ClassNames.cn("cart-row", ShowImage ? null : "sf-cart-no-picture")" data-native-cart-line="@Line.Id" dir="@Labels.Direction">
     @if (ShowImage)
     {
         <a href="@Line.Url"><img src="@Line.Image" alt="@Line.ImageAlt" title="@Line.ImageTitle" /></a>
@@ -14,33 +14,33 @@
         }
         @if (!string.IsNullOrEmpty(Line.EditUrl))
         {
-            <a href="@Line.EditUrl" class="text-xs text-primary inline-block mt-2">ویرایش انتخاب‌ها</a>
+            <a href="@Line.EditUrl" class="text-xs text-primary inline-block mt-2">@Labels.Get("Common.Edit")</a>
         }
         <div class="flex gap-3 items-center mt-3 flex-wrap" @ref="_quantityControls">
             @if (Line.AllowedQuantities.Count > 0)
             {
-                <StoreSelect @key="_selectionRevision" TValue="string" Value="@Line.Quantity.ToString()" ValueChanged="SelectQuantity" Options="Options" Label="@("تعداد " + Line.Name)" Disabled="Busy" />
+                <StoreSelect @key="_selectionRevision" TValue="string" Value="@Line.Quantity.ToString()" ValueChanged="SelectQuantity" Options="Options" Label="@(Labels.Get("Products.Qty") + " " + Line.Name)" Disabled="Busy" />
             }
             else
             {
                 <div class="qty">
-                    <BbButton Variant="ButtonVariant.Ghost" Size="ButtonSize.IconLarge" AriaLabel="@("کاهش تعداد " + Line.Name)" Disabled="@(Busy || Line.Quantity <= 1)" OnClick="() => SetQuantity(Line.Quantity - 1)"><SfIcon Name="minus" data-icon="inline-start" /></BbButton>
+                    <BbButton Variant="ButtonVariant.Ghost" Size="ButtonSize.IconLarge" AriaLabel="@(Labels.Get("Products.Qty") + " − " + Line.Name)" Disabled="@(Busy || Line.Quantity <= 1)" OnClick="() => SetQuantity(Line.Quantity - 1)"><SfIcon Name="minus" data-icon="inline-start" /></BbButton>
                     <span>@Line.Quantity</span>
-                    <BbButton Variant="ButtonVariant.Ghost" Size="ButtonSize.IconLarge" AriaLabel="@("افزایش تعداد " + Line.Name)" Disabled="@Busy" OnClick="() => SetQuantity(Line.Quantity + 1)"><SfIcon Name="plus" data-icon="inline-start" /></BbButton>
+                    <BbButton Variant="ButtonVariant.Ghost" Size="ButtonSize.IconLarge" AriaLabel="@(Labels.Get("Products.Qty") + " + " + Line.Name)" Disabled="@Busy" OnClick="() => SetQuantity(Line.Quantity + 1)"><SfIcon Name="plus" data-icon="inline-start" /></BbButton>
                 </div>
             }
             @if (!Line.DisableRemoval)
             {
-                <BbButton Variant="ButtonVariant.Ghost" Size="ButtonSize.IconLarge" AriaLabel="@("حذف " + Line.Name)" Disabled="@Busy" OnClick="() => SetQuantity(0)"><SfIcon Name="trash" data-icon="inline-start" /></BbButton>
+                <BbButton Variant="ButtonVariant.Ghost" Size="ButtonSize.IconLarge" AriaLabel="@(Labels.Get("ShoppingCart.Remove") + " " + Line.Name)" Disabled="@Busy" OnClick="() => SetQuantity(0)"><SfIcon Name="trash" data-icon="inline-start" /></BbButton>
             }
         </div>
     </div>
-    <div class="text-sm font-bold text-left price">
+    <div class="text-sm font-bold text-end price">
         @Line.SubTotal
-        <p class="text-xs font-normal text-muted-foreground mt-2">هر عدد: @Line.UnitPrice</p>
+        <p class="text-xs font-normal text-muted-foreground mt-2">@Labels.Get("ShoppingCart.Mini.UnitPrice"): @Line.UnitPrice</p>
         @if (!string.IsNullOrEmpty(Line.Discount))
         {
-            <p class="text-xs font-normal text-primary mt-2">تخفیف: @Line.Discount</p>
+            <p class="text-xs font-normal text-primary mt-2">@Labels.Get("ShoppingCart.Totals.SubTotalDiscount"): @Line.Discount</p>
             <p class="text-xs font-normal text-muted-foreground mt-2">@Line.DiscountNote</p>
         }
     </div>

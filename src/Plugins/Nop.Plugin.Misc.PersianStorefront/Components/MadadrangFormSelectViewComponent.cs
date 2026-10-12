@@ -1,16 +1,18 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Nop.Core;
 using Nop.Web.Framework.Components;
 using Storefront.UI.Shared;
 
 namespace Nop.Plugin.Misc.PersianStorefront.Components;
 
-public sealed class MadadrangFormSelectViewComponent : NopViewComponent
+public sealed class MadadrangFormSelectViewComponent(IWorkContext work) : NopViewComponent
 {
     public async Task<IViewComponentResult> InvokeAsync(string name, string label, IEnumerable<SelectListItem> options, string submitName, string? selectedValue = null)
     {
         var model = new NativeFormSelectInput
         {
+            Rtl = (await work.GetWorkingLanguageAsync()).Rtl,
             Name = name,
             Label = label,
             SubmitName = submitName,

@@ -3,6 +3,7 @@ namespace Storefront.UI.Shared;
 /// <summary>Presentation and navigation supplied by the storefront's selected theme.</summary>
 public sealed record StorefrontThemeProfile
 {
+    public NativeUiLabels Labels { get; init; } = new();
     public string BrandName { get; init; } = "فروشگاه";
     public string HomeUrl { get; init; } = "/";
     public string CatalogUrl { get; init; } = "/catalog/all";

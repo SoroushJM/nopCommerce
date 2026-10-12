@@ -3,18 +3,22 @@ using System.Text.RegularExpressions;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Nop.Core;
+using Nop.Services.Localization;
 using Nop.Web.Framework.Components;
 using Nop.Web.Models.Catalog;
 using Storefront.UI.Shared;
 
 namespace Nop.Plugin.Misc.PersianStorefront.Components;
 
-public sealed class MadadrangCatalogControlsViewComponent(IWorkContext work) : NopViewComponent
+public sealed class MadadrangCatalogControlsViewComponent(IWorkContext work, ILocalizationService localization) : NopViewComponent
 {
     public async Task<IViewComponentResult> InvokeAsync(CatalogProductsModel model, string placement, SearchModel? search = null, bool allProducts = false)
     {
+        var labels = await NativeUiLocalization.PrepareAsync(localization, work);
         var controls = new CatalogControls
         {
+            Rtl = labels.Rtl,
+            Labels = labels,
             Path = HttpContext.Request.PathBase + HttpContext.Request.Path,
             NativeSearch = search != null && !allProducts,
             SortOptions = model.AllowProductSorting ? Choices(model.AvailableSortOptions) : [],
@@ -45,7 +49,7 @@ public sealed class MadadrangCatalogControlsViewComponent(IWorkContext work) : N
         {
             controls.Categories = Choices(search.AvailableCategories);
             if (allProducts)
-                controls.Categories.Insert(0, new("0", "همهٔ دسته‌ها", search.cid == 0));
+                controls.Categories.Insert(0, new("0", labels.Get("Common.All"), search.cid == 0));
             controls.Query["cid"] = search.cid.ToString(CultureInfo.InvariantCulture);
             controls.Query["isc"] = search.isc.ToString().ToLowerInvariant();
         }

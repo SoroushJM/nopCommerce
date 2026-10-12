@@ -46,7 +46,7 @@ public partial class CatalogFilterPanel
     {
         if (!NormalizePrice(_from, out var from) || !NormalizePrice(_to, out var to))
         {
-            _error = "قیمت را با عدد مثبت وارد کن.";
+            _error = Initial.Labels.Get("Common.Error");
             return Task.CompletedTask;
         }
         _error = "";

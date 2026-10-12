@@ -2,9 +2,9 @@
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
 
-<BbDirectionProvider Direction="TextDirection.RightToLeft">
+<BbDirectionProvider Direction="@(Labels.Rtl ? TextDirection.RightToLeft : TextDirection.LeftToRight)">
 <BbDialog Open="_zoomOpen" OpenChanged="SetZoomOpen">
-    <div class="storefront" dir="rtl">
+    <div class="storefront" dir="@Labels.Direction">
         @foreach (var field in FormFields())
         {
             <input type="hidden" id="@field.Key.Replace('.', '_')" name="@field.Key" value="@field.Value" />
@@ -13,7 +13,7 @@
             <section class="wrap py-7">
                 @if (Initial.BreadcrumbEnabled)
                 {
-                <p class="text-xs text-muted-foreground mb-7"><a href="@Initial.HomeUrl">خانه</a> / @foreach (var link in Initial.Breadcrumb)
+                <p class="text-xs text-muted-foreground mb-7"><a href="@Initial.HomeUrl">@Labels.Get("Homepage")</a> / @foreach (var link in Initial.Breadcrumb)
                     {
                         <a href="@link.Url">@link.Name</a><span> / </span>
                     }
@@ -27,11 +27,11 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-md:gap-7">
                     <div @ref="_gallery" class="sf-product-gallery">
                         <BbCard Class="sf-product-image">
-                            <BbCardHeader Class="sr-only"><BbCardTitle>تصویر @Initial.Name</BbCardTitle></BbCardHeader>
+                            <BbCardHeader Class="sr-only"><BbCardTitle>@Labels.Format("Media.Product.ImageAlternateTextFormat.Details", Initial.Name)</BbCardTitle></BbCardHeader>
                             <BbCardContent Class="p-0">
                             @if (Initial.ZoomEnabled && !string.IsNullOrEmpty(_fullSizeImage))
                             {
-                                <BbDialogTrigger AsChild="false" class="sf-product-zoom" aria-label="بزرگ‌نمایی تصویر محصول">
+                                <BbDialogTrigger AsChild="false" class="sf-product-zoom" aria-label="@Labels.Format("Media.Product.ImageLinkTitleFormat.Details", Initial.Name)">
                                     <img src="@_image" alt="@_imageAlt" title="@_imageTitle" />
                                 </BbDialogTrigger>
                             }
@@ -43,7 +43,7 @@
                         </BbCard>
                         @if (Initial.Pictures.Count > 1)
                         {
-                            <div class="sf-product-thumbnails" aria-label="تصاویر محصول">
+                            <div class="sf-product-thumbnails" aria-label="@Labels.Format("Media.Product.ImageAlternateTextFormat.Details", Initial.Name)">
                                 @foreach (var picture in VisiblePictures)
                                 {
                                     <button type="button" class="@(_image == picture.Image ? "selected" : "")"
@@ -71,30 +71,30 @@
                         <dl class="sf-product-metadata">
                             @if (Initial.ShowSku && _sku.Length > 0)
                             {
-                                <div><dt>کد محصول</dt><dd data-product-sku>@_sku</dd></div>
+                                <div><dt>@Labels.Get("Products.Sku")</dt><dd data-product-sku>@_sku</dd></div>
                             }
                             @if (Initial.ShowMpn && _mpn.Length > 0)
                             {
-                                <div><dt>کد تولیدکننده</dt><dd>@_mpn</dd></div>
+                                <div><dt>@Labels.Get("Products.ManufacturerPartNumber")</dt><dd>@_mpn</dd></div>
                             }
                             @if (Initial.ShowGtin && _gtin.Length > 0)
                             {
-                                <div><dt>شناسهٔ کالا</dt><dd>@_gtin</dd></div>
+                                <div><dt>@Labels.Get("Products.GTIN")</dt><dd>@_gtin</dd></div>
                             }
                             @if (Initial.ShowVendor && Initial.Vendor != null)
                             {
-                                <div><dt>فروشنده</dt><dd><a href="@Initial.Vendor.Url">@Initial.Vendor.Name</a></dd></div>
+                                <div><dt>@Labels.Get("Products.Vendor")</dt><dd><a href="@Initial.Vendor.Url">@Initial.Vendor.Name</a></dd></div>
                             }
                         </dl>
                         @if (Initial.IsShipEnabled)
                         {
                             @if (_freeShipping && Initial.FreeShippingNotificationEnabled)
                             {
-                                <p class="sf-product-delivery">ارسال رایگان</p>
+                                <p class="sf-product-delivery">@Labels.Get("Products.FreeShipping")</p>
                             }
                             @if (Initial.DeliveryDate.Length > 0)
                             {
-                                <p class="sf-product-delivery">زمان تحویل: @Initial.DeliveryDate</p>
+                                <p class="sf-product-delivery">@Labels.Get("Products.DeliveryDate"): @Initial.DeliveryDate</p>
                             }
                         }
                         <BbSeparator Class="sf-product-separator my-6" />
@@ -154,10 +154,10 @@
                         @if (!Initial.DisableBuy)
                         {
                         <div class="flex items-center gap-5 mb-6">
-                            <span class="text-sm">تعداد</span>
+                            <span class="text-sm">@Labels.Get("Products.Qty")</span>
                             @if (Initial.Quantities.Count > 0)
                             {
-                                <BbSelect TValue="int" Value="_quantity" ValueChanged="ChangeQuantity" AriaLabel="تعداد محصول" Disabled="@(!_ready || _busy)">
+                                <BbSelect TValue="int" Value="_quantity" ValueChanged="ChangeQuantity" AriaLabel="@Labels.Get("Products.Qty.AriaLabel")" Disabled="@(!_ready || _busy)">
                                     <BbSelectTrigger Class="sf-select h-11">
                                         <BbSelectValue />
                                     </BbSelectTrigger>
@@ -171,13 +171,13 @@
                         }
                             else
                         {
-                            <BbButtonGroup Class="sf-quantity qty"><button aria-label="کاهش تعداد"
+                            <BbButtonGroup Class="sf-quantity qty"><button aria-label="@(Labels.Get("Products.Qty") + " −")"
                                                                            disabled="@(_quantity <= Initial.MinimumQuantity || !_ready || _busy || _updating)"
                                                                            @onclick="() => ChangeQuantity(_quantity - 1)">
                                 <SfIcon Name="minus" Size="14" />
-                            </button><input @key="_quantityInputRevision" @ref="_quantityInput" class="sf-product-quantity-input" type="number" aria-label="تعداد محصول"
+                        </button><input @key="_quantityInputRevision" @ref="_quantityInput" class="sf-product-quantity-input" type="number" aria-label="@Labels.Get("Products.Qty.AriaLabel")"
                                             min="@Initial.MinimumQuantity" step="1" value="@_quantity" @onchange="EnterQuantity"
-                                            disabled="@(!_ready || _busy || _updating)" /><button aria-label="افزایش تعداد" disabled="@(!_ready || _busy || _updating)"
+                                            disabled="@(!_ready || _busy || _updating)" /><button aria-label="@(Labels.Get("Products.Qty") + " +")" disabled="@(!_ready || _busy || _updating)"
                                                                 @onclick="() => ChangeQuantity(_quantity + 1)">
                             <SfIcon Name="plus" Size="14" />
                         </button></BbButtonGroup>
@@ -191,20 +191,19 @@
                 @if (DisplayTierPrices)
                 {
                     <div class="sf-product-tiers">
-                        <h2>قیمت خرید تعدادی</h2>
-                        <table><thead><tr><th>تعداد</th><th>قیمت هر عدد</th></tr></thead><tbody>
+                        <h2>@Labels.Get("Products.TierPrices")</h2>
+                        <table><thead><tr><th>@Labels.Get("Products.TierPrices.Quantity")</th><th>@Labels.Get("Products.TierPrices.Price")</th></tr></thead><tbody>
                             @foreach (var tier in Initial.TierPrices)
                             {
                                 <tr><td>@(tier.Quantity)+</td><td>@tier.Price</td></tr>
                             }
                         </tbody></table>
-                        <p>قیمت نهایی با تعداد و انتخاب شما در سبد خرید محاسبه می‌شود.</p>
                     </div>
                 }
                 @if (!Initial.HidePrices || !Initial.DisableBuy)
                 {
                 <BbCard Class="sf-price-card">
-                    <BbCardHeader Class="sr-only"><BbCardTitle>انتخاب و خرید @Initial.Name</BbCardTitle></BbCardHeader>
+                    <BbCardHeader Class="sr-only"><BbCardTitle>@Initial.PurchaseLabel @Initial.Name</BbCardTitle></BbCardHeader>
                     <BbCardContent Class="pt-6">
                     @if (!Initial.HidePrices)
                     {
@@ -214,9 +213,8 @@
                     }
                     else
                     {
-                    <div class="flex items-end justify-between mb-5"><span class="text-xs text-muted-foreground">قیمت
-                        هر عدد</span>
-                        <div class="text-left">@if (!string.IsNullOrWhiteSpace(Initial.OldPrice)) {
+                    <div class="flex items-end justify-between mb-5"><span class="text-xs text-muted-foreground">@Labels.Get("Products.Price")</span>
+                        <div class="text-end">@if (!string.IsNullOrWhiteSpace(Initial.OldPrice)) {
                             <del class="text-xs text-muted-foreground block mb-1">@Initial.OldPrice</del>
                         }
                         <strong class="text-2xl price">@_price</strong>
@@ -250,22 +248,19 @@
                 }
             @if (Initial.PreOrderDate.Length > 0)
             {
-                <p class="text-xs text-muted-foreground mt-4">زمان عرضهٔ پیش‌سفارش: @Initial.PreOrderDate</p>
+                <p class="text-xs text-muted-foreground mt-4">@Labels.Get("ShoppingCart.PreOrderAvailability"): @Initial.PreOrderDate</p>
             }
-            <p class="text-xs text-muted-foreground mt-5 flex gap-2">
-                <SfIcon Name="shield" Size="15" />انتخاب‌ها و موجودی هنگام افزودن به سبد دوباره بررسی
-                می‌شوند.
-            </p>
         </div>
     </div>
 </section>
 </main>
 
 </div>
-    <BbDialogContent Class="sf-product-image-dialog" ShowClose="true">
+    <BbDialogContent Class="sf-product-image-dialog" ShowClose="false" dir="@Labels.Direction">
+        <BbDialogClose AsChild="false" class="absolute top-4 end-4" aria-label="@Labels.Get("Common.Close")"><SfIcon Name="x" /></BbDialogClose>
         <BbDialogHeader>
             <BbDialogTitle>@Initial.Name</BbDialogTitle>
-            <BbDialogDescription>تصویر بزرگ محصول</BbDialogDescription>
+            <BbDialogDescription>@Labels.Format("Media.Product.ImageAlternateTextFormat.Details", Initial.Name)</BbDialogDescription>
         </BbDialogHeader>
         <img src="@_fullSizeImage" alt="@_imageAlt" title="@_imageTitle" />
     </BbDialogContent>

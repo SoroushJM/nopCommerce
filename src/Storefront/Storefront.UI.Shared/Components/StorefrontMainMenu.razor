@@ -1,16 +1,17 @@
-<BbDirectionProvider Direction="TextDirection.RightToLeft">
+<BbDirectionProvider Direction="@(Menu.Rtl ? TextDirection.RightToLeft : TextDirection.LeftToRight)">
     @if (Mobile)
     {
-        <BbButton Variant="ButtonVariant.Ghost" Class="icon-btn" OnClick="() => _open = true" aria-label="دسته‌بندی‌ها">
+        <BbButton Variant="ButtonVariant.Ghost" Class="icon-btn" OnClick="() => _open = true" aria-label="@Menu.Labels.Get("Categories")">
             <SfIcon Name="menu" Size="20" />
         </BbButton>
-        <BbSheet Open="_open" OpenChanged="value => _open = value" Side="SheetSide.Right">
-            <BbSheetContent Class="sf-sheet" ShowClose="true">
+        <BbSheet Open="_open" OpenChanged="value => _open = value" Side="@(Menu.Rtl ? SheetSide.Right : SheetSide.Left)">
+            <BbSheetContent Class="sf-sheet" ShowClose="false" dir="@(Menu.Rtl ? "rtl" : "ltr")">
+                <BbSheetClose AsChild="false" class="absolute top-4 end-4" aria-label="@Menu.Labels.Get("Common.Close")"><SfIcon Name="x" /></BbSheetClose>
                 <BbSheetHeader>
-                    <BbSheetTitle>دسته‌بندی‌های فروشگاه</BbSheetTitle>
-                    <BbSheetDescription>دسته‌بندی محصولات را ببین.</BbSheetDescription>
+                    <BbSheetTitle>@Menu.Labels.Get("Categories")</BbSheetTitle>
+                    <BbSheetDescription>@Menu.Name</BbSheetDescription>
                 </BbSheetHeader>
-                <nav aria-label="دسته‌بندی‌های موبایل" class="overflow-y-auto my-4">
+                <nav aria-label="@Menu.Labels.Get("Categories")" class="overflow-y-auto my-4">
                     @foreach (var item in Menu.Items)
                     {
                         <StorefrontMenuBranch Item="item" />
@@ -22,7 +23,7 @@
     else
     {
         <BbNavigationMenu Class="sf-native-menu flex max-w-none" EnableKeyboardNavigation="true"
-                          aria-label="دسته‌بندی‌های فروشگاه">
+                          aria-label="@Menu.Labels.Get("Categories")">
             <BbNavigationMenuList Class="gap-8 w-full">
                 @for (var index = 0; index < Menu.Items.Count; index++)
                 {

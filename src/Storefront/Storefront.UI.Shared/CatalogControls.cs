@@ -6,6 +6,8 @@ public sealed record CatalogFilterChange(string Key, string? Value);
 
 public sealed class CatalogControls
 {
+    public bool Rtl { get; set; } = true;
+    public NativeUiLabels Labels { get; set; } = new();
     public string Path { get; set; } = "";
     public Dictionary<string, string> Query { get; set; } = [];
     public List<CatalogChoice> SortOptions { get; set; } = [];

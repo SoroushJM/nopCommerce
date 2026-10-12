@@ -27,8 +27,9 @@ public partial class NativeProductPage
     private bool _restoreZoomFocus;
     private bool _restoreQuantityFocus;
     private bool _ready, _selectionReady, _busy, _updating, _zoomOpen, _freeShipping, _quantityChanged;
-    private string PurchaseLabel => StockAvailable ? Initial.PurchaseLabel : "فعلاً ناموجود";
-    private string StockLabel => _stock.Length > 0 ? _stock : StockAvailable ? "" : "این انتخاب فعلاً ناموجود است";
+    private NativeUiLabels Labels => Initial.Labels;
+    private string PurchaseLabel => StockAvailable ? Initial.PurchaseLabel : Labels.Get("Products.Availability.OutOfStock");
+    private string StockLabel => _stock.Length > 0 ? _stock : StockAvailable ? "" : Labels.Get("Products.Availability.OutOfStock");
     private IEnumerable<NativeProductPicture> VisiblePictures => Initial.Pictures.Where(picture =>
         !Initial.CombinationImagesOnly || _pictureIds.Count == 0 || _pictureIds.Contains(picture.Id));
     private bool DisplayTierPrices => !Initial.HidePrices && !Initial.CallForPrice && Initial.TierPrices.Count > 0
@@ -107,7 +108,7 @@ public partial class NativeProductPage
         catch (Exception exception)
         {
             Console.Error.WriteLine(exception);
-            _error = "بارگذاری کنترل‌های محصول انجام نشد. صفحه را دوباره باز کنید.";
+            _error = Labels.Get("Common.Error");
         }
 
         StateHasChanged();
@@ -168,7 +169,7 @@ public partial class NativeProductPage
         catch (Exception)
         {
             if (version == _selectionVersion)
-                _error = "به‌روزرسانی انتخاب و تعداد انجام نشد. دوباره تلاش کنید.";
+                _error = Labels.Get("Common.Error");
         }
         finally
         {
@@ -194,7 +195,7 @@ public partial class NativeProductPage
         {
             _quantityInputRevision++;
             _restoreQuantityFocus = true;
-            _error = "تعداد باید عدد صحیح باشد؛ مقدار قبلی دوباره نمایش داده شد.";
+            _error = Labels.Get("Products.QuantityShouldBePositive");
         }
     }
 
@@ -237,7 +238,7 @@ public partial class NativeProductPage
         }
         catch (Exception)
         {
-            _error = "افزودن به سبد انجام نشد. دوباره تلاش کنید.";
+            _error = Labels.Get("Common.Error");
         }
         finally
         {
@@ -254,7 +255,7 @@ public partial class NativeProductPage
 
     private IEnumerable<SelectOption<int>> AttributeOptions(NativeAttribute attribute)
     {
-        yield return new SelectOption<int>(0, attribute.Required ? "انتخاب کنید" : "بدون انتخاب");
+        yield return new SelectOption<int>(0, attribute.Required ? Labels.Get("Products.ProductAttributes.DropdownList.DefaultItem") : "---");
         foreach (var option in attribute.Options)
             yield return new SelectOption<int>(option.Id, OptionLabel(option));
     }

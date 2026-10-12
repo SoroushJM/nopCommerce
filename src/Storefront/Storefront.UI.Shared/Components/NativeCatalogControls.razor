@@ -1,23 +1,23 @@
 @inject NavigationManager Navigation
-<BbDirectionProvider Direction="TextDirection.RightToLeft">
+<BbDirectionProvider Direction="@(Initial.Rtl ? TextDirection.RightToLeft : TextDirection.LeftToRight)">
     @if (Placement == "toolbar")
     {
-        <div class="flex items-center gap-3 flex-wrap text-xs text-muted-foreground" aria-label="نمایش محصولات">
+        <div class="flex items-center gap-3 flex-wrap text-xs text-muted-foreground" aria-label="@Initial.Labels.Get("Catalog.ViewMode")">
             @if (Initial.SortOptions.Count > 0)
             {
-                <div class="flex items-center gap-2"><span>مرتب‌سازی</span>
-                    <StoreSelect TValue="string" Label="مرتب‌سازی محصولات" Options="Options(Initial.SortOptions)"
+                <div class="flex items-center gap-2"><span>@Initial.Labels.Get("Catalog.OrderBy")</span>
+                    <StoreSelect TValue="string" Label="@Initial.Labels.Get("Catalog.OrderBy.Label")" Options="Options(Initial.SortOptions)"
                                  Value="Selected(Initial.SortOptions)" ValueChanged='value => Change(new("orderby", value))' />
                 </div>
             }
             @if (Initial.PageSizes.Count > 0)
             {
-                <StoreSelect TValue="string" Label="تعداد محصول در صفحه" Options="Options(Initial.PageSizes)"
+                <StoreSelect TValue="string" Label="@Initial.Labels.Get("Catalog.PageSize.Label")" Options="Options(Initial.PageSizes)"
                              Value="Selected(Initial.PageSizes)" ValueChanged='value => Change(new("pagesize", value))' />
             }
             @if (Initial.ViewModes.Count > 0)
             {
-                <StoreSelect TValue="string" Label="نمایش شبکه‌ای یا فهرستی" Options="Options(Initial.ViewModes)"
+                <StoreSelect TValue="string" Label="@Initial.Labels.Get("Catalog.ViewMode")" Options="Options(Initial.ViewModes)"
                              Value="Selected(Initial.ViewModes)" ValueChanged='value => Change(new("viewmode", value))' />
             }
         </div>
@@ -25,15 +25,16 @@
     else
     {
         <div class="desktop-filter">
-            <h2 class="font-bold text-sm flex items-center gap-2 mb-5"><SfIcon Name="filter" />فیلتر محصولات</h2>
+            <h2 class="font-bold text-sm flex items-center gap-2 mb-5"><SfIcon Name="filter" />@Initial.Labels.Get("Filtering.SpecificationFilter")</h2>
             <CatalogFilterPanel Initial="Initial" InstanceId="sf-catalog-desktop" Change="Change" />
         </div>
-        <BbSheet Open="_open" OpenChanged="SetOpen" Side="SheetSide.Right">
+        <BbSheet Open="_open" OpenChanged="SetOpen" Side="@(Initial.Rtl ? SheetSide.Right : SheetSide.Left)">
             <div class="md:hidden mb-5" @ref="_filterTrigger">
-                <BbSheetTrigger AsChild="true"><BbButton Variant="ButtonVariant.Outline" Class="w-full"><SfIcon Name="filter" />فیلتر محصولات</BbButton></BbSheetTrigger>
+                <BbSheetTrigger AsChild="true"><BbButton Variant="ButtonVariant.Outline" Class="w-full"><SfIcon Name="filter" />@Initial.Labels.Get("Filtering.SpecificationFilter")</BbButton></BbSheetTrigger>
             </div>
-            <BbSheetContent Class="sf-sheet" ShowClose="true">
-                <BbSheetHeader><BbSheetTitle>فیلتر محصولات</BbSheetTitle><BbSheetDescription>محصول موردنظرت را دقیق‌تر پیدا کن.</BbSheetDescription></BbSheetHeader>
+            <BbSheetContent Class="sf-sheet" ShowClose="false" dir="@(Initial.Rtl ? "rtl" : "ltr")">
+                <BbSheetClose AsChild="false" class="absolute top-4 end-4" aria-label="@Initial.Labels.Get("Common.Close")"><SfIcon Name="x" /></BbSheetClose>
+                <BbSheetHeader><BbSheetTitle>@Initial.Labels.Get("Filtering.SpecificationFilter")</BbSheetTitle><BbSheetDescription>@Initial.Labels.Get("Search.Category")</BbSheetDescription></BbSheetHeader>
                 <div class="overflow-y-auto my-6"><CatalogFilterPanel Initial="Initial" InstanceId="sf-catalog-mobile" Change="Change" /></div>
             </BbSheetContent>
         </BbSheet>

@@ -17,6 +17,7 @@ public sealed record NativeTierPrice(int Quantity, string Price);
 
 public sealed record NativeProduct
 {
+    public NativeUiLabels Labels { get; init; } = new();
     public int Id
     {
         get; init;

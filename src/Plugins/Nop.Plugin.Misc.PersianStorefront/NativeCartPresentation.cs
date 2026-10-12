@@ -62,6 +62,7 @@ public sealed class NativeCartPresentation(IWorkContext work, IStoreContext stor
         var cartUrl = urls.RouteUrl(NopRouteNames.General.CART)!;
         return new NativeCart
         {
+            Labels = await NativeUiLocalization.PrepareAsync(localization, work),
             MiniEnabled = settings.MiniShoppingCartEnabled,
             SignedIn = await customers.IsRegisteredAsync(customer),
             Phone = customer.Phone ?? "",

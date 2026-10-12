@@ -80,6 +80,7 @@ public static class NativeProductPresentation
         }
         return new NativeProduct
         {
+            Labels = await NativeUiLocalization.PrepareAsync(localization, workContext),
             HomeUrl = url.RouteUrl(NopRouteNames.General.HOMEPAGE) ?? "/",
             Id = model.Id,
             Name = model.Name,
