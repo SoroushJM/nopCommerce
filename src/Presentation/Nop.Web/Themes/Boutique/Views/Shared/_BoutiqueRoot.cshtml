@@ -1,0 +1,26 @@
+@{
+    Layout = "_Root.Head";
+    Context.Items["Boutique.NativePage"] = true;
+    NopHtml.AppendCssFileParts("~/_content/Storefront.UI.Boutique/boutique.css");
+    NopHtml.AppendCssFileParts("~/_content/BlazorBlueprint.Components/blazorblueprint.css");
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/_content/Storefront.UI.Boutique/boutique.js", excludeFromBundle: true);
+    NopHtml.AppendScriptParts(ResourceLocation.Footer, "~/_framework/blazor.webassembly.js", excludeFromBundle: true);
+}
+@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.BodyStartHtmlTagAfter })
+@await Html.PartialAsync("_Notifications")
+@await Html.PartialAsync("_JavaScriptDisabledWarning")
+<div class="storefront boutique-shell" dir="rtl">
+    <a class="skip" href="#main">@T("Header.SkipNavigation.Text")</a>
+    @await Component.InvokeAsync(typeof(AdminHeaderLinksViewComponent))
+    @await Component.InvokeAsync("BoutiqueHeader")
+    <main class="master-wrapper-content boutique-content" id="main">
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ContentBefore })
+        @await RenderSectionAsync("Breadcrumb", false)
+        <div class="master-column-wrapper">@RenderBody()</div>
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ContentAfter })
+    </main>
+    <persist-component-state />
+    @await Component.InvokeAsync("BoutiqueFooter")
+</div>
+@await Component.InvokeAsync(typeof(EuCookieLawViewComponent))
+@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.BodyEndHtmlTagBefore })

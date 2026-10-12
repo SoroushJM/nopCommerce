@@ -1,0 +1,24 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Storefront.UI.Boutique</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.12" />
+    <PackageReference Include="BlazorBlueprint.Components" Version="4.1.0" />
+    <ProjectReference Include="../Storefront.UI.Shared/Storefront.UI.Shared.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="package.json;package-lock.json" CopyToPublishDirectory="Never" />
+    <TailwindSources Include="**/*.razor;Styles/input.css;package-lock.json;../Storefront.UI.Shared/**/*.razor;../../Presentation/Nop.Web/Themes/Boutique/Views/**/*.cshtml" />
+  </ItemGroup>
+  <Target Name="RestoreBoutiqueNodeModules" BeforeTargets="PrepareForBuild" Inputs="package-lock.json" Outputs="node_modules/.package-lock.json">
+    <Exec Command="npm ci --no-audit --no-fund" WorkingDirectory="$(MSBuildProjectDirectory)" />
+  </Target>
+  <Target Name="BuildBoutiqueStyles" BeforeTargets="PrepareForBuild" DependsOnTargets="RestoreBoutiqueNodeModules" Inputs="@(TailwindSources)" Outputs="wwwroot/boutique.css">
+    <Exec Command="npm run build" WorkingDirectory="$(MSBuildProjectDirectory)" />
+  </Target>
+</Project>

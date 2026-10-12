@@ -1,0 +1,32 @@
+@model Storefront.UI.Shared.StoreNavigation
+@using Storefront.UI.Boutique.Components
+@using Storefront.UI.Shared
+@inject Nop.Core.IStoreContext storeContext
+@{
+    var store = await storeContext.GetCurrentStoreAsync();
+    var theme = ViewData["ThemeProfile"] as StorefrontThemeProfile ?? new StorefrontThemeProfile { BrandName = store.Name, CatalogUrl = Url.RouteUrl(NopRouteNames.General.SEARCH), EnableOtp = false };
+}
+@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderBefore })
+<header class="boutique-header header">
+    <div class="boutique-selectors header-selectors-wrapper">
+        @await Component.InvokeAsync(typeof(TaxTypeSelectorViewComponent))
+        @await Component.InvokeAsync(typeof(CurrencySelectorViewComponent))
+        @await Component.InvokeAsync(typeof(LanguageSelectorViewComponent))
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderSelectors })
+    </div>
+    <div class="boutique-header-row header-upper">
+        <div role="search" class="search-box store-search-box">
+            @await Component.InvokeAsync(typeof(SearchBoxViewComponent))
+        </div>
+        <component type="typeof(BoutiqueHeader)" render-mode="Static" param-BrandName="theme.BrandName" param-HomeUrl="@(Url.RouteUrl(NopRouteNames.General.HOMEPAGE))" param-Navigation="Model" param-LogoUrl="@(ViewData["LogoUrl"] as string ?? "")" />
+        <div class="header-links-wrapper">
+            @await Component.InvokeAsync(typeof(HeaderLinksViewComponent))
+            @await Component.InvokeAsync(typeof(FlyoutShoppingCartViewComponent))
+        </div>
+    </div>
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderMiddle })
+    <div class="header-menu boutique-menu">
+        @await Component.InvokeAsync(typeof(MainMenuViewComponent))
+    </div>
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderAfter })
+</header>

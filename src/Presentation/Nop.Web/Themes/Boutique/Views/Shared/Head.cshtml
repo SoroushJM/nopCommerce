@@ -1,0 +1,12 @@
+@inject Nop.Core.Domain.Catalog.CatalogSettings catalogSettings
+@{
+    Layout = "";
+    // The native base keeps every third-party/plugin form and advanced control usable.
+    NopHtml.AppendCssFileParts("~/Themes/DefaultClean/Content/css/styles.rtl.css");
+    NopHtml.AppendCssFileParts("~/lib_npm/jquery-ui-dist/jquery-ui.min.css");
+    if (catalogSettings.DisplayAllPicturesOnCatalogPages)
+    {
+        NopHtml.AppendCssFileParts("~/lib_npm/swiper/swiper-bundle.min.css");
+    }
+}
+<base href="@Url.Content("~/")" />

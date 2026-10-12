@@ -1,0 +1,14 @@
+@model Storefront.UI.Shared.StoreNavigation
+@using Storefront.UI.Boutique.Components
+@using Storefront.UI.Shared
+@inject Nop.Core.IStoreContext storeContext
+@{
+    var store = await storeContext.GetCurrentStoreAsync();
+    var theme = ViewData["ThemeProfile"] as StorefrontThemeProfile;
+}
+<div class="boutique-footer">
+    <component type="typeof(BoutiqueFooter)" render-mode="Static" param-BrandName="@(theme?.BrandName ?? store.Name)" param-HomeUrl="@(Url.RouteUrl(NopRouteNames.General.HOMEPAGE))" />
+    @*Native footer includes all configured menus, newsletter, social links, copyright,
+      tax/shipping text, theme selector and the Footer widget zone.*@
+    @await Component.InvokeAsync(typeof(FooterViewComponent))
+</div>

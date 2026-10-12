@@ -1,0 +1,26 @@
+@using Nop.Core
+@using Nop.Services.Localization
+@inject ILocalizationService localizationService
+@inject IStoreContext storeContext
+@{
+    Layout = "_ColumnsOne";
+    var store = await storeContext.GetCurrentStoreAsync();
+    var title = await localizationService.GetLocalizedAsync(store, item => item.HomepageTitle);
+    if (!string.IsNullOrEmpty(title)) NopHtml.AddTitleParts(title);
+    var description = await localizationService.GetLocalizedAsync(store, item => item.HomepageDescription);
+    if (!string.IsNullOrEmpty(description)) NopHtml.AddMetaDescriptionParts(description);
+    NopHtml.AppendPageCssClassParts("html-home-page");
+}
+<div class="boutique-home">
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageTop })
+    @await Component.InvokeAsync("BoutiqueHero")
+    @await Component.InvokeAsync(typeof(TopicBlockViewComponent), new { systemName = "HomepageText" })
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeCategories })
+    @await Component.InvokeAsync(typeof(HomepageCategoriesViewComponent))
+    @await Component.InvokeAsync(typeof(FilterLevelValueSearchViewComponent))
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeProducts })
+    @await Component.InvokeAsync(typeof(HomepageProductsViewComponent))
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBeforeBestSellers })
+    @await Component.InvokeAsync(typeof(HomepageBestSellersViewComponent))
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageBottom })
+</div>
