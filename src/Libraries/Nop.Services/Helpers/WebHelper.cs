@@ -9,7 +9,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Primitives;
 using Microsoft.Net.Http.Headers;
 using Nop.Core;
-using Nop.Core.Configuration;
 using Nop.Core.Http;
 using Nop.Core.Infrastructure;
 
@@ -24,7 +23,6 @@ public partial class WebHelper : IWebHelper
 
     protected readonly IHostApplicationLifetime _hostApplicationLifetime;
     protected readonly IHttpContextAccessor _httpContextAccessor;
-    protected readonly AppSettings _appSettings;
 
     private static string _cachedStoreUrl;
 
@@ -33,12 +31,10 @@ public partial class WebHelper : IWebHelper
     #region Ctor
 
     public WebHelper(IHostApplicationLifetime hostApplicationLifetime,
-        IHttpContextAccessor httpContextAccessor,
-        AppSettings appSettings = null)
+        IHttpContextAccessor httpContextAccessor)
     {
         _hostApplicationLifetime = hostApplicationLifetime;
         _httpContextAccessor = httpContextAccessor;
-        _appSettings = appSettings;
     }
 
     #endregion
@@ -178,19 +174,8 @@ public partial class WebHelper : IWebHelper
         if (StringValues.IsNullOrEmpty(hostHeader))
             return string.Empty;
 
-        var host = HostString.FromUriComponent(hostHeader.FirstOrDefault());
-        var commonConfig = _appSettings?.Get<CommonConfig>();
-        var sourcePort = useSsl ? commonConfig?.HttpPort : commonConfig?.HttpsPort;
-        var targetPort = useSsl ? commonConfig?.HttpsPort : commonConfig?.HttpPort;
-
-        //Only map the configured pair when changing protocols. Other hosts and ports
-        //may belong to a reverse proxy and must retain their original authority.
-        if (useSsl != IsCurrentConnectionSecured() && sourcePort.HasValue &&
-            host.Port == sourcePort.Value && targetPort is > 0 and <= 65535)
-            host = new HostString(host.Host, targetPort.Value);
-
         //add scheme to the URL
-        var storeHost = $"{(useSsl ? Uri.UriSchemeHttps : Uri.UriSchemeHttp)}{Uri.SchemeDelimiter}{host}";
+        var storeHost = $"{(useSsl ? Uri.UriSchemeHttps : Uri.UriSchemeHttp)}{Uri.SchemeDelimiter}{hostHeader.FirstOrDefault()}";
 
         //ensure that host is ended with slash
         storeHost = $"{storeHost.TrimEnd('/')}/";

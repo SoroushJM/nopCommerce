@@ -50,8 +50,13 @@ The installer persists its configuration in `app_data`.
 The protocol used for installation sets the store's initial SSL preference. Enable
 SSL in the store settings and set its URL to `https://<host>:2021/` to serve HTTPS
 after installation. Configure the matching host and port when deploying remotely.
-Compose supplies the external port pair to `CommonConfig`; protocol redirects map
+Compose supplies the external port pair to the plugin's `StorefrontHostConfig`; protocol redirects map
 2020 to 2021 (and back) instead of preserving an incompatible port.
+The plugin accepts the old `CommonConfig` port pair when neither new port is set.
+Custom JSON deployments must move both `HttpPort` and `HttpsPort` into
+`StorefrontHostConfig` before the first startup of this build; native configuration
+rewriting may discard old file-only keys. This mapping requires the PersianStorefront plugin to be
+installed or queued for installation; the fresh installer itself uses the native helper.
 
 The first installed-store startup can take several minutes with the small-host CPU
 limit, while plugins initialize and Razor views compile. If installation has

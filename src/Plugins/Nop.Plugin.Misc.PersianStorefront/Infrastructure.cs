@@ -24,6 +24,7 @@ public sealed class StorefrontStartup : INopStartup
         {
             options.Filters.Add<NativeProductFallbackFilter>();
             options.Filters.Add<NativeCartResponseFilter>();
+            options.Filters.Add<AdminTransferCalendarAttribute>();
         });
         services.AddBlazorBlueprintComponents(localizer =>
         {

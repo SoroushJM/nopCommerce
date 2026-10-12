@@ -1,7 +1,12 @@
-using System.Security.Cryptography;
+﻿using System.Security.Cryptography;
 using System.Text;
 using System.Text.Json;
 using System.Xml.Linq;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
 using Nop.Core.Caching;
 using Nop.Core.Domain.Localization;
 using Nop.Core.Infrastructure;
@@ -9,14 +14,16 @@ using Nop.Data;
 using Nop.Services.Common;
 using Nop.Services.Localization;
 
-namespace Nop.Web.Infrastructure;
+namespace Nop.Plugin.Misc.PersianStorefront;
 
 /// <summary>Installs the versioned admin pack without replacing translations edited by an administrator.</summary>
 public sealed class PersianAdminResourcesStartup : INopStartup
 {
     private const string LedgerAttribute = "PersianAdminResourceBaseline";
 
-    public void ConfigureServices(IServiceCollection services, IConfiguration configuration) { }
+    public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
+    {
+    }
 
     public void Configure(IApplicationBuilder application)
     {
@@ -57,8 +64,12 @@ public sealed class PersianAdminResourcesStartup : INopStartup
         {
             persian = new Language
             {
-                Name = "فارسی", LanguageCulture = "fa-IR", UniqueSeoCode = "fa",
-                FlagImageFileName = "ir.png", Published = true, Rtl = true,
+                Name = "فارسی",
+                LanguageCulture = "fa-IR",
+                UniqueSeoCode = "fa",
+                FlagImageFileName = "ir.png",
+                Published = true,
+                Rtl = true,
                 DisplayOrder = languages.Count == 0 ? 1 : languages.Max(language => language.DisplayOrder) + 1
             };
             await languageService.InsertLanguageAsync(persian);
@@ -88,7 +99,8 @@ public sealed class PersianAdminResourcesStartup : INopStartup
                 .Where(element => !englishValues.ContainsKey(element.Attribute("Name")!.Value))
                 .Select(element => new LocaleStringResource
                 {
-                    LanguageId = english.Id, ResourceName = element.Attribute("Name")!.Value,
+                    LanguageId = english.Id,
+                    ResourceName = element.Attribute("Name")!.Value,
                     ResourceValue = element.Element("Value")!.Value
                 }).ToList();
             if (englishInserts.Count > 0)

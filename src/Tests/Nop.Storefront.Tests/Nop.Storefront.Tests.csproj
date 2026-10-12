@@ -10,6 +10,13 @@
     <PackageReference Include="TUnit" Version="1.73.19" />
   </ItemGroup>
   <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="../../Libraries/Nop.Services/Nop.Services.csproj" />
+    <!-- Compile the exact plugin helper without building/publishing the entire UI for unit tests. -->
+    <Compile Include="../../Plugins/Nop.Plugin.Misc.PersianStorefront/StorefrontWebHelper.cs" Link="Plugin/StorefrontWebHelper.cs" />
+    <Compile Include="../../Plugins/Nop.Plugin.Misc.PersianStorefront/StorefrontHostConfig.cs" Link="Plugin/StorefrontHostConfig.cs" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="../../Presentation/Nop.Web/App_Data/Localization/defaultResources.nopres.xml" Link="Localization/defaultResources.nopres.xml" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="../../Presentation/Nop.Web/App_Data/Localization/PersianAdmin/*.xml" Link="Localization/PersianAdmin/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>

@@ -16,7 +16,6 @@ namespace Nop.Web.Areas.Admin.Controllers;
 [ValidateVendor]
 [SaveSelectedTab]
 [NotNullValidationMessage]
-[Nop.Web.Areas.Admin.Filters.AdminTransferCalendar]
 public abstract partial class BaseAdminController : BaseController
 {
     /// <summary>

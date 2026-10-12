@@ -1,12 +1,15 @@
-using System.Globalization;
+﻿using System.Globalization;
 using System.Text;
 using System.Xml.Linq;
 using ClosedXML.Excel;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Nop.Services.ExportImport;
+using Nop.Web.Areas.Admin.Controllers;
+using Nop.Web.Areas.Admin.Infrastructure;
 
-namespace Nop.Web.Areas.Admin.Filters;
+namespace Nop.Plugin.Misc.PersianStorefront;
 
 /// <summary>Adapts built-in admin files at the presentation boundary without changing service/plugin contracts.</summary>
 public sealed class AdminTransferCalendarAttribute : ActionFilterAttribute
@@ -15,7 +18,7 @@ public sealed class AdminTransferCalendarAttribute : ActionFilterAttribute
     public override async Task OnActionExecutionAsync(ActionExecutingContext context, ActionExecutionDelegate next)
     {
         // External plugin transfers retain their own formats and validation contracts.
-        if (context.Controller.GetType().Assembly != typeof(Nop.Web.Areas.Admin.Controllers.BaseAdminController).Assembly)
+        if (context.Controller is not BaseAdminController || context.Controller.GetType().Assembly != typeof(BaseAdminController).Assembly)
         {
             await next();
             return;
@@ -29,10 +32,10 @@ public sealed class AdminTransferCalendarAttribute : ActionFilterAttribute
         }
         var request = context.HttpContext.Request;
         var form = request.HasFormContentType ? await request.ReadFormAsync() : null;
-        var calendar = (form?["transferCalendar"].FirstOrDefault() ?? request.Query["transferCalendar"].FirstOrDefault());
+        var calendar = form?["transferCalendar"].FirstOrDefault() ?? request.Query["transferCalendar"].FirstOrDefault() ?? "";
         var importing = action.Contains("ImportFromXlsx", StringComparison.OrdinalIgnoreCase);
         if (!importing && string.IsNullOrEmpty(calendar))
-            calendar = request.Cookies[Infrastructure.AdminTransferCalendarPreference.CookieName];
+            calendar = request.Cookies[AdminTransferCalendarPreference.CookieName] ?? "";
         if (!TransferCalendar.IsValid(calendar))
         {
             if (importing)
@@ -53,12 +56,18 @@ public sealed class AdminTransferCalendarAttribute : ActionFilterAttribute
                         var stream = new MemoryStream(bytes);
                         context.HttpContext.Response.RegisterForDispose(stream);
                         context.ActionArguments[key] = new FormFile(stream, 0, bytes.Length, file.Name, file.FileName)
-                        { Headers = file.Headers, ContentType = file.ContentType };
+                        {
+                            Headers = file.Headers,
+                            ContentType = file.ContentType
+                        };
                     }
             var previous = TransferCalendar.Current;
             TransferCalendar.Current = calendar;
             ActionExecutedContext executed;
-            try { executed = await next(); }
+            try
+            {
+                executed = await next();
+            }
             finally { TransferCalendar.Current = previous; }
             if (!importing && executed.Result is FileContentResult result)
             {
@@ -125,14 +134,16 @@ public sealed class AdminTransferCalendarAttribute : ActionFilterAttribute
                 }
                 display.Columns().AdjustToContents();
             }
-            if (book.TryGetWorksheet(MetadataSheet, out _)) book.Worksheets.Delete(MetadataSheet);
+            if (book.TryGetWorksheet(MetadataSheet, out _))
+                book.Worksheets.Delete(MetadataSheet);
             var marker = book.AddWorksheet(MetadataSheet);
             marker.Cell(1, 1).Value = "Calendar";
             marker.Cell(1, 2).Value = calendar;
             marker.Cell(2, 1).Value = "DateFormat";
             marker.Cell(2, 2).Value = calendar == "jalali" ? "yyyy/MM/dd HH:mm:ss.fffffff (Jalali, original timezone)" : "Excel Gregorian date (original timezone)";
             var rowIndex = 3;
-            foreach (var address in dateCells) marker.Cell(rowIndex++, 1).Value = address;
+            foreach (var address in dateCells)
+                marker.Cell(rowIndex++, 1).Value = address;
             marker.Visibility = XLWorksheetVisibility.VeryHidden;
         }
         using var output = new MemoryStream();
@@ -142,11 +153,13 @@ public sealed class AdminTransferCalendarAttribute : ActionFilterAttribute
 
     private static bool IsDateColumn(IXLWorksheet sheet, IXLCell cell)
     {
-        if (cell.Address.RowNumber <= 1) return false;
+        if (cell.Address.RowNumber <= 1)
+            return false;
         for (var row = cell.Address.RowNumber - 1; row >= 1; row--)
         {
             var header = sheet.Cell(row, cell.Address.ColumnNumber).GetString();
-            if (string.IsNullOrEmpty(header) || char.IsDigit(TransferCalendar.LatinDigits(header)[0])) continue;
+            if (string.IsNullOrEmpty(header) || char.IsDigit(TransferCalendar.LatinDigits(header)[0]))
+                continue;
             return header.Contains("Date", StringComparison.OrdinalIgnoreCase) || header.EndsWith("OnUtc", StringComparison.OrdinalIgnoreCase) || header.Equals("Created on", StringComparison.OrdinalIgnoreCase);
         }
         return false;
@@ -167,13 +180,32 @@ public sealed class AdminTransferCalendarAttribute : ActionFilterAttribute
 
     private static string ReportHeader(string header) => header switch
     {
-        "Summary" => "خلاصه", "SummaryDate" => "تاریخ", "NumberOfOrders" => "تعداد سفارش‌ها",
-        "Profit" => "سود", "ProfitStr" => "سود (نمایش)", "Shipping" => "هزینه ارسال", "Tax" => "مالیات",
-        "OrderTotal" => "مبلغ سفارش", "SummaryType" => "نوع خلاصه", "Id" => "شناسه", "Name" => "نام",
-        "StockQuantity" => "موجودی", "ManageInventoryMethod" => "روش مدیریت موجودی", "Published" => "منتشرشده",
-        "ProductId" => "شناسه محصول", "ProductName" => "نام محصول", "TotalQuantity" => "تعداد کل",
-        "TotalAmount" => "مبلغ کل", "TotalAmountStr" => "مبلغ کل (نمایش)", "CountryName" => "کشور",
-        "TotalOrders" => "تعداد سفارش‌ها", "SumOrders" => "مجموع سفارش‌ها", "SumOrdersStr" => "مجموع سفارش‌ها (نمایش)",
-        "Period" => "بازه زمانی", "Customers" => "تعداد مشتریان", "OrderCount" => "تعداد سفارش‌ها", _ => header
+        "Summary" => "خلاصه",
+        "SummaryDate" => "تاریخ",
+        "NumberOfOrders" => "تعداد سفارش‌ها",
+        "Profit" => "سود",
+        "ProfitStr" => "سود (نمایش)",
+        "Shipping" => "هزینه ارسال",
+        "Tax" => "مالیات",
+        "OrderTotal" => "مبلغ سفارش",
+        "SummaryType" => "نوع خلاصه",
+        "Id" => "شناسه",
+        "Name" => "نام",
+        "StockQuantity" => "موجودی",
+        "ManageInventoryMethod" => "روش مدیریت موجودی",
+        "Published" => "منتشرشده",
+        "ProductId" => "شناسه محصول",
+        "ProductName" => "نام محصول",
+        "TotalQuantity" => "تعداد کل",
+        "TotalAmount" => "مبلغ کل",
+        "TotalAmountStr" => "مبلغ کل (نمایش)",
+        "CountryName" => "کشور",
+        "TotalOrders" => "تعداد سفارش‌ها",
+        "SumOrders" => "مجموع سفارش‌ها",
+        "SumOrdersStr" => "مجموع سفارش‌ها (نمایش)",
+        "Period" => "بازه زمانی",
+        "Customers" => "تعداد مشتریان",
+        "OrderCount" => "تعداد سفارش‌ها",
+        _ => header
     };
 }
