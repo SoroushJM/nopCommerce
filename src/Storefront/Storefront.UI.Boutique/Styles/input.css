@@ -185,12 +185,12 @@ body {background:var(--background);color:var(--foreground);font-family:Vazirmatn
 .boutique-shell .overview .option-list li:has(input:checked) {border-color:var(--primary);background:var(--secondary)}
 .boutique-shell .overview .attributes .color-squares {display:flex;gap:12px;flex-wrap:wrap}
 .boutique-shell .overview .attributes .color-squares li {padding:0;margin:0;border:0;background:transparent;border-radius:0;min-height:0}
-.boutique-shell .overview .attributes .color-squares .attribute-square-container {border-radius:50%;border:1px solid var(--border);padding:4px;width:38px;height:38px;background:var(--card)}
+.boutique-shell .overview .attributes .color-squares .attribute-square-container {border-radius:50%;border:1px solid var(--border);padding:4px;width:38px;height:38px;background-color:var(--card)}
 /* The native base fixes square dimensions/borders with !important. Override only
    the ColorSquares view, preserving image-square and disabled-variant behavior. */
 .boutique-shell .overview .attributes .color-squares .attribute-square {border-radius:50%;width:28px!important;height:28px!important;border:0!important}
 .boutique-shell .overview .attributes .color-squares .selected-value .attribute-square-container,
-.boutique-shell .overview .attributes .color-squares li:has(input:checked) .attribute-square-container {border-color:var(--primary);box-shadow:0 0 0 1px var(--primary);background:var(--secondary)}
+.boutique-shell .overview .attributes .color-squares li:has(input:checked) .attribute-square-container {border-color:var(--primary);box-shadow:0 0 0 1px var(--primary);background-color:var(--secondary)}
 .boutique-shell .overview .attributes select {max-width:100%;min-width:180px;border-radius:10px;background:var(--card);border:1px solid var(--border);padding:10px;font-size:13px}
 .boutique-shell .overview .prices {margin:20px 0}
 .boutique-shell .overview .product-price {color:var(--foreground);font-size:25px;font-weight:500}
