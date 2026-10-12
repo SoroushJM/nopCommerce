@@ -53,6 +53,31 @@ public static class NativeProductPresentation
         var purchaseResource = model.AddToCart.UpdatedShoppingCartItemId > 0
             ? "ShoppingCart.AddToCart.Update" : model.AddToCart.AvailableForPreOrder
                 ? "ShoppingCart.PreOrder" : "ShoppingCart.AddToCart";
+        var attributes = new List<NativeAttribute>();
+        var priceAdjustmentFormat = await localization.GetResourceAsync("Products.ProductAttributes.PriceAdjustment");
+        foreach (var attribute in model.ProductAttributes)
+        {
+            var options = attribute.Values.Select(value =>
+            {
+                // ProductModelFactory already applies tax, currency, percentage and price permissions.
+                // Use the same localized label as the native product attributes view.
+                var showAdjustment = !model.ProductPrice.HidePrices && !model.ProductPrice.CallForPrice
+                    && (attribute.AttributeControlType == AttributeControlType.DropdownList
+                        ? value.PriceAdjustmentValue != 0 : !string.IsNullOrEmpty(value.PriceAdjustment));
+                return new NativeOption(value.Id, value.Name, value.ColorSquaresRgb,
+                    value.ImageSquaresPictureModel.ImageUrl, value.IsPreSelected)
+                {
+                    DisplayName = showAdjustment
+                        ? string.Format(priceAdjustmentFormat, value.Name, value.PriceAdjustment, string.Empty) : value.Name
+                };
+            }).ToList();
+            attributes.Add(new NativeAttribute(attribute.Id, attribute.Name, (int)attribute.AttributeControlType,
+                attribute.IsRequired, attribute.HasCondition, options)
+            {
+                TextPrompt = attribute.TextPrompt ?? "",
+                Description = attribute.Description ?? ""
+            });
+        }
         return new NativeProduct
         {
             HomeUrl = url.RouteUrl(NopRouteNames.General.HOMEPAGE) ?? "/",
@@ -109,10 +134,7 @@ public static class NativeProductPresentation
             Brand = model.ProductManufacturers.FirstOrDefault()?.Name ?? "",
             BreadcrumbEnabled = model.Breadcrumb.Enabled,
             Breadcrumb = breadcrumb,
-            Attributes = model.ProductAttributes.Select(attribute => new NativeAttribute(
-                attribute.Id, attribute.Name, (int)attribute.AttributeControlType, attribute.IsRequired, attribute.HasCondition,
-                attribute.Values.Select(value => new NativeOption(value.Id, value.Name, value.ColorSquaresRgb,
-                    value.ImageSquaresPictureModel.ImageUrl, value.IsPreSelected)).ToList())).ToList(),
+            Attributes = attributes,
             InitialDisabledAttributeIds = initialDisabledAttributeIds,
             ChangeUrl = url.RouteUrl(NopRouteNames.Ajax.PRODUCT_DETAILS_ATTRIBUTE_CHANGE,
                 new

@@ -102,12 +102,20 @@
                         !_disabledAttributes.Contains(item.Id)))
                         {
                             <fieldset class="mb-6">
-                                <legend class="text-sm font-bold mb-3">@(attribute.Name): <span
-                                    class="font-normal text-muted-foreground">@(attribute.Options.FirstOrDefault(option =>
-                                    option.Id == _selected.GetValueOrDefault(attribute.Id))?.Name)</span></legend>
+                                <legend class="text-sm font-bold mb-3">@AttributePrompt(attribute)
+                                    @if (attribute.Required)
+                                    {
+                                        <span class="required">*</span>
+                                    }
+                                    : <span class="font-normal text-muted-foreground">@(attribute.Options.FirstOrDefault(option =>
+                                    option.Id == _selected.GetValueOrDefault(attribute.Id)) is { } selectedOption ? OptionLabel(selectedOption) : "")</span></legend>
+                                @if (!string.IsNullOrEmpty(attribute.Description))
+                                {
+                                    <div class="attribute-description">@((MarkupString)attribute.Description)</div>
+                                }
                                     @if (attribute.ControlType == 1)
                                     {
-                                        <StoreSelect TValue="int" Label="@(attribute.Name)" Options="@AttributeOptions(attribute)"
+                                        <StoreSelect TValue="int" Label="@AttributePrompt(attribute)" Options="@AttributeOptions(attribute)"
                                                      Value="_selected.GetValueOrDefault(attribute.Id)"
                                                      ValueChanged="value => SelectOption(attribute.Id, value)" Disabled="@(!_ready || _busy)" />
                                 }
@@ -120,17 +128,18 @@
                                                     class="@ClassNames.cn(attribute.ControlType is 40 or 45 ? "color-choice" : "filter-pill", _selected.GetValueOrDefault(attribute.Id) == option.Id ? "selected" : null)"
                                                     style="@(attribute.ControlType == 40 ? "background:" + option.Color : "")"
                                                     disabled="@(!_ready || _busy)"
-                                                    aria-label="@($"{attribute.Name} {option.Name}")"
+                                                    aria-label="@($"{AttributePrompt(attribute)} {OptionLabel(option)}")"
+                                                    title="@OptionLabel(option)"
                                                     aria-pressed="@((_selected.GetValueOrDefault(attribute.Id) == option.Id).ToString().ToLowerInvariant())"
                                                     @onclick="() => SelectOption(attribute.Id, option.Id)">
                                                 @if (attribute.ControlType == 45)
                                                 {
-                                                    <img src="@option.Image" alt="@option.Name" />
+                                                    <img src="@option.Image" alt="@OptionLabel(option)" />
                                                 }
                                                 else if (attribute.ControlType != 40)
                                                 {
 
-                                                    @option.Name
+                                                    @OptionLabel(option)
                                                 }
                                                 else if (_selected.GetValueOrDefault(attribute.Id) == option.Id)
                                                 {

@@ -77,7 +77,9 @@ public sealed class NativeFeatureRenderingTests
                 Id = 73, Name = "Product", HidePrices = hidePrices, CallForPrice = callForPrice,
                 CallForPriceLabel = "CONTACT_FOR_PRICE", Price = "SECRET_PRICE", OldPrice = "SECRET_OLD",
                 ReferencePrice = "SECRET_REFERENCE", BasePrice = "SECRET_BASE", InStock = true,
-                TierPrices = [new(5, "SECRET_TIER")]
+                TierPrices = [new(5, "SECRET_TIER")],
+                Attributes = [new(10, "Size", 2, true, false,
+                    [new(101, "Medium", "", "", true) { DisplayName = "Medium (SECRET_OPTION_PRICE)" }])]
             }
         });
         Assert.Multiple(() =>
@@ -85,6 +87,44 @@ public sealed class NativeFeatureRenderingTests
             Assert.That(html, Does.Not.Contain("SECRET_"));
             if (callForPrice)
                 Assert.That(html, Does.Contain("CONTACT_FOR_PRICE"));
+        });
+    }
+
+    [TestCase(1)]
+    [TestCase(2)]
+    [TestCase(40)]
+    [TestCase(45)]
+    public async Task ProductChoicesKeepNativeInstructionsAndPreparedPriceLabelsWithoutExecutingPlainText(int controlType)
+    {
+        var html = await Render<NativeProductPage>(new()
+        {
+            [nameof(NativeProductPage.Initial)] = new NativeProduct
+            {
+                Id = 73, Name = "Product", InStock = true,
+                Attributes =
+                [
+                    new(10, "Original name", controlType, true, false,
+                        [new(101, "<em>Natural</em>", "#aabbcc", "/media/choice.png", true)
+                            { DisplayName = "<em>Natural</em> (+15%)" }])
+                    {
+                        TextPrompt = "<strong>Choose fit</strong>",
+                        Description = "<b>Prepared native sizing guide</b>"
+                    },
+                    new(20, "Fallback prompt", 2, false, false, [new(201, "Plain option", "", "", true)])
+                ]
+            }
+        }, decodeHtml: false);
+        Assert.Multiple(() =>
+        {
+            Assert.That(html, Does.Contain("&lt;strong&gt;Choose fit&lt;/strong&gt;"));
+            Assert.That(WebUtility.HtmlDecode(html), Does.Contain("<em>Natural</em> (+15%)"));
+            Assert.That(html, Does.Contain("&lt;em&gt;Natural&lt;/em&gt;"));
+            Assert.That(html, Does.Contain("<b>Prepared native sizing guide</b>"));
+            Assert.That(html, Does.Contain("class=\"required\">*</span>"));
+            Assert.That(html, Does.Contain("Fallback prompt"));
+            Assert.That(html, Does.Contain("Plain option"));
+            Assert.That(html, Does.Not.Contain("<strong>Choose fit</strong>"));
+            Assert.That(html, Does.Not.Contain("<em>Natural</em>"));
         });
     }
 
@@ -118,7 +158,7 @@ public sealed class NativeFeatureRenderingTests
         });
     }
 
-    private static async Task<string> Render<T>(Dictionary<string, object?> parameters) where T : IComponent
+    private static async Task<string> Render<T>(Dictionary<string, object?> parameters, bool decodeHtml = true) where T : IComponent
     {
         var services = new ServiceCollection();
         services.AddLogging();
@@ -130,7 +170,8 @@ public sealed class NativeFeatureRenderingTests
         return await renderer.Dispatcher.InvokeAsync(async () =>
         {
             var result = await renderer.RenderComponentAsync<T>(ParameterView.FromDictionary(parameters));
-            return WebUtility.HtmlDecode(result.ToHtmlString());
+            var html = result.ToHtmlString();
+            return decodeHtml ? WebUtility.HtmlDecode(html) : html;
         });
     }
 

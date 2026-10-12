@@ -245,11 +245,18 @@ public partial class NativeProductPage
         }
     }
 
-    private static IEnumerable<SelectOption<int>> AttributeOptions(NativeAttribute attribute)
+    private static string AttributePrompt(NativeAttribute attribute) =>
+        string.IsNullOrEmpty(attribute.TextPrompt) ? attribute.Name : attribute.TextPrompt;
+
+    private string OptionLabel(NativeOption option) =>
+        Initial.HidePrices || Initial.CallForPrice || string.IsNullOrEmpty(option.DisplayName)
+            ? option.Name : option.DisplayName;
+
+    private IEnumerable<SelectOption<int>> AttributeOptions(NativeAttribute attribute)
     {
         yield return new SelectOption<int>(0, attribute.Required ? "انتخاب کنید" : "بدون انتخاب");
         foreach (var option in attribute.Options)
-            yield return new SelectOption<int>(option.Id, option.Name);
+            yield return new SelectOption<int>(option.Id, OptionLabel(option));
     }
 
     public async ValueTask DisposeAsync()

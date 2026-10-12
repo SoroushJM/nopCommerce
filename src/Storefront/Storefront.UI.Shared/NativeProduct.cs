@@ -3,8 +3,15 @@ using System.Text.Json.Serialization;
 namespace Storefront.UI.Shared;
 
 public sealed record StoreLink(int Id, string Name, string Url);
-public sealed record NativeOption(int Id, string Name, string Color, string Image, bool Selected);
-public sealed record NativeAttribute(int Id, string Name, int ControlType, bool Required, bool HasCondition, List<NativeOption> Options);
+public sealed record NativeOption(int Id, string Name, string Color, string Image, bool Selected)
+{
+    public string DisplayName { get; init; } = "";
+}
+public sealed record NativeAttribute(int Id, string Name, int ControlType, bool Required, bool HasCondition, List<NativeOption> Options)
+{
+    public string TextPrompt { get; init; } = "";
+    public string Description { get; init; } = "";
+}
 public sealed record NativeProductPicture(int Id, string Image, string Thumbnail, string FullSize, string Alt, string Title);
 public sealed record NativeTierPrice(int Quantity, string Price);
 
