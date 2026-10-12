@@ -1,0 +1,105 @@
+Boutique isolated QA clothing catalogue
+
+Target database: nop_themeqa_boutique_20261012185304 (PostgreSQL, loopback only).
+Target existing app: C:/Users/s_jamili/Desktop/nopcomerce/theme-build-checks/runtime-smoke-boutique-1e5498f14ffc47e486403f68e5162ca4/app
+Target QA URL: http://127.0.0.1:6250/
+The script reads this app's private settings in memory. It does not copy or print credentials.
+No server was created, stopped or restarted. No source, Madadrang QA or port-5090 database was touched.
+
+Created native products (prices stored in the existing primary toman unit, IRT ID12 / rate1):
+3583 BTQ-QA-001 شومیز لینن آوا      1,290,000 تومان
+3584 BTQ-QA-002 شومیز پاپلین نوا    1,190,000 تومان
+3585 BTQ-QA-003 تاپ ریب مینا          590,000 تومان
+3586 BTQ-QA-004 پلیور بافت رها      1,690,000 تومان
+3587 BTQ-QA-005 ژیلهٔ بافت ماهور       990,000 تومان
+3588 BTQ-QA-006 کت آزاد لونا        2,790,000 تومان
+3589 BTQ-QA-007 ترنچ کوتاه آیلین    3,490,000 تومان
+3590 BTQ-QA-008 جین واید نیکا       1,890,000 تومان
+3591 BTQ-QA-009 شلوار پیلی‌دار السا  1,590,000 تومان
+3592 BTQ-QA-010 جین راستهٔ مانا      1,790,000 تومان
+3593 BTQ-QA-011 کیف دوشی لیا        1,390,000 تومان
+3594 BTQ-QA-012 عینک مینیمال سایا     690,000 تومان
+
+Categories: 57 شومیز و تاپ (3 products), 58 بافت و ژیله (2),
+59 کت و رویه (2), 60 شلوار و دنیم (3), 61 اکسسوری (2).
+Each has a native Product_Category_Mapping, an active native UrlRecord slug and a category PictureId.
+
+Native attribute inventory:
+- ProductAttribute رنگ reused; سایز added if absent.
+- Each product has color-square mapping (control40) plus alternating dropdown/radio size (control1/2).
+- AttributeValueType0 values, quantity1, zero price adjustments, first selections preselected.
+- XML contains actual mapping IDs and actual value IDs, not attribute definition IDs.
+- Inventory method2; only existing combinations may be purchased; no out-of-stock orders.
+- 66 combinations total, 64 in stock with quantity8, 2 unavailable with quantity0.
+- Primary HTTP/cart fixture: product3583, slug boutique-linen-shirt.
+  MappingIDs65(color)/66(size); six combinations, five available and one unavailable.
+  The unavailable combination is color2 (موکا) / size3 (L).
+- Secondary stock fixture: product3590, color2 / size4 unavailable.
+- No orders, payments, discounts, shipping methods or tax rules were created/changed.
+
+Images and origin:
+12 product SVGs (native PictureIDs70..81) and one garment-only hero SVG (PictureID82).
+All are original code-created illustrations, explicitly marked SAMPLE and described as illustrations,
+not photographs of real merchandise. No humans, human models, mannequins, external embedded image
+resources or stationery images are used. They are released under CC0-1.0 by the accompanying generator.
+Public Pexels sources/license were researched, but bounded CDN downloads failed and no Pexels images
+were used. No attribution to those photographers is claimed.
+
+Native image storage:
+The existing QA has no Media.Images.StoreInDB setting. PictureService.IsStoreInDbAsync supplies
+true as its explicit default (src/Libraries/Nop.Services/Media/PictureService.cs), so native PictureBinary
+is the correct original storage. The SQL rejects an explicit false setting instead of changing policy.
+SVG MIME is image/svg+xml; native PictureService skips raster resizing for this MIME.
+SVG originals are also copied to this existing clone's wwwroot/images/boutique-sample directory.
+All 13 direct static image URLs returned HTTP200/image/svg+xml.
+After one product details request, native thumbnail /images/thumbs/0000070_btq-qa-001.svg also returned
+HTTP200/image/svg+xml, proving the native PictureBinary-to-thumbnail path works on the current host.
+
+Coherent QA presentation changes:
+- Store1 neutral name فروشگاه لباس, homepage/default titles and description, QA URL6250.
+- Persian language2 stays store default, becomes first DisplayOrder0, default currency12.
+- Existing IRT primary settings/rate/unit remain unchanged; IRT display fa-IR / #,##0 تومان.
+  USD is unpublished in this QA so the storefront does not offer a misleading USD conversion at rate1.
+- Existing stationery products MRG-1..MRG-8 unpublished and removed from homepage, not deleted.
+  Their attribute values/combinations/pictures remain untouched. Existing IDs1/2/3 no longer provide
+  published Boutique HTTP fixtures; use product3583 and omit old fallback expectations2/3.
+- Original stationery categories1..4 unpublished and removed from homepage; manufacturers linked to
+  MRG products unpublished in this QA. Clothing gets its own fresh categories and slugs.
+- Existing native menus6/7/8 preserved: category items point to new categories, fifth category added
+  once, catalog URLs use /boutique/catalog, footer cart/login use native /cart and /login.
+  Footer shop name/CSS and menu CSS are neutral to Boutique; contact native route remains intact.
+- HomepageText native topic/title/body and localized title/body changed to neutral clothing preview.
+- Existing copied logo setting cleared so it cannot leak a stationery logo.
+- BoutiqueThemeSettings.HeroPictureId82, neutral hero heading/description; brand comes from Store.Name.
+
+Execution and repeatability:
+1. Apply-Seed.ps1 without -Apply generates assets/SQL only (dry run).
+2. Apply-Seed.ps1 -Apply reads only the fixed QA app settings, verifies exact DB/provider/loopback,
+   and runs the guarded SQL transaction with ON_ERROR_STOP, timeout and advisory transaction lock.
+3. SQL independently asserts current_database(), baseline product1/SKU, existing primary toman unit
+   and native DB-image mode before any mutation. PostgreSQL identity columns allocate new IDs.
+4. Product creation is keyed by unique sample SKUs and an AdminComment ownership stamp; a foreign
+   SKU collision throws. Categories are keyed by active sample slugs; images by sample SeoFilename;
+   native menu additions check existence. All operations stay within this exact isolated QA database.
+5. Repeated execution retained products3583..3594, categories57..61, pictures70..82 and 66 combinations.
+   It does not reset combination stock, recreate images or update existing sample price/description
+   when catalog.json changes. This is create-if-absent seeding of this manifest, not catalogue migration.
+   Slug/picture key reuse assumes this verified snapshot; the exact DB guard is intentionally not reusable
+   against another install. Metadata/menu/default-language settings are applied on each run.
+6. verify.sql passed actual PostgreSQL XPath mapping/value ownership checks and count assertions.
+7. Native /product/combinations?productId=3583 returned HTTP200 with six combinations, five InStock
+   and one unavailable, with mappingIDs65/66.
+
+Verification evidence outside the source checkout:
+C:/Users/s_jamili/Desktop/nopcomerce/runtime-verification/boutique-clothing-seed-verification.txt
+C:/Users/s_jamili/Desktop/nopcomerce/runtime-verification/boutique-clothing-seed-rerun.txt
+C:/Users/s_jamili/Desktop/nopcomerce/runtime-verification/boutique-clothing-media-http.json
+C:/Users/s_jamili/Desktop/nopcomerce/runtime-verification/boutique-clothing-native-picture-http.json
+C:/Users/s_jamili/Desktop/nopcomerce/runtime-verification/boutique-clothing-combinations-http.json
+
+Remaining runtime limitation:
+This host still runs the older package whose Head view raises HTTP500. Product details rendering
+therefore still returned500, although native combinations and media returned200. Complete clothing
+homepage/catalog/product appearance and guest cart need verification after the existing host owner
+applies the prepared compiled package and refreshes caches with the already planned manual restart.
+No workaround server/restart was attempted after automatic approval review blocked those operations.
