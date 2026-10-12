@@ -1,0 +1,9 @@
+@{
+    Layout = "_MadadrangRoot";
+}
+<main class="master-wrapper-content sf-native-fallback" id="main">
+    @await RenderSectionAsync("Breadcrumb", false)
+    <div class="master-column-wrapper">
+        @RenderBody()
+    </div>
+</main>

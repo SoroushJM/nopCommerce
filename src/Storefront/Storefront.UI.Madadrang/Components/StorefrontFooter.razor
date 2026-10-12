@@ -1,0 +1,30 @@
+<footer class="sf-footer">
+    <div class="wrap">
+        <div class="grid md:grid-cols-[2fr_1fr_1fr] gap-8">
+            <div><a href="/" class="sf-brand mb-4"><span class="brand-mark">
+                <SfIcon />
+            </span><span>مدادرنگ</span></a>
+            <p class="text-xs text-muted-foreground leading-7 max-w-sm">برای ما، لوازم‌تحریر فقط ابزار نیست؛ یک بهانهٔ کوچک
+                برای نوشتن، یاد گرفتن و رنگی‌تر دیدن دنیاست.</p>
+            </div>
+            @foreach (var menu in Menus)
+            {
+                <div>
+                    <h2 class="text-sm font-bold mb-4">@menu.Name</h2>
+                    <div class="flex flex-col gap-3 text-xs text-muted-foreground">
+                        @foreach (var item in menu.Items)
+                        {
+                            <StorefrontMenuBranch Item="item" Plain="true" />
+                        }
+                    </div>
+                </div>
+            }
+        </div>
+        <div class="border-t mt-8 pt-5 text-xs text-muted-foreground flex justify-between gap-5"><span>مدادرنگ؛ همراه
+            ایده‌های کوچک و بزرگ</span><span>ساخته‌شده برای نوشتن و خیال‌کردن</span></div>
+        </div>
+    </footer>
+
+@code {
+    [Parameter] public List<StoreMenu> Menus { get; set; } = [];
+}

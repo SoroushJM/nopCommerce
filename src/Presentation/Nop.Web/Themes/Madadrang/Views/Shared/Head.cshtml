@@ -2,11 +2,8 @@
 @{
     Layout = "";
 }
-@if (Context.Items["Madadrang.NativePage"] is true)
-{
-    <base href="@Url.Content("~/")" />
-}
-else
+<base href="@Url.Content("~/")" />
+@if (Context.Items["Madadrang.NativePage"] is not true)
 {
     var rtl = await Html.ShouldUseRtlThemeAsync();
     NopHtml.AppendCssFileParts($"~/Themes/DefaultClean/Content/css/styles{(rtl ? ".rtl" : "")}.css");
