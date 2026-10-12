@@ -1,7 +1,7 @@
 <footer class="sf-footer">
     <div class="wrap">
         <div class="grid md:grid-cols-[2fr_1fr_1fr] gap-8">
-            <div><a href="/" class="sf-brand mb-4"><span class="brand-mark">
+            <div><a href="@HomeUrl" class="sf-brand mb-4"><span class="brand-mark">
                 <SfIcon />
             </span><span>مداد رنگی</span></a>
             <p class="text-xs text-muted-foreground leading-7 max-w-sm">برای ما، لوازم‌تحریر فقط ابزار نیست؛ یک بهانهٔ کوچک
@@ -27,4 +27,5 @@
 
 @code {
     [Parameter] public List<StoreMenu> Menus { get; set; } = [];
+    [Parameter] public string HomeUrl { get; set; } = "/";
 }
