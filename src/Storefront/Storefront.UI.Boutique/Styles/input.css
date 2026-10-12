@@ -163,6 +163,7 @@ body {background:var(--background);color:var(--foreground);font-family:Vazirmatn
 
 /* Product form and all advanced native attributes are retained. */
 .boutique-shell .product-essential {display:grid;grid-template-columns:1fr 1fr;gap:32px 48px;border:0;margin:0 0 36px}
+.boutique-shell .product-essential > :not(.gallery):not(.overview) {grid-column:1/-1}
 .boutique-shell .product-essential > .gallery, .boutique-shell .product-essential > .overview {float:none;width:100%;margin:0;min-width:0;padding:0}
 .boutique-shell .gallery .picture {background:var(--muted);border-radius:16px;overflow:hidden;margin:0 0 16px}
 .boutique-shell .gallery .picture img {width:100%;height:auto;max-height:none;object-fit:cover;aspect-ratio:3/4}
@@ -183,10 +184,13 @@ body {background:var(--background);color:var(--foreground);font-family:Vazirmatn
 .boutique-shell .overview .option-list li {display:flex;align-items:center;gap:6px;margin:0;border:1px solid var(--border);border-radius:10px;padding:8px 14px;background:var(--card);font-size:12px;min-height:40px}
 .boutique-shell .overview .option-list li:has(input:checked) {border-color:var(--primary);background:var(--secondary)}
 .boutique-shell .overview .attributes .color-squares {display:flex;gap:12px;flex-wrap:wrap}
-.boutique-shell .overview .attributes .color-squares li {padding:0;margin:0}
-.boutique-shell .overview .attributes .color-squares .color-container {border-radius:50%;border:1px solid var(--border);padding:4px;width:38px;height:38px}
-.boutique-shell .overview .attributes .color-squares .color {border-radius:50%;width:28px;height:28px}
-.boutique-shell .overview .attributes .color-squares .selected-value .color-container {border-color:var(--primary);box-shadow:0 0 0 1px var(--primary)}
+.boutique-shell .overview .attributes .color-squares li {padding:0;margin:0;border:0;background:transparent;border-radius:0;min-height:0}
+.boutique-shell .overview .attributes .color-squares .attribute-square-container {border-radius:50%;border:1px solid var(--border);padding:4px;width:38px;height:38px;background:var(--card)}
+/* The native base fixes square dimensions/borders with !important. Override only
+   the ColorSquares view, preserving image-square and disabled-variant behavior. */
+.boutique-shell .overview .attributes .color-squares .attribute-square {border-radius:50%;width:28px!important;height:28px!important;border:0!important}
+.boutique-shell .overview .attributes .color-squares .selected-value .attribute-square-container,
+.boutique-shell .overview .attributes .color-squares li:has(input:checked) .attribute-square-container {border-color:var(--primary);box-shadow:0 0 0 1px var(--primary);background:var(--secondary)}
 .boutique-shell .overview .attributes select {max-width:100%;min-width:180px;border-radius:10px;background:var(--card);border:1px solid var(--border);padding:10px;font-size:13px}
 .boutique-shell .overview .prices {margin:20px 0}
 .boutique-shell .overview .product-price {color:var(--foreground);font-size:25px;font-weight:500}
@@ -286,9 +290,12 @@ body {background:var(--background);color:var(--foreground);font-family:Vazirmatn
 .boutique-shell .footer-menu__title {font-size:13px;font-weight:500;color:var(--foreground);background:transparent;padding:12px 0;border-color:var(--border)}
 .boutique-shell .footer-menu__item {padding:5px 0;border:0;font-size:12px;color:var(--muted-foreground)}
 .boutique-shell .footer-menu__link {color:var(--muted-foreground)}
-.boutique-shell .newsletter-email {display:flex;border:1px solid var(--border);border-radius:12px;background:var(--card);overflow:hidden}
+.boutique-shell .newsletter-email {display:flex;flex-wrap:wrap;border:1px solid var(--border);border-radius:12px;background:var(--card);overflow:visible;gap:8px}
 .boutique-shell .newsletter-email input {background:transparent;border:0;color:var(--foreground)}
-.boutique-shell .newsletter-email .newsletter-subscribe-button {background:var(--primary);color:var(--primary-foreground);font-size:11px}
+.boutique-shell .newsletter-email .newsletter-subscribe-text {flex:1 1 140px;min-width:0;max-width:100%;width:auto}
+.boutique-shell .newsletter-email .newsletter-subscribe-button {flex:0 0 auto;max-width:100%;background:var(--primary);color:var(--primary-foreground);font-size:11px}
+.boutique-shell .newsletter-email .options, .boutique-shell .newsletter-email .captcha-box {flex:0 0 100%;width:100%;max-width:100%;text-align:start;padding:8px}
+.boutique-shell .newsletter-email .captcha-box {overflow-x:auto}
 .boutique-shell .footer-lower {background:transparent;border-top:1px solid #dfd0c0;color:var(--muted-foreground);font-size:11px;padding:20px}
 .boutique-shell .footer-powered-by {font-size:10px;color:var(--muted-foreground)}
 
