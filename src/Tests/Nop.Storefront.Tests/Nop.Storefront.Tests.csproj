@@ -15,9 +15,11 @@
     <!-- Compile the exact plugin helper without building/publishing the entire UI for unit tests. -->
     <Compile Include="../../Plugins/Nop.Plugin.Misc.PersianStorefront/StorefrontWebHelper.cs" Link="Plugin/StorefrontWebHelper.cs" />
     <Compile Include="../../Plugins/Nop.Plugin.Misc.PersianStorefront/StorefrontHostConfig.cs" Link="Plugin/StorefrontHostConfig.cs" />
+    <Compile Include="../../Plugins/Nop.Plugin.Misc.PersianStorefront/PersianPublicResourcesStartup.cs" Link="Plugin/PersianPublicResourcesStartup.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="../../Presentation/Nop.Web/App_Data/Localization/defaultResources.nopres.xml" Link="Localization/defaultResources.nopres.xml" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="../../Presentation/Nop.Web/App_Data/Localization/PersianAdmin/*.xml" Link="Localization/PersianAdmin/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="../../Presentation/Nop.Web/App_Data/Localization/PersianPublic/*.xml" Link="Localization/PersianPublic/%(Filename)%(Extension)" CopyToOutputDirectory="PreserveNewest" />
   </ItemGroup>
 </Project>
