@@ -1,0 +1,79 @@
+<BbDirectionProvider Direction="TextDirection.RightToLeft">
+    @if (Mobile)
+    {
+        <BbButton Variant="ButtonVariant.Ghost" Class="icon-btn" OnClick="() => _open = true" aria-label="دسته‌بندی‌ها">
+            <SfIcon Name="menu" Size="20" />
+        </BbButton>
+        <BbSheet Open="_open" OpenChanged="value => _open = value" Side="SheetSide.Right">
+            <BbSheetContent Class="sf-sheet" ShowClose="true">
+                <BbSheetHeader>
+                    <BbSheetTitle>دسته‌بندی‌های فروشگاه</BbSheetTitle>
+                    <BbSheetDescription>دسته‌بندی محصولات را ببین.</BbSheetDescription>
+                </BbSheetHeader>
+                <nav aria-label="دسته‌بندی‌های موبایل" class="overflow-y-auto my-4">
+                    @foreach (var item in Menu.Items)
+                    {
+                        <StorefrontMenuBranch Item="item" />
+                    }
+                </nav>
+            </BbSheetContent>
+        </BbSheet>
+    }
+    else
+    {
+        <BbNavigationMenu Class="sf-native-menu flex max-w-none" EnableKeyboardNavigation="true"
+                          aria-label="دسته‌بندی‌های فروشگاه">
+            <BbNavigationMenuList Class="gap-8 w-full">
+                @for (var index = 0; index < Menu.Items.Count; index++)
+                {
+                    var item = Menu.Items[index];
+                    <BbNavigationMenuItem Value="@($"menu-{Menu.Id}-{index}")" Class="@item.CssClass">
+                        @if (item.Children.Count > 0)
+                        {
+                            <BbNavigationMenuTrigger Class="nav-link bg-transparent">@item.Title</BbNavigationMenuTrigger>
+                            <BbNavigationMenuContent>
+                                <div class="min-w-60 max-w-md p-3 max-h-96 overflow-y-auto">
+                                    @if (item.Url.Length > 0)
+                                    {
+                                        <a href="@item.Url" class="block px-3 py-2 text-primary font-bold">@item.Title</a>
+                                    }
+                                    @foreach (var child in item.Children)
+                                    {
+                                        <StorefrontMenuBranch Item="child" />
+                                    }
+                                </div>
+                            </BbNavigationMenuContent>
+                        }
+                        else if (item.Url.Length > 0)
+                        {
+                            <BbNavigationMenuLink Href="@item.Url" Class="nav-link flex items-center gap-2">
+                                @if (item.CssClass.Split(' ').Contains("sf-menu-all"))
+                                {
+                                    <SfIcon Name="menu" Size="17" />
+                                }
+                                @if (item.CssClass.Split(' ').Contains("sf-menu-offer"))
+                                {
+                                    <SfIcon Name="star" Size="15" />
+                                }
+                                @item.Title
+                            </BbNavigationMenuLink>
+                        }
+                        else
+                        {
+                            <span class="nav-link">@item.Title</span>
+                        }
+                    </BbNavigationMenuItem>
+                }
+            </BbNavigationMenuList>
+        </BbNavigationMenu>
+    }
+</BbDirectionProvider>
+@code {
+    [Parameter] public StoreMenu Menu { get; set; } = new();
+    [Parameter]
+    public bool Mobile
+    {
+        get; set;
+    }
+    private bool _open;
+}
