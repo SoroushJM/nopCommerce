@@ -15,8 +15,9 @@ class Inputs(html.parser.HTMLParser):
   if tag=='link' and a.get('rel')=='stylesheet': self.styles.append(a.get('href',''))
 records=[]
 slug='/mrg-1' if theme=='madadrang' else '/boutique-linen-shirt'
-for path in ['/',slug,'/cart','/login','/register','/search?advs=true']:
- status,url,html=get(path); records.append({'path':path,'status':status,'bytes':len(html.encode())})
+for path in ['/','/catalog/all',slug,'/cart','/login','/register','/search?advs=true']:
+ status,url,html=get(path); assert 'internal error occurred' not in html.lower(), 'Native error page rendered: '+path
+ records.append({'path':path,'status':status,'bytes':len(html.encode())})
  if path=='/':
   selected='Madadrang' if theme=='madadrang' else 'Boutique'; opposite='Boutique' if theme=='madadrang' else 'Madadrang'
   assert f'_content/Storefront.UI.{selected}/' in html

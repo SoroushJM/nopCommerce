@@ -28,12 +28,24 @@ q=shlex.quote
 try:
  with tempfile.TemporaryDirectory(prefix='nop-server-deploy-') as td:
   archive=pathlib.Path(td)/'app.tar.gz'
+  unpacked_bytes=0
   with tarfile.open(archive,'w:gz',compresslevel=3) as tar:
    for item in files:
     if not item.is_file(): continue
     rel=item.relative_to(app); parts=rel.parts
     if item.suffix.lower() in ['.pdb','.pfx','.key','.pem'] or item.name.startswith('.env') or 'logs' in parts or 'DataProtectionKeys' in parts or 'ref' in parts or (parts[0]=='App_Data' and item.suffix=='.json'): continue
+    unpacked_bytes+=item.stat().st_size
     tar.add(item,arcname='app/'+rel.as_posix(),recursive=False)
+  # Reserve archive, extracted files, BuildKit input/COPY layers and bounded headroom.
+  # Fail before upload or data changes; capacity maintenance is explicitly scoped.
+  required_free=3*unpacked_bytes+archive.stat().st_size+256*1024*1024
+  run(f'''python3 - {q(root)} {required_free} <<'PY'
+import pathlib,shutil,sys
+target=pathlib.Path(sys.argv[1]); required=int(sys.argv[2]); free=shutil.disk_usage(target).free
+print('Deployment disk preflight: free bytes',free,'required bytes',required,flush=True)
+if free<required: raise SystemExit('Insufficient deployment capacity. Preserve application/database volumes and use verified task-owned release/cache maintenance before retrying; no upload or service update was started.')
+PY
+''')
   digest=hashlib.sha256(archive.read_bytes()).hexdigest(); run(f'umask 077\nmkdir -p {q(remote)}\n')
   with client.open_sftp() as s:
    uploads=[(here/'Dockerfile',remote+'/Dockerfile'),(here/'native-admin.py',root+'/native-admin.py'),(here/'verify-native-http.py',root+'/verify-native-http.py'),(here/'ensure-relative-media.sql',root+'/ensure-relative-media.sql'),(pathlib.Path(c['adminCredentialsPath']),root+'/admin-credentials.json')]
