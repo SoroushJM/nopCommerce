@@ -125,7 +125,7 @@ body {background:var(--background);color:var(--foreground);font-family:Vazirmatn
 .boutique-shell .product-item .picture {margin:0;background:var(--muted);overflow:hidden;border-radius:12px}
 .boutique-shell .product-item .picture a {display:block;position:relative;aspect-ratio:3/4}
 .boutique-shell .product-item .picture a:before {display:none}
-.boutique-shell .product-item .picture img {width:100%;height:100%;object-fit:cover;position:static;margin:0}
+.boutique-shell .product-item .picture img {width:100%;height:100%;object-fit:contain;position:static;margin:0;padding:8px}
 .boutique-shell .product-item .details {padding:14px 0 0;text-align:start}
 .boutique-shell .product-item .product-title {font-size:14px;font-weight:500;line-height:1.9;margin:0 0 5px;height:auto;min-height:0;padding:0}
 .boutique-shell .product-item .product-title a {color:var(--foreground)}
@@ -166,10 +166,10 @@ body {background:var(--background);color:var(--foreground);font-family:Vazirmatn
 .boutique-shell .product-essential > :not(.gallery):not(.overview) {grid-column:1/-1}
 .boutique-shell .product-essential > .gallery, .boutique-shell .product-essential > .overview {float:none;width:100%;margin:0;min-width:0;padding:0}
 .boutique-shell .gallery .picture {background:var(--muted);border-radius:16px;overflow:hidden;margin:0 0 16px}
-.boutique-shell .gallery .picture img {width:100%;height:auto;max-height:none;object-fit:cover;aspect-ratio:3/4}
+.boutique-shell .gallery .picture img {width:100%;height:auto;max-height:none;object-fit:contain;aspect-ratio:3/4;padding:14px}
 .boutique-shell .gallery .picture-thumbs {display:flex;gap:10px;overflow-x:auto;justify-content:flex-start;scrollbar-width:thin;margin:0}
 .boutique-shell .gallery .thumb-item {flex:0 0 70px;width:70px;margin:0;border:1px solid var(--border);border-radius:8px;overflow:hidden;display:block;background:none;padding:0;cursor:pointer}
-.boutique-shell .gallery .thumb-item img {width:100%;height:90px;object-fit:cover}
+.boutique-shell .gallery .thumb-item img {width:100%;height:90px;object-fit:contain;padding:3px}
 .boutique-shell .gallery .thumb-item[aria-current=true] {border-color:var(--primary);box-shadow:0 0 0 1px var(--primary)}
 .boutique-shell .overview .product-name {border:0;margin:0 0 12px;padding:0}
 .boutique-shell .overview .product-name h1 {font-weight:500;font-size:clamp(23px,3vw,32px);line-height:1.8;color:var(--foreground)}
@@ -229,7 +229,7 @@ body {background:var(--background);color:var(--foreground);font-family:Vazirmatn
 .boutique-shell .data-table, .boutique-shell .cart {margin:0;width:100%;border:0;color:var(--foreground);font-size:12px}
 .boutique-shell .data-table th, .boutique-shell .cart th {background:var(--muted);border:0;padding:12px;color:var(--muted-foreground);font-size:11px;font-weight:500}
 .boutique-shell .data-table td, .boutique-shell .cart td {border:0;border-bottom:1px solid var(--border);padding:12px;background:var(--card);vertical-align:middle}
-.boutique-shell .cart .product-picture img {width:70px;height:90px;object-fit:cover;border-radius:8px}
+.boutique-shell .cart .product-picture img {width:70px;height:90px;object-fit:contain;border-radius:8px;background:var(--muted)}
 .boutique-shell .cart .product-name {color:var(--foreground);font-size:13px;font-weight:500}
 .boutique-shell .cart .attributes {color:var(--muted-foreground);font-size:11px;line-height:2;margin-top:6px}
 .boutique-shell .cart .qty-input, .boutique-shell .cart .qty-dropdown {width:52px;min-height:44px;border:1px solid var(--ring);border-radius:8px;padding:6px;background:var(--card);color:var(--foreground);text-align:center}
