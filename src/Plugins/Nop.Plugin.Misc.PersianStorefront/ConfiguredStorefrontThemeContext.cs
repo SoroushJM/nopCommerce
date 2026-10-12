@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Nop.Core;
 using Nop.Core.Domain;
+using Nop.Core.Domain.Customers;
 using Nop.Core.Infrastructure;
 using Nop.Services.Common;
 using Nop.Services.Themes;
@@ -19,10 +20,25 @@ public sealed class ConfiguredStorefrontThemeContext(IGenericAttributeService at
     {
         if (string.IsNullOrWhiteSpace(configuration.Theme))
             return await base.GetWorkingThemeNameAsync();
+        if (!string.IsNullOrEmpty(_cachedThemeName))
+            return _cachedThemeName;
         if (!StorefrontThemeService.IsSupported(configuration.Theme) ||
             !await _themeProvider.ThemeExistsAsync(configuration.Theme))
             throw new InvalidOperationException($"Configured storefront theme '{configuration.Theme}' is not available in this deployment.");
-        return configuration.Theme;
+        // Preserve the native customer selector when the merchant explicitly enables it.
+        if (_storeInformationSettings.AllowCustomerToSelectTheme)
+        {
+            var customer = await _workContext.GetCurrentCustomerAsync();
+            if (customer != null)
+            {
+                var store = await _storeContext.GetCurrentStoreAsync();
+                var selected = await _genericAttributeService.GetAttributeAsync<string>(customer,
+                    NopCustomerDefaults.WorkingThemeNameAttribute, store.Id);
+                if (!string.IsNullOrEmpty(selected) && await _themeProvider.ThemeExistsAsync(selected))
+                    return _cachedThemeName = selected;
+            }
+        }
+        return _cachedThemeName = configuration.Theme;
     }
 }
 

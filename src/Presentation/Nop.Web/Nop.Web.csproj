@@ -23,6 +23,9 @@
     <ProjectReference Include="..\..\Libraries\Nop.Data\Nop.Data.csproj" />
     <ProjectReference Include="..\..\Libraries\Nop.Services\Nop.Services.csproj" />
     <ProjectReference Include="..\Nop.Web.Framework\Nop.Web.Framework.csproj" />
+    <ProjectReference Include="../../Storefront/Storefront.UI.Shared/Storefront.UI.Shared.csproj" />
+    <ProjectReference Include="../../Storefront/Storefront.UI.Madadrang/Storefront.UI.Madadrang.csproj" Condition="'$(StorefrontTheme)' == 'Madadrang' Or '$(StorefrontTheme)' == 'All'" />
+    <ProjectReference Include="../../Storefront/Storefront.UI.Boutique/Storefront.UI.Boutique.csproj" Condition="'$(StorefrontTheme)' == 'Boutique' Or '$(StorefrontTheme)' == 'All'" />
   </ItemGroup>
 
   <ItemGroup>
