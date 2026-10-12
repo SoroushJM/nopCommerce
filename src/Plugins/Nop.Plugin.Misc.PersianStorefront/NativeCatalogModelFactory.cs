@@ -29,6 +29,11 @@ public sealed class NativeCatalogModelFactory(ICatalogModelFactory catalog, IPro
         var availableCategories = await categories.GetAllCategoriesAsync(storeId);
         if (cid != 0 && availableCategories.All(category => category.Id != cid))
             return null;
+        // As in native search, retain an explicit unfiltered selection. Otherwise
+        // the browser selects the first category and catalog navigation adds it.
+        if (availableCategories.Count > 0)
+            result.AvailableCategories.Add(new SelectListItem(
+                await localization.GetResourceAsync("Common.All"), "0", cid == 0));
         foreach (var category in availableCategories)
             result.AvailableCategories.Add(new SelectListItem(await localization.GetLocalizedAsync(category, item => item.Name), category.Id.ToString(), category.Id == cid));
 
