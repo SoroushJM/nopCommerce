@@ -96,6 +96,7 @@ STOREFRONT_THEME=$Theme
 STOREFRONT_THEME_SLUG=$themeSlug
 STOREFRONT_ENVIRONMENT=$Environment
 StorefrontThemeConfig__Theme=$Theme
+NOP_COOKIE_PREFIX=.Nop.$themeSlug
 HTTP_PORT=$HttpPort
 HTTPS_PORT=$HttpsPort
 POSTGRES_DB=nopcommerce_${themeSlug}_${Environment}
