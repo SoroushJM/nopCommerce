@@ -21,7 +21,7 @@ dotnet test src/Tests/Storefront.Theme.Tests/Storefront.Theme.Tests.csproj --fil
 
 | Area | Evidence captured on both themes | Limit |
 | --- | --- | --- |
-| Package/theme isolation | Own theme CSS, opposite/legacy theme CSS absent, correct brand wrapper, actual CSS/shared JS/Blazor boot served with expected media type | Does not execute Blazor or inspect computed styles |
+| Package/theme isolation | Linked CSS, including native bundles, contains the current theme's brand styles and excludes the other theme's brand styles; opposite/legacy asset references absent; correct brand wrapper; raw theme CSS/shared JS/Blazor boot served with expected media type | Does not execute Blazor or inspect computed styles |
 | Header/footer | Native search control, HeaderLinks and AjaxCart initialization, native footer copyright | Currency/language/tax selectors depend on settings and number of configured choices |
 | Native navigation | Login password and CSRF, registration page, wishlist/compare/cart reachable | Does not register or authenticate a user |
 | Search | q/advs/sid/sit selectable, query booleans restored | Category/vendor choices depend on fixture data; browser interaction still required |

@@ -18,7 +18,6 @@ public sealed class RuntimeThemeTests
         Assert.Multiple(() =>
         {
             Assert.That(Regex.Matches(home, "<!DOCTYPE html>", RegexOptions.IgnoreCase), Has.Count.EqualTo(1));
-            Assert.That(home, Does.Contain(expectedCss));
             Assert.That(home, Does.Not.Contain("_content/Storefront.UI/storefront.css"));
             Assert.That(home, Does.Not.Contain(theme == "Boutique" ? "_content/Storefront.UI.Madadrang/storefront.css" : "_content/Storefront.UI.Boutique/boutique.css"));
             Assert.That(home, Does.Contain("header-links"));
@@ -39,6 +38,23 @@ public sealed class RuntimeThemeTests
             Assert.That(response.Content.Headers.ContentType?.MediaType, Does.Contain(mediaType), path);
             Assert.That(await response.Content.ReadAsStringAsync(), Is.Not.Empty, path);
         }
+        var linkedStyles = Regex.Matches(home, "<link\\b[^>]*>", RegexOptions.IgnoreCase)
+            .Select(match => match.Value).Where(tag => Attribute(tag, "rel") == "stylesheet")
+            .Select(tag => new Uri(client.BaseAddress!, Attribute(tag, "href"))).ToArray();
+        Assert.That(linkedStyles, Is.Not.Empty, "The rendered page must load a stylesheet, including when native bundling is enabled.");
+        var stylesheetContents = new List<string>();
+        foreach (var uri in linkedStyles.Where(uri => uri.Authority == client.BaseAddress!.Authority))
+        {
+            using var response = await client.GetAsync(uri);
+            Assert.That(response.StatusCode, Is.EqualTo(HttpStatusCode.OK), uri.AbsolutePath);
+            Assert.That(response.Content.Headers.ContentType?.MediaType, Is.EqualTo("text/css"), uri.AbsolutePath);
+            stylesheetContents.Add(await response.Content.ReadAsStringAsync());
+        }
+        var renderedCss = string.Join("\n", stylesheetContents);
+        Assert.That(renderedCss, Does.Contain(theme == "Boutique" ? ".boutique-brand" : ".brand-word"),
+            "The CSS actually linked by the page must contain the current theme's branding styles.");
+        Assert.That(renderedCss, Does.Not.Contain(theme == "Boutique" ? ".brand-word" : ".boutique-brand"),
+            "The rendered stylesheet must not carry the other theme's branding styles.");
     }
 
     [TestCase("MADADRANG")]
