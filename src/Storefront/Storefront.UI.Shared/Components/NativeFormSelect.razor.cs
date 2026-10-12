@@ -20,7 +20,7 @@ public partial class NativeFormSelect
     private async Task SetValue(string? value)
     {
         _value = value ?? "";
-        _module ??= await JS.InvokeAsync<IJSObjectReference>("import", "/_content/Storefront.UI.Shared/storefront.js");
+        _module ??= await JS.InvokeAsync<IJSObjectReference>("import", "./_content/Storefront.UI.Shared/storefront.js");
         await _module.InvokeVoidAsync("submitNativeSelect", _input, _value, Initial.SubmitName);
     }
 

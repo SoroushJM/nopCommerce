@@ -24,7 +24,7 @@
         }
     </div>
     <nav class="mobile-nav" aria-label="منوی موبایل">
-        <a href="/">
+        <a href="@Theme.HomeUrl">
             <SfIcon Name="@Theme.HomeIcon" /><span>خانه</span>
         </a>
         <a href="@Theme.CatalogUrl">
@@ -114,7 +114,8 @@
             @if (cart.SignedIn)
             {
                 <p class="text-center text-lg py-6" dir="ltr">@cart.Phone</p>
-                <BbButton Href="@Initial.CartUrl" Size="ButtonSize.Large" Class="w-full">دیدن سبد خرید</BbButton><a href="/logout"
+                <BbButton Href="@Theme.AccountUrl" Size="ButtonSize.Large" Class="w-full mb-3">حساب من</BbButton>
+                <BbButton Href="@Initial.CartUrl" Size="ButtonSize.Large" Class="w-full">دیدن سبد خرید</BbButton><a href="@Theme.LogoutUrl"
                                                                                                       class="block text-center text-xs text-muted-foreground mt-5">خروج از حساب</a>
             }
             else

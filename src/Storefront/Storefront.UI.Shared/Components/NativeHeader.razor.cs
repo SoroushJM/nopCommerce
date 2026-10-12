@@ -13,7 +13,7 @@ public partial class NativeHeader
     [Parameter]
     public StorefrontThemeProfile Theme { get; set; } = new();
 
-    private string AccountUrl => _signedIn ? "/customer/info" : Theme.LoginUrl;
+    private string AccountUrl => _signedIn ? Theme.AccountUrl : Theme.LoginUrl;
 
     [Parameter]
     public bool OpenLoginOnLoad
@@ -44,7 +44,7 @@ public partial class NativeHeader
             return;
         try
         {
-            module = await JS.InvokeAsync<IJSObjectReference>("import", "/_content/Storefront.UI.Shared/storefront.js");
+            module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/Storefront.UI.Shared/storefront.js");
             _reference = DotNetObjectReference.Create(this);
             _listener = await module.InvokeAsync<int>("listenForCart", _reference);
             if (Initial.CartEnabled)

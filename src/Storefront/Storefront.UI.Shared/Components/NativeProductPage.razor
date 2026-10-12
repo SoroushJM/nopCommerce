@@ -13,7 +13,7 @@
             <section class="wrap py-7">
                 @if (Initial.BreadcrumbEnabled)
                 {
-                <p class="text-xs text-muted-foreground mb-7"><a href="/">خانه</a> / @foreach (var link in Initial.Breadcrumb)
+                <p class="text-xs text-muted-foreground mb-7"><a href="@Initial.HomeUrl">خانه</a> / @foreach (var link in Initial.Breadcrumb)
                     {
                         <a href="@link.Url">@link.Name</a><span> / </span>
                     }

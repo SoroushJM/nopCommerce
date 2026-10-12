@@ -99,7 +99,7 @@ public partial class NativeProductPage
         }
         try
         {
-            _module = await JS.InvokeAsync<IJSObjectReference>("import", "/_content/Storefront.UI.Shared/storefront.js");
+            _module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/Storefront.UI.Shared/storefront.js");
             _combinations = await _module.InvokeAsync<List<NativeCombination>>("request", Initial.CombinationsUrl);
             _ready = true;
             await RefreshSelection();

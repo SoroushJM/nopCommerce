@@ -4,8 +4,11 @@ namespace Storefront.UI.Shared;
 public sealed record StorefrontThemeProfile
 {
     public string BrandName { get; init; } = "فروشگاه";
+    public string HomeUrl { get; init; } = "/";
     public string CatalogUrl { get; init; } = "/catalog/all";
     public string LoginUrl { get; init; } = "/login";
+    public string AccountUrl { get; init; } = "/customer/info";
+    public string LogoutUrl { get; init; } = "/logout";
     public string OtpApiBasePath { get; init; } = "/storefront/api";
     public bool EnableOtp { get; init; }
     public string CartDescription { get; init; } = "محصولات انتخاب‌شدهٔ تو";
