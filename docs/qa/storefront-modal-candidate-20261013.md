@@ -23,7 +23,7 @@ Both controls passed the following in an independent browser session:
 | Rapid reopen | A Dialog reopened 50 ms into the 180 ms exit bridge with a non-inert open root, hidden body overflow, and focus on dialog content. Five Tab presses remained within the dialog. Its eventual close unmounted roots, unlocked the body, and restored the opener. |
 | Reduced motion | At 30 ms after Sheet open there were no active animations and opacity was 1. At 30 ms after close its roots were unmounted, body scrolling was restored, and focus returned to the opener. |
 
-Native HTML dialog behavior was intentionally not changed; both storefronts use the JavaScript dialog strategy.
+Native HTML dialog behavior was intentionally not changed. The public Madadrang cart mounts the JavaScript Sheet strategy. Boutique's reviewed header/catalog paths use native MVC controls; its shared modal integration is covered by package integrity and this isolated harness, without claiming an actual public Boutique modal was exercised.
 
 ## Reproducible checks
 

@@ -56,7 +56,7 @@ MVC میزبان HTML اولیهٔ کامپوننت‌های WebAssemblyPrerende
 
 ## Tailwind و BB
 
-BB 4.1.0 از NuGet اجرا می‌شود؛ submodule فقط مرجع سورس pinned است. دکمه، Sheet، Dialog، DirectionProvider و PortalHost از BB هستند. کارت، انتخاب ویژگی، هدر و شبکهٔ محصولات اجزای اختصاصی فروشگاه‌اند. ویژگی رنگ به شکل swatch و ویژگی‌های دیگر به شکل گزینهٔ متنی نمایش داده می‌شوند. BB CSS آماده با پیشوند `bb:` جدا از CSS Tailwind 4.1.18 بارگذاری می‌شود؛ سورس BB در Tailwind اسکن نمی‌شود. رنگ‌ها و فونت در متغیرهای ابتدای `Styles/input.css` قابل تغییرند. Vazirmatn محلی با OFL استفاده شده است.
+Components رسمی BB نسخهٔ 4.1.0 از NuGet اجرا می‌شود. Primitives روی نسخهٔ محلی `4.1.1-storefront.1` پین شده است تا Sheet و Dialog برای پایان انیمیشن خروج منتظر بمانند؛ این نسخه، انتشار رسمی جدید BB نیست. بسته، پچ محدود، مجوز و دستور بازسازی از کامیت دقیق upstream در `vendor/blazorblueprint-primitives` نگهداری می‌شوند؛ submodule مرجع سورس pinned است. دکمه، Sheet، Dialog، DirectionProvider و PortalHost از BB هستند. کارت، انتخاب ویژگی، هدر و شبکهٔ محصولات اجزای اختصاصی فروشگاه‌اند. ویژگی رنگ به شکل swatch و ویژگی‌های دیگر به شکل گزینهٔ متنی نمایش داده می‌شوند. BB CSS آماده با پیشوند `bb:` جدا از CSS Tailwind 4.1.18 بارگذاری می‌شود؛ سورس BB در Tailwind اسکن نمی‌شود. رنگ‌ها و فونت در متغیرهای ابتدای `Styles/input.css` قابل تغییرند. Vazirmatn محلی با OFL استفاده شده است.
 
 ## حدود نسخهٔ نخست
 
