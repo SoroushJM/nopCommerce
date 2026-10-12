@@ -1,4 +1,3 @@
 SHA256  C31241A6C32419BDF673D4185911F47DC6429209F37868B0B0ED44B59D3CDD64  packages/BlazorBlueprint.Primitives.4.1.1-storefront.1.nupkg
 Source: https://github.com/blazorblueprintui/ui primitives/v4.1.0 commit 9534520512db530e640b7bca878d73f7c444874e
 License: Apache-2.0; LICENSE and NOTICE copied verbatim from upstream source.
-
