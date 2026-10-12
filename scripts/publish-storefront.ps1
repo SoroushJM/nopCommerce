@@ -39,7 +39,7 @@ $sourceFiles = & git -C $repoRoot -c core.quotepath=false ls-files --cached --ot
 if ($LASTEXITCODE -ne 0) { throw 'The source snapshot requires a Git checkout.' }
 Write-Output "Preparing isolated $Theme source snapshot: $sourceRoot"
 foreach ($relativePath in ($sourceFiles | Sort-Object -Unique)) {
-    if ($relativePath -match '(^|/)(bin|obj|node_modules|\.git|\.artifacts)(/|$)' -or
+    if ($relativePath -match '(^|/)(bin|obj|node_modules|runtime-verification|\.git|\.artifacts)(/|$)' -or
         $relativePath -match '^src/Presentation/Nop.Web/(Plugins/|App_Data/DataProtectionKeys/)' -or
         $relativePath -match '(^|/)\.env($|\.)' -or
         $relativePath -match '\.(pfx|key)$') { continue }
