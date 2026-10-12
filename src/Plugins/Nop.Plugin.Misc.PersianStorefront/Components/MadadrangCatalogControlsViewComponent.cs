@@ -48,7 +48,7 @@ public sealed class MadadrangCatalogControlsViewComponent(IWorkContext work, ILo
         if (search != null)
         {
             controls.Categories = Choices(search.AvailableCategories);
-            if (allProducts)
+            if (allProducts && search.AvailableCategories.All(option => option.Value != "0"))
                 controls.Categories.Insert(0, new("0", labels.Get("Common.All"), search.cid == 0));
             controls.Query["cid"] = search.cid.ToString(CultureInfo.InvariantCulture);
             controls.Query["isc"] = search.isc.ToString().ToLowerInvariant();
