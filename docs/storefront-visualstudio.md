@@ -2,6 +2,8 @@
 
 فایل `src/NopCommerce.sln` را باز کنید و پروژهٔ `Nop.Web` را به‌عنوان Startup Project انتخاب کنید. دو پروفایل `Madadrang` و `Boutique` در `Properties/launchSettings.json` تعریف شده‌اند. پروفایل اول مداد رنگی را روی `http://localhost:5602` و پروفایل دوم تم لباس را روی `http://localhost:5630` اجرا می‌کند. پروفایل قبلی `Nop.Web` نیز باقی است.
 
+فایل `launchSettings.json` طبق قاعدهٔ موجود مخزن محلی و خارج از Git است. نمونهٔ بدون اطلاعات اتصال در `docs/examples/launchSettings.storefront.json` نگهداری می‌شود؛ در یک checkout تازه پروفایل‌های آن را با فایل محلی خود ادغام کنید. فایل فعلی این workspace همین پروفایل‌ها را دارد.
+
 پروفایل اجرا، مقدار `StorefrontThemeConfig__Theme` را به فرایند می‌دهد. این مقدار انتخاب زمان ساخت نیست؛ انتخاب تم در ساخت با property مستقل `StorefrontTheme` انجام می‌شود.
 
 برای جابه‌جایی راحت میان دو تم هنگام توسعه، مقدار پیش‌فرض `StorefrontTheme` در `src/Directory.Build.props` را به `All` تغییر دهید و یک بار Rebuild Solution انجام دهید:

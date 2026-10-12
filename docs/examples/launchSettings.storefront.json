@@ -1,0 +1,34 @@
+{
+  "profiles": {
+    "Madadrang": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "StorefrontThemeConfig__Theme": "Madadrang",
+        "CommonConfig__UsePrecompiledViews": "false",
+        "StorefrontHostConfig__HttpPort": "5602"
+      },
+      "applicationUrl": "http://localhost:5602"
+    },
+    "Boutique": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development",
+        "StorefrontThemeConfig__Theme": "Boutique",
+        "CommonConfig__UsePrecompiledViews": "false",
+        "StorefrontHostConfig__HttpPort": "5630"
+      },
+      "applicationUrl": "http://localhost:5630"
+    },
+    "Nop.Web": {
+      "commandName": "Project",
+      "launchBrowser": true,
+      "environmentVariables": {
+        "ASPNETCORE_ENVIRONMENT": "Development"
+      },
+      "applicationUrl": "https://localhost:1914;http://localhost:1915"
+    }
+  }
+}
