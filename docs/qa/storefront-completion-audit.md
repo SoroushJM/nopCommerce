@@ -22,7 +22,7 @@ Audit date: 2026-10-12. Implementation and package work is ready for the permitt
 | Preserve existing user work | Original port5090 untouched by QA restart; private configs excluded; unrelated deploy files remain uncommitted and unchanged by this task | Established for task actions; do not attribute another thread's deployment checks to this goal |
 | Architecture/development/deployment/coverage/evidence docs | ADR0003/0004, current development guide, Visual Studio examples, release guide, feature map, native test audit, locale report, seed report | Current guide repaired; runtime evidence gaps remain explicit |
 
-## Authoritative live state at this audit
+## Authoritative live state at the initial completion audit
 
 - Boutique: `http://127.0.0.1:6250/`, process26200 / `dotnet`, start UTC `2026-10-12T16:13:26.9903454Z`. Identity was re-read, not inferred from smoke.json alone.
 - Both Home6250 and Home6240 returned HTTP500 with the old `NopLinkTagHelper` stack on the final recheck at17:28 UTC. Madadrang remains process23548 / start UTC `2026-10-12T16:13:18.5212365Z`. The corrected Head has built in the final packages but has not been observed in these running clones. Evidence: `C:/Users/s_jamili/Desktop/nopcomerce/runtime-verification/theme-live-state-completion.json`.
@@ -41,6 +41,14 @@ Automatic approval review rejected the operation preparing a verified process st
 - Default compiler builds had malformed Razor diagnostics. The same unchanged source passed with `UseSharedCompilation=false`; both full builds and publish succeeded using this setting. Compiler-server state is an inference. Settings are bounded to isolated Release entry points and forwarded to the Client child process; global/default Debug behavior is preserved. Final logs have0 compiler warnings/errors; a previous failed fresh run had the existing VAT CS0108 warning. Optional wasm-tools optimization remains unavailable.
 - Cache deletion also received an automatic approval rejection. No deletion/rename workaround was attempted; fresh additive package directories preserved the old caches and revealed that stale obj alone did not explain the failure.
 - The operator transition needs the complete final selected release, rather than only the earlier three-file Head/XML repair. Keep the existing QA's own private configuration, database, media and protection keys attached to its selected app; packages intentionally omit private state. Do not copy an opposite store's settings or run both against one database. No transition has been performed by this task.
+
+## Later resumed transition: Boutique staged, startup pending
+
+The user explicitly requested a stop script and its execution. `runtime-verification/Stop-BoutiqueQaServer.ps1` (outside the repository) verified PID26200, its exact start time/executable, nopCommerce command line and only ports6250/6251. Execution succeeded; port6250 no longer has a listener. This supersedes the earlier Boutique Home500 live-state entry. Madadrang was not stopped by this action.
+
+During the resumed goal turn,5958 files from the final Boutique release were copied into that stopped, existing QA app. All of `App_Data` was excluded, no files/directories were deleted, and existing sample media was retained. The precompiled views and both root/plugin PersianStorefront DLL hashes match the final release. Evidence: `C:/Users/s_jamili/Desktop/nopcomerce/runtime-verification/boutique-release-staged.json`.
+
+The subsequent `Start-Process` action received `blocked by policy` before execution; no new host exists. A guarded operator script was prepared at `C:/Users/s_jamili/Desktop/nopcomerce/runtime-verification/Start-BoutiqueQaServer.ps1`, with verified PowerShell syntax. It checks both ports, the exact isolated PostgreSQL database/loopback provider and release DLL hashes; then configures Development, Boutique and precompiled views. This script has not been executed by the agent. It records a new process identity if successfully run; a startup message alone does not prove Home200. Full runtime acceptance remains pending. The start rejection is the first occurrence of this blocker in the resumed audit.
 
 ## Next acceptance work
 
