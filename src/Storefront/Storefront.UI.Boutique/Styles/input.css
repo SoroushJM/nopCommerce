@@ -341,8 +341,10 @@ body {background:var(--background);color:var(--foreground);font-family:Vazirmatn
  .boutique-shell .search-box form {max-width:none}
  .boutique-shell .boutique-selectors {padding:4px 0;justify-content:center}
  .boutique-shell .top-menu.notmobile {display:none}
- .boutique-shell .top-menu.mobile {display:none;flex-direction:column;align-items:stretch}
- .boutique-shell .top-menu.mobile.active {display:flex}
+ /* nopCommerce native menu: public.menu.js toggles .menu-dropdown--active on .menu-container. */
+ .boutique-shell .menu-container.menu-dropdown > .menu__toggle {min-height:44px}
+ .boutique-shell .menu-container.menu-dropdown > .menu {max-height:0!important;opacity:0!important;visibility:hidden!important;overflow:hidden!important;pointer-events:none!important;transition:max-height .24s ease,opacity .18s ease,visibility 0s linear .24s}
+ .boutique-shell .menu-container.menu-dropdown.menu-dropdown--active > .menu {max-height:70vh!important;opacity:1!important;visibility:visible!important;overflow-y:auto!important;pointer-events:auto!important;transition-delay:0s}
  .boutique-shell .side-2 {margin:20px 0}
  .boutique-shell .product-grid .item-grid {grid-template-columns:repeat(3,minmax(0,1fr));gap:24px 15px}
  .boutique-shell .block .title {margin:0}
