@@ -1,6 +1,7 @@
 @model Nop.Web.Models.Catalog.ProductOverviewModel
 @using Nop.Core
 @using Nop.Core.Domain.Catalog
+@using Nop.Core.Domain.Orders
 @using Nop.Core.Domain.Tax
 @using Nop.Web.Components
 @using Nop.Web.Framework.Infrastructure
@@ -9,22 +10,50 @@
 @inherits Nop.Web.Framework.Mvc.Razor.NopRazorPage<TModel>
 @inject Nop.Web.Framework.Mvc.Routing.INopUrlHelper NopUrl
 @inject IWorkContext workContext
+@inject CatalogSettings catalogSettings
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @{
     var url = await NopUrl.RouteGenericUrlAsync<Product>(new { SeName = Model.SeName });
     var picture = Model.PictureModels.FirstOrDefault();
     var inStock = (bool)ViewData["InStock"]!;
     var label = !inStock ? "ناموجود" : Model.ProductPrice.DisableBuyButton ? "خرید غیرفعال" : Model.MarkAsNew ? "تازه رسیده" : !string.IsNullOrEmpty(Model.ProductPrice.OldPrice) ? "پیشنهاد رنگی" : "";
+    var addtocartlink = Model.ProductPrice.ForceRedirectionAfterAddingToCart
+        ? Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_CART_CATALOG, new { productId = Model.Id, shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart, quantity = 1, forceredirection = Model.ProductPrice.ForceRedirectionAfterAddingToCart })
+        : Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_CART_CATALOG, new { productId = Model.Id, shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart, quantity = 1 });
+    var addtowishlistlink = Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_CART_CATALOG, new { productId = Model.Id, shoppingCartTypeId = (int)ShoppingCartType.Wishlist, quantity = 1 });
+    var addtocomparelink = Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_COMPARE, new { productId = Model.Id });
 }
 <article class="product-card" data-productid="@Model.Id" data-product-stock="@inStock.ToString().ToLowerInvariant()">
-    <a href="@url" aria-label="@Model.Name">
         <div class="product-photo">
-            <img src="@picture?.ImageUrl" alt="@picture?.AlternateText" title="@picture?.Title" loading="lazy" />
+            @if (Model.PictureModels.Count > 1)
+            {
+                <div class="swiper h-full" id="swiper-@Model.Id" dir="@Html.GetUIDirection(!await Html.ShouldUseRtlThemeAsync())">
+                    <div class="swiper-wrapper">
+                        @foreach (var item in Model.PictureModels)
+                        {
+                            <a class="swiper-slide" href="@url" title="@item.Title">
+                                <img src="@item.ImageUrl" alt="@item.AlternateText" title="@item.Title" loading="lazy" />
+                            </a>
+                        }
+                    </div>
+                    <div class="swiper-pagination"></div>
+                </div>
+                <script asp-location="Footer">
+                    new Swiper('#swiper-@(Model.Id)', {
+                        pagination: { clickable: true, el: '.swiper-pagination' }
+                    });
+                </script>
+            }
+            else
+            {
+                <a href="@url" aria-label="@Model.Name" title="@picture?.Title"><img src="@picture?.ImageUrl" alt="@picture?.AlternateText" title="@picture?.Title" loading="lazy" /></a>
+            }
             @if (label.Length > 0)
             {
                 <span class="tag absolute right-3 top-3">@label</span>
             }
         </div>
+    <a href="@url" aria-label="@Model.Name">
         <div class="p-4 pb-2">
             <p class="text-xs text-muted-foreground mb-2">@ViewData["Caption"]</p>
             <h3 class="text-sm font-bold leading-6 min-h-12">@Model.Name</h3>
@@ -36,6 +65,23 @@
             </div>
         </div>
     </a>
+    <div class="px-4 pb-3">
+        @if (catalogSettings.ShowSkuOnCatalogPages && !string.IsNullOrEmpty(Model.Sku))
+        {
+            <div class="sku text-xs text-muted-foreground mb-2">@Model.Sku</div>
+        }
+        @if (Model.ReviewOverviewModel.AllowCustomerReviews)
+        {
+            var ratingPercent = Model.ReviewOverviewModel.TotalReviews == 0 ? 0
+                : ((Model.ReviewOverviewModel.RatingSum * 100) / Model.ReviewOverviewModel.TotalReviews) / 5;
+            <div class="product-rating-box inline-block mb-2" title="@string.Format(T("Reviews.TotalReviews").Text, Model.ReviewOverviewModel.TotalReviews)">
+                <div class="rating" style="background: url('@Url.Content("~/Themes/DefaultClean/Content/images/rating1.png")') repeat-x; width: 95px; height: 14px;">
+                    <div style="background: url('@Url.Content("~/Themes/DefaultClean/Content/images/rating2.png")') repeat-x; height: 14px; width: @(ratingPercent)%"></div>
+                </div>
+            </div>
+        }
+        <div class="description text-xs text-muted-foreground leading-6" hidden="@(!catalogSettings.ShowShortDescriptionOnCatalogPages)" @(catalogSettings.ShowShortDescriptionOnCatalogPages ? "" : "data-short-description=none")>@Html.Raw(Model.ShortDescription)</div>
+    </div>
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductBoxAddinfoBefore, additionalData = Model })
     <div class="px-4 pb-4 flex items-end justify-between gap-2">
         <div>
@@ -58,6 +104,26 @@
         <a href="@url" aria-label="مشاهدهٔ @Model.Name" class="size-8 rounded-lg bg-muted text-muted-foreground grid place-items-center">
             <component type="typeof(SfIcon)" render-mode="Static" param-Name='@("arrow")' param-Size="16" />
         </a>
+    </div>
+    <div class="buttons px-4 pb-4 flex gap-2 flex-wrap text-xs">
+        @if (!Model.ProductPrice.DisableBuyButton)
+        {
+            var addToCartText = T("ShoppingCart.AddToCart").Text;
+            if (Model.ProductPrice.IsRental)
+                addToCartText = T("ShoppingCart.Rent").Text;
+            if (Model.ProductPrice.AvailableForPreOrder)
+                addToCartText = T("ShoppingCart.PreOrder").Text;
+            <button type="button" class="product-box-add-to-cart-button rounded-lg bg-primary text-primary-foreground px-3 py-2" onclick="AjaxCart.addproducttocart_catalog('@addtocartlink');return false;">@addToCartText</button>
+        }
+        @if (!Model.ProductPrice.DisableAddToCompareListButton)
+        {
+            <button type="button" class="add-to-compare-list-button rounded-lg bg-muted text-muted-foreground px-3 py-2" title="@T("ShoppingCart.AddToCompareList")" onclick="AjaxCart.addproducttocomparelist('@addtocomparelink');return false;">@T("ShoppingCart.AddToCompareList")</button>
+        }
+        @if (!Model.ProductPrice.DisableWishlistButton)
+        {
+            @await Html.PartialAsync("_MoveToWishlistModal", Model.ProductToWishlist)
+            <button type="button" class="add-to-wishlist-button rounded-lg bg-muted text-muted-foreground px-3 py-2" title="@T("ShoppingCart.AddToWishlist")" onclick="AjaxCart.addproducttocart_catalog('@addtowishlistlink');return false;">@T("ShoppingCart.AddToWishlist")</button>
+        }
     </div>
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductBoxAddinfoAfter, additionalData = Model })
 </article>
