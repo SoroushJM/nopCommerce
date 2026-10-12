@@ -39,3 +39,13 @@ STOREFRONT_QA_BOUTIQUE_FALLBACKS to expectations.json raw content, and run ONLY 
 ConfiguredUnsupportedProductsKeepTheirNativeControls case with Name~BOUTIQUE.
 The case is read-only GET, checks native product-name/form/CSRF and all configured fields.
 Use ../BoutiqueQaSeed/Invoke-QaSql.ps1 -SqlFile ./cleanup.sql only when parent is done.
+
+Parent correction after source inspection:
+Native ProductController redirects VisibleIndividually=false products without a grouped parent
+back to Home. The initial quarantined fixtures therefore were not directly navigable.
+activate-for-check.sql checks the exact isolated database and both owner-stamped, uncleaned
+SKUs before temporarily setting VisibleIndividually=true for runtime acceptance. It was
+executed by the parent; Home/category mapping remains absent, but native all-products/search
+can include the two QA fixtures during this temporary window. The coordinated next host
+restart clears the previous product cache. cleanup.sql remains required after acceptance,
+and neither fixture nor this setting belongs in a Production data export.
