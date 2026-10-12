@@ -18,17 +18,17 @@
                 @switch (menuItem.Template)
                 {
                     case MenuItemTemplate.Grid:
-                        @await Html.PartialAsync("_MenuItem.Grid.cshtml", menuItem)
+                        @await Html.PartialAsync("~/Views/Shared/Components/MainMenu/_MenuItem.Grid.cshtml", menuItem)
                         break;
                     default:
-                        @await Html.PartialAsync("_MenuItem.List.cshtml", menuItem)
+                        @await Html.PartialAsync("~/Views/Shared/Components/MainMenu/_MenuItem.List.cshtml", menuItem)
                         break;
                 }
             }
             else
             {
                 <div class="menu__item @menuItem.CssClass" role="menuitem">
-                    @await Html.PartialAsync("_MenuItem.cshtml", menuItem)
+                    @await Html.PartialAsync("~/Views/Shared/Components/MainMenu/_MenuItem.cshtml", menuItem)
                 </div>
             }
         }

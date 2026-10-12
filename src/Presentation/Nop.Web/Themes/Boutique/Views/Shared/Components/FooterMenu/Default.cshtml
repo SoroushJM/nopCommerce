@@ -11,7 +11,7 @@
             <div class="footer-menu__list" role="menu" aria-labelledby="footer-menu-@menu.Id">
                 @foreach (var menuItem in menu.Items)
                 {
-                    @await Html.PartialAsync("_FooterItem.cshtml", menuItem)
+                    @await Html.PartialAsync("~/Views/Shared/Components/FooterMenu/_FooterItem.cshtml", menuItem)
                 }
             </div>
         </div>
