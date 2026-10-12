@@ -1,6 +1,6 @@
 # Completion audit for the two independent storefronts
 
-Audit date: 2026-10-12. The user goal remains active. This is an evidence map, not a claim of completed runtime acceptance.
+Audit date: 2026-10-12. Implementation and package work is ready for the permitted operator transition; full goal acceptance is blocked on running the corrected isolated packages. This is an evidence map, not a claim of completed runtime acceptance.
 
 ## Explicit requirements and current evidence
 
@@ -16,7 +16,7 @@ Audit date: 2026-10-12. The user goal remains active. This is an evidence map, n
 | Native pricing, stock, cart, order, shipping and payment behavior | Server model adapters/native actions; old isolated Madadrang cart checks; Boutique combinations API3583 = six combinations/five stock/one zero | Sample API and earlier cart evidence only; current cart/account/checkout/shipping/payment traversal incomplete |
 | Two independent installs/databases/releases/settings/media | Distinct QA databases and clone app paths; selected-only clean packages; eight evaluated Compose configurations; no private configs/keys/opposite brand assets in packages | Isolation source/package checks pass; actual Linux/container rollout and independent upgrade/restart behavior have not been observed |
 | Parallel worktrees and incremental integration | Three dedicated worktrees, source commits and integration history; additional delegated QA catalog seeding | Established |
-| Build/publish both outputs | Latest completed full Release refresh before follow-up corrections: Head609884 + locale1119, zero errors/warnings, separate package manifests/logs | Follow-up Shared/CSS/embedded-locale corrections need refreshed package evidence |
+| Build/publish both outputs | Final production baseline7e0be11a6f + isolated compiler settings (root cfc6ada86f): full Docker.slnx Release build and host/Client publication pass for both; separate package manifests/logs; four real DLL embedded-resource checks1119/hash match | Final package integrity passes; actual startup/browser/checkout still incomplete |
 | Real desktop/mobile checks and repair observed issues | Baseline/historical browser records; native cascade and Head defects found during preview | Incomplete: both current hosts still execute an old Head and return HTTP500 |
 | Mock SMS treated as development only | Theme/environment policy: Madadrang + Development + Persian; other themes/languages use native authentication | Source policy established; current native account traversal not verified |
 | Preserve existing user work | Original port5090 untouched by QA restart; private configs excluded; unrelated deploy files remain uncommitted and unchanged by this task | Established for task actions; do not attribute another thread's deployment checks to this goal |
@@ -25,12 +25,22 @@ Audit date: 2026-10-12. The user goal remains active. This is an evidence map, n
 ## Authoritative live state at this audit
 
 - Boutique: `http://127.0.0.1:6250/`, process26200 / `dotnet`, start UTC `2026-10-12T16:13:26.9903454Z`. Identity was re-read, not inferred from smoke.json alone.
-- Both Home6250 and Home6240 returned HTTP500 with the old `NopLinkTagHelper` stack. The corrected Head has built in the clean packages but has not been observed in these running clones.
+- Both Home6250 and Home6240 returned HTTP500 with the old `NopLinkTagHelper` stack on the final recheck at17:28 UTC. Madadrang remains process23548 / start UTC `2026-10-12T16:13:18.5212365Z`. The corrected Head has built in the final packages but has not been observed in these running clones. Evidence: `C:/Users/s_jamili/Desktop/nopcomerce/runtime-verification/theme-live-state-completion.json`.
 - Boutique database `nop_themeqa_boutique_20261012185304` contains products3583–3594 and categories57–61. Product3583 is the supported primary fixture. Its native combinations API returned HTTP200; 13 original SVGs and native thumbnail70 returned200.
 - Madadrang database `nop_themeqa_madadrang_20261012185304` retains its separate normal/gift/rental fixtures. Do not apply Boutique seed to it.
 - QA schedule tasks are disabled in these disposable copies. This is QA setup, not a production scheduling recommendation.
 
 Automatic approval review rejected the operation preparing a verified process stop/start helper with `blocked by policy`, without a detailed reason. The rejected operation was not retried through another tool or encoding. A human-run transition was provided in chat. Until the existing corrected package runs, browser/HTML/cart checks dependent on the Head cannot supply new evidence. Independent source repairs and package checks can continue.
+
+## Final package handover
+
+- Madadrang app: `C:/Users/s_jamili/Desktop/nopcomerce/theme-package-checks/madadrang-test-a296b077c1d14c38a93bd741c339077a/app`.
+- Boutique app: `C:/Users/s_jamili/Desktop/nopcomerce/theme-package-checks/boutique-test-ac00683449fb434ebed7893837578b86/app`.
+- Evidence: `C:/Users/s_jamili/Desktop/nopcomerce/theme-build-checks/package-verification-completion.txt`, per-brand `completion-package-*.json`, and `package-*-completion-inprocess.log`.
+- Each contains only selected brand + Shared + DefaultClean, no Nop browser WASM and no private App_Data JSON/keys/certificates. Five root model DLLs match actual Release exports. Four plugin DLLs contain1119 unique embedded public labels, byte-for-byte matching source/published XML. Eight public-locale contracts and17 merged Shared HtmlRenderer cases pass separately.
+- Default compiler builds had malformed Razor diagnostics. The same unchanged source passed with `UseSharedCompilation=false`; both full builds and publish succeeded using this setting. Compiler-server state is an inference. Settings are bounded to isolated Release entry points and forwarded to the Client child process; global/default Debug behavior is preserved. Final logs have0 compiler warnings/errors; a previous failed fresh run had the existing VAT CS0108 warning. Optional wasm-tools optimization remains unavailable.
+- Cache deletion also received an automatic approval rejection. No deletion/rename workaround was attempted; fresh additive package directories preserved the old caches and revealed that stale obj alone did not explain the failure.
+- The operator transition needs the complete final selected release, rather than only the earlier three-file Head/XML repair. Keep the existing QA's own private configuration, database, media and protection keys attached to its selected app; packages intentionally omit private state. Do not copy an opposite store's settings or run both against one database. No transition has been performed by this task.
 
 ## Next acceptance work
 
