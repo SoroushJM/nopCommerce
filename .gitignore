@@ -228,3 +228,10 @@ src/Tests/Nop.Tests/Connections.resx
 
 # Local downloaded admin verification files
 /output/admin-localization/
+
+# Local runtime verification output and browser profiles
+/runtime-verification/
+
+# Python bytecode caches used by deployment tooling
+__pycache__/
+*.py[cod]
