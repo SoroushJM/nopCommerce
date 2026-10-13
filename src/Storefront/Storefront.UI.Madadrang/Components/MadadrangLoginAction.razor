@@ -1,0 +1,30 @@
+@using BlazorBlueprint.Icons.Lucide.Components
+
+@if (PasswordToggle)
+{
+    <BbButton Type="ButtonType.Button" Variant="ButtonVariant.Ghost" Size="ButtonSize.Icon"
+              AriaLabel="نمایش رمز عبور" id="madadrang-password-toggle" aria-controls="Password" aria-pressed="false"
+              Class="size-[2.75rem]! shrink-0! rounded-[.5rem]! border-[0rem]! bg-transparent! p-0! text-muted-foreground! [box-shadow:none]! aria-pressed:bg-secondary! aria-pressed:text-primary! focus-visible:[outline:.125rem_solid_var(--ring)]! focus-visible:[outline-offset:.125rem]! [&_svg]:size-[1.125rem]!">
+        <LucideIcon Name="eye" aria-hidden="true" />
+    </BbButton>
+}
+else
+{
+    <BbButton Type="@(Submit ? ButtonType.Submit : ButtonType.Button)" Href="@Url"
+              Variant="@(Secondary ? ButtonVariant.Outline : ButtonVariant.Default)"
+              id="@Id" data-set-mode="@Mode" hidden="@Hidden"
+              Class="w-full! min-h-[2.875rem]! h-auto! rounded-[.75rem]! border-[.0625rem]! border-solid! px-5! py-3! text-[.875rem]! font-semibold! normal-case! [box-shadow:none]! [&[hidden]]:hidden! focus-visible:[outline:.125rem_solid_var(--ring)]! focus-visible:[outline-offset:.1875rem]!">
+        @Text
+    </BbButton>
+}
+
+@code {
+    [Parameter] public string Text { get; set; } = "";
+    [Parameter] public string? Url { get; set; }
+    [Parameter] public string? Id { get; set; }
+    [Parameter] public string? Mode { get; set; }
+    [Parameter] public bool Submit { get; set; }
+    [Parameter] public bool Secondary { get; set; }
+    [Parameter] public bool Hidden { get; set; }
+    [Parameter] public bool PasswordToggle { get; set; }
+}

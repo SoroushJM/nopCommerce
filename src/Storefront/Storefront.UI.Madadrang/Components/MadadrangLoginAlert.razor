@@ -1,0 +1,22 @@
+@if (!string.IsNullOrWhiteSpace(Message))
+{
+<BbAlert Variant="@Variant"
+         Class="w-full! rounded-[.75rem]! border-[.0625rem]! border-solid! p-4! text-start! [box-shadow:none]! has-[.validation-summary-valid]:hidden! [&_.message-error]:m-0! [&_.message-error]:p-0! [&_ul]:m-0! [&_ul]:ps-5!">
+    <BbAlertDescription Class="text-[.875rem]! leading-[1.8]!">
+        @if (HtmlContent)
+        {
+            @((MarkupString)Message)
+        }
+        else
+        {
+            @Message
+        }
+    </BbAlertDescription>
+</BbAlert>
+}
+
+@code {
+    [Parameter] public string Message { get; set; } = "";
+    [Parameter] public bool HtmlContent { get; set; }
+    [Parameter] public AlertVariant Variant { get; set; } = AlertVariant.Default;
+}

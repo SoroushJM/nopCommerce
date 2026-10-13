@@ -1,0 +1,36 @@
+<BbCard Class="flex! h-auto! min-h-0! flex-col! gap-0! rounded-[1rem]! border-[.0625rem]! border-solid! border-border! bg-secondary! py-0! [box-shadow:none]!">
+    <BbCardHeader Class="gap-2! p-6! pb-0! text-start! max-[40rem]:p-5! max-[40rem]:pb-0!">
+        <BbCardTitle Class="text-[1.125rem]! font-semibold! leading-[1.7]!">@Title</BbCardTitle>
+    </BbCardHeader>
+    <BbCardContent Class="p-6! pt-3! text-start! text-[.875rem]! leading-[1.9]! max-[40rem]:p-5! max-[40rem]:pt-3! [&_.topic-block]:m-0! [&_.topic-block-body]:m-0! [&_p]:m-0!">
+        @if (HtmlDescription)
+        {
+            @((MarkupString)Description)
+        }
+        else
+        {
+            <p class="m-0! text-muted-foreground!">@Description</p>
+        }
+    </BbCardContent>
+    @if (!Disabled)
+    {
+        <BbCardFooter Class="flex! flex-col! items-stretch! gap-3! p-6! pt-0! max-[40rem]:p-5! max-[40rem]:pt-0!">
+            @if (!string.IsNullOrEmpty(GuestUrl))
+            {
+                <MadadrangLoginAction Text="@GuestText" Url="@GuestUrl" />
+            }
+            <MadadrangLoginAction Text="@RegisterText" Url="@RegisterUrl" Secondary="true" />
+        </BbCardFooter>
+    }
+</BbCard>
+
+@code {
+    [Parameter] public string Title { get; set; } = "";
+    [Parameter] public string Description { get; set; } = "";
+    [Parameter] public bool HtmlDescription { get; set; }
+    [Parameter] public bool Disabled { get; set; }
+    [Parameter] public string? RegisterUrl { get; set; }
+    [Parameter] public string RegisterText { get; set; } = "";
+    [Parameter] public string? GuestUrl { get; set; }
+    [Parameter] public string GuestText { get; set; } = "";
+}
