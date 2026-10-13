@@ -10,7 +10,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Update="package.json;package-lock.json" CopyToPublishDirectory="Never" />
-    <TailwindSources Include="**/*.razor;../Storefront.UI.Shared/**/*.razor;Styles/input.css;package-lock.json;../../Plugins/Nop.Plugin.Misc.PersianStorefront/Views/**/*.cshtml;../../Presentation/Nop.Web/Themes/Madadrang/Views/**/*.cshtml" />
+    <TailwindSources Include="**/*.razor;../Storefront.UI.Shared/**/*.razor;../Storefront.UI.Shared/wwwroot/native-select.css;Styles/input.css;package-lock.json;../../Plugins/Nop.Plugin.Misc.PersianStorefront/Views/**/*.cshtml;../../Presentation/Nop.Web/Themes/Madadrang/Views/**/*.cshtml" />
   </ItemGroup>
   <Target Name="RestoreStorefrontNodeModules" BeforeTargets="PrepareForBuild" Inputs="package-lock.json" Outputs="node_modules/.package-lock.json">
     <Exec Command="npm ci --no-audit --no-fund" WorkingDirectory="$(MSBuildProjectDirectory)" />

@@ -13,6 +13,7 @@
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ContentBefore })
     @await RenderSectionAsync("Breadcrumb", false)
     @RenderBody()
+    <component type="typeof(Storefront.UI.Shared.Components.NativeSelectHost)" render-mode="WebAssemblyPrerendered" />
     <persist-component-state />
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ContentAfter })
     @await Component.InvokeAsync("MadadrangFooter")

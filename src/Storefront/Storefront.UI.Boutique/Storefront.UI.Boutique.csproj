@@ -13,7 +13,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Update="package.json;package-lock.json" CopyToPublishDirectory="Never" />
-    <TailwindSources Include="**/*.razor;Styles/input.css;package-lock.json;../Storefront.UI.Shared/**/*.razor;../../Presentation/Nop.Web/Themes/Boutique/Views/**/*.cshtml" />
+    <TailwindSources Include="**/*.razor;Styles/input.css;package-lock.json;../Storefront.UI.Shared/**/*.razor;../Storefront.UI.Shared/wwwroot/native-select.css;../../Presentation/Nop.Web/Themes/Boutique/Views/**/*.cshtml" />
   </ItemGroup>
   <Target Name="RestoreBoutiqueNodeModules" BeforeTargets="PrepareForBuild" Inputs="package-lock.json" Outputs="node_modules/.package-lock.json">
     <Exec Command="npm ci --no-audit --no-fund" WorkingDirectory="$(MSBuildProjectDirectory)" />

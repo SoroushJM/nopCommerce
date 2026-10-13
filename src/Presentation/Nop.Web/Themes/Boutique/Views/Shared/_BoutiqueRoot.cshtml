@@ -19,6 +19,7 @@
         <div class="master-column-wrapper">@RenderBody()</div>
         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ContentAfter })
     </main>
+    <component type="typeof(Storefront.UI.Shared.Components.NativeSelectHost)" render-mode="WebAssemblyPrerendered" />
     <persist-component-state />
     @await Component.InvokeAsync("BoutiqueFooter")
 </div>
