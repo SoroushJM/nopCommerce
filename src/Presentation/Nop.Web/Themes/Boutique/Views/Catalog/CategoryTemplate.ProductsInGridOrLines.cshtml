@@ -11,6 +11,7 @@
 
 @{
     Layout = "_ColumnsTwo";
+    ViewData["Boutique.CompactCategory"] = true;
 
     //title
     NopHtml.AddTitleParts(!string.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
@@ -34,7 +35,7 @@
 {
     @if (Model.DisplayCategoryBreadcrumb)
     {
-        <div class="breadcrumb">
+        <div class="breadcrumb !my-3 !text-start [&_ul]:m-0! [&_ul]:p-0!">
             <ul>
                 <li>
                     <a href="@Url.RouteUrl(NopRouteNames.General.HOMEPAGE)" title="@T("Categories.Breadcrumb.Top")">@T("Categories.Breadcrumb.Top")</a>
@@ -68,11 +69,11 @@
 
 @section CatalogFilters {
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CategoryDetailsBeforeFilters, additionalData = Model })
-    @await Html.PartialAsync("_CatalogFilters", Model.CatalogProductsModel)
+    @await Html.PartialAsync("_BoutiqueCategoryFilters", Model.CatalogProductsModel)
 }
 
-<div class="page category-page">
-    <div class="page-title">
+<div class="page category-page [&_.product-selectors]:flex! [&_.product-selectors]:flex-wrap! [&_.product-selectors]:items-center! [&_.product-selectors]:gap-3! [&_.product-selectors]:my-4! [&_.product-selectors]:p-0! [&_.product-selectors>div]:float-none! [&_.product-selectors>div]:m-0! [&_.product-selectors>div]:flex! [&_.product-selectors>div]:items-center! [&_.product-selectors>div]:gap-2! [&_.product-selectors_select]:w-auto! [&_.product-selectors_select]:max-w-full! [&_.product-selectors_select]:h-10! [&_.product-selectors_select]:m-0! [&_.product-selectors_span]:m-0! [&_.product-selectors_span]:text-[0.75rem]! max-[40rem]:[&_.product-viewmode]:hidden! max-[40rem]:[&_.product-sorting]:flex-[1_1_100%]! max-[40rem]:[&_.product-sorting_select]:flex-1! max-[40rem]:[&_.product-page-size]:flex-[1_1_100%]!">
+    <div class="page-title !mt-0 !mb-3">
         <h1>@Model.Name</h1>
     </div>
     <div class="page-body">
@@ -80,7 +81,7 @@
         @*description*@
         @if (!string.IsNullOrWhiteSpace(Model.Description))
         {
-            <div class="category-description">
+            <div class="category-description !mt-0 !mb-3 !text-[0.8125rem] !leading-[1.8] [&_p]:m-0! [&_p+p]:mt-2!">
                 @Html.Raw(Model.Description)
             </div>
         }

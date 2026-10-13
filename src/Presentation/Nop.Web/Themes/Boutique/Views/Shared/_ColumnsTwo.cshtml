@@ -1,5 +1,6 @@
 @{
     Layout = "_Root";
+    var compactCategory = ViewData["Boutique.CompactCategory"] as bool? == true;
 }
 @{
     //current category ID
@@ -29,7 +30,7 @@
 
 @await RenderSectionAsync("Breadcrumb", false)
 
-<aside class="side-2">
+<aside class="side-2 @(compactCategory ? "max-[62.5rem]:mt-0! max-[62.5rem]:mb-3!" : "")">
     @if (IsSectionDefined("left"))
     {
         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.LeftSideColumnBefore })
@@ -40,12 +41,14 @@
     {
         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.LeftSideColumnBefore })
         @await RenderSectionAsync("CatalogFilters", false)
+        <div class="@(compactCategory ? "max-[62.5rem]:hidden [&_.block:not(:has(li))]:hidden! [&_.block]:mb-4! [&_.title]:py-2! [&_.listbox]:p-3!" : "contents")">
         @await Component.InvokeAsync(typeof(CategoryNavigationViewComponent), new { currentCategoryId = currentCategoryId, currentProductId = currentProductId })
         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.LeftSideColumnAfterCategoryNavigation })
         @await Component.InvokeAsync(typeof(ManufacturerNavigationViewComponent), new { currentManufacturerId = currentManufacturerId })
         @await Component.InvokeAsync(typeof(VendorNavigationViewComponent))
         @await Component.InvokeAsync(typeof(RecentlyViewedProductsBlockViewComponent), new { productThumbPictureSize = 64 })
         @await Component.InvokeAsync(typeof(PopularProductTagsViewComponent))
+        </div>
         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.LeftSideColumnAfter })
     }
 </aside>
