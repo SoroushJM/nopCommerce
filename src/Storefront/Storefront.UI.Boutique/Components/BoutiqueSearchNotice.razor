@@ -1,0 +1,9 @@
+<div id="boutique-search-notice" hidden class="mt-2 w-full max-w-[19.375rem] [&[hidden]]:hidden min-[62.5625rem]:max-w-[19.375rem] max-[62.5rem]:max-w-none">
+    <BbAlert Variant="AlertVariant.Warning" Class="rounded-[0.75rem]! border-[0.0625rem]! border-border! bg-secondary! p-3! text-foreground!">
+        <BbAlertDescription id="boutique-search-message" Class="text-[0.75rem]! leading-[1.7]!">@Message</BbAlertDescription>
+    </BbAlert>
+</div>
+
+@code {
+    [Parameter] public string Message { get; set; } = "";
+}

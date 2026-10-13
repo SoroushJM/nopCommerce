@@ -9,7 +9,7 @@
 <form asp-route="@NopRouteNames.General.SEARCH" method="get" id="small-search-box-form" class="flex! items-center! gap-1! w-full! max-w-[19.375rem]! m-0! [padding:0_0.25rem_0_0.5rem]! border-[0.0625rem]! border-solid! border-border! rounded-[0.75rem]! bg-background! min-h-11! float-none! max-[62.5rem]:max-w-[none]!">
     @if (Model.ShowSearchBox)
     {
-        <input type="text" class="search-box-text bg-transparent! bg-none! text-foreground! border-0! w-full! min-w-0! flex-1! text-[0.75rem]! py-[0.625rem]! px-[0.75rem]! h-11! m-0! float-none!" id="@searchBoxId" autocomplete="off" name="@termFormName" placeholder="@T("Search.SearchBox.Tooltip")" aria-label="@T("Search.SearchBox.Text.Label")" />
+        <input type="text" class="search-box-text bg-transparent! bg-none! text-foreground! border-0! w-full! min-w-0! flex-1! text-[0.75rem]! py-[0.625rem]! px-[0.75rem]! h-11! m-0! float-none!" id="@searchBoxId" autocomplete="off" name="@termFormName" placeholder="@T("Search.SearchBox.Tooltip")" aria-label="@T("Search.SearchBox.Text.Label")" aria-describedby="boutique-search-message" />
         @if(Model.ShowSearchBoxCategories)
         {
             <select asp-for="SearchCategoryId" name="@categoryFormName" asp-items="Model.AvailableCategories" class="search-box-category"></select>
@@ -32,8 +32,9 @@
                 @if(Model.SearchTermMinimumLength > 0)
                 {
                     <text>
-                    if ($("#@searchBoxId").val() == "") {
-                        alert('@Html.Raw(JavaScriptEncoder.Default.Encode(T("Search.EnterSearchTerms").Text))');
+                    if (String($("#@searchBoxId").val() || "").trim() == "") {
+                        document.getElementById('boutique-search-notice').hidden = false;
+                        $("#@searchBoxId").attr('aria-invalid', 'true');
                         $("#@searchBoxId").focus();
                         return;
                     }
@@ -55,6 +56,12 @@
                 }
 
                 window.location.href = `@Url.RouteUrl(NopRouteNames.General.SEARCH)?${new URLSearchParams(formData).toString()}`;
+            });
+            $("#@searchBoxId").on('input', function () {
+                if (this.value.trim()) {
+                    document.getElementById('boutique-search-notice').hidden = true;
+                    this.removeAttribute('aria-invalid');
+                }
             });
         </script>
 
@@ -176,3 +183,7 @@
         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.SearchBox, additionalData = Model })
     }
 </form>
+@if (Model.ShowSearchBox)
+{
+    <component type="typeof(BoutiqueSearchNotice)" render-mode="Static" param-Message='@(T("Search.EnterSearchTerms").Text)' />
+}
