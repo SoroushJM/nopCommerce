@@ -4,6 +4,8 @@ let observer;
 let nextKey = 0;
 let scheduled = false;
 let running = false;
+let magnificFocusBridge;
+let dropdownEscape = false;
 // Keep a measurable native control for jQuery validation's :visible contract.
 // Important utilities override native theme select rules without custom CSS.
 const mirrorUtilities = "absolute! w-[.0625rem]! h-[.0625rem]! min-w-0! min-h-0! -m-[.0625rem]! p-0! border-[0rem]! [clip-path:inset(50%)]! overflow-hidden! whitespace-nowrap!".split(" ");
@@ -75,6 +77,7 @@ function snapshot(entry) {
     describedBy: select.getAttribute("aria-describedby"),
     value: select.value, values: Array.from(select.selectedOptions, option => option.value),
     rtl: getComputedStyle(select).direction === "rtl", multiple: select.multiple,
+    searchable: select.matches('.estimate-shipping-address-control[data-trigger="country-select"]'),
     required: select.required, disabled: select.matches(":disabled"),
     invalid: select.getAttribute("aria-invalid") === "true"
       || select.classList.contains("input-validation-error") || select.classList.contains("error"),
@@ -196,6 +199,7 @@ function release(entry) {
 }
 
 function refresh() {
+  configureShippingPopupFocus();
   for (const entry of entries.values()) {
     if (!entry.select.isConnected || !entry.host.isConnected) { release(entry); continue; }
     if (entry.select.nextElementSibling !== entry.host) entry.select.after(entry.host);
@@ -209,6 +213,48 @@ function refresh() {
   document.querySelectorAll("select:not([data-bb-select])").forEach(select => {
     if (!select.closest("[data-storefront-select-skip]")) mount(select);
   });
+}
+
+function ownedShippingDropdown(target) {
+  if (!(target instanceof Element)) return false;
+  const popup = window.jQuery?.magnificPopup?.instance;
+  if (!popup?.isOpen || !popup.wrap?.[0]) return false;
+  for (const entry of entries.values()) {
+    if (!entry.select.closest(".estimate-shipping-popup") || !popup.wrap[0].contains(entry.select)) continue;
+    const trigger = entry.host.querySelector('button[role="combobox"]');
+    const contentId = trigger?.getAttribute("aria-controls");
+    const content = contentId && document.getElementById(contentId);
+    if (content?.contains(target)) return true;
+  }
+  return false;
+}
+
+function configureShippingPopupFocus() {
+  const jquery = window.jQuery;
+  const popup = jquery?.magnificPopup?.instance;
+  if (!popup || magnificFocusBridge?.popup === popup || typeof popup._onFocusIn !== "function") return;
+  // The pinned native popup traps focus inside its wrap. BB dropdowns are
+  // portalled: permit only content owned by a native select in that same popup.
+  const original = popup._onFocusIn;
+  const wrapped = function (event) {
+    if (ownedShippingDropdown(event.target)) return;
+    return original.apply(this, arguments);
+  };
+  popup._onFocusIn = wrapped;
+  if (popup.isOpen) jquery(document).off("focusin.mfp", original).on("focusin.mfp", wrapped);
+  magnificFocusBridge = { popup, original, wrapped };
+}
+
+function dropdownKeyDown(event) {
+  if (event.key === "Escape") dropdownEscape = ownedShippingDropdown(event.target);
+}
+
+function dropdownKeyUp(event) {
+  if (event.key !== "Escape" || !dropdownEscape) return;
+  dropdownEscape = false;
+  // BB closes its own dropdown on keydown. Do not also close the shipping
+  // popup when Magnific handles the subsequent keyup.
+  event.stopPropagation();
 }
 
 function changed(event) {
@@ -257,6 +303,8 @@ export function startNativeSelects() {
   document.addEventListener("invalid", invalid, true);
   document.addEventListener("click", clickedLabel, true);
   document.addEventListener("focus", focused, true);
+  document.addEventListener("keydown", dropdownKeyDown, true);
+  document.addEventListener("keyup", dropdownKeyUp, true);
   schedule();
 }
 
@@ -288,5 +336,14 @@ export function stopNativeSelects() {
   document.removeEventListener("invalid", invalid, true);
   document.removeEventListener("click", clickedLabel, true);
   document.removeEventListener("focus", focused, true);
+  document.removeEventListener("keydown", dropdownKeyDown, true);
+  document.removeEventListener("keyup", dropdownKeyUp, true);
+  if (magnificFocusBridge) {
+    const { popup, original, wrapped } = magnificFocusBridge;
+    if (popup._onFocusIn === wrapped) popup._onFocusIn = original;
+    if (popup.isOpen) window.jQuery(document).off("focusin.mfp", wrapped).on("focusin.mfp", original);
+    magnificFocusBridge = null;
+  }
+  dropdownEscape = false;
   for (const entry of entries.values()) release(entry);
 }

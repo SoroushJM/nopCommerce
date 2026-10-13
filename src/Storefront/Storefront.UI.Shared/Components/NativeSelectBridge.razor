@@ -17,6 +17,27 @@
             }
         </BbMultiSelect>
     }
+    else if (_state.Searchable)
+    {
+        <BbCombobox TValue="string" @key="_optionsKey" Value="@_state.Value" ValueChanged="SetCountryValue"
+                    SelectedItemText="@DisplayText(_state.Value)" Disabled="_state.Disabled" Required="_state.Required"
+                    AriaLabel="@_state.Label" AriaDescribedBy="@_state.DescribedBy" Placeholder="@_state.Label"
+                    SearchPlaceholder="@(_state.Rtl ? "جست‌وجوی کشور…" : "Search countries…")"
+                    EmptyMessage="@(_state.Rtl ? "کشوری پیدا نشد" : "No countries found")" MatchTriggerWidth="true"
+                    PopoverWidth="bb:w-[12.5rem]"
+                    Class="sf-native-select-control w-full [&_button[role=combobox]]:min-h-11 [&_button[role=combobox]]:max-w-full [&_button[role=combobox]]:border-[.0625rem]! [&_button[role=combobox]]:font-[inherit] [&_[aria-invalid=true]]:border-destructive"
+                    aria-invalid="@(_state.Invalid ? "true" : null)">
+            @foreach (var group in _state.Options.GroupBy(option => option.GroupIndex))
+            {
+                <BbComboboxGroup @key="group.Key" Label="@group.First().GroupText">
+                    @foreach (var option in group)
+                    {
+                        <BbComboboxItem TValue="string" @key="option.Index" Value="@option.Value" Text="@option.Text" Disabled="@option.Disabled" />
+                    }
+                </BbComboboxGroup>
+            }
+        </BbCombobox>
+    }
     else
     {
         <BbSelect TValue="string" @key="_optionsKey" Value="@_state.Value" ValueChanged="SetValue" Disabled="_state.Disabled" Required="_state.Required"
@@ -65,6 +86,9 @@
 
     private string DisplayText(string value) => _state.Options.FirstOrDefault(option => option.Value == value)?.Text ?? _state.Label;
     private Task SetValue(string? value) => WriteValues([value ?? ""]);
+    // BB Combobox toggles the chosen item to null. A native country select does
+    // not clear when its current option is chosen again; keep that contract.
+    private Task SetCountryValue(string? value) => WriteValues([value ?? _state.Value]);
     private Task SetValues(IEnumerable<MultiSelectOption>? values) => WriteValues(values?.Select(value => value.Value).ToArray() ?? []);
 
     private async Task WriteValues(string[] values)
@@ -87,6 +111,7 @@
         public string[] Values { get; set; } = [];
         public bool Rtl { get; set; }
         public bool Multiple { get; set; }
+        public bool Searchable { get; set; }
         public bool Required { get; set; }
         public bool Disabled { get; set; }
         public bool Invalid { get; set; }
