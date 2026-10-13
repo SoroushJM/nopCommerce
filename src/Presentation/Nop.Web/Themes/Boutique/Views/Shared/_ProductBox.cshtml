@@ -120,22 +120,24 @@
                     {
                         addToCartText = T("ShoppingCart.PreOrder").Text;
                     }
-                    <button type="button" class="button-2 product-box-add-to-cart-button inline-flex! items-center! justify-center! border-[0.0625rem]! border-solid! border-transparent! rounded-[0.75rem]! bg-secondary! bg-none! text-foreground! text-[0.75rem]! leading-[1.8]! py-2! px-3! float-none! w-full! min-w-11! min-h-11! h-auto! indent-0! cursor-pointer! max-[40rem]:text-[0.6875rem]! hover:bg-primary! hover:text-primary-foreground!" onclick="AjaxCart.addproducttocart_catalog('@addtocartlink');return false;">@(addToCartText)</button>
+                    <button type="button" class="button-2 product-box-add-to-cart-button inline-flex! items-center! justify-center! border-[0.0625rem]! border-solid! border-primary! rounded-[0.625rem]! bg-primary! bg-none! text-primary-foreground! text-[0.75rem]! font-medium! leading-[1.8]! py-[0.75rem]! px-[1rem]! float-none! w-full! min-w-0! min-h-[2.75rem]! h-auto! indent-0! cursor-pointer! hover:bg-[#614936]! hover:border-[#614936]!" onclick="AjaxCart.addproducttocart_catalog('@addtocartlink');return false;">@(addToCartText)</button>
                 }
                 @if (!Model.ProductPrice.DisableAddToCompareListButton || !Model.ProductPrice.DisableWishlistButton)
                 {
-                    <div class="boutique-card-secondary-actions flex! justify-end! gap-2! min-h-11!  ">
+                    <div class="boutique-card-secondary-actions flex! items-stretch! gap-[0.5rem]! w-full! min-w-0!">
                         @if (!Model.ProductPrice.DisableWishlistButton)
                         {
                             @await Html.PartialAsync("_MoveToWishlistModal", Model.ProductToWishlist)
-                            <button type="button" class="button-2 add-to-wishlist-button inline-flex! items-center! justify-center! border-[0.0625rem]! border-solid! border-border! rounded-[9999rem]! bg-transparent! bg-none! text-foreground! text-[0.75rem]! leading-[1.8]! p-0! float-none! min-w-11! min-h-11! w-11! h-11! flex-[0_0_2.75rem]! indent-0! cursor-pointer! max-[40rem]:text-[0.6875rem]! hover:bg-secondary!" aria-label="@T("ShoppingCart.AddToWishlist")" title="@T("ShoppingCart.AddToWishlist")" onclick="AjaxCart.addproducttocart_catalog('@addtowishlistlink');return false;">
-                                <svg class="size-[1.25rem]!" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" /></svg>
+                            <button type="button" class="button-2 add-to-wishlist-button inline-flex! items-center! justify-center! gap-[0.375rem]! flex-1! border-[0.0625rem]! border-solid! border-border! rounded-[0.625rem]! bg-card! bg-none! text-muted-foreground! text-[0.6875rem]! leading-[1.6]! py-[0.625rem]! px-[0.5rem]! float-none! min-w-0! min-h-[2.5rem]! w-auto! h-auto! indent-0! cursor-pointer! hover:bg-secondary! hover:text-foreground!" aria-label="@T("ShoppingCart.AddToWishlist")" title="@T("ShoppingCart.AddToWishlist")" onclick="AjaxCart.addproducttocart_catalog('@addtowishlistlink');return false;">
+                                <svg class="size-[1rem]!" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" /></svg>
+                                <span>@T("Wishlist")</span>
                             </button>
                         }
                         @if (!Model.ProductPrice.DisableAddToCompareListButton)
                         {
-                            <button type="button" class="button-2 add-to-compare-list-button inline-flex! items-center! justify-center! border-[0.0625rem]! border-solid! border-border! rounded-[9999rem]! bg-transparent! bg-none! text-foreground! text-[0.75rem]! leading-[1.8]! p-0! float-none! min-w-11! min-h-11! w-11! h-11! flex-[0_0_2.75rem]! indent-0! cursor-pointer! max-[40rem]:text-[0.6875rem]! hover:bg-secondary!" aria-label="@T("ShoppingCart.AddToCompareList")" title="@T("ShoppingCart.AddToCompareList")" onclick="AjaxCart.addproducttocomparelist('@addtocomparelink');return false;">
-                                <svg class="size-[1.25rem]!" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4" width="6" height="16" rx="1.5" /><rect x="15" y="4" width="6" height="16" rx="1.5" /><path d="M6 8v4m12-4v8" /></svg>
+                            <button type="button" class="button-2 add-to-compare-list-button inline-flex! items-center! justify-center! gap-[0.375rem]! flex-1! border-[0.0625rem]! border-solid! border-border! rounded-[0.625rem]! bg-card! bg-none! text-muted-foreground! text-[0.6875rem]! leading-[1.6]! py-[0.625rem]! px-[0.5rem]! float-none! min-w-0! min-h-[2.5rem]! w-auto! h-auto! indent-0! cursor-pointer! hover:bg-secondary! hover:text-foreground!" aria-label="@T("ShoppingCart.AddToCompareList")" title="@T("ShoppingCart.AddToCompareList")" onclick="AjaxCart.addproducttocomparelist('@addtocomparelink');return false;">
+                                <svg class="size-[1rem]!" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4" width="6" height="16" rx="1.5" /><rect x="15" y="4" width="6" height="16" rx="1.5" /><path d="M6 8v4m12-4v8" /></svg>
+                                <span>@T("Products.Compare")</span>
                             </button>
                         }
                     </div>
