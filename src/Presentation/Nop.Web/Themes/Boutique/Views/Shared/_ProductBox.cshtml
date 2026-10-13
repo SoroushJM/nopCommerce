@@ -89,10 +89,7 @@
         <div class="add-info">
             @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductBoxAddinfoBefore, additionalData = Model })
             <div class="prices">
-                @if (!string.IsNullOrEmpty(Model.ProductPrice.OldPrice))
-                {
-                    <span class="price old-price">@Model.ProductPrice.OldPrice</span>
-                }
+                <span class="price old-price" aria-hidden="@(string.IsNullOrEmpty(Model.ProductPrice.OldPrice) ? "true" : null)">@Model.ProductPrice.OldPrice</span>
                 <span class="price actual-price">@Model.ProductPrice.Price</span>
                 @if (Model.ProductPrice.DisplayTaxShippingInfo)
                 {
@@ -125,15 +122,23 @@
                     }
                     <button type="button" class="button-2 product-box-add-to-cart-button" onclick="AjaxCart.addproducttocart_catalog('@addtocartlink');return false;">@(addToCartText)</button>
                 }
-                @if (!Model.ProductPrice.DisableAddToCompareListButton)
+                @if (!Model.ProductPrice.DisableAddToCompareListButton || !Model.ProductPrice.DisableWishlistButton)
                 {
-                    <button type="button" class="button-2 add-to-compare-list-button" title="@T("ShoppingCart.AddToCompareList")" onclick="AjaxCart.addproducttocomparelist('@addtocomparelink');return false;">@T("ShoppingCart.AddToCompareList")</button>
-                }
-                @if (!Model.ProductPrice.DisableWishlistButton)
-                {
-                    @await Html.PartialAsync("_MoveToWishlistModal", Model.ProductToWishlist)
-
-                    <button type="button" class="button-2 add-to-wishlist-button" title="@T("ShoppingCart.AddToWishlist")" onclick="AjaxCart.addproducttocart_catalog('@addtowishlistlink');return false;">@T("ShoppingCart.AddToWishlist")</button>
+                    <div class="boutique-card-secondary-actions">
+                        @if (!Model.ProductPrice.DisableWishlistButton)
+                        {
+                            @await Html.PartialAsync("_MoveToWishlistModal", Model.ProductToWishlist)
+                            <button type="button" class="button-2 add-to-wishlist-button" aria-label="@T("ShoppingCart.AddToWishlist")" title="@T("ShoppingCart.AddToWishlist")" onclick="AjaxCart.addproducttocart_catalog('@addtowishlistlink');return false;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" /></svg>
+                            </button>
+                        }
+                        @if (!Model.ProductPrice.DisableAddToCompareListButton)
+                        {
+                            <button type="button" class="button-2 add-to-compare-list-button" aria-label="@T("ShoppingCart.AddToCompareList")" title="@T("ShoppingCart.AddToCompareList")" onclick="AjaxCart.addproducttocomparelist('@addtocomparelink');return false;">
+                                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4" width="6" height="16" rx="1.5" /><rect x="15" y="4" width="6" height="16" rx="1.5" /><path d="M6 8v4m12-4v8" /></svg>
+                            </button>
+                        }
+                    </div>
                 }
             </div>
             @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductBoxAddinfoAfter, additionalData = Model })
