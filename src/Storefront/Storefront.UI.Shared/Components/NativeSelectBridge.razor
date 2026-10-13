@@ -25,7 +25,8 @@
                     SearchPlaceholder="@(_state.Rtl ? "جست‌وجوی کشور…" : "Search countries…")"
                     EmptyMessage="@(_state.Rtl ? "کشوری پیدا نشد" : "No countries found")" MatchTriggerWidth="true"
                     PopoverWidth="bb:w-[12.5rem]"
-                    Class="sf-native-select-control w-full [&_button[role=combobox]]:min-h-11 [&_button[role=combobox]]:max-w-full [&_button[role=combobox]]:border-[.0625rem]! [&_button[role=combobox]]:font-[inherit] [&_[aria-invalid=true]]:border-destructive"
+                    ActiveClass="bg-secondary! text-foreground!"
+                    Class="@ShippingTriggerClass"
                     aria-invalid="@(_state.Invalid ? "true" : null)">
             @foreach (var group in _state.Options.GroupBy(option => option.GroupIndex))
             {
@@ -42,7 +43,7 @@
     {
         <BbSelect TValue="string" @key="_optionsKey" Value="@_state.Value" ValueChanged="SetValue" Disabled="_state.Disabled" Required="_state.Required"
                   AriaLabel="@_state.Label" DisplayTextSelector="DisplayText" Class="sf-native-select-control w-full [&_button[role=combobox]]:min-h-11 [&_button[role=combobox]]:max-w-full [&_button[role=combobox]]:font-[inherit] [&_[aria-invalid=true]]:border-destructive">
-            <BbSelectTrigger TValue="string" Class="min-h-11 max-w-full font-[inherit] aria-invalid:border-destructive" id="@(_state.Id + "__bb")" aria-describedby="@_state.DescribedBy"
+            <BbSelectTrigger TValue="string" Class="@(_state.Shipping ? ShippingTriggerClass : "min-h-11 max-w-full font-[inherit] aria-invalid:border-destructive")" id="@(_state.Id + "__bb")" aria-describedby="@_state.DescribedBy"
                              aria-invalid="@(_state.Invalid ? "true" : null)" aria-required="@(_state.Required ? "true" : null)">
                 <BbSelectValue Placeholder="@_state.Label" />
             </BbSelectTrigger>
@@ -73,6 +74,7 @@
     private MultiSelectOption[] _multiValues = [];
     private IJSObjectReference? _module;
     private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
+    private const string ShippingTriggerClass = "sf-native-select-control w-full! min-w-0! max-w-full! h-[2.75rem]! min-h-[2.75rem]! rounded-[.625rem]! border-[.0625rem]! border-solid! border-input! bg-background! px-[.75rem]! py-[.5rem]! text-[.8125rem]! font-normal! font-[inherit]! text-foreground! shadow-none! outline-none! focus-visible:ring-[0rem]! focus-visible:[outline:.125rem_solid_var(--ring)]! focus-visible:outline-offset-[.125rem]! aria-invalid:border-destructive! [&_svg]:size-[1rem]! [&_span]:min-w-0 [&_span]:truncate";
 
     protected override void OnParametersSet()
     {
@@ -112,6 +114,7 @@
         public bool Rtl { get; set; }
         public bool Multiple { get; set; }
         public bool Searchable { get; set; }
+        public bool Shipping { get; set; }
         public bool Required { get; set; }
         public bool Disabled { get; set; }
         public bool Invalid { get; set; }

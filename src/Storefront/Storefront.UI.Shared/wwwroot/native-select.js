@@ -10,6 +10,9 @@ let dropdownEscape = false;
 // Important utilities override native theme select rules without custom CSS.
 const mirrorUtilities = "absolute! w-[.0625rem]! h-[.0625rem]! min-w-0! min-h-0! -m-[.0625rem]! p-0! border-[0rem]! [clip-path:inset(50%)]! overflow-hidden! whitespace-nowrap!".split(" ");
 const hostUtilities = "inline-block align-middle min-w-[min(8rem,100%)] max-w-full [&[hidden]]:hidden [.inputs_&]:w-full [.date-picker-wrapper_&]:flex-1 [.date-picker-wrapper_&]:min-w-20 [.date-picker-wrapper_&]:w-auto [&.qty-dropdown]:min-w-20";
+// Apply only to BB content owned by native shipping selects, including their
+// portalled search input. One focus border belongs to the search row.
+const shippingDropdownUtilities = "rounded-[.625rem]! border-[.0625rem]! border-solid! border-border! bg-background! p-0! text-[.8125rem]! text-foreground! shadow-[0_.5rem_1.5rem_0_rgb(0_0_0/0.12)]! outline-none! [&_[role=listbox]]:bg-background! [&_[role=listbox]]:text-[.8125rem]! [&_[role=listbox]_div:has(>input[role=combobox])]:border-b-[.0625rem]! [&_[role=listbox]_div:has(>input[role=combobox])]:border-border! [&_[role=listbox]_div:has(>input[role=combobox])]:px-[.75rem]! [&_[role=listbox]_div:has(>input[role=combobox])]:focus-within:ring-[0rem]! [&_[role=listbox]_div:has(>input[role=combobox])]:focus-within:border-primary! [&_input[role=combobox]]:h-[2.75rem]! [&_input[role=combobox]]:min-h-0! [&_input[role=combobox]]:min-w-0! [&_input[role=combobox]]:rounded-none! [&_input[role=combobox]]:border-[0rem]! [&_input[role=combobox]]:bg-transparent! [&_input[role=combobox]]:m-0! [&_input[role=combobox]]:p-[.5rem]! [&_input[role=combobox]]:text-[.8125rem]! [&_input[role=combobox]]:shadow-none! [&_input[role=combobox]]:outline-none! [&_input[role=combobox]]:focus:ring-[0rem]! [&_input[role=combobox]]:focus-visible:ring-[0rem]! [&_input[role=combobox]]:focus-visible:outline-none! [&_[role=listbox][id]]:max-h-[min(16rem,45dvh)]! [&_[role=listbox][id]]:p-[.25rem]! [&_[role=option]]:min-h-[2.5rem]! [&_[role=option]]:rounded-[.375rem]! [&_[role=option]]:px-[.625rem]! [&_[role=option]]:py-[.5rem]! [&_[role=option]]:text-[.8125rem]! [&_svg]:size-[1rem]!".split(" ");
 const dateLayouts = new Map();
 const dateUtilities = "flex gap-2 flex-wrap".split(" ");
 
@@ -78,7 +81,8 @@ function snapshot(entry) {
     value: select.value, values: Array.from(select.selectedOptions, option => option.value),
     rtl: getComputedStyle(select).direction === "rtl", multiple: select.multiple,
     searchable: select.matches('.estimate-shipping-address-control[data-trigger="country-select"]'),
-    required: select.required, disabled: select.matches(":disabled"),
+    shipping: select.classList.contains("estimate-shipping-address-control"),
+    required: select.required || select.getAttribute("aria-required") === "true", disabled: select.matches(":disabled"),
     invalid: select.getAttribute("aria-invalid") === "true"
       || select.classList.contains("input-validation-error") || select.classList.contains("error"),
     options,
@@ -113,7 +117,8 @@ async function update(entry) {
   const hidden = entry.select.hidden || entry.select.style.display === "none";
   if (entry.host.hidden !== hidden) entry.host.hidden = hidden;
   const className = "sf-native-select " + hostUtilities + " " + Array.from(entry.select.classList)
-    .filter(name => name !== "sf-select-mirror" && !mirrorUtilities.includes(name)).join(" ");
+    .filter(name => name !== "sf-select-mirror" && name !== "estimate-shipping-address-control" && !mirrorUtilities.includes(name)).join(" ")
+    + (entry.select.classList.contains("estimate-shipping-address-control") ? " sf-estimate-select w-full min-w-0" : "");
   // Do not write unchanged observed attributes: that would retrigger the observer.
   if (entry.host.className !== className) entry.host.className = className;
   if (json === entry.json) return;
@@ -200,6 +205,7 @@ function release(entry) {
 
 function refresh() {
   configureShippingPopupFocus();
+  styleShippingDropdowns();
   for (const entry of entries.values()) {
     if (!entry.select.isConnected || !entry.host.isConnected) { release(entry); continue; }
     if (entry.select.nextElementSibling !== entry.host) entry.select.after(entry.host);
@@ -213,6 +219,18 @@ function refresh() {
   document.querySelectorAll("select:not([data-bb-select])").forEach(select => {
     if (!select.closest("[data-storefront-select-skip]")) mount(select);
   });
+}
+
+function styleShippingDropdowns() {
+  for (const entry of entries.values()) {
+    if (!entry.select.closest(".estimate-shipping-popup")) continue;
+    const trigger = entry.host.querySelector('button[role="combobox"]');
+    const contentId = trigger?.getAttribute("aria-controls");
+    const content = contentId && document.getElementById(contentId);
+    if (!content) continue;
+    const missing = shippingDropdownUtilities.filter(name => !content.classList.contains(name));
+    if (missing.length) content.classList.add(...missing);
+  }
 }
 
 function ownedShippingDropdown(target) {

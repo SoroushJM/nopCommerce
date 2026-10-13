@@ -1,5 +1,8 @@
 ﻿@model EstimateShippingModel
 
+@{
+    var validationId = $"{Html.IdFor(model => model.CountryId)}-shipping-validation";
+}
 <link rel="stylesheet" href="~/lib_npm/magnific-popup/magnific-popup.css" />
 <script asp-exclude-from-bundle="true" src="~/js/public.estimateshipping.popup.js" asp-location="Footer"></script>
 <script asp-exclude-from-bundle="true" src="~/lib_npm/magnific-popup/jquery.magnific-popup.min.js" asp-location="Footer"></script>
@@ -9,7 +12,8 @@
 </div>
 
 <div class="estimate-shipping-row shipping-address">
-    <div class="estimate-shipping-row-item address-item">
+    <div class="estimate-shipping-row-item address-item grid gap-[.375rem]">
+        <label asp-for="CountryId" class="text-[.75rem] font-medium">@T("Shipping.EstimateShippingPopUp.Country") <nop-required /></label>
         <div class="estimate-shipping-row">
             <select asp-for="CountryId"
                     asp-items="Model.AvailableCountries"
@@ -18,33 +22,39 @@
                     data-url="@(Url.RouteUrl(NopRouteNames.Ajax.GET_STATES_BY_COUNTRY_ID))"
                     data-stateprovince="#@Html.IdFor(model => model.StateProvinceId)"
                     data-loading="#estimate-shipping-loading-progress"
-                    aria-label="@T("Shipping.EstimateShippingPopUp.Country")"></select>
-            <nop-required />
+                    aria-label="@T("Shipping.EstimateShippingPopUp.Country")" aria-required="true" aria-describedby="@validationId"></select>
         </div>
     </div>
-    <div class="estimate-shipping-row-item address-item">
+    <div class="estimate-shipping-row-item address-item grid gap-[.375rem]">
+        <label asp-for="StateProvinceId" class="text-[.75rem] font-medium">@T("Shipping.EstimateShippingPopUp.StateProvince")</label>
         <div class="estimate-shipping-row">
             <select asp-for="StateProvinceId"
                 asp-items="Model.AvailableStates"
                 class="estimate-shipping-address-control"
-                aria-label="@T("Shipping.EstimateShippingPopUp.StateProvince")"></select>
+                aria-label="@T("Shipping.EstimateShippingPopUp.StateProvince")" aria-describedby="@validationId"></select>
         </div>
     </div>
-    <div class="estimate-shipping-row-item address-item">
+    <div class="estimate-shipping-row-item address-item grid gap-[.375rem]">
+        @if (Model.UseCity)
+        {
+            <label asp-for="City" class="text-[.75rem] font-medium">@T("Shipping.EstimateShippingPopUp.City") <nop-required /></label>
+        }
+        else
+        {
+            <label asp-for="ZipPostalCode" class="text-[.75rem] font-medium">@T("Shipping.EstimateShippingPopUp.ZipPostalCode") <nop-required /></label>
+        }
         <div class="estimate-shipping-row">
             @if (Model.UseCity)
             {
                 <input asp-for="City"
                        class="estimate-shipping-address-control"
-                       placeholder="@T("Shipping.EstimateShippingPopUp.City")" />
-                <nop-required />
+                       placeholder="@T("Shipping.EstimateShippingPopUp.City")" aria-required="true" aria-describedby="@validationId" />
             }
             else
             {
                 <input asp-for="ZipPostalCode"
                        class="estimate-shipping-address-control"
-                       placeholder="@T("Shipping.EstimateShippingPopUp.ZipPostalCode")" />
-                <nop-required />
+                       placeholder="@T("Shipping.EstimateShippingPopUp.ZipPostalCode")" aria-required="true" aria-describedby="@validationId" />
             }
         </div>
     </div>
@@ -77,5 +87,5 @@
 
 <div class="apply-shipping-button-container">
     <button type="button" class="button-2 apply-shipping-button">@T("Shipping.EstimateShippingPopUp.SelectShippingOption.Button")</button>
-    <div class="message-failure"></div>
+    <div class="message-failure" id="@validationId" role="alert" aria-live="polite"></div>
 </div>
