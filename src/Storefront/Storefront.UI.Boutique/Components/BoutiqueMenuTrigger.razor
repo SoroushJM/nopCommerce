@@ -1,0 +1,12 @@
+<BbButton id="@TriggerId" Type="ButtonType.Button" Variant="ButtonVariant.Ghost"
+          aria-expanded="false" aria-controls="@ContentId"
+          Class="menu__toggle border-[0rem]! bg-transparent! bg-none! text-foreground! rounded-[0.625rem]! text-[0.75rem]! font-medium! min-[62.5625rem]:hidden! max-[62.5rem]:inline-flex! max-[62.5rem]:items-center! max-[62.5rem]:justify-center! max-[62.5rem]:gap-2! max-[62.5rem]:w-auto! max-[62.5rem]:min-h-11! max-[62.5rem]:h-11! max-[62.5rem]:py-0! max-[62.5rem]:px-3! max-[62.5rem]:m-0! max-[62.5rem]:bg-secondary! max-[62.5rem]:cursor-pointer! hover:bg-secondary! aria-expanded:bg-primary! aria-expanded:text-primary-foreground! focus-visible:ring-[0rem]! focus-visible:[outline:0.125rem_solid_var(--ring)]! focus-visible:outline-offset-[0.125rem]!">
+    <SfIcon Name="menu" Size="1.125m" />
+    <span>@Name</span>
+</BbButton>
+
+@code {
+    [Parameter] public string TriggerId { get; set; } = "";
+    [Parameter] public string ContentId { get; set; } = "";
+    [Parameter] public string Name { get; set; } = "";
+}
