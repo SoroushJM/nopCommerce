@@ -1,5 +1,5 @@
 <BbButton Type="ButtonType.Button" Variant="@(Kind == "cart" ? ButtonVariant.Default : ButtonVariant.Outline)"
-          onclick="@NativeClick" AriaLabel="@Label" title="@Label" Class="@ActionClass">
+          AdditionalAttributes="@NativeAttributes" AriaLabel="@Label" Class="@ActionClass">
     @if (Kind == "wishlist")
     {
         <svg class="size-[1rem]! shrink-0!" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" /></svg>
@@ -16,6 +16,12 @@
     [Parameter] public string Text { get; set; } = "";
     [Parameter] public string Label { get; set; } = "";
     [Parameter] public string NativeClick { get; set; } = "";
+
+    private Dictionary<string, object> NativeAttributes => new()
+    {
+        ["onclick"] = NativeClick,
+        ["title"] = Label
+    };
 
     private string ActionClass => Kind == "cart"
         ? "button-2 product-box-add-to-cart-button inline-flex! items-center! justify-center! border-[0.0625rem]! border-solid! border-primary! rounded-[0.625rem]! bg-primary! bg-none! text-primary-foreground! text-[0.75rem]! font-medium! leading-[1.6]! py-2! px-4! float-none! w-full! min-w-0! min-h-11! h-auto! indent-0! shadow-none! cursor-pointer! hover:bg-[#614936]! hover:border-[#614936]! focus-visible:ring-[0rem]! focus-visible:[outline:0.125rem_solid_var(--ring)]! focus-visible:outline-offset-[0.125rem]! [.product-list_&]:w-auto! [.product-list_&]:max-w-full!"
