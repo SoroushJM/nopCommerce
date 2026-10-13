@@ -1,0 +1,18 @@
+<BbFieldGroup Class="grid! grid-cols-[minmax(0,1fr)_auto]! items-start! gap-2! max-[25rem]:grid-cols-1!">
+    <BbField Class="min-w-0! gap-0!">
+        <BbFieldLabel For="newsletter-email" Class="absolute! size-[0.0625rem]! overflow-hidden! [clip-path:inset(50%)]! whitespace-nowrap!">@EmailLabel</BbFieldLabel>
+        <BbInput Id="newsletter-email" Name="NewsLetterEmail" Type="InputType.Email" Value="@Email"
+                 Placeholder="@Placeholder" AriaLabel="@EmailLabel" AriaInvalid="@Invalid" AriaDescribedBy="newsletter-email-validation"
+                 autocomplete="email" inputmode="email" dir="ltr"
+                 Class="newsletter-subscribe-text h-11! min-h-11! w-full! min-w-0! m-0! rounded-[0.625rem]! border-[0.0625rem]! border-solid! border-input! bg-card! px-3! py-2! text-[0.8125rem]! text-foreground! shadow-none! placeholder:text-end! placeholder:text-muted-foreground! focus-visible:[outline:0.125rem_solid_var(--ring)]! focus-visible:outline-offset-[0.125rem]! focus-visible:ring-[0rem]!" />
+    </BbField>
+    <BbButton id="newsletter-subscribe-button" Type="ButtonType.Button" Class="newsletter-subscribe-button h-11! min-h-11! w-auto! min-w-[5.25rem]! m-0! rounded-[0.625rem]! border-[0rem]! bg-primary! px-4! py-2! text-[0.8125rem]! font-medium! text-primary-foreground! shadow-none! hover:bg-primary/90! focus-visible:[outline:0.125rem_solid_var(--ring)]! focus-visible:outline-offset-[0.125rem]! focus-visible:ring-[0rem]! max-[25rem]:w-full!">@ButtonText</BbButton>
+</BbFieldGroup>
+
+@code {
+    [Parameter] public string? Email { get; set; }
+    [Parameter] public string Placeholder { get; set; } = "";
+    [Parameter] public string EmailLabel { get; set; } = "";
+    [Parameter] public string ButtonText { get; set; } = "";
+    [Parameter] public bool Invalid { get; set; }
+}
