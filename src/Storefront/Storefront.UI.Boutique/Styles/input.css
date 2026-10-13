@@ -56,34 +56,9 @@ body {background:var(--background);color:var(--foreground);font-family:Vazirmatn
 .boutique-shell .breadcrumb ul {display:flex;flex-wrap:wrap;align-items:center;gap:8px}
 .boutique-shell .breadcrumb li {display:flex;align-items:center;gap:8px}
 
-/* The masthead retains native search, customer links, currencies, languages and menus. */
-.boutique-shell .boutique-header {width:100%;margin:0 auto 36px;background:var(--card);border-bottom:1px solid var(--border);position:relative;padding:0 20px}
-.boutique-header-row {max-width:1180px;margin:auto;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:30px;align-items:center;padding:24px 0}
-.boutique-brand {display:inline-flex;align-items:center;justify-content:center;font-size:clamp(25px,3vw,36px);font-weight:500;letter-spacing:-1px;white-space:nowrap}
-.boutique-brand img {max-width:180px;max-height:65px;object-fit:contain}
-.boutique-shell .boutique-selectors {max-width:1180px;margin:auto;display:flex;justify-content:flex-end;flex-wrap:wrap;gap:8px;min-height:0;padding:8px 0;font-size:11px}
-.boutique-shell .boutique-selectors select {background:transparent;border:0;color:var(--muted-foreground);width:auto;max-width:160px;padding:4px}
-.boutique-shell .header-links-wrapper {position:relative;display:flex;justify-content:flex-end;margin:0}
-.boutique-shell .header-links {font-size:11px}
-.boutique-shell .header-links ul {display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px 12px}
-.boutique-shell .header-links li {margin:0}
-.boutique-shell .header-links a {border-radius:999px;background:transparent;padding:4px;color:var(--foreground)}
-.boutique-shell .header-links #topcartlink {padding:0;background:none}
-.boutique-shell .header-links .cart-label {padding-inline-start:22px;background-size:15px}
-.boutique-shell .search-box {margin:0;width:100%;text-align:start}
-.boutique-shell .search-box form {display:flex;align-items:center;gap:6px;max-width:280px;border-bottom:1px solid var(--border)}
-.boutique-shell .search-box input.search-box-text {background:transparent;color:var(--foreground);border:0;width:100%;min-width:0;flex:1;font-size:12px;padding:8px 0}
-.boutique-shell .search-box .search-box-button {background:none;border:0;color:var(--primary);padding:8px;width:auto;height:auto;font-size:11px}
-.boutique-shell .header-menu {position:relative;max-width:1180px;width:100%;margin:0 auto;border:0;border-top:1px solid var(--border);background:transparent}
-.boutique-shell .top-menu {display:flex;justify-content:center;align-items:center;flex-wrap:wrap;gap:6px}
-.boutique-shell .top-menu > li {margin:0;padding:0}
-.boutique-shell .top-menu > li > a {font-size:12px;line-height:1.8;color:var(--foreground);padding:14px 18px;min-height:0}
-.boutique-shell .top-menu .sublist {background:var(--card);border:1px solid var(--border);border-radius:12px;box-shadow:0 10px 24px #493c3310}
-.boutique-shell .top-menu .sublist a {color:var(--foreground);font-size:12px}
-.boutique-shell .menu-toggle {background:var(--secondary);border-radius:999px;color:var(--foreground);font-size:13px;margin:8px 0;padding:10px 18px}
-.boutique-shell .menu-container {padding:0;width:100%}
+/* Native navigation and flyout surfaces share the boutique palette. */
+.boutique-shell .boutique-header {width:100%;background:var(--card);border-bottom:1px solid var(--border);position:relative}
 .boutique-shell .menu {font-size:12px}
-.boutique-shell .menu__toggle {border:0;border-radius:999px;background:var(--secondary);color:var(--foreground);padding:10px 18px;margin:8px 0;font-size:13px;font-weight:500}
 .boutique-shell .menu__item, .boutique-shell .menu > .menu__item {background:transparent;border-color:var(--border);color:var(--foreground)}
 .boutique-shell .menu__item-toggle, .boutique-shell .menu__link {font-size:12px;color:var(--foreground)}
 .boutique-shell .menu__grid-view, .boutique-shell .menu__list-view {background:var(--card);border-color:var(--border);border-radius:12px;box-shadow:0 10px 24px #493c3310}
@@ -342,19 +317,6 @@ body {background:var(--background);color:var(--foreground);font-family:Vazirmatn
 }
 @media (max-width:1000px) {
  .boutique-shell .master-wrapper-content {width:calc(100% - 32px)}
- .boutique-shell .boutique-header {padding:0 16px;margin-bottom:22px}
- .boutique-header-row {grid-template-columns:1fr;gap:16px;padding:12px 0 20px}
- .boutique-header-row .boutique-brand {grid-row:1;justify-self:center;font-size:30px}
- .boutique-header-row .header-links-wrapper {justify-content:center;grid-row:2}
- .boutique-shell .header-links ul {justify-content:center}
- .boutique-header-row .search-box {grid-row:3}
- .boutique-shell .search-box form {max-width:none}
- .boutique-shell .boutique-selectors {padding:4px 0;justify-content:center}
- .boutique-shell .top-menu.notmobile {display:none}
- /* nopCommerce native menu: public.menu.js toggles .menu-dropdown--active on .menu-container. */
- .boutique-shell .menu-container.menu-dropdown > .menu__toggle {min-height:44px}
- .boutique-shell .menu-container.menu-dropdown > .menu {max-height:0!important;opacity:0!important;visibility:hidden!important;overflow:hidden!important;pointer-events:none!important;transition:max-height .24s ease,opacity .18s ease,visibility 0s linear .24s}
- .boutique-shell .menu-container.menu-dropdown.menu-dropdown--active > .menu {max-height:70vh!important;opacity:1!important;visibility:visible!important;overflow-y:auto!important;pointer-events:auto!important;transition-delay:0s}
  .boutique-shell .side-2 {margin:20px 0}
  .boutique-shell .product-grid .item-grid {grid-template-columns:repeat(3,minmax(0,1fr));gap:24px 15px}
  .boutique-shell .block .title {margin:0}
@@ -365,17 +327,6 @@ body {background:var(--background);color:var(--foreground);font-family:Vazirmatn
 @media (max-width:640px) {
  .boutique-shell .master-wrapper-content {width:calc(100% - 28px);margin-bottom:40px}
  .boutique-shell .wrap {width:calc(100% - 28px)}
- /* Keep every native header control available while giving the first screen back to the catalogue. */
- .boutique-shell .boutique-header {margin-bottom:14px}
- .boutique-shell .boutique-selectors {padding:2px 0;gap:4px;font-size:10px}
- .boutique-header-row {grid-template-columns:minmax(0,1fr) auto;column-gap:12px;row-gap:6px;padding:8px 0 10px}
- .boutique-header-row .boutique-brand {grid-column:2;grid-row:1;font-size:27px;justify-self:end}
- .boutique-header-row .header-links-wrapper {grid-column:1;grid-row:1;justify-content:start}
- .boutique-shell .header-links ul {justify-content:start;gap:5px 8px}
- .boutique-header-row .search-box {grid-column:1 / -1;grid-row:2}
- .boutique-shell .search-box input.search-box-text {padding:6px 0}
- .boutique-shell .search-box .search-box-button {padding:6px}
- .boutique-shell .menu-toggle {margin:4px 0;padding:7px 14px;font-size:12px;min-height:44px}
  .boutique-shell .page-title {margin:24px 0}
  .boutique-hero {grid-template-columns:1fr;border-radius:18px;margin-top:0}
  .boutique-hero-copy {padding:36px 28px 32px;align-items:center;text-align:center}
@@ -435,6 +386,77 @@ body {background:var(--background);color:var(--foreground);font-family:Vazirmatn
  .boutique-footer-brand {padding:30px 16px 20px}
  .boutique-footer-brand > a {font-size:25px}
  .boutique-shell .footer-lower {font-size:10px;padding:18px 16px}
+}
+/* Boutique masthead resets native header sizing before placing its controls. */
+.boutique-shell .boutique-header.header {margin:0 auto 24px;padding:0 20px;z-index:30;text-align:start}
+.boutique-shell .boutique-header .boutique-header-row {width:100%;max-width:1180px;margin:0 auto;float:none;display:grid;grid-template-columns:minmax(0,1fr) auto minmax(0,1fr);gap:28px;align-items:center;padding:20px 0;min-height:0;height:auto;border:0}
+.boutique-shell .boutique-header .boutique-header-row::before, .boutique-shell .boutique-header .boutique-header-row::after {display:none}
+.boutique-shell .boutique-header .boutique-brand {display:inline-flex;align-items:center;justify-content:center;font-size:30px;font-weight:550;line-height:1.5;letter-spacing:-1px;min-width:0;white-space:nowrap;color:var(--foreground);grid-column:2;grid-row:1;justify-self:center}
+.boutique-shell .boutique-header .boutique-brand img {display:block;max-width:180px;max-height:54px;object-fit:contain}
+.boutique-shell .boutique-header .header-links-wrapper {position:relative;display:flex;justify-content:flex-end;margin:0;padding:0;float:none;width:auto;min-width:0;text-align:start;grid-column:3;grid-row:1}
+.boutique-shell .boutique-header .header-links {font-size:12px;margin:0;padding:0}
+.boutique-shell .boutique-header .header-links > ul {display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:4px;margin:0;padding:0}
+.boutique-shell .boutique-header .header-links li {margin:0;padding:0;float:none}
+.boutique-shell .boutique-header .header-links > ul > li > a,
+.boutique-shell .boutique-header .boutique-account > summary {position:relative;display:flex;align-items:center;justify-content:center;width:44px;height:44px;min-height:44px;padding:0;border:0;border-radius:50%;background:transparent;color:var(--foreground);cursor:pointer;text-decoration:none;list-style:none}
+.boutique-shell .boutique-header .header-links > ul > li > a:hover,
+.boutique-shell .boutique-header .boutique-account > summary:hover,
+.boutique-shell .boutique-header .boutique-account[open] > summary {background:var(--secondary)}
+.boutique-shell .boutique-header .header-links #topcartlink {padding:0;background:none}
+.boutique-shell .boutique-header .header-links svg {display:block;flex:none}
+.boutique-shell .boutique-header .header-links .cart-qty,
+.boutique-shell .boutique-header .header-links .wishlist-qty,
+.boutique-shell .boutique-header .header-links .inbox-unread {position:absolute;inset-block-start:0;inset-inline-end:-1px;min-width:19px;padding:0 3px;border-radius:10px;background:var(--secondary);color:var(--foreground);font-size:10px;line-height:19px;text-align:center;white-space:nowrap}
+.boutique-shell .boutique-header .boutique-account {position:relative}
+.boutique-shell .boutique-header .boutique-account > summary::marker,
+.boutique-shell .boutique-header .boutique-account > summary::-webkit-details-marker {display:none;content:''}
+.boutique-shell .boutique-header .boutique-account-panel {position:absolute;inset-block-start:calc(100% + 8px);inset-inline-end:0;z-index:35;width:200px;display:block;padding:8px;margin:0;background:var(--card);border:1px solid var(--border);border-radius:14px;box-shadow:0 12px 28px #493c3315}
+.boutique-shell .boutique-header .boutique-account-panel a {display:flex;align-items:center;min-height:44px;padding:8px 14px;border-radius:8px;background:transparent;font-size:13px;color:var(--foreground)}
+.boutique-shell .boutique-header .boutique-account-panel a:hover {background:var(--muted)}
+.boutique-shell .boutique-header .search-box {margin:0;padding:0;float:none;width:100%;min-width:0;text-align:start;position:relative;grid-column:1;grid-row:1}
+.boutique-shell .boutique-header .search-box form {display:flex;align-items:center;gap:4px;width:100%;max-width:310px;margin:0;padding:0 4px 0 8px;border:1px solid var(--border);border-radius:12px;background:var(--background);min-height:44px;float:none}
+.boutique-shell .boutique-header .search-box input.search-box-text {background:transparent;color:var(--foreground);border:0;width:100%;min-width:0;flex:1;font-size:12px;padding:10px 12px;height:44px;margin:0;float:none}
+.boutique-shell .boutique-header .search-box .search-box-button {display:flex;align-items:center;justify-content:center;flex:none;background:none;border:0;border-radius:8px;color:var(--primary);padding:0;width:44px;height:44px;min-height:44px;margin:0;float:none;font-size:0}
+.boutique-shell .boutique-header .search-box .search-box-button::before {content:'';display:block;width:20px;height:20px;background:currentColor;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='black' stroke-width='1.7' stroke-linecap='round'%3E%3Ccircle cx='10.5' cy='10.5' r='7'/%3E%3Cpath d='m16 16 5 5'/%3E%3C/svg%3E") center/contain no-repeat}
+.boutique-shell .boutique-header .search-box .search-box-button:hover {background:var(--secondary)}
+.boutique-shell .boutique-header .boutique-header-bottom {position:relative;display:flex;align-items:center;justify-content:space-between;gap:12px;max-width:1180px;margin:0 auto;border-top:1px solid var(--border)}
+.boutique-shell .boutique-header .header-menu {position:static;flex:1;max-width:none;min-width:0;width:auto;margin:0;padding:0;border:0;background:transparent;text-align:start}
+.boutique-shell .boutique-header .boutique-selectors {display:flex;align-items:center;justify-content:flex-end;flex-wrap:wrap;gap:8px;width:auto;max-width:none;margin:0;padding:0;min-height:44px;font-size:11px;float:none;flex:none}
+.boutique-shell .boutique-header .boutique-selectors > div {margin:0;padding:0;float:none;min-width:0}
+.boutique-shell .boutique-header .boutique-selectors select {background:transparent;border:0;color:var(--muted-foreground);width:auto;max-width:140px;min-height:44px;padding:4px}
+.boutique-shell .boutique-header .boutique-selectors .sf-native-select {width:auto;min-width:76px;max-width:140px}
+.boutique-shell .boutique-header .boutique-selectors button[role=combobox] {width:auto;min-width:76px;padding:0 10px;border:0;background:transparent;border-radius:8px;box-shadow:none;font-size:11px;gap:8px;color:var(--muted-foreground)}
+.boutique-shell .boutique-header .boutique-selectors button[role=combobox]:hover {background:var(--muted)}
+.boutique-shell .boutique-header .menu-container {position:static;margin:0;padding:0;width:100%;display:block}
+.boutique-shell .boutique-header .menu__toggle {border:0;background:transparent;color:var(--foreground);border-radius:8px;font-size:12px;font-weight:500}
+.boutique-shell .boutique-visually-hidden {position:absolute!important;width:1px!important;height:1px!important;padding:0!important;margin:-1px!important;overflow:hidden!important;clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
+@media (max-width:1000px) {
+ .boutique-shell .boutique-header.header {padding:0 16px;margin-bottom:18px}
+ .boutique-shell .boutique-header .boutique-header-row {grid-template-columns:minmax(0,1fr) auto;column-gap:12px;row-gap:12px;padding:12px 0}
+ .boutique-shell .boutique-header .boutique-header-row .boutique-brand {grid-column:1;grid-row:1;justify-self:start;font-size:25px}
+ .boutique-shell .boutique-header .boutique-header-row .header-links-wrapper {grid-column:2;grid-row:1;justify-content:flex-end}
+ .boutique-shell .boutique-header .boutique-header-row .search-box {grid-column:1 / -1;grid-row:2}
+ .boutique-shell .boutique-header .search-box form {max-width:none}
+ .boutique-shell .boutique-header .boutique-header-bottom {gap:8px;min-height:48px}
+ .boutique-shell .boutique-header .boutique-selectors {gap:4px;flex:0 1 auto}
+ .boutique-shell .boutique-header .header-menu {flex:1 0 auto}
+ .boutique-shell .boutique-header .menu-container.menu-dropdown > .menu__toggle {display:inline-flex;align-items:center;justify-content:flex-start;gap:8px;width:auto;min-height:44px;height:44px;padding:0 10px;margin:0;cursor:pointer}
+ .boutique-shell .boutique-header .menu-container.menu-dropdown > .menu__toggle:hover,
+ .boutique-shell .boutique-header .menu-container.menu-dropdown > .menu__toggle[aria-expanded=true] {background:var(--secondary)}
+ .boutique-shell .boutique-header .menu-container.menu-dropdown > .menu {position:absolute;inset-block-start:calc(100% + 4px);inset-inline:0;width:100%;margin:0;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:14px;box-shadow:0 14px 30px #493c3315;max-height:0!important;opacity:0!important;visibility:hidden!important;overflow:hidden!important;pointer-events:none!important;transition:opacity .16s ease,visibility 0s linear .16s;z-index:34}
+ .boutique-shell .boutique-header .menu-container.menu-dropdown.menu-dropdown--active > .menu {max-height:70vh!important;opacity:1!important;visibility:visible!important;overflow-y:auto!important;pointer-events:auto!important;transition-delay:0s}
+}
+@media (max-width:640px) {
+ .boutique-shell .boutique-header.header {padding:0 14px;margin-bottom:14px}
+ .boutique-shell .boutique-header .boutique-header-row {column-gap:8px;row-gap:8px;padding:10px 0}
+ .boutique-shell .boutique-header .boutique-header-row .boutique-brand {font-size:22px;letter-spacing:-.65px}
+ .boutique-shell .boutique-header .boutique-brand img {max-width:130px;max-height:44px}
+ .boutique-shell .boutique-header .header-links > ul {gap:0}
+ .boutique-shell .boutique-header .boutique-account-panel {inset-inline-end:-88px}
+}
+@media (max-width:360px) {
+ .boutique-shell .boutique-header .boutique-header-row .boutique-brand {font-size:19px}
+ .boutique-shell .boutique-header .boutique-header-row:has(.ico-inbox) .boutique-brand {font-size:16px}
 }
 @media (prefers-reduced-motion:reduce) {
   .boutique-shell *, .boutique-shell *::before, .boutique-shell *::after {scroll-behavior:auto!important;transition:none!important}

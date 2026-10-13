@@ -9,8 +9,11 @@
 
 
 <nav class="menu-container menu-dropdown">
-    <button type="button" id="menu-@Model.Id" class="menu__toggle" aria-expanded="false">@Model.Name</button>
-    <div role="menu" class="menu @Model.CssClass" aria-labelledby="menu-@Model.Id">
+    <button type="button" id="menu-@Model.Id" class="menu__toggle" aria-expanded="false" aria-controls="boutique-menu-content-@Model.Id">
+        <component type="typeof(SfIcon)" render-mode="Static" param-Name='@("menu")' param-Size="20" />
+        <span>@Model.Name</span>
+    </button>
+    <div id="boutique-menu-content-@Model.Id" role="menu" class="menu @Model.CssClass" aria-labelledby="menu-@Model.Id">
         @foreach (var menuItem in Model.Items)
         {
             @if (menuItem.ChildrenItems.Any())
