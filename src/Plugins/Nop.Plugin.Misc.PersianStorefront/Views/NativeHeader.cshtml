@@ -20,12 +20,20 @@
                 @await Component.InvokeAsync(typeof(HeaderLinksViewComponent))
                 <div class="hidden">@await Component.InvokeAsync(typeof(FlyoutShoppingCartViewComponent))</div>
             </div>
-            <div class="sf-native-selectors flex flex-wrap items-center justify-end gap-2 text-xs [&>div]:m-0! [&>div]:w-auto!">
-            @await Component.InvokeAsync(typeof(TaxTypeSelectorViewComponent))
-            @await Component.InvokeAsync(typeof(CurrencySelectorViewComponent))
-            @await Component.InvokeAsync(typeof(LanguageSelectorViewComponent))
-            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderSelectors })
-            </div>
+            @{
+                var taxSelector = await Component.InvokeAsync(typeof(TaxTypeSelectorViewComponent));
+                var selectorWidgets = await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderSelectors });
+                using var selectorWriter = new System.IO.StringWriter();
+                taxSelector.WriteTo(selectorWriter, System.Text.Encodings.Web.HtmlEncoder.Default);
+                selectorWidgets.WriteTo(selectorWriter, System.Text.Encodings.Web.HtmlEncoder.Default);
+                var headerSelectors = selectorWriter.ToString();
+            }
+            @if (!string.IsNullOrWhiteSpace(headerSelectors))
+            {
+                <div class="sf-native-selectors flex flex-wrap items-center justify-end gap-2 text-xs [&>div]:m-0! [&>div]:w-auto!">
+                    @Html.Raw(headerSelectors)
+                </div>
+            }
         </div>
         <div class="wrap mx-auto max-w-[80rem] px-8 max-md:px-5 sf-header-main flex items-center justify-between gap-5 py-2 max-md:flex-wrap max-md:gap-2">
             @if (storeSettings.LogoPictureId > 0)

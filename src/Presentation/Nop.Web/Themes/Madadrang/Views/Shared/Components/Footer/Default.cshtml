@@ -6,6 +6,12 @@
 @inject IWorkContext workContext
 @{
     var navigation = Context.Items["Madadrang.Navigation"] as StoreNavigation;
+    var currencySelector = await Component.InvokeAsync(typeof(CurrencySelectorViewComponent));
+    var languageSelector = await Component.InvokeAsync(typeof(LanguageSelectorViewComponent));
+    using var selectorWriter = new System.IO.StringWriter();
+    currencySelector.WriteTo(selectorWriter, System.Text.Encodings.Web.HtmlEncoder.Default);
+    languageSelector.WriteTo(selectorWriter, System.Text.Encodings.Web.HtmlEncoder.Default);
+    var footerSelectors = selectorWriter.ToString();
 }
 <div class="sf-stationery-footer">
     <component type="typeof(StorefrontFooter)" render-mode="Static"
@@ -32,6 +38,17 @@
                 </div>
                 @await Component.InvokeAsync(typeof(NewsLetterBoxViewComponent))
             </div>
+            @if (!string.IsNullOrWhiteSpace(footerSelectors))
+            {
+                <div class="sf-footer-selectors flex! w-full! min-w-0! flex-wrap! items-center! justify-start! gap-3! text-[0.75rem]!
+                    [&>div]:m-0! [&>div]:w-auto! [&>div]:min-w-0! [&>div]:float-none!
+                    [&_.sf-native-select]:min-w-[7rem]! [&_.sf-native-select]:max-w-full!
+                    [&_select]:h-11! [&_select]:min-h-11! [&_select]:max-w-full! [&_select]:m-0! [&_select]:rounded-[0.625rem]! [&_select]:border-[0.0625rem]! [&_select]:border-solid! [&_select]:border-border! [&_select]:bg-background! [&_select]:px-3! [&_select]:text-[0.75rem]!
+                    [&_[role=combobox]]:h-11! [&_[role=combobox]]:min-h-11! [&_[role=combobox]]:rounded-[0.625rem]! [&_[role=combobox]]:border-[0.0625rem]! [&_[role=combobox]]:border-border! [&_[role=combobox]]:bg-background! [&_[role=combobox]]:px-3! [&_[role=combobox]]:text-[0.75rem]! [&_[role=combobox]]:shadow-none!
+                    [&_.language-list]:flex! [&_.language-list]:flex-wrap! [&_.language-list]:items-center! [&_.language-list]:gap-2! [&_.language-list]:m-0! [&_.language-list]:p-0! [&_.language-list_li]:m-0! [&_.language-list_a]:flex! [&_.language-list_a]:min-h-11! [&_.language-list_a]:items-center! [&_.language-list_a]:px-2!">
+                    @Html.Raw(footerSelectors)
+                </div>
+            }
         </section>
         <section class="footer-lower w-full! max-w-[80rem]! mx-auto! px-8! max-md:px-4.5! py-3! flex! flex-wrap! items-center! justify-between! gap-2! text-xs! max-md:flex-col! max-md:items-start! [&_.theme-selector]:float-none! [&_.theme-selector]:m-0! [&_.theme-selector]:max-w-full!">
             <div class="footer-info float-none! min-w-0! max-w-full! break-words! leading-6!">
