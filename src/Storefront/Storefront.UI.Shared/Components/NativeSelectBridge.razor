@@ -5,7 +5,7 @@
 <BbDirectionProvider Direction="@(_state.Rtl ? TextDirection.RightToLeft : TextDirection.LeftToRight)">
     @if (_state.Multiple)
     {
-        <BbMultiSelect TValue="string" @key="_optionsKey" Values="_state.Values" ValuesChanged="SetValues" Disabled="_state.Disabled"
+        <BbMultiSelect TValue="MultiSelectOption" @key="_optionsKey" Values="_multiValues" ValuesChanged="SetValues" Disabled="_state.Disabled"
                        Required="_state.Required" AriaLabel="@_state.Label" AriaDescribedBy="@_state.DescribedBy"
                        Placeholder="@_state.Label" SearchPlaceholder="@(_state.Rtl ? "جست‌وجو…" : "Search…")"
                        EmptyMessage="@(_state.Rtl ? "گزینه‌ای پیدا نشد" : "No options found")" ShowSelectAll="false"
@@ -13,7 +13,7 @@
                        Class="sf-native-select-control" aria-invalid="@(_state.Invalid ? "true" : null)">
             @foreach (var option in _state.Options)
             {
-                <BbMultiSelectItem TValue="string" @key="option.Index" Value="@option.Value" Text="@option.Text" Disabled="@option.Disabled" />
+                <BbMultiSelectItem TValue="MultiSelectOption" @key="option.Index" Value="@(new MultiSelectOption(option.Value, option.Text))" Text="@option.Text" Disabled="@option.Disabled" />
             }
         </BbMultiSelect>
     }
@@ -49,6 +49,7 @@
     [Parameter] public string StateJson { get; set; } = "{}";
     private NativeSelectState _state = new();
     private string _optionsKey = "";
+    private MultiSelectOption[] _multiValues = [];
     private IJSObjectReference? _module;
     private static readonly JsonSerializerOptions JsonOptions = new() { PropertyNameCaseInsensitive = true };
 
@@ -58,11 +59,13 @@
         // The pinned BB option registry initializes only once. Rebuild it when
         // native AJAX replaces options, including their order/text/disabled state.
         _optionsKey = JsonSerializer.Serialize(_state.Options);
+        _multiValues = _state.Options.Where(option => _state.Values.Contains(option.Value))
+            .Select(option => new MultiSelectOption(option.Value, option.Text)).ToArray();
     }
 
     private string DisplayText(string value) => _state.Options.FirstOrDefault(option => option.Value == value)?.Text ?? _state.Label;
     private Task SetValue(string? value) => WriteValues([value ?? ""]);
-    private Task SetValues(IEnumerable<string>? values) => WriteValues(values?.ToArray() ?? []);
+    private Task SetValues(IEnumerable<MultiSelectOption>? values) => WriteValues(values?.Select(value => value.Value).ToArray() ?? []);
 
     private async Task WriteValues(string[] values)
     {
@@ -98,5 +101,12 @@
         public bool Disabled { get; set; }
         public int GroupIndex { get; set; }
         public string GroupText { get; set; } = "";
+    }
+
+    // In pinned BB's compositional mode the registry appears only when opened.
+    // The fallback string must therefore be the human label, not the form ID.
+    public sealed record MultiSelectOption(string Value, string Text)
+    {
+        public override string ToString() => Text;
     }
 }

@@ -87,6 +87,14 @@ async function update(entry) {
   try {
     await entry.component.setParameters({ bridgeKey: entry.key, stateJson: json });
     entry.json = json;
+    // MultiSelect forwards extra attributes to its wrapper. Keep validation
+    // semantics on the actual focusable trigger as well as on the native field.
+    const trigger = entry.host.querySelector('button[role="combobox"]');
+    const invalid = JSON.parse(json).invalid;
+    if (trigger) {
+      if (invalid && trigger.getAttribute("aria-invalid") !== "true") trigger.setAttribute("aria-invalid", "true");
+      if (!invalid && trigger.hasAttribute("aria-invalid")) trigger.removeAttribute("aria-invalid");
+    }
   } catch (error) {
     if (entry.select.isConnected && entry.host.isConnected) console.error("Storefront select update failed", error);
   } finally {

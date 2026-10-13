@@ -10,5 +10,8 @@ builder.Services.AddBlazorBlueprintComponents(localizer =>
 {
     localizer.Set("Sheet.Close", "بستن");
     localizer.Set("Dialog.Close", "بستن");
+    localizer.Set("MultiSelect.Remove", "حذف {0}");
+    localizer.Set("MultiSelect.Clear", "پاک کردن انتخاب‌ها");
+    localizer.Set("MultiSelect.More", "{0} مورد دیگر");
 });
 await builder.Build().RunAsync();
