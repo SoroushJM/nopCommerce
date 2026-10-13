@@ -10,7 +10,10 @@ for required in ['Nop.Web.dll','Nop.Docker.Views.dll','libSkiaSharp.so','Microso
 files=list(app.rglob('*'))
 if not (app/'Themes'/brand).is_dir() or not any(x.is_file() for x in [app/('Storefront.UI.'+brand+'.dll'), app/'Plugins/Misc.PersianStorefront'/('Storefront.UI.'+brand+'.dll')]) or not list((app/'Plugins/Misc.PersianStorefront/Content/Client/wwwroot/_framework').glob('Storefront.UI.'+brand+'*.wasm')): raise SystemExit('Selected native theme, UI assembly or browser module is missing')
 if any(x.is_file() and (x.name.startswith('Storefront.UI.'+opposite) or '/Storefront.UI.'+opposite+'/' in x.as_posix() or '/Themes/'+opposite+'/' in x.as_posix()) for x in files): raise SystemExit('Package contains opposite brand')
-stamp=time.strftime('%Y%m%dT%H%M%S',time.gmtime()); rev=subprocess.check_output(['git','-C',str(here.parent.parent),'rev-parse','--short=12','HEAD'],text=True).strip(); tag=f'nop-dual:{a.theme}-{rev}-{stamp}'; remote=f'{root}/releases/{stamp}-{a.theme}'
+package_manifest=app.parent/'package.json'
+package_revision=json.loads(package_manifest.read_text(encoding='utf-8-sig')).get('SourceCommit') if package_manifest.is_file() else None
+if package_revision and not re.fullmatch('[a-f0-9]{40}',package_revision): raise SystemExit('Invalid published source revision')
+stamp=time.strftime('%Y%m%dT%H%M%S',time.gmtime()); rev=package_revision[:12] if package_revision else subprocess.check_output(['git','-C',str(here.parent.parent),'rev-parse','--short=12','HEAD'],text=True).strip(); tag=f'nop-dual:{a.theme}-{rev}-{stamp}'; remote=f'{root}/releases/{stamp}-{a.theme}'
 if a.resume_release:
  if not re.fullmatch(r'\d{8}T\d{6}-'+a.theme,a.resume_release): raise SystemExit('Invalid scoped release directory')
  remote=root+'/releases/'+a.resume_release
