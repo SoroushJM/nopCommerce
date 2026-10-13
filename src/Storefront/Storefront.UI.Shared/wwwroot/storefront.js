@@ -216,6 +216,44 @@ export function navigate(url) {
   location.assign(url);
 }
 
+const purchaseListeners = new Map();
+let nextPurchaseListener = 0;
+
+export function listenForPurchase(reference) {
+  const id = ++nextPurchaseListener;
+  const open = (url) => {
+    if (window.MadadrangPurchase) window.MadadrangPurchase.pending = null;
+    return reference.invokeMethodAsync("OpenPurchase", url);
+  };
+  const listener = (event) => open(event.detail.url);
+  purchaseListeners.set(id, listener);
+  window.addEventListener("storefront:purchase", listener);
+  const pending = window.MadadrangPurchase?.pending;
+  if (pending) queueMicrotask(() => open(pending));
+  return id;
+}
+
+export function stopListeningForPurchase(id) {
+  const listener = purchaseListeners.get(id);
+  if (listener) window.removeEventListener("storefront:purchase", listener);
+  purchaseListeners.delete(id);
+}
+
+export async function getPurchaseProduct(url) {
+  const target = new URL(url, location.href);
+  if (target.origin !== location.origin) throw new Error("آدرس محصول معتبر نیست.");
+  const response = await fetch(target.href, {
+    credentials: "same-origin",
+    cache: "no-store",
+    headers: { "X-Storefront-Purchase": "1" },
+  });
+  if (!response.headers.get("Content-Type")?.includes("application/json"))
+    throw new Error("گزینه‌های محصول دریافت نشد. دوباره تلاش کنید.");
+  const product = await response.json();
+  if (!response.ok) throw new Error(product.message || "گزینه‌های محصول دریافت نشد. دوباره تلاش کنید.");
+  return product;
+}
+
 export function reloadAfterSignIn(force) {
   if (force || document.querySelector(".sf-native-cart")) {
     location.reload();

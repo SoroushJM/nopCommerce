@@ -5,13 +5,13 @@
 <BbDirectionProvider Direction="@(Labels.Rtl ? TextDirection.RightToLeft : TextDirection.LeftToRight)">
 <BbDialog Open="_zoomOpen" OpenChanged="SetZoomOpen">
     <div class="storefront" dir="@Labels.Direction">
-        @foreach (var field in FormFields())
+        @foreach (var field in FormFields().Where(_ => !QuickPurchase))
         {
             <input type="hidden" id="@field.Key.Replace('.', '_')" name="@field.Key" value="@field.Value" />
         }
-        <main id="main-content">
-            <section class="wrap mx-auto max-w-[80rem] px-8 max-md:px-5 [.boutique-shell_&]:w-[calc(100%-2.5rem)] [.boutique-shell_&]:max-w-[73.75rem] [.boutique-shell_&]:px-0 max-md:[.boutique-shell_&]:w-[calc(100%-1.75rem)] py-7">
-                @if (Initial.BreadcrumbEnabled)
+        <main id="@(QuickPurchase ? null : "main-content")">
+            <section class="@(QuickPurchase ? "min-w-0" : "wrap mx-auto max-w-[80rem] px-8 max-md:px-5 [.boutique-shell_&]:w-[calc(100%-2.5rem)] [.boutique-shell_&]:max-w-[73.75rem] [.boutique-shell_&]:px-0 max-md:[.boutique-shell_&]:w-[calc(100%-1.75rem)] py-7")">
+                @if (!QuickPurchase && Initial.BreadcrumbEnabled)
                 {
                 <BbBreadcrumb Class="sf-product-breadcrumb [&_ol]:text-xs text-xs text-muted-foreground mb-7" aria-label="@Initial.Name">
                     <BbBreadcrumbItem><BbBreadcrumbLink Href="@Initial.HomeUrl">@Labels.Get("Homepage")</BbBreadcrumbLink></BbBreadcrumbItem>
@@ -28,7 +28,9 @@
                 {
                     <BbAlert Variant="AlertVariant.Danger" Class="mb-5">@_error</BbAlert>
                 }
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-md:gap-7">
+                <div class="@(QuickPurchase ? "grid grid-cols-1 gap-4" : "grid grid-cols-1 md:grid-cols-2 gap-12 max-md:gap-7")">
+                    @if (!QuickPurchase)
+                    {
                     <div @ref="_gallery" class="sf-product-gallery min-w-0">
                         <BbCard Class="sf-product-image aspect-square overflow-hidden [&>div]:h-full [.boutique-shell_&]:aspect-auto [.boutique-shell_&]:rounded-2xl [.boutique-shell_&]:border-[0rem] [.boutique-shell_&]:bg-muted">
                             <BbCardHeader Class="absolute size-[.0625rem] -m-[.0625rem] overflow-hidden whitespace-nowrap border-[0rem] p-0 [clip-path:inset(50%)]"><BbCardTitle>@Labels.Format("Media.Product.ImageAlternateTextFormat.Details", Initial.Name)</BbCardTitle></BbCardHeader>
@@ -59,7 +61,10 @@
                             </div>
                         }
                     </div>
+                    }
                     <div class="min-w-0">
+                        @if (!QuickPurchase)
+                        {
                         <p class="text-xs text-primary mb-3">
                             @foreach (var manufacturer in Initial.Manufacturers)
                             {
@@ -68,10 +73,13 @@
                         </p>
                         <h1 class="sf-product-name [overflow-wrap:anywhere] text-3xl max-md:text-2xl font-bold leading-relaxed">@Initial.Name</h1>
                         <p class="text-sm text-muted-foreground leading-8 mt-4">@((MarkupString)Initial.Description)</p>
+                        }
                         @if (StockLabel.Length > 0)
                         {
                             <BbBadge Variant="@(StockAvailable ? BadgeVariant.SoftSuccess : BadgeVariant.SoftWarning)" Class="sf-product-stock mt-5 [overflow-wrap:anywhere]">@StockLabel</BbBadge>
                         }
+                        @if (!QuickPurchase)
+                        {
                         <dl class="sf-product-metadata mt-4 flex flex-wrap gap-x-6 gap-y-3 text-xs [&_div]:flex [&_div]:gap-2 [&_dt]:text-muted-foreground [&_dd]:[overflow-wrap:anywhere]">
                             @if (Initial.ShowSku && _sku.Length > 0)
                             {
@@ -102,6 +110,7 @@
                             }
                         }
                         <BbSeparator Class="sf-product-separator my-6 h-[.0625rem] bg-border" />
+                        }
                         @foreach (var attribute in Initial.Attributes.Where(item =>
                         !_disabledAttributes.Contains(item.Id)))
                         {

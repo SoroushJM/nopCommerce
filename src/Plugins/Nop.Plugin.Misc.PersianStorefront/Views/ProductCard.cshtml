@@ -18,6 +18,7 @@
     var url = await NopUrl.RouteGenericUrlAsync<Product>(new { SeName = Model.SeName });
     var picture = Model.PictureModels.FirstOrDefault();
     var inStock = (bool)ViewData["InStock"]!;
+    var purchaseOptions = ViewData["PurchaseOptions"] is true;
     var label = !inStock ? "ناموجود" : Model.ProductPrice.DisableBuyButton ? "خرید غیرفعال" : Model.MarkAsNew ? "تازه رسیده" : !string.IsNullOrEmpty(Model.ProductPrice.OldPrice) ? "پیشنهاد رنگی" : "";
     var addtocartlink = Model.ProductPrice.ForceRedirectionAfterAddingToCart
         ? Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_CART_CATALOG, new { productId = Model.Id, shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart, quantity = 1, forceredirection = Model.ProductPrice.ForceRedirectionAfterAddingToCart })
@@ -121,7 +122,7 @@
                 addToCartText = T("ShoppingCart.Rent").Text;
             if (Model.ProductPrice.AvailableForPreOrder)
                 addToCartText = T("ShoppingCart.PreOrder").Text;
-            <button type="button" class="product-box-add-to-cart-button inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary px-3 py-2.5 font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-[.125rem] focus-visible:outline-offset-[.125rem] focus-visible:outline-ring motion-reduce:transition-none" onclick="AjaxCart.addproducttocart_catalog('@addtocartlink');return false;">
+            <button type="button" data-purchase-url="@url" class="product-box-add-to-cart-button inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary px-3 py-2.5 font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-[.125rem] focus-visible:outline-offset-[.125rem] focus-visible:outline-ring motion-reduce:transition-none" onclick="@(purchaseOptions ? "MadadrangPurchase.open(this.dataset.purchaseUrl);return false;" : $"AjaxCart.addproducttocart_catalog('{addtocartlink}');return false;")">
                 <component type="typeof(SfIcon)" render-mode="Static" param-Name='@("bag")' param-Size="@(1m)" />
                 <span>@addToCartText</span>
             </button>

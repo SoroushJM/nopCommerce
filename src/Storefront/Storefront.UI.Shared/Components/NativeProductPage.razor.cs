@@ -12,6 +12,9 @@ public partial class NativeProductPage
     [Parameter]
     public NativeProduct Initial { get; set; } = new();
 
+    [Parameter] public bool QuickPurchase { get; set; }
+    [Parameter] public EventCallback Purchased { get; set; }
+
     private IJSObjectReference? _module;
     private readonly Dictionary<int, int> _selected = [];
     private readonly HashSet<int> _disabledAttributes = [];
@@ -221,20 +224,23 @@ public partial class NativeProductPage
         try
         {
             var result = await _module.InvokeAsync<NativeCartResult>("postForm", Initial.AddUrl, FormFields());
-            if (result.Redirect != null)
+            if (result.Redirect != null && !QuickPurchase)
             {
                 Navigation.NavigateTo(result.Redirect, forceLoad: true);
                 return;
             }
 
-            if (!result.Success)
+            // The native controller can return the cart redirect after a successful add.
+            if (!result.Success && !(QuickPurchase && result.Redirect != null))
             {
                 _error = string.Join(" ", result.Message);
                 return;
             }
 
-            await _module.InvokeVoidAsync("notifyCartChanged", true);
+            await _module.InvokeVoidAsync("notifyCartChanged", !QuickPurchase);
             _error = "";
+            if (QuickPurchase)
+                await Purchased.InvokeAsync();
         }
         catch (Exception)
         {

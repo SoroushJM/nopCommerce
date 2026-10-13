@@ -95,7 +95,15 @@
             </div>
             @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderAfter })
         </header>
+<component type="typeof(NativeCatalogPurchase)" render-mode="WebAssemblyPrerendered" />
 <script asp-location="Footer">
+    window.MadadrangPurchase = {
+        pending: null,
+        open: function (url) {
+            this.pending = url;
+            window.dispatchEvent(new CustomEvent('storefront:purchase', { detail: { url: url } }));
+        }
+    };
     $(function () {
         // Keep the native failure alert, adding only safe transport metadata for the owner's next attempt.
         // Never expose the response body, exception details, request URL or antiforgery token.

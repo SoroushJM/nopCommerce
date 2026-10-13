@@ -20,10 +20,16 @@ public sealed class MadadrangProductViewComponent(IProductService products, INop
     {
         // The calling theme chooses its layout after this component has rendered.
         HttpContext.Items["Madadrang.NativePage"] = true;
-        var product = await products.GetProductByIdAsync(model.Id);
-        ViewData["NativeProduct"] = await NativeProductPresentation.FromAsync(model, Url, nopUrl, localization,
-            workContext, product?.OrderMinimumQuantity ?? 1, await InitialDisabledAttributesAsync(model, product));
+        ViewData["NativeProduct"] = await PrepareAsync(model, Url);
         return await ViewAsync("~/Plugins/Misc.PersianStorefront/Views/NativeProduct.cshtml", model);
+    }
+
+    public async Task<Storefront.UI.Shared.NativeProduct> PrepareAsync(ProductDetailsModel model, IUrlHelper url)
+    {
+        var product = await products.GetProductByIdAsync(model.Id);
+        return (await NativeProductPresentation.FromAsync(model, url, nopUrl, localization,
+            workContext, product?.OrderMinimumQuantity ?? 1, await InitialDisabledAttributesAsync(model, product)))
+            with { ShowSku = false };
     }
 
     private async Task<List<int>> InitialDisabledAttributesAsync(ProductDetailsModel model, Product? product)

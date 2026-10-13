@@ -1,0 +1,88 @@
+@implements IAsyncDisposable
+@inject IJSRuntime JS
+
+<BbDirectionProvider Direction="TextDirection.RightToLeft">
+    <BbDialog Open="_open" OpenChanged="SetOpen">
+        <BbDialogContent Class="w-[min(34rem,calc(100vw-2rem))] max-w-none max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-xl border-[.0625rem] border-border bg-background p-5" dir="rtl">
+            <BbDialogHeader Class="pe-8">
+                <BbDialogTitle>@(_product?.Name ?? "افزودن به سبد خرید")</BbDialogTitle>
+                <BbDialogDescription>گزینه‌های دلخواه و تعداد را انتخاب کنید.</BbDialogDescription>
+            </BbDialogHeader>
+            @if (_loading)
+            {
+                <p role="status" class="py-6 text-sm text-muted-foreground">در حال دریافت گزینه‌های محصول…</p>
+            }
+            else if (_error.Length > 0)
+            {
+                <BbAlert Variant="AlertVariant.Danger">@_error</BbAlert>
+                <BbButton Variant="ButtonVariant.Outline" OnClick="Retry">تلاش دوباره</BbButton>
+            }
+            else if (_product != null)
+            {
+                <NativeProductPage @key="_product" Initial="_product" QuickPurchase="true" Purchased="PurchaseCompleted" />
+            }
+        </BbDialogContent>
+    </BbDialog>
+</BbDirectionProvider>
+
+@code {
+    private IJSObjectReference? _module;
+    private DotNetObjectReference<NativeCatalogPurchase>? _reference;
+    private NativeProduct? _product;
+    private bool _open, _loading;
+    private string _error = "", _url = "";
+    private int _listener, _version;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+        _module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/Storefront.UI.Shared/storefront.js");
+        _reference = DotNetObjectReference.Create(this);
+        _listener = await _module.InvokeAsync<int>("listenForPurchase", _reference);
+    }
+
+    [JSInvokable]
+    public async Task OpenPurchase(string url)
+    {
+        var version = ++_version;
+        _url = url;
+        _open = true;
+        _loading = true;
+        _product = null;
+        _error = "";
+        await InvokeAsync(StateHasChanged);
+        try
+        {
+            var product = await _module!.InvokeAsync<NativeProduct>("getPurchaseProduct", url);
+            if (version == _version && _open) _product = product;
+        }
+        catch (JSException exception)
+        {
+            if (version == _version && _open)
+                _error = exception.Message.Split('\n')[0];
+        }
+        finally
+        {
+            if (version == _version) _loading = false;
+            await InvokeAsync(StateHasChanged);
+        }
+    }
+
+    private Task Retry() => OpenPurchase(_url);
+    private void SetOpen(bool open)
+    {
+        _open = open;
+        if (!open) { ++_version; _product = null; }
+    }
+    private void PurchaseCompleted() => SetOpen(false);
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_module != null)
+        {
+            await _module.InvokeVoidAsync("stopListeningForPurchase", _listener);
+            await _module.DisposeAsync();
+        }
+        _reference?.Dispose();
+    }
+}

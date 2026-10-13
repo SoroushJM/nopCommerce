@@ -36,7 +36,8 @@ public sealed class MadadrangProductCardViewComponent(ICategoryService categorie
             }
         }
         var colors = new List<string>();
-        foreach (var mapping in await attributes.GetProductAttributeMappingsByProductIdAsync(model.Id))
+        var attributeMappings = await attributes.GetProductAttributeMappingsByProductIdAsync(model.Id);
+        foreach (var mapping in attributeMappings)
         {
             if (mapping.AttributeControlType != AttributeControlType.ColorSquares)
                 continue;
@@ -47,6 +48,10 @@ public sealed class MadadrangProductCardViewComponent(ICategoryService categorie
         ViewData["Caption"] = string.Join(" · ", caption);
         ViewData["Colors"] = colors.Distinct().Take(3).ToList();
         var product = await products.GetProductByIdAsync(model.Id);
+        ViewData["PurchaseOptions"] = product != null && (product.ProductType != ProductType.SimpleProduct
+            || product.OrderMinimumQuantity > 1 || product.CustomerEntersPrice || product.IsRental
+            || products.ParseAllowedQuantities(product).Length > 0
+            || attributeMappings.Any(mapping => mapping.AttributeControlType != AttributeControlType.ReadonlyCheckboxes));
         ViewData["InStock"] = product?.ManageInventoryMethod switch
         {
             ManageInventoryMethod.DontManageStock => true,
