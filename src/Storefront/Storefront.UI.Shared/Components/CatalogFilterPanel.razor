@@ -41,11 +41,11 @@
                 <BbField Class="gap-2!">
                     <BbFieldLabel Class="sr-only!">@Initial.Labels.Get("Filtering.PriceRangeFilter")</BbFieldLabel>
                     <div class="px-2.5 py-3">
-                        <BbRangeSlider Value="_priceRange" ValueChanged="UpdatePriceRange"
-                                       Min="_priceMin" Max="_priceMax" Step="_priceStep"
+                        <BbRangeSlider Value="@_priceRange" ValueChanged="UpdatePriceRange"
+                                       Min="@_priceMin" Max="@_priceMax" Step="@_priceStep"
                                        StartLabel="حداقل قیمت" EndLabel="حداکثر قیمت"
                                        aria-describedby="@(InstanceId + "-price-error")"
-                                       Class="h-5! [&_[role=slider]]:size-5! [&_[role=slider]]:border-[0.125rem]! [&_[role=slider]]:border-solid! [&_[role=slider]]:border-primary! [&_[role=slider]]:focus-visible:ring-0! [&_[role=slider]]:focus-visible:ring-offset-0! [&_[role=slider]]:focus-visible:outline-[0.125rem]! [&_[role=slider]]:focus-visible:outline-solid! [&_[role=slider]]:focus-visible:outline-ring! [&_[role=slider]]:focus-visible:outline-offset-[0.1875rem]!" />
+                                       Class="h-5! [&_[role=slider]]:size-5! rtl:[&_[role=slider]]:translate-x-1/2! [&_[role=slider]]:border-[0.125rem]! [&_[role=slider]]:border-solid! [&_[role=slider]]:border-primary! [&_[role=slider]]:focus-visible:ring-0! [&_[role=slider]]:focus-visible:ring-offset-0! [&_[role=slider]]:focus-visible:outline-[0.125rem]! [&_[role=slider]]:focus-visible:outline-solid! [&_[role=slider]]:focus-visible:outline-ring! [&_[role=slider]]:focus-visible:outline-offset-[0.1875rem]!" />
                     </div>
                 </BbField>
             }
@@ -54,13 +54,13 @@
                     <BbFieldLabel For="@(InstanceId + "-from")">@(Compact ? "از قیمت" : "≥ " + Initial.Labels.Get("Products.Price"))</BbFieldLabel>
                     <BbInput Id="@(InstanceId + "-from")" Class="@(Compact ? "h-10! min-w-0! text-left!" : "h-11 text-left")" dir="ltr" inputmode="decimal"
                              AriaInvalid="@(_error.Length > 0)" AriaDescribedBy="@(InstanceId + "-price-error")"
-                             Value="_from" ValueChanged="UpdatePriceFrom" UpdateTiming="UpdateTiming.Immediate" />
+                             Value="@_from" ValueChanged="UpdatePriceFrom" UpdateTiming="UpdateTiming.Immediate" />
                 </BbField>
                 <BbField IsInvalid="@(_error.Length > 0)">
                     <BbFieldLabel For="@(InstanceId + "-to")">@(Compact ? "تا قیمت" : "≤ " + Initial.Labels.Get("Products.Price"))</BbFieldLabel>
                     <BbInput Id="@(InstanceId + "-to")" Class="@(Compact ? "h-10! min-w-0! text-left!" : "h-11 text-left")" dir="ltr" inputmode="decimal"
                              AriaInvalid="@(_error.Length > 0)" AriaDescribedBy="@(InstanceId + "-price-error")"
-                             Value="_to" ValueChanged="UpdatePriceTo" UpdateTiming="UpdateTiming.Immediate" />
+                             Value="@_to" ValueChanged="UpdatePriceTo" UpdateTiming="UpdateTiming.Immediate" />
                 </BbField>
             </BbFieldGroup>
             @if (_error.Length > 0)
