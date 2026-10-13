@@ -9,6 +9,9 @@
 @using Nop.Web.Framework.Infrastructure
 @using Nop.Web.Framework.Mvc.Routing
 @using Storefront.UI.Shared
+@using Microsoft.AspNetCore.Components
+@using BlazorBlueprint.Components
+@using BlazorBlueprint.Icons.Lucide.Components
 @inherits Nop.Web.Framework.Mvc.Razor.NopRazorPage<TModel>
 @inject Nop.Web.Framework.Mvc.Routing.INopUrlHelper NopUrl
 @inject IWorkContext workContext
@@ -20,6 +23,26 @@
     var inStock = (bool)ViewData["InStock"]!;
     var purchaseOptions = ViewData["PurchaseOptions"] is true;
     var label = !inStock ? "ناموجود" : Model.ProductPrice.DisableBuyButton ? "خرید غیرفعال" : Model.MarkAsNew ? "تازه رسیده" : !string.IsNullOrEmpty(Model.ProductPrice.OldPrice) ? "پیشنهاد رنگی" : "";
+    var freshArrival = inStock && !Model.ProductPrice.DisableBuyButton && Model.MarkAsNew;
+    var recommendation = inStock && !Model.ProductPrice.DisableBuyButton && !Model.MarkAsNew
+        && !string.IsNullOrEmpty(Model.ProductPrice.OldPrice);
+    var badgeVariant = freshArrival ? BadgeVariant.Default : recommendation ? BadgeVariant.Soft : BadgeVariant.Secondary;
+    RenderFragment badgeContent = builder =>
+    {
+        builder.OpenComponent<LucideIcon>(0);
+        builder.AddAttribute(1, nameof(LucideIcon.Name), freshArrival ? "package-plus" : recommendation ? "sparkles" : "circle-minus");
+        builder.AddAttribute(2, nameof(LucideIcon.StrokeWidth), 1.8);
+        builder.AddAttribute(3, nameof(LucideIcon.AdditionalAttributes), new Dictionary<string, object>
+        {
+            ["aria-hidden"] = "true",
+            ["focusable"] = "false"
+        });
+        builder.CloseComponent();
+        builder.OpenElement(4, "span");
+        builder.AddAttribute(5, "class", "min-w-0 truncate");
+        builder.AddContent(6, label);
+        builder.CloseElement();
+    };
     var addtocartlink = Model.ProductPrice.ForceRedirectionAfterAddingToCart
         ? Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_CART_CATALOG, new { productId = Model.Id, shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart, quantity = 1, forceredirection = Model.ProductPrice.ForceRedirectionAfterAddingToCart })
         : Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_CART_CATALOG, new { productId = Model.Id, shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart, quantity = 1 });
@@ -58,7 +81,10 @@
             }
             @if (label.Length > 0)
             {
-                <span class="tag absolute right-3 top-3 inline-flex items-center rounded-[.25rem] bg-background px-[0.5625rem] py-[0.3125rem] text-xs font-semibold text-foreground">@label</span>
+                <div class="pointer-events-none absolute end-3 top-3 max-w-[calc(100%-1.5rem)]">
+                    <component type="typeof(BbBadge)" render-mode="Static" param-Variant="@badgeVariant" param-ChildContent="@badgeContent"
+                               param-Class='@("max-w-full! min-h-7! gap-1.5! rounded-lg! border-[.0625rem]! border-background/80! px-2.5! py-1! text-[.6875rem]! leading-5! [&_svg]:size-[.875rem]! [&_svg]:shrink-0!")' />
+                </div>
             }
         </div>
     <a href="@url" aria-label="@Model.Name">
