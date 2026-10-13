@@ -25,7 +25,7 @@
     var addtowishlistlink = Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_CART_CATALOG, new { productId = Model.Id, shoppingCartTypeId = (int)ShoppingCartType.Wishlist, quantity = quantity });
     var addtocomparelink = Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_COMPARE, new { productId = Model.Id });
 }
-<article class="product-item relative! border-0! bg-transparent! bg-none! rounded-none! shadow-none! [.product-grid_&]:flex! [.product-grid_&]:flex-col! [.product-grid_&]:h-full! [&_.picture_a:before]:hidden! [&_.product-title_a]:text-foreground! [&_.description[data-short-description=none]]:hidden! [&_.boutique-card-secondary-actions_svg]:block! [&_.boutique-card-secondary-actions_svg]:flex-none! [&_.boutique-card-secondary-actions_svg]:pointer-events-none! [.product-list_&]:grid! [.product-list_&]:grid-cols-[10rem_1fr]! [.product-list_&]:gap-5! [.product-list_&]:mb-5! max-[40rem]:[.product-list_&]:grid-cols-[6.25rem_1fr]! max-[40rem]:[.product-list_&]:gap-3!" data-productid="@Model.Id">
+<article class="product-item relative! min-w-0! border-[0rem]! bg-transparent! bg-none! rounded-none! shadow-none! [.product-grid_&]:flex! [.product-grid_&]:flex-col! [.product-grid_&]:h-full! [&_.picture_a:before]:hidden! [&_.product-title_a]:text-foreground! [&_.description[data-short-description=none]]:hidden! [&_.boutique-card-secondary-actions_svg]:block! [&_.boutique-card-secondary-actions_svg]:flex-none! [&_.boutique-card-secondary-actions_svg]:pointer-events-none! [.product-list_&]:grid! [.product-list_&]:grid-cols-[9rem_minmax(0,1fr)]! [.product-list_&]:items-start! [.product-list_&]:gap-4! [.product-list_&]:mb-0! [.product-list_&]:after:hidden! max-[40rem]:[.product-list_&]:grid-cols-[6rem_minmax(0,1fr)]! max-[40rem]:[.product-list_&]:gap-3!" data-productid="@Model.Id">
     <div class="picture m-0! bg-muted! overflow-hidden! rounded-[0.75rem]! max-[40rem]:rounded-[0.5rem]!  [.product-list_&]:float-none! [.product-list_&]:w-auto! [.product-list_&]:m-0!">
         @if (Model.PictureModels.Count > 1)
         {
@@ -59,7 +59,7 @@
             </a>
         }
     </div>
-    <div class="details [padding:0.875rem_0_0]! text-start! [.product-grid_&]:flex! [.product-grid_&]:flex-col! [.product-grid_&]:flex-1! [.product-list_&]:float-none! [.product-list_&]:w-auto! [.product-list_&]:m-0!">
+    <div class="details min-w-0! [padding:0.875rem_0_0]! text-start! [.product-grid_&]:flex! [.product-grid_&]:flex-col! [.product-grid_&]:flex-1! [.product-list_&]:float-none! [.product-list_&]:w-auto! [.product-list_&]:m-0! [.product-list_&]:p-0!">
         <h2 class="product-title text-[0.875rem]! font-medium! leading-[1.9]! [margin:0_0_0.25rem]! h-auto! min-h-0! p-0! max-[40rem]:text-[0.75rem]! max-[40rem]:leading-[1.9]! ">
             <a href="@(await NopUrl.RouteGenericUrlAsync<Product>(new {SeName = Model.SeName }))" class="text-foreground!">@Model.Name</a>
         </h2>
@@ -86,7 +86,7 @@
         <div class="description text-[0.6875rem]! text-muted-foreground! leading-[1.8]! h-auto! max-h-[none]! p-0! my-[0.5rem]! mx-[0]!  " @(catalogSettings.ShowShortDescriptionOnCatalogPages ? "" : "data-short-description=none")>
             @Html.Raw(Model.ShortDescription)
         </div>
-        <div class="add-info p-0! border-0! flex! flex-col! gap-[0.625rem]! [.product-grid_&]:flex-1! ">
+        <div class="add-info min-w-0! p-0! border-[0rem]! flex! flex-col! gap-[0.625rem]! [.product-grid_&]:flex-1! ">
             @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductBoxAddinfoBefore, additionalData = Model })
             <div class="prices h-auto! min-h-0! m-0! flex! flex-col! items-start! gap-[0.125rem]! text-[0.8125rem]! max-[40rem]:text-[0.6875rem]!  ">
                 @if (!string.IsNullOrEmpty(Model.ProductPrice.OldPrice))
@@ -111,7 +111,7 @@
                 }
             </div>
             @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductBoxAddinfoMiddle, additionalData = Model })
-            <div class="buttons flex! flex-col! gap-2! m-0! h-auto! static! [transform:none]! opacity-[1]! [.product-grid_&]:[margin-block-start:auto]! ">
+            <div class="buttons flex! min-w-0! flex-col! gap-2! m-0! h-auto! static! [transform:none]! opacity-[1]! [.product-grid_&]:[margin-block-start:auto]! [.product-list_&]:flex-row! [.product-list_&]:flex-wrap! [.product-list_&]:items-center! [.product-list_&]:justify-start! ">
                 @if (!Model.ProductPrice.DisableBuyButton)
                 {
                     var addToCartText = T("ShoppingCart.AddToCart").Text;
@@ -123,25 +123,19 @@
                     {
                         addToCartText = T("ShoppingCart.PreOrder").Text;
                     }
-                    <button type="button" class="button-2 product-box-add-to-cart-button inline-flex! items-center! justify-center! border-[0.0625rem]! border-solid! border-primary! rounded-[0.625rem]! bg-primary! bg-none! text-primary-foreground! text-[0.75rem]! font-medium! leading-[1.8]! py-[0.75rem]! px-[1rem]! float-none! w-full! min-w-0! min-h-[2.75rem]! h-auto! indent-0! cursor-pointer! hover:bg-[#614936]! hover:border-[#614936]!" onclick="AjaxCart.addproducttocart_catalog('@addtocartlink');return false;">@(addToCartText)</button>
+                    <component type="typeof(BoutiqueCardAction)" render-mode="Static" param-Kind='@("cart")' param-Text="addToCartText" param-Label="addToCartText" param-NativeClick='@($"AjaxCart.addproducttocart_catalog({System.Text.Json.JsonSerializer.Serialize(addtocartlink)});return false;")' />
                 }
                 @if (!Model.ProductPrice.DisableAddToCompareListButton || !Model.ProductPrice.DisableWishlistButton)
                 {
-                    <div class="boutique-card-secondary-actions flex! items-stretch! gap-[0.5rem]! w-full! min-w-0!">
+                    <div class="boutique-card-secondary-actions flex! items-center! gap-2! w-full! min-w-0! [&>button.button-2]:[border:0.0625rem_solid_var(--border)]! max-[40rem]:w-auto! [.product-list_&]:w-auto!">
                         @if (!Model.ProductPrice.DisableWishlistButton)
                         {
                             @await Html.PartialAsync("_MoveToWishlistModal", Model.ProductToWishlist)
-                            <button type="button" class="button-2 add-to-wishlist-button inline-flex! items-center! justify-center! gap-[0.375rem]! flex-1! border-[0.0625rem]! border-solid! border-border! rounded-[0.625rem]! bg-card! bg-none! text-muted-foreground! text-[0.6875rem]! leading-[1.6]! py-[0.625rem]! px-[0.5rem]! float-none! min-w-0! min-h-[2.5rem]! w-auto! h-auto! indent-0! cursor-pointer! hover:bg-secondary! hover:text-foreground!" aria-label="@T("ShoppingCart.AddToWishlist")" title="@T("ShoppingCart.AddToWishlist")" onclick="AjaxCart.addproducttocart_catalog('@addtowishlistlink');return false;">
-                                <svg class="size-[1rem]!" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M20.8 4.6a5.5 5.5 0 0 0-7.8 0L12 5.7l-1.1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 21l8.8-8.6a5.5 5.5 0 0 0 0-7.8Z" /></svg>
-                                <span>@T("Wishlist")</span>
-                            </button>
+                            <component type="typeof(BoutiqueCardAction)" render-mode="Static" param-Kind='@("wishlist")' param-Text='@(T("Wishlist").Text)' param-Label='@(T("ShoppingCart.AddToWishlist").Text)' param-NativeClick='@($"AjaxCart.addproducttocart_catalog({System.Text.Json.JsonSerializer.Serialize(addtowishlistlink)});return false;")' />
                         }
                         @if (!Model.ProductPrice.DisableAddToCompareListButton)
                         {
-                            <button type="button" class="button-2 add-to-compare-list-button inline-flex! items-center! justify-center! gap-[0.375rem]! flex-1! border-[0.0625rem]! border-solid! border-border! rounded-[0.625rem]! bg-card! bg-none! text-muted-foreground! text-[0.6875rem]! leading-[1.6]! py-[0.625rem]! px-[0.5rem]! float-none! min-w-0! min-h-[2.5rem]! w-auto! h-auto! indent-0! cursor-pointer! hover:bg-secondary! hover:text-foreground!" aria-label="@T("ShoppingCart.AddToCompareList")" title="@T("ShoppingCart.AddToCompareList")" onclick="AjaxCart.addproducttocomparelist('@addtocomparelink');return false;">
-                                <svg class="size-[1rem]!" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false"><rect x="3" y="4" width="6" height="16" rx="1.5" /><rect x="15" y="4" width="6" height="16" rx="1.5" /><path d="M6 8v4m12-4v8" /></svg>
-                                <span>@T("Products.Compare")</span>
-                            </button>
+                            <component type="typeof(BoutiqueCardAction)" render-mode="Static" param-Kind='@("compare")' param-Text='@(T("Products.Compare").Text)' param-Label='@(T("ShoppingCart.AddToCompareList").Text)' param-NativeClick='@($"AjaxCart.addproducttocomparelist({System.Text.Json.JsonSerializer.Serialize(addtocomparelink)});return false;")' />
                         }
                     </div>
                 }
