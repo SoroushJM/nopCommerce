@@ -3,12 +3,11 @@
 @implements IAsyncDisposable
 
 <BbDirectionProvider Direction="@(_state.Rtl ? TextDirection.RightToLeft : TextDirection.LeftToRight)">
-    <BbPortalHost />
     @if (_state.Multiple)
     {
         <BbMultiSelect TValue="string" @key="_optionsKey" Values="_state.Values" ValuesChanged="SetValues" Disabled="_state.Disabled"
-                       Required="_state.Required" AriaLabel="_state.Label" AriaDescribedBy="_state.DescribedBy"
-                       Placeholder="_state.Label" SearchPlaceholder="@(_state.Rtl ? "جست‌وجو…" : "Search…")"
+                       Required="_state.Required" AriaLabel="@_state.Label" AriaDescribedBy="@_state.DescribedBy"
+                       Placeholder="@_state.Label" SearchPlaceholder="@(_state.Rtl ? "جست‌وجو…" : "Search…")"
                        EmptyMessage="@(_state.Rtl ? "گزینه‌ای پیدا نشد" : "No options found")" ShowSelectAll="false"
                        ClearLabel="@(_state.Rtl ? "پاک کردن" : "Clear")" CloseLabel="@(_state.Rtl ? "بستن" : "Close")"
                        Class="sf-native-select-control" aria-invalid="@(_state.Invalid ? "true" : null)">
@@ -20,11 +19,11 @@
     }
     else
     {
-        <BbSelect TValue="string" @key="_optionsKey" Value="_state.Value" ValueChanged="SetValue" Disabled="_state.Disabled" Required="_state.Required"
-                  AriaLabel="_state.Label" DisplayTextSelector="DisplayText" Class="sf-native-select-control">
+        <BbSelect TValue="string" @key="_optionsKey" Value="@_state.Value" ValueChanged="SetValue" Disabled="_state.Disabled" Required="_state.Required"
+                  AriaLabel="@_state.Label" DisplayTextSelector="DisplayText" Class="sf-native-select-control">
             <BbSelectTrigger TValue="string" id="@(_state.Id + "__bb")" aria-describedby="@_state.DescribedBy"
                              aria-invalid="@(_state.Invalid ? "true" : null)" aria-required="@(_state.Required ? "true" : null)">
-                <BbSelectValue Placeholder="_state.Label" />
+                <BbSelectValue Placeholder="@_state.Label" />
             </BbSelectTrigger>
             <BbSelectContent TValue="string">
                 @foreach (var group in _state.Options.GroupBy(option => option.GroupIndex))

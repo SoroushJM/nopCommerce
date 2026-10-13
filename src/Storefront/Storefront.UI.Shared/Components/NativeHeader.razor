@@ -2,7 +2,6 @@
 @inject IJSRuntime JS
 @inject NavigationManager Navigation
 <BbDirectionProvider Direction="@(Labels.Rtl ? TextDirection.RightToLeft : TextDirection.LeftToRight)">
-    <BbPortalHost />
     <div class="flex items-center gap-4 max-md:gap-1">
         @if (Theme.EnableOtp)
         {
