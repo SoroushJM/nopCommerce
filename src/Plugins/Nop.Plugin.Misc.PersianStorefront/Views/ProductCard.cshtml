@@ -30,8 +30,8 @@
         ["data-icon"] = "inline-start"
     };
 }
-<article class="product-card group overflow-hidden rounded-lg border-[.0625rem] border-border bg-background transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-(--shadow-hover) motion-reduce:transform-none motion-reduce:translate-none motion-reduce:transition-none" data-productid="@Model.Id" data-product-stock="@inStock.ToString().ToLowerInvariant()">
-        <div class="product-photo relative h-56 overflow-hidden bg-surface max-md:h-[11.875rem] [&_img]:h-full [&_img]:w-full [&_img]:object-cover [&_img]:transition-transform [&_img]:duration-[400ms] group-hover:[&_img]:scale-[1.04] motion-reduce:[&_img]:transform-none motion-reduce:[&_img]:scale-100 motion-reduce:[&_img]:transition-none">
+<article class="product-card group flex h-full flex-col overflow-hidden rounded-lg border-[.0625rem] border-border bg-background transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-(--shadow-hover) [.sf-catalog-list_&]:flex-row max-md:[.sf-catalog-list_&]:flex-col motion-reduce:transform-none motion-reduce:translate-none motion-reduce:transition-none" data-productid="@Model.Id" data-product-stock="@inStock.ToString().ToLowerInvariant()">
+        <div class="product-photo relative h-56 shrink-0 overflow-hidden bg-surface max-md:h-[11.875rem] [&_img]:h-full [&_img]:w-full [&_img]:object-cover [&_img]:transition-transform [&_img]:duration-[400ms] group-hover:[&_img]:scale-[1.04] motion-reduce:[&_img]:transform-none motion-reduce:[&_img]:scale-100 motion-reduce:[&_img]:transition-none">
             @if (Model.PictureModels.Count > 1)
             {
                 <div class="swiper h-full" id="swiper-@Model.Id" dir="@Html.GetUIDirection(!await Html.ShouldUseRtlThemeAsync())">
@@ -63,7 +63,7 @@
     <a href="@url" aria-label="@Model.Name">
         <div class="p-4 pb-2">
             <p class="text-xs text-muted-foreground mb-2">@ViewData["Caption"]</p>
-            <h3 class="text-sm font-bold leading-6 min-h-12">@Model.Name</h3>
+            <h3 class="text-sm font-bold leading-6">@Model.Name</h3>
             <div class="flex gap-1.5 mt-2" aria-label="رنگ‌های محصول">
                 @foreach (var color in (List<string>)ViewData["Colors"]!)
                 {
@@ -90,7 +90,7 @@
         <div class="description text-xs text-muted-foreground leading-6" hidden="@(!catalogSettings.ShowShortDescriptionOnCatalogPages)" @(catalogSettings.ShowShortDescriptionOnCatalogPages ? "" : "data-short-description=none")>@Html.Raw(Model.ShortDescription)</div>
     </div>
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductBoxAddinfoBefore, additionalData = Model })
-    <div class="px-4 pb-4 flex items-end justify-between gap-2">
+    <div class="mt-auto flex items-end justify-between gap-2 px-4 pb-4 [.sf-catalog-list_&]:mt-0">
         <div>
             @if (!string.IsNullOrEmpty(Model.ProductPrice.OldPrice))
             {
@@ -113,7 +113,7 @@
             <component type="typeof(SfIcon)" render-mode="Static" param-Name='@("arrow")' param-Size="@(.875m)" />
         </a>
     </div>
-    <div class="buttons grid gap-2 px-4 pb-4 text-xs">
+    <div class="buttons grid shrink-0 gap-2 px-4 pb-4 text-xs">
         @if (!Model.ProductPrice.DisableBuyButton)
         {
             var addToCartText = T("ShoppingCart.AddToCart").Text;
