@@ -2,11 +2,11 @@
 <BbDirectionProvider Direction="@(Initial.Rtl ? TextDirection.RightToLeft : TextDirection.LeftToRight)">
     @if (Placement == "toolbar")
     {
-        <div class="@(CompactToolbar ? "flex flex-wrap items-center gap-2 text-xs text-muted-foreground [&_[role=combobox]]:h-[2.25rem]! [&_[role=combobox]]:min-h-[2.25rem]!" : "flex items-center gap-3 flex-wrap text-xs text-muted-foreground")" aria-label="@Initial.Labels.Get("Catalog.ViewMode")">
+        <div class="@(CompactToolbar ? "grid w-full min-w-0 grid-cols-2 items-center gap-2 text-xs text-muted-foreground min-[48rem]:flex min-[48rem]:flex-wrap [&_[role=combobox]]:h-[2.25rem]! [&_[role=combobox]]:min-h-[2.25rem]!" : "flex items-center gap-3 flex-wrap text-xs text-muted-foreground")" aria-label="@Initial.Labels.Get("Catalog.ViewMode")">
             @if (Initial.SortOptions.Count > 0)
             {
-                <div class="flex items-center gap-2"><span class="whitespace-nowrap">@Initial.Labels.Get("Catalog.OrderBy")</span>
-                    <div class="@(CompactToolbar ? "w-[10rem] max-w-full" : "contents")">
+                <div class="@(CompactToolbar ? "col-span-full flex min-w-0 items-center gap-2" : "flex items-center gap-2")"><span class="whitespace-nowrap">@Initial.Labels.Get("Catalog.OrderBy")</span>
+                    <div class="@(CompactToolbar ? "min-w-0 flex-1 min-[48rem]:w-[10rem] min-[48rem]:flex-none" : "contents")">
                     <StoreSelect TValue="string" Label="@Initial.Labels.Get("Catalog.OrderBy.Label")" Options="Options(Initial.SortOptions)"
                                  Value="Selected(Initial.SortOptions)" ValueChanged='value => Change(new("orderby", value))' />
                     </div>
@@ -14,14 +14,14 @@
             }
             @if (Initial.PageSizes.Count > 0)
             {
-                <div class="@(CompactToolbar ? "w-[5rem] max-w-full" : "contents")">
+                <div class="@(CompactToolbar ? "w-full min-w-0 min-[48rem]:w-[5rem]" : "contents")">
                 <StoreSelect TValue="string" Label="@Initial.Labels.Get("Catalog.PageSize.Label")" Options="Options(Initial.PageSizes)"
                              Value="Selected(Initial.PageSizes)" ValueChanged='value => Change(new("pagesize", value))' />
                 </div>
             }
             @if (Initial.ViewModes.Count > 0)
             {
-                <div class="@(CompactToolbar ? "w-[8.5rem] max-w-full" : "contents")">
+                <div class="@(CompactToolbar ? "w-full min-w-0 min-[48rem]:w-[8.5rem]" : "contents")">
                 <StoreSelect TValue="string" Label="@Initial.Labels.Get("Catalog.ViewMode")" Options="Options(Initial.ViewModes)"
                              Value="Selected(Initial.ViewModes)" ValueChanged='value => Change(new("viewmode", value))' />
                 </div>
