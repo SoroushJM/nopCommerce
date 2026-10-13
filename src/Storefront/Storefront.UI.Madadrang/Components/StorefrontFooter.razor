@@ -1,7 +1,7 @@
 <footer id="site-footer" class="sf-footer bg-surface! border-t-[0.0625rem]! border-solid! border-border! py-6!">
     <div class="wrap max-w-320 mx-auto px-8 max-md:px-4.5">
-        <div class="grid! items-start! md:grid-cols-[2fr_1fr_1fr]! gap-6!">
-            <div><a href="@HomeUrl" class="sf-brand mb-3! flex! items-center! gap-2! text-xl! font-bold! tracking-[-0.0625rem]!"><span class="brand-mark bg-primary! text-primary-foreground! grid! place-items-center! size-9! shrink-0! rounded-lg! -rotate-[7deg]!">
+        <div class="grid! grid-cols-2! items-start! md:grid-cols-[2fr_1fr_1fr]! gap-6!">
+            <div class="col-span-full! min-w-0! md:col-span-1!"><a href="@HomeUrl" class="sf-brand mb-3! flex! items-center! gap-2! text-xl! font-bold! tracking-[-0.0625rem]!"><span class="brand-mark bg-primary! text-primary-foreground! grid! place-items-center! size-9! shrink-0! rounded-lg! -rotate-[7deg]!">
                 <SfIcon />
             </span><span>مداد رنگی</span></a>
             <p class="text-xs! text-muted-foreground! leading-6! max-w-sm! m-0!">برای ما، لوازم‌تحریر فقط ابزار نیست؛ یک بهانهٔ کوچک
@@ -9,7 +9,7 @@
             </div>
             @foreach (var menu in Menus)
             {
-                <div class="h-auto! min-h-0! self-start!">
+                <div class="h-auto! min-h-0! min-w-0! self-start! break-words!">
                     <h2 class="text-sm! font-bold! mt-0! mb-2!">@FooterHeading(menu.Name)</h2>
                     <nav class="flex! flex-col! justify-start! items-stretch! h-auto! min-h-0! gap-1! text-xs! text-muted-foreground! [&_a]:block! [&_a]:flex-none! [&_a]:h-auto! [&_a]:min-h-7! [&_a]:m-0! [&_a]:px-0! [&_a]:py-1! [&_a]:leading-5! [&_span]:block! [&_span]:flex-none! [&_span]:h-auto! [&_span]:min-h-7! [&_span]:m-0! [&_span]:px-0! [&_span]:py-1! [&_span]:leading-5!" aria-label="@FooterHeading(menu.Name)">
                         @foreach (var item in menu.Items)
@@ -20,7 +20,7 @@
                 </div>
             }
         </div>
-        <div class="border-t-[0.0625rem]! border-solid! border-border! mt-5! pt-3! text-xs! text-muted-foreground! flex! flex-wrap! items-center! justify-between! gap-2!"><span>مداد رنگی؛ همراه
+        <div class="border-t-[0.0625rem]! border-solid! border-border! mt-5! pt-3! text-xs! text-muted-foreground! flex! flex-wrap! items-center! justify-between! gap-2! max-md:flex-col! max-md:items-start! max-md:text-start! [&_span]:min-w-0! [&_span]:max-w-full! [&_span]:break-words!"><span>مداد رنگی؛ همراه
             ایده‌های کوچک و بزرگ</span><span>ساخته‌شده برای نوشتن و خیال‌کردن</span></div>
         </div>
     </footer>
