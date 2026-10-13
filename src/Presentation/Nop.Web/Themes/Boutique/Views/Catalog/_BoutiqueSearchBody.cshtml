@@ -1,4 +1,9 @@
 @model Nop.Web.Models.Catalog.SearchModel
+@using Microsoft.AspNetCore.Components
+@using BlazorBlueprint.Components
+@{
+    RenderFragment searchButtonText = builder => builder.AddContent(0, T("Search.Button").Text);
+}
 <script asp-location="Footer">
     $(function() {
         $("#@Html.IdFor(model => model.advs)").on('click', toggleAdvancedSearch);
@@ -15,62 +20,60 @@
     }
 </script>
 
-        <div class="search-input">
-            <form asp-route="@NopRouteNames.General.SEARCH" method="get">
-                <section class="fieldset">
-                    <div class="form-fields">
-                        <div class="basic-search">
-                            <div class="inputs">
-                                <label asp-for="q">@T("Search.SearchTerm"):</label>
-                                <input asp-for="q" class="search-text" />
-                            </div>
-                            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductSearchPageBasic, additionalData = Model })
-                            <div class="inputs reversed">
-                                <input asp-for="advs" />
-                                <label asp-for="advs">@T("Search.AdvancedSearch")</label>
-                            </div>
-                        </div>
-                        <div class="advanced-search" id="advanced-search-block">
+        <div class="search-input mb-[1.25rem]! rounded-[1rem]! border-[.0625rem]! border-solid! border-border! bg-card! p-[1rem]! text-start!">
+            <form asp-route="@NopRouteNames.General.SEARCH" method="get" class="grid gap-[.75rem]">
+                <div class="basic-search grid grid-cols-[minmax(0,1fr)_auto] items-end gap-[.75rem] max-[30rem]:grid-cols-1">
+                    <div class="grid min-w-0 gap-[.375rem]">
+                        <label asp-for="q" class="m-0! text-[.75rem] font-medium text-foreground">@T("Search.SearchTerm")</label>
+                        <component type="typeof(BbInput)" render-mode="Static"
+                                   param-Id='@(Html.IdFor(model => model.q))' param-Name='@(Html.NameFor(model => model.q))'
+                                   param-Value='@(Html.Value(nameof(Model.q)))' param-AriaLabel='@(T("Search.SearchTerm").Text)'
+                                   param-Class='@("search-text w-full! min-w-0! h-[2.75rem]! min-h-[2.75rem]! m-0! rounded-[.625rem]! border-[.0625rem]! border-solid! border-border! bg-background! px-[.875rem]! py-[.625rem]! text-[.8125rem]! text-foreground! shadow-none! focus-visible:ring-[0rem]! focus-visible:[outline:.125rem_solid_var(--ring)]! focus-visible:outline-offset-[.125rem]!")' />
+                    </div>
+                    <component type="typeof(BbButton)" render-mode="Static" param-Type="@(ButtonType.Submit)" param-ChildContent="@searchButtonText"
+                               param-Class='@("search-button h-[2.75rem]! min-h-[2.75rem]! min-w-[7rem]! w-auto! m-0! rounded-[.625rem]! border-[0rem]! bg-primary! px-[1.25rem]! py-[.625rem]! text-[.8125rem]! font-medium! text-primary-foreground! shadow-none! hover:bg-primary/90! focus-visible:ring-[0rem]! focus-visible:[outline:.125rem_solid_var(--ring)]! focus-visible:outline-offset-[.125rem]! max-[30rem]:w-full!")' />
+                    <label class="col-span-full flex min-h-[2rem] w-fit cursor-pointer items-center gap-[.5rem] text-[.75rem] text-muted-foreground [&_input]:m-0! [&_input]:size-[1rem]! [&_input]:shrink-0! [&_input]:accent-primary!">
+                        <input asp-for="advs" aria-controls="advanced-search-block" />
+                        <span>@T("Search.AdvancedSearch")</span>
+                    </label>
+                    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductSearchPageBasic, additionalData = Model })
+                </div>
+                <div class="advanced-search m-0! border-t-[.0625rem] border-solid border-border pt-[.75rem]" id="advanced-search-block">
+                    <div class="grid gap-[.75rem]">
+                        <div class="grid grid-cols-[repeat(auto-fit,minmax(min(100%,12rem),1fr))] gap-[.75rem]">
                             @if (Model.AvailableCategories.Count > 0)
                             {
-                                <div class="inputs">
-                                    <label asp-for="cid">@T("Search.Category"):</label>
-                                    <select asp-for="cid" asp-items="Model.AvailableCategories"></select>
-                                </div>
-                                <div class="inputs reversed">
-                                    <input asp-for="isc" />
-                                    <label asp-for="isc">@T("Search.IncludeSubCategories")</label>
+                                <div class="grid min-w-0 gap-[.375rem]">
+                                    <label asp-for="cid" class="m-0! text-[.75rem] font-medium text-foreground">@T("Search.Category")</label>
+                                    <select asp-for="cid" asp-items="Model.AvailableCategories" class="w-full min-w-0 rounded-[.625rem] border-[.0625rem] border-border bg-background text-[.8125rem]"></select>
                                 </div>
                             }
                             @if (Model.AvailableManufacturers.Count > 0)
                             {
-                                <div class="inputs">
-                                    <label asp-for="mid">@T("Search.Manufacturer"):</label>
-                                    <select asp-for="mid" asp-items="Model.AvailableManufacturers"></select>
+                                <div class="grid min-w-0 gap-[.375rem]">
+                                    <label asp-for="mid" class="m-0! text-[.75rem] font-medium text-foreground">@T("Search.Manufacturer")</label>
+                                    <select asp-for="mid" asp-items="Model.AvailableManufacturers" class="w-full min-w-0 rounded-[.625rem] border-[.0625rem] border-border bg-background text-[.8125rem]"></select>
                                 </div>
                             }
                             @if (Model.asv && Model.AvailableVendors.Count > 0)
                             {
-                                <div class="inputs">
-                                    <label asp-for="vid">@T("Search.Vendor"):</label>
-                                    <select asp-for="vid" asp-items="Model.AvailableVendors"></select>
+                                <div class="grid min-w-0 gap-[.375rem]">
+                                    <label asp-for="vid" class="m-0! text-[.75rem] font-medium text-foreground">@T("Search.Vendor")</label>
+                                    <select asp-for="vid" asp-items="Model.AvailableVendors" class="w-full min-w-0 rounded-[.625rem] border-[.0625rem] border-border bg-background text-[.8125rem]"></select>
                                 </div>
                             }
-                            <div class="inputs reversed">
-                                <input asp-for="sid" />
-                                <label asp-for="sid">@T("Search.SearchInDescriptions")</label>
-                            </div>
-                            <div class="inputs reversed">
-                                <input asp-for="sit" />
-                                <label asp-for="sit">@T("Search.SearchInTags")</label>
-                            </div>
-                            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductSearchPageAdvanced, additionalData = Model })
                         </div>
+                        <div class="flex flex-wrap gap-x-[1rem] gap-y-[.375rem] text-[.75rem] text-muted-foreground [&_label]:flex [&_label]:min-h-[2rem] [&_label]:cursor-pointer [&_label]:items-center [&_label]:gap-[.5rem] [&_input]:m-0! [&_input]:size-[1rem]! [&_input]:shrink-0! [&_input]:accent-primary!">
+                            @if (Model.AvailableCategories.Count > 0)
+                            {
+                                <label><input asp-for="isc" /><span>@T("Search.IncludeSubCategories")</span></label>
+                            }
+                            <label><input asp-for="sid" /><span>@T("Search.SearchInDescriptions")</span></label>
+                            <label><input asp-for="sit" /><span>@T("Search.SearchInTags")</span></label>
+                        </div>
+                        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductSearchPageAdvanced, additionalData = Model })
                     </div>
-                </section>
-                <section class="buttons">
-                    <button type="submit" class="button-1 search-button">@T("Search.Button")</button>
-                </section>
+                </div>
             </form>
         </div>
         @await Html.PartialAsync("_CatalogSelectors", Model.CatalogProductsModel)
