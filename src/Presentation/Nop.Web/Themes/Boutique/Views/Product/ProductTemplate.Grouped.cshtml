@@ -205,9 +205,13 @@
             </article>
         </form>
         <!--product reviews-->
-        @if (Model.ProductReviewOverview.AllowCustomerReviews)
+        @if (Model.ProductReviewOverview.AllowCustomerReviews && Model.ProductReviews.Items.Count > 0)
         {
             <details class="boutique-accordion"><summary>@T("Reviews")</summary><div class="boutique-accordion-body">@await Html.PartialAsync("_ProductReviews", Model.ProductReviews)</div></details>
+        }
+        else if (Model.ProductReviewOverview.AllowCustomerReviews)
+        {
+            @await Html.PartialAsync("_EmptyProductReviewForm", Model.ProductReviews)
         }
         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductDetailsBottom, additionalData = Model })
     </div>

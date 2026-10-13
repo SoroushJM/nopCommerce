@@ -1,0 +1,8 @@
+@{
+    Layout = "_ColumnsOne";
+    NopHtml.AddTitleParts("این صفحه پیدا نشد");
+    NopHtml.AppendPageCssClassParts("html-not-found-page");
+}
+<component type="typeof(BoutiqueNotFound)" render-mode="Static"
+           param-CatalogUrl="@(Url.RouteUrl("MadadrangAllProducts"))"
+           param-HomeUrl="@(Url.RouteUrl(NopRouteNames.General.HOMEPAGE))" />

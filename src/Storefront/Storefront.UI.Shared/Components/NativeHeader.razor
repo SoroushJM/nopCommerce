@@ -3,7 +3,24 @@
 @inject NavigationManager Navigation
 <BbDirectionProvider Direction="@(Labels.Rtl ? TextDirection.RightToLeft : TextDirection.LeftToRight)">
     <div class="flex items-center gap-4 max-md:gap-1">
-        @if (Theme.EnableOtp)
+        @if (AccountDropdown && _signedIn)
+        {
+            <div class="max-md:hidden">
+                <BbDropdownMenu Dir="@Labels.Direction">
+                    <BbDropdownMenuTrigger AsChild="true">
+                        <BbButton Variant="ButtonVariant.Ghost" Size="ButtonSize.Large">
+                            <SfIcon Name="user" data-icon="inline-start" /><span>@Labels.Get("Account.MyAccount")</span>
+                        </BbButton>
+                    </BbDropdownMenuTrigger>
+                    <BbDropdownMenuContent Class="min-w-[11rem]! border-[0.0625rem]! border-solid! border-border! rounded-[0.5rem]! bg-card! text-foreground! font-sans! [box-shadow:0_0.25rem_0.75rem_rgb(32_43_54_/_0.12)]!">
+                        <BbDropdownMenuItem Href="@Theme.AccountUrl">@Labels.Get("Account.MyAccount")</BbDropdownMenuItem>
+                        <BbDropdownMenuItem Href="@Initial.CartUrl">@Labels.Get("ShoppingCart")</BbDropdownMenuItem>
+                        <BbDropdownMenuItem Href="@Theme.LogoutUrl" Class="text-destructive!">@Labels.Get("Account.Logout")</BbDropdownMenuItem>
+                    </BbDropdownMenuContent>
+                </BbDropdownMenu>
+            </div>
+        }
+        else if (Theme.EnableOtp)
         {
             <BbButton Variant="ButtonVariant.Ghost" Size="ButtonSize.Large" Class="max-md:hidden" OnClick="ShowLogin">
                 <SfIcon Name="user" data-icon="inline-start" /><span>@Labels.Get(_signedIn ? "Account.MyAccount" : "Account.Login")</span>

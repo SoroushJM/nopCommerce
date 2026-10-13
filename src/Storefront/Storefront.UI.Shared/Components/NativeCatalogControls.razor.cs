@@ -9,6 +9,7 @@ public partial class NativeCatalogControls
 {
     [Parameter] public CatalogControls Initial { get; set; } = new();
     [Parameter] public string Placement { get; set; } = "filters";
+    [Parameter] public bool CompactToolbar { get; set; }
     [Inject] private IFocusManager FocusManager { get; set; } = default!;
     private bool _open, _restoreFocus;
     private ElementReference _filterTrigger;

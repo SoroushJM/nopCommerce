@@ -1,0 +1,12 @@
+@model TopicModel
+@{
+    // Omit only nopCommerce's unchanged installation placeholder. Store-authored topics keep the native renderer.
+    var isDefaultLoginPlaceholder = !Model.IsPasswordProtected &&
+        string.Equals(Model.SystemName, "LoginRegistrationInfo", StringComparison.OrdinalIgnoreCase) &&
+        string.Equals(Model.Title?.Trim(), "About login / registration", StringComparison.Ordinal) &&
+        string.Equals(Model.Body?.Trim(), "<p>Put your login / registration information here. You can edit this in the admin site.</p>", StringComparison.Ordinal);
+}
+@if (!isDefaultLoginPlaceholder)
+{
+    @await Html.PartialAsync("~/Views/Shared/Components/TopicBlock/Default.cshtml", Model)
+}

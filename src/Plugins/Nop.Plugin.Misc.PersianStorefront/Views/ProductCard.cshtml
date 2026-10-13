@@ -24,6 +24,11 @@
         : Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_CART_CATALOG, new { productId = Model.Id, shoppingCartTypeId = (int)ShoppingCartType.ShoppingCart, quantity = 1 });
     var addtowishlistlink = Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_CART_CATALOG, new { productId = Model.Id, shoppingCartTypeId = (int)ShoppingCartType.Wishlist, quantity = 1 });
     var addtocomparelink = Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_COMPARE, new { productId = Model.Id });
+    var cardIconAttributes = new Dictionary<string, object>
+    {
+        ["aria-hidden"] = "true",
+        ["data-icon"] = "inline-start"
+    };
 }
 <article class="product-card group overflow-hidden rounded-lg border-[.0625rem] border-border bg-background transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-(--shadow-hover) motion-reduce:transform-none motion-reduce:translate-none motion-reduce:transition-none" data-productid="@Model.Id" data-product-stock="@inStock.ToString().ToLowerInvariant()">
         <div class="product-photo relative h-56 overflow-hidden bg-surface max-md:h-[11.875rem] [&_img]:h-full [&_img]:w-full [&_img]:object-cover [&_img]:transition-transform [&_img]:duration-[400ms] group-hover:[&_img]:scale-[1.04] motion-reduce:[&_img]:transform-none motion-reduce:[&_img]:scale-100 motion-reduce:[&_img]:transition-none">
@@ -103,11 +108,12 @@
             }
         </div>
         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductBoxAddinfoMiddle, additionalData = Model })
-        <a href="@url" aria-label="مشاهدهٔ @Model.Name" class="size-8 rounded-lg bg-muted text-muted-foreground grid place-items-center">
-            <component type="typeof(SfIcon)" render-mode="Static" param-Name='@("arrow")' param-Size="@(1m)" />
+        <a href="@url" aria-label="مشاهدهٔ @Model.Name" class="inline-flex min-h-10 shrink-0 items-center gap-1 rounded-md px-2 text-xs text-primary transition-colors hover:bg-secondary focus-visible:outline-[.125rem] focus-visible:outline-offset-[.125rem] focus-visible:outline-ring motion-reduce:transition-none">
+            <span>مشاهده</span>
+            <component type="typeof(SfIcon)" render-mode="Static" param-Name='@("arrow")' param-Size="@(.875m)" />
         </a>
     </div>
-    <div class="buttons px-4 pb-4 flex gap-2 flex-wrap text-xs">
+    <div class="buttons grid gap-2 px-4 pb-4 text-xs">
         @if (!Model.ProductPrice.DisableBuyButton)
         {
             var addToCartText = T("ShoppingCart.AddToCart").Text;
@@ -115,16 +121,30 @@
                 addToCartText = T("ShoppingCart.Rent").Text;
             if (Model.ProductPrice.AvailableForPreOrder)
                 addToCartText = T("ShoppingCart.PreOrder").Text;
-            <button type="button" class="product-box-add-to-cart-button rounded-lg bg-primary text-primary-foreground px-3 py-2" onclick="AjaxCart.addproducttocart_catalog('@addtocartlink');return false;">@addToCartText</button>
+            <button type="button" class="product-box-add-to-cart-button inline-flex min-h-11 w-full items-center justify-center gap-2 rounded-lg bg-primary px-3 py-2.5 font-semibold text-primary-foreground transition-colors hover:bg-primary/90 focus-visible:outline-[.125rem] focus-visible:outline-offset-[.125rem] focus-visible:outline-ring motion-reduce:transition-none" onclick="AjaxCart.addproducttocart_catalog('@addtocartlink');return false;">
+                <component type="typeof(SfIcon)" render-mode="Static" param-Name='@("bag")' param-Size="@(1m)" />
+                <span>@addToCartText</span>
+            </button>
         }
-        @if (!Model.ProductPrice.DisableAddToCompareListButton)
+        @if (!Model.ProductPrice.DisableAddToCompareListButton || !Model.ProductPrice.DisableWishlistButton)
         {
-            <button type="button" class="add-to-compare-list-button rounded-lg bg-muted text-muted-foreground px-3 py-2" title="@T("ShoppingCart.AddToCompareList")" onclick="AjaxCart.addproducttocomparelist('@addtocomparelink');return false;">@T("ShoppingCart.AddToCompareList")</button>
-        }
-        @if (!Model.ProductPrice.DisableWishlistButton)
-        {
-            @await Html.PartialAsync("_MoveToWishlistModal", Model.ProductToWishlist)
-            <button type="button" class="add-to-wishlist-button rounded-lg bg-muted text-muted-foreground px-3 py-2" title="@T("ShoppingCart.AddToWishlist")" onclick="AjaxCart.addproducttocart_catalog('@addtowishlistlink');return false;">@T("ShoppingCart.AddToWishlist")</button>
+            <div class="flex! min-w-0 flex-nowrap! items-center! gap-2">
+                @if (!Model.ProductPrice.DisableWishlistButton)
+                {
+                    @await Html.PartialAsync("_MoveToWishlistModal", Model.ProductToWishlist)
+                    <button type="button" class="add-to-wishlist-button inline-flex! h-[2.5rem]! min-h-[2.5rem]! max-h-[2.5rem]! min-w-0! flex-1! basis-0! items-center! justify-center! gap-1.5! overflow-hidden! rounded-lg border-[.0625rem] border-border bg-background px-2 py-2 text-xs! text-muted-foreground transition-colors hover:border-primary/30 hover:bg-secondary hover:text-primary focus-visible:outline-[.125rem] focus-visible:outline-offset-[.125rem] focus-visible:outline-ring motion-reduce:transition-none [&>svg]:size-[1rem]! [&>svg]:min-w-[1rem]! [&>svg]:max-w-[1rem]! [&>svg]:min-h-[1rem]! [&>svg]:max-h-[1rem]! [&>svg]:shrink-0!" title="@T("ShoppingCart.AddToWishlist")" aria-label="@T("ShoppingCart.AddToWishlist")" onclick="AjaxCart.addproducttocart_catalog('@addtowishlistlink');return false;">
+                        <component type="typeof(BlazorBlueprint.Icons.Lucide.Components.LucideIcon)" render-mode="Static" param-Name='@("heart")' param-StrokeWidth="@(1.7)" param-AdditionalAttributes="@cardIconAttributes" />
+                        <span class="truncate">علاقه‌مندی</span>
+                    </button>
+                }
+                @if (!Model.ProductPrice.DisableAddToCompareListButton)
+                {
+                    <button type="button" class="add-to-compare-list-button inline-flex! h-[2.5rem]! min-h-[2.5rem]! max-h-[2.5rem]! min-w-0! flex-1! basis-0! items-center! justify-center! gap-1.5! overflow-hidden! rounded-lg border-[.0625rem] border-border bg-background px-2 py-2 text-xs! text-muted-foreground transition-colors hover:border-primary/30 hover:bg-secondary hover:text-primary focus-visible:outline-[.125rem] focus-visible:outline-offset-[.125rem] focus-visible:outline-ring motion-reduce:transition-none [&>svg]:size-[1rem]! [&>svg]:min-w-[1rem]! [&>svg]:max-w-[1rem]! [&>svg]:min-h-[1rem]! [&>svg]:max-h-[1rem]! [&>svg]:shrink-0!" title="@T("ShoppingCart.AddToCompareList")" aria-label="@T("ShoppingCart.AddToCompareList")" onclick="AjaxCart.addproducttocomparelist('@addtocomparelink');return false;">
+                        <component type="typeof(BlazorBlueprint.Icons.Lucide.Components.LucideIcon)" render-mode="Static" param-Name='@("columns-2")' param-StrokeWidth="@(1.7)" param-AdditionalAttributes="@cardIconAttributes" />
+                        <span class="truncate">مقایسه</span>
+                    </button>
+                }
+            </div>
         }
     </div>
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductBoxAddinfoAfter, additionalData = Model })

@@ -1,26 +1,19 @@
-@using Storefront.UI.Boutique.Components
-@using Storefront.UI.Shared
-@inject Nop.Core.IStoreContext storeContext
-@{
-    var store = await storeContext.GetCurrentStoreAsync();
-    var theme = ViewData["ThemeProfile"] as StorefrontThemeProfile;
-}
-<div class="boutique-footer bg-[#f0e6db]! border-t-[0.0625rem]! border-border!
-            [&_.footer]:bg-transparent! [&_.footer]:bg-none! [&_.footer]:text-foreground! [&_.footer]:border-0!
-            [&_.footer-upper]:bg-transparent! [&_.footer-upper]:bg-none! [&_.footer-upper]:border-0! [&_.footer-upper]:pt-6! [&_.footer-upper]:px-5! [&_.footer-upper]:pb-10! [&_.footer-upper]:max-w-[73.75rem]! [&_.footer-upper]:mx-auto!
-            [&_.footer-block_.title]:text-foreground! [&_.footer-block_.title]:text-[0.8125rem]! [&_.footer-block_.title]:font-medium! [&_.footer-block_.title]:bg-transparent! [&_.footer-block_.title]:bg-none! [&_.footer-block_.title]:border-border!
-            [&_.footer-block_.list_a]:text-muted-foreground! [&_.footer-block_.list_a]:text-[0.75rem]!
-            [&_.footer-menu\_\_item]:py-[0.3125rem]! [&_.footer-menu\_\_item]:px-0! [&_.footer-menu\_\_item]:border-0! [&_.footer-menu\_\_item]:text-[0.75rem]! [&_.footer-menu\_\_item]:text-muted-foreground! [&_.footer-menu\_\_link]:text-muted-foreground!
-            [&_.newsletter-email]:flex! [&_.newsletter-email]:flex-wrap! [&_.newsletter-email]:border-[0.0625rem]! [&_.newsletter-email]:border-solid! [&_.newsletter-email]:border-border! [&_.newsletter-email]:rounded-[0.75rem]! [&_.newsletter-email]:bg-card! [&_.newsletter-email]:overflow-visible! [&_.newsletter-email]:gap-2!
-            [&_.newsletter-email_input]:bg-transparent! [&_.newsletter-email_input]:bg-none! [&_.newsletter-email_input]:border-0! [&_.newsletter-email_input]:text-foreground!
-            [&_.newsletter-email_.newsletter-subscribe-text]:flex-[1_1_8.75rem]! [&_.newsletter-email_.newsletter-subscribe-text]:min-w-0! [&_.newsletter-email_.newsletter-subscribe-text]:max-w-full! [&_.newsletter-email_.newsletter-subscribe-text]:w-auto!
-            [&_.newsletter-email_.newsletter-subscribe-button]:flex-none! [&_.newsletter-email_.newsletter-subscribe-button]:max-w-full! [&_.newsletter-email_.newsletter-subscribe-button]:bg-primary! [&_.newsletter-email_.newsletter-subscribe-button]:text-primary-foreground! [&_.newsletter-email_.newsletter-subscribe-button]:text-[0.6875rem]!
-            [&_.newsletter-email_.options]:flex-[0_0_100%]! [&_.newsletter-email_.options]:w-full! [&_.newsletter-email_.options]:max-w-full! [&_.newsletter-email_.options]:text-start! [&_.newsletter-email_.options]:p-2!
-            [&_.newsletter-email_.captcha-box]:flex-[0_0_100%]! [&_.newsletter-email_.captcha-box]:w-full! [&_.newsletter-email_.captcha-box]:max-w-full! [&_.newsletter-email_.captcha-box]:text-start! [&_.newsletter-email_.captcha-box]:p-2! [&_.newsletter-email_.captcha-box]:overflow-x-auto!
-            [&_.footer-lower]:bg-transparent! [&_.footer-lower]:border-t-[0.0625rem]! [&_.footer-lower]:border-[#dfd0c0]! [&_.footer-lower]:text-muted-foreground! [&_.footer-lower]:text-[0.6875rem]! [&_.footer-lower]:p-5! [&_.footer-powered-by]:text-[0.625rem]! [&_.footer-powered-by]:text-muted-foreground!
-            max-[40rem]:[&_.footer-upper]:pt-2! max-[40rem]:[&_.footer-upper]:px-4! max-[40rem]:[&_.footer-upper]:pb-7! max-[40rem]:[&_.footer-block]:w-full! max-[40rem]:[&_.footer-block]:mb-4! max-[40rem]:[&_.footer-block]:text-start! max-[40rem]:[&_.footer-block_.title]:py-3! max-[40rem]:[&_.footer-block_.title]:px-0! max-[40rem]:[&_.footer-block_.title]:text-[0.8125rem]! max-[40rem]:[&_.footer-block_.list]:pt-0! max-[40rem]:[&_.footer-block_.list]:px-0! max-[40rem]:[&_.footer-block_.list]:pb-[0.875rem]! max-[40rem]:[&_.footer-lower]:text-[0.625rem]! max-[40rem]:[&_.footer-lower]:py-[1.125rem]! max-[40rem]:[&_.footer-lower]:px-4!">
-    <component type="typeof(BoutiqueFooter)" render-mode="Static" param-BrandName="@(theme?.BrandName ?? store.Name)" param-HomeUrl="@(Url.RouteUrl(NopRouteNames.General.HOMEPAGE))" />
-    @*Native footer includes all configured menus, newsletter, social links, copyright,
-      tax/shipping text, theme selector and the Footer widget zone.*@
+<div class="boutique-footer border-t-[0.0625rem]! border-solid! border-border! bg-muted!
+            [&_.footer-menu\_\_item]:m-0! [&_.footer-menu\_\_item]:border-[0rem]! [&_.footer-menu\_\_item]:px-0! [&_.footer-menu\_\_item]:py-[0.3125rem]! [&_.footer-menu\_\_item]:text-start! [&_.footer-menu\_\_item]:text-[0.8125rem]! [&_.footer-menu\_\_item]:leading-[1.8]!
+            [&_.footer-menu\_\_link]:gap-2! [&_.footer-menu\_\_link]:text-muted-foreground! [&_.footer-menu\_\_link:hover]:text-primary!
+            [&_.networks]:m-0! [&_.networks]:flex! [&_.networks]:flex-wrap! [&_.networks]:gap-2! [&_.networks]:border-[0rem]! [&_.networks]:p-0!
+            [&_.networks_li]:m-0! [&_.networks_a]:size-[2.375rem]!
+            [&_.newsletter]:m-0! [&_.newsletter]:flex! [&_.newsletter]:min-w-0! [&_.newsletter]:flex-col! [&_.newsletter]:gap-3! [&_.newsletter]:text-start!
+            [&_.newsletter_>_.title]:m-0! [&_.newsletter_>_.title]:border-[0rem]! [&_.newsletter_>_.title]:bg-transparent! [&_.newsletter_>_.title]:bg-none! [&_.newsletter_>_.title]:p-0! [&_.newsletter_>_.title]:text-[0.875rem]! [&_.newsletter_>_.title]:font-medium! [&_.newsletter_>_.title]:leading-[1.8]! [&_.newsletter_>_.title]:text-foreground!
+            [&_.newsletter-subscribe]:min-w-0! [&_.newsletter-subscribe]:w-full!
+            [&_.newsletter-email]:flex! [&_.newsletter-email]:w-full! [&_.newsletter-email]:flex-wrap! [&_.newsletter-email]:items-center! [&_.newsletter-email]:gap-1! [&_.newsletter-email]:overflow-visible! [&_.newsletter-email]:rounded-[0.75rem]! [&_.newsletter-email]:border-[0.0625rem]! [&_.newsletter-email]:border-solid! [&_.newsletter-email]:border-border! [&_.newsletter-email]:bg-card! [&_.newsletter-email]:p-1!
+            [&_.newsletter-subscribe-text]:float-none! [&_.newsletter-subscribe-text]:m-0! [&_.newsletter-subscribe-text]:h-10! [&_.newsletter-subscribe-text]:w-auto! [&_.newsletter-subscribe-text]:min-w-0! [&_.newsletter-subscribe-text]:max-w-full! [&_.newsletter-subscribe-text]:flex-[1_1_8rem]! [&_.newsletter-subscribe-text]:border-[0rem]! [&_.newsletter-subscribe-text]:bg-transparent! [&_.newsletter-subscribe-text]:px-2! [&_.newsletter-subscribe-text]:py-2! [&_.newsletter-subscribe-text]:text-[0.75rem]! [&_.newsletter-subscribe-text]:text-foreground!
+            [&_.newsletter-subscribe-button]:float-none! [&_.newsletter-subscribe-button]:m-0! [&_.newsletter-subscribe-button]:h-10! [&_.newsletter-subscribe-button]:min-h-10! [&_.newsletter-subscribe-button]:min-w-0! [&_.newsletter-subscribe-button]:max-w-full! [&_.newsletter-subscribe-button]:flex-none! [&_.newsletter-subscribe-button]:rounded-[0.5rem]! [&_.newsletter-subscribe-button]:border-[0rem]! [&_.newsletter-subscribe-button]:bg-primary! [&_.newsletter-subscribe-button]:px-3! [&_.newsletter-subscribe-button]:py-2! [&_.newsletter-subscribe-button]:text-[0.75rem]! [&_.newsletter-subscribe-button]:leading-[1.5]! [&_.newsletter-subscribe-button]:text-primary-foreground!
+            [&_.newsletter-email_.options]:w-full! [&_.newsletter-email_.options]:flex-[0_0_100%]! [&_.newsletter-email_.options]:p-2! [&_.newsletter-email_.options]:text-[0.75rem]! [&_.newsletter-email_.options]:text-start!
+            [&_.newsletter-email_.captcha-box]:w-full! [&_.newsletter-email_.captcha-box]:max-w-full! [&_.newsletter-email_.captcha-box]:flex-[0_0_100%]! [&_.newsletter-email_.captcha-box]:overflow-x-auto! [&_.newsletter-email_.captcha-box]:p-2! [&_.newsletter-email_.captcha-box]:text-start!
+            [&_.newsletter-validation]:overflow-visible! [&_.newsletter-validation]:text-[0.75rem]! [&_.newsletter-validation]:leading-[1.8]!
+            [&_.newsletter-result]:overflow-visible! [&_.newsletter-result]:text-[0.75rem]! [&_.newsletter-result]:leading-[1.8]!">
+    @*Keep native footer menus, newsletter behavior, social links, legal text,
+      theme selection and footer widgets inside the Boutique footer layout.*@
     @await Component.InvokeAsync(typeof(FooterViewComponent))
 </div>

@@ -13,6 +13,8 @@ public partial class NativeHeader
     [Parameter]
     public StorefrontThemeProfile Theme { get; set; } = new();
 
+    [Parameter] public bool AccountDropdown { get; set; }
+
     private string AccountUrl => _signedIn ? Theme.AccountUrl : Theme.LoginUrl;
     private NativeUiLabels Labels => Theme.Labels;
 

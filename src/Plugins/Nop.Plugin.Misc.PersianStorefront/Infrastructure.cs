@@ -105,6 +105,11 @@ public sealed class StorefrontRoutes : BaseRouteProvider, IRouteProvider
             controller = "MadadrangCatalog",
             action = "LegacyCatalog"
         });
+        endpoints.MapControllerRoute("BoutiqueLegacyCatalog", $"{language}/boutique/catalog", new
+        {
+            controller = "MadadrangCatalog",
+            action = "LegacyCatalog"
+        });
         endpoints.MapControllerRoute("StationeryCart", $"{language}/stationery/cart", new
         {
             controller = "MadadrangCompatibility",

@@ -12,7 +12,7 @@ namespace Nop.Plugin.Misc.PersianStorefront.Components;
 
 public sealed class MadadrangCatalogControlsViewComponent(IWorkContext work, ILocalizationService localization) : NopViewComponent
 {
-    public async Task<IViewComponentResult> InvokeAsync(CatalogProductsModel model, string placement, SearchModel? search = null, bool allProducts = false)
+    public async Task<IViewComponentResult> InvokeAsync(CatalogProductsModel model, string placement, SearchModel? search = null, bool allProducts = false, bool compactToolbar = false)
     {
         var labels = await NativeUiLocalization.PrepareAsync(localization, work);
         var controls = new CatalogControls
@@ -74,6 +74,7 @@ public sealed class MadadrangCatalogControlsViewComponent(IWorkContext work, ILo
         if (!controls.PriceEnabled)
             controls.Query.Remove("price");
         ViewData["Placement"] = placement;
+        ViewData["CompactToolbar"] = compactToolbar;
         return await ViewAsync("~/Plugins/Misc.PersianStorefront/Views/CatalogControls.cshtml", controls);
     }
 

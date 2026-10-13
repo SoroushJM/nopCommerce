@@ -68,9 +68,13 @@
     @await Component.InvokeAsync(typeof(ProductsAlsoPurchasedViewComponent), new { productId = Model.Id })
     @await Component.InvokeAsync(typeof(RelatedProductsViewComponent), new { productId = Model.Id })
     @await Component.InvokeAsync(typeof(CompatibleWithFilterLevelValuesViewComponent), new { productId = Model.Id })
-    @if (Model.ProductReviewOverview.AllowCustomerReviews)
+    @if (Model.ProductReviewOverview.AllowCustomerReviews && Model.ProductReviews.Items.Count > 0)
     {
         @await Html.PartialAsync("_ProductReviews", Model.ProductReviews)
+    }
+    else if (Model.ProductReviewOverview.AllowCustomerReviews)
+    {
+        @await Html.PartialAsync("_EmptyProductReviewForm", Model.ProductReviews)
     }
 </div>
 @await Component.InvokeAsync(typeof(WidgetViewComponent), new

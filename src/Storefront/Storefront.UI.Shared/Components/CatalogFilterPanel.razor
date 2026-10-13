@@ -1,4 +1,4 @@
-<BbFieldGroup>
+<BbFieldGroup Class="@(Compact ? "gap-5! [&_[data-slot=field-label]]:m-0! [&_[data-slot=field-label]]:w-auto! [&_[data-slot=field-label]]:flex! [&_[data-slot=field-label]]:items-center! [&_[data-slot=field-label]]:gap-2! [&_[data-slot=field-label]]:text-sm! [&_[data-slot=field-label]]:font-normal! [&_[data-slot=field-label]]:leading-6! [&_[data-slot=field-label]]:cursor-pointer! [&_fieldset]:min-w-0! [&_fieldset]:flex! [&_fieldset]:flex-col! [&_fieldset]:gap-2! [&_fieldset>*]:my-0! [&_legend]:text-xs! [&_legend]:font-bold! [&_legend]:leading-5! [&_[data-orientation=horizontal]]:items-center! [&_[data-orientation=horizontal]]:gap-2.5! [&_[data-orientation=horizontal]]:min-h-8! [&_[data-orientation=horizontal]]:m-0! [&_[data-orientation=horizontal]_[role=checkbox]]:size-[1.125rem]! [&_[data-orientation=horizontal]_[role=checkbox]]:shrink-0! [&_[data-orientation=horizontal]_[role=checkbox]]:rounded-[0.25rem]! [&_[data-orientation=horizontal]_[role=checkbox]]:border-[0.0625rem]! [&_[data-orientation=horizontal]_[role=checkbox]]:border-solid! [&_[data-orientation=horizontal]_[role=checkbox]]:border-input!" : null)">
     @if (Initial.Categories.Count > 0)
     {
         <BbField>
@@ -18,7 +18,7 @@
             }
             else
             {
-                <BbFieldGroup>
+                <BbFieldGroup Class="@(Compact ? "gap-1!" : null)">
                     @foreach (var option in Initial.Manufacturers)
                     {
                         <BbField Orientation="FieldOrientation.Horizontal">
@@ -36,32 +36,45 @@
         <BbFieldSet>
             <BbFieldLegend>@Initial.Labels.Get("Filtering.PriceRangeFilter") (@Initial.Currency)</BbFieldLegend>
             <BbFieldDescription><span dir="ltr">@Initial.AvailableFrom – @Initial.AvailableTo</span></BbFieldDescription>
+            @if (Compact && _hasPriceRange)
+            {
+                <BbField Class="gap-2!">
+                    <BbFieldLabel Class="sr-only!">@Initial.Labels.Get("Filtering.PriceRangeFilter")</BbFieldLabel>
+                    <div class="px-2.5 py-3">
+                        <BbRangeSlider Value="_priceRange" ValueChanged="UpdatePriceRange"
+                                       Min="_priceMin" Max="_priceMax" Step="_priceStep"
+                                       StartLabel="حداقل قیمت" EndLabel="حداکثر قیمت"
+                                       aria-describedby="@(InstanceId + "-price-error")"
+                                       Class="h-5! [&_[role=slider]]:size-5! [&_[role=slider]]:border-[0.125rem]! [&_[role=slider]]:border-solid! [&_[role=slider]]:border-primary! [&_[role=slider]]:focus-visible:ring-0! [&_[role=slider]]:focus-visible:ring-offset-0! [&_[role=slider]]:focus-visible:outline-[0.125rem]! [&_[role=slider]]:focus-visible:outline-solid! [&_[role=slider]]:focus-visible:outline-ring! [&_[role=slider]]:focus-visible:outline-offset-[0.1875rem]!" />
+                    </div>
+                </BbField>
+            }
             <BbFieldGroup Class="grid grid-cols-2 gap-2">
                 <BbField IsInvalid="@(_error.Length > 0)">
-                    <BbFieldLabel For="@(InstanceId + "-from")">≥ @Initial.Labels.Get("Products.Price")</BbFieldLabel>
-                    <BbInput Id="@(InstanceId + "-from")" Class="h-11 text-left" dir="ltr" inputmode="decimal"
+                    <BbFieldLabel For="@(InstanceId + "-from")">@(Compact ? "از قیمت" : "≥ " + Initial.Labels.Get("Products.Price"))</BbFieldLabel>
+                    <BbInput Id="@(InstanceId + "-from")" Class="@(Compact ? "h-10! min-w-0! text-left!" : "h-11 text-left")" dir="ltr" inputmode="decimal"
                              AriaInvalid="@(_error.Length > 0)" AriaDescribedBy="@(InstanceId + "-price-error")"
-                             @bind-Value="_from" UpdateTiming="UpdateTiming.Immediate" />
+                             Value="_from" ValueChanged="UpdatePriceFrom" UpdateTiming="UpdateTiming.Immediate" />
                 </BbField>
                 <BbField IsInvalid="@(_error.Length > 0)">
-                    <BbFieldLabel For="@(InstanceId + "-to")">≤ @Initial.Labels.Get("Products.Price")</BbFieldLabel>
-                    <BbInput Id="@(InstanceId + "-to")" Class="h-11 text-left" dir="ltr" inputmode="decimal"
+                    <BbFieldLabel For="@(InstanceId + "-to")">@(Compact ? "تا قیمت" : "≤ " + Initial.Labels.Get("Products.Price"))</BbFieldLabel>
+                    <BbInput Id="@(InstanceId + "-to")" Class="@(Compact ? "h-10! min-w-0! text-left!" : "h-11 text-left")" dir="ltr" inputmode="decimal"
                              AriaInvalid="@(_error.Length > 0)" AriaDescribedBy="@(InstanceId + "-price-error")"
-                             @bind-Value="_to" UpdateTiming="UpdateTiming.Immediate" />
+                             Value="_to" ValueChanged="UpdatePriceTo" UpdateTiming="UpdateTiming.Immediate" />
                 </BbField>
             </BbFieldGroup>
             @if (_error.Length > 0)
             {
                 <BbFieldError Id="@(InstanceId + "-price-error")" role="alert">@_error</BbFieldError>
             }
-            <BbButton Size="ButtonSize.Large" Class="w-full" OnClick="ApplyPrice">@Initial.Labels.Get("Common.Confirm")</BbButton>
+            <BbButton Size="ButtonSize.Large" Class="@(Compact ? "w-full h-10! min-h-10!" : "w-full")" OnClick="ApplyPrice">@Initial.Labels.Get("Common.Confirm")</BbButton>
         </BbFieldSet>
     }
     @foreach (var group in Initial.Specifications)
     {
         <BbFieldSet>
             <BbFieldLegend>@group.Name</BbFieldLegend>
-            <BbFieldGroup>
+            <BbFieldGroup Class="@(Compact ? "gap-1!" : null)">
                 @foreach (var option in group.Options)
                 {
                     <BbField Orientation="FieldOrientation.Horizontal">
@@ -70,8 +83,9 @@
                         <BbFieldLabel For="@(InstanceId + "-spec-" + option.Value)">
                             @if (option.Color.Length > 0)
                             {
-                                <span class="size-3 rounded-[9999rem] border border-border bg-(--swatch-color)"
-                                      style="--swatch-color:@option.Color"></span>
+                                <svg class="inline-block size-3 shrink-0 rounded-[9999rem] border-[0.0625rem] border-solid border-border" viewBox="0 0 16 16" aria-hidden="true">
+                                    <circle cx="8" cy="8" r="8" fill="@option.Color" />
+                                </svg>
                             }
                             @option.Text
                         </BbFieldLabel>
@@ -80,5 +94,14 @@
             </BbFieldGroup>
         </BbFieldSet>
     }
-    <BbButton Variant="ButtonVariant.Ghost" Class="w-full" OnClick='() => Change.InvokeAsync(new("reset", null))'>@Initial.Labels.Get("Common.Remove")</BbButton>
+    <BbButton Variant="ButtonVariant.Ghost" Class="@(Compact ? "h-9! min-h-9! w-full justify-start! gap-2! border-t-[0.0625rem]! border-solid! border-border! rounded-none! px-0! text-xs! text-muted-foreground! hover:text-primary!" : "w-full")" OnClick='() => Change.InvokeAsync(new("reset", null))'>
+        @if (Compact)
+        {
+            <SfIcon Name="x" Size="0.875m" /><span>پاک کردن فیلترها</span>
+        }
+        else
+        {
+            @Initial.Labels.Get("Common.Remove")
+        }
+    </BbButton>
 </BbFieldGroup>

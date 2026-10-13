@@ -1,0 +1,29 @@
+@model ProductReviewsModel
+
+@if (Model.AddProductReview.CanCurrentCustomerLeaveReview && Model.AddProductReview.CanAddNewReview)
+{
+    <div id="empty-product-review-editor" hidden="@(ViewData.ModelState.IsValid)">
+        @await Html.PartialAsync("_ProductReviews", Model)
+    </div>
+    <script asp-location="Footer">
+        $(function () {
+            var editor = document.getElementById('empty-product-review-editor');
+            if (!editor) return;
+            function openReviewEditor() {
+                editor.hidden = false;
+                var form = editor.querySelector('#review-form');
+                if (form) form.scrollIntoView({ block: 'start' });
+            }
+            document.querySelectorAll('a[href="#addreview"]').forEach(function (link) {
+                link.setAttribute('aria-controls', editor.id);
+                link.setAttribute('aria-expanded', String(!editor.hidden));
+                link.addEventListener('click', function (event) {
+                    event.preventDefault();
+                    openReviewEditor();
+                    link.setAttribute('aria-expanded', 'true');
+                });
+            });
+            if (window.location.hash === '#addreview') openReviewEditor();
+        });
+    </script>
+}

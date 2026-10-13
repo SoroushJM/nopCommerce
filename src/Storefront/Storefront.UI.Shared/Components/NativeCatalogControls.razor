@@ -2,31 +2,37 @@
 <BbDirectionProvider Direction="@(Initial.Rtl ? TextDirection.RightToLeft : TextDirection.LeftToRight)">
     @if (Placement == "toolbar")
     {
-        <div class="flex items-center gap-3 flex-wrap text-xs text-muted-foreground" aria-label="@Initial.Labels.Get("Catalog.ViewMode")">
+        <div class="@(CompactToolbar ? "flex flex-wrap items-center gap-2 text-xs text-muted-foreground [&_[role=combobox]]:h-[2.25rem]! [&_[role=combobox]]:min-h-[2.25rem]!" : "flex items-center gap-3 flex-wrap text-xs text-muted-foreground")" aria-label="@Initial.Labels.Get("Catalog.ViewMode")">
             @if (Initial.SortOptions.Count > 0)
             {
-                <div class="flex items-center gap-2"><span>@Initial.Labels.Get("Catalog.OrderBy")</span>
+                <div class="flex items-center gap-2"><span class="whitespace-nowrap">@Initial.Labels.Get("Catalog.OrderBy")</span>
+                    <div class="@(CompactToolbar ? "w-[10rem] max-w-full" : "contents")">
                     <StoreSelect TValue="string" Label="@Initial.Labels.Get("Catalog.OrderBy.Label")" Options="Options(Initial.SortOptions)"
                                  Value="Selected(Initial.SortOptions)" ValueChanged='value => Change(new("orderby", value))' />
+                    </div>
                 </div>
             }
             @if (Initial.PageSizes.Count > 0)
             {
+                <div class="@(CompactToolbar ? "w-[5rem] max-w-full" : "contents")">
                 <StoreSelect TValue="string" Label="@Initial.Labels.Get("Catalog.PageSize.Label")" Options="Options(Initial.PageSizes)"
                              Value="Selected(Initial.PageSizes)" ValueChanged='value => Change(new("pagesize", value))' />
+                </div>
             }
             @if (Initial.ViewModes.Count > 0)
             {
+                <div class="@(CompactToolbar ? "w-[8.5rem] max-w-full" : "contents")">
                 <StoreSelect TValue="string" Label="@Initial.Labels.Get("Catalog.ViewMode")" Options="Options(Initial.ViewModes)"
                              Value="Selected(Initial.ViewModes)" ValueChanged='value => Change(new("viewmode", value))' />
+                </div>
             }
         </div>
     }
     else
     {
         <div class="desktop-filter w-[13.75rem] shrink-0 max-md:hidden">
-            <h2 class="font-bold text-sm flex items-center gap-2 mb-5"><SfIcon Name="filter" />@Initial.Labels.Get("Filtering.SpecificationFilter")</h2>
-            <CatalogFilterPanel Initial="Initial" InstanceId="sf-catalog-desktop" Change="Change" />
+            <h2 class="font-bold text-sm flex items-center gap-2 @(CompactToolbar ? "mb-4" : "mb-5")"><SfIcon Name="filter" />@Initial.Labels.Get("Filtering.SpecificationFilter")</h2>
+            <CatalogFilterPanel Initial="Initial" InstanceId="sf-catalog-desktop" Compact="CompactToolbar" Change="Change" />
         </div>
         <BbSheet Open="_open" OpenChanged="SetOpen" Side="@(Initial.Rtl ? SheetSide.Right : SheetSide.Left)">
             <div class="md:hidden mb-5" @ref="_filterTrigger">
@@ -35,7 +41,7 @@
             <BbSheetContent Class="sf-sheet flex w-[27.5rem] max-w-screen flex-col bg-card text-foreground font-sans pb-[max(1.5rem,env(safe-area-inset-bottom))]" ShowClose="false" dir="@(Initial.Rtl ? "rtl" : "ltr")">
                 <BbSheetClose AsChild="false" class="absolute top-4 end-4" aria-label="@Initial.Labels.Get("Common.Close")"><SfIcon Name="x" /></BbSheetClose>
                 <BbSheetHeader><BbSheetTitle>@Initial.Labels.Get("Filtering.SpecificationFilter")</BbSheetTitle><BbSheetDescription>@Initial.Labels.Get("Search.Category")</BbSheetDescription></BbSheetHeader>
-                <div class="overflow-y-auto my-6"><CatalogFilterPanel Initial="Initial" InstanceId="sf-catalog-mobile" Change="Change" /></div>
+                <div class="overflow-y-auto my-6"><CatalogFilterPanel Initial="Initial" InstanceId="sf-catalog-mobile" Compact="CompactToolbar" Change="Change" /></div>
             </BbSheetContent>
         </BbSheet>
     }

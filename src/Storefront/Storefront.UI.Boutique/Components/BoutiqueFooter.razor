@@ -1,9 +1,9 @@
-<div class="boutique-footer-brand text-center! [padding:2.5rem_1.25rem_1.5rem]! max-[40rem]:[padding:1.875rem_1rem_1.25rem]!">
-    <a href="@HomeUrl" class="text-[1.75rem]! font-medium! max-[40rem]:text-[1.5625rem]!">@BrandName</a>
-    <p class="text-[0.75rem]! text-muted-foreground! mt-[0.625rem]!">انتخاب‌هایی برای استایلِ خودت</p>
+<div class="boutique-footer-brand flex! min-w-0! flex-col! items-start! gap-3! text-start!">
+    <a href="@HomeUrl" class="text-[1.5rem]! font-medium! leading-[1.5]! text-foreground!">@BrandName</a>
+    <p class="m-0! max-w-[20rem]! text-[0.8125rem]! leading-[1.8]! text-muted-foreground!">انتخاب‌هایی برای استایلِ خودت</p>
     @if (Menus.Count > 0)
     {
-        <div class="boutique-footer-menus flex! flex-wrap! justify-center! gap-8! mt-8! text-start! [&_a]:text-[0.75rem]!">
+        <div class="boutique-footer-menus flex! flex-wrap! gap-6! text-start! [&_a]:text-[0.8125rem]!">
             @foreach (var menu in Menus)
             {
                 <nav aria-label="@menu.Name">

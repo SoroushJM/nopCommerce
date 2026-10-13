@@ -11,22 +11,30 @@
     <component type="typeof(StorefrontFooter)" render-mode="Static"
                param-Menus="@(navigation?.Footer ?? new List<StoreMenu>())"
                param-HomeUrl="@(Url.RouteUrl(NopRouteNames.General.HOMEPAGE))" />
-    <footer class="footer">
-        <section class="footer-upper">
+    <footer class="footer text-start! max-md:pb-20!">
+        <section class="footer-upper w-full! max-w-[80rem]! mx-auto! px-8! max-md:px-4.5! py-4! flex! flex-wrap! items-start! justify-start! gap-5! border-b-[0.0625rem]! border-solid! border-border!">
             @if (navigation == null)
             {
                 @await Component.InvokeAsync(typeof(FooterMenuViewComponent))
             }
-            <div class="footer-block follow-us">
-                <div class="social">
-                    <h2 class="title">@T("Footer.FollowUs")</h2>
+            <div class="footer-block follow-us flex! flex-col! md:flex-row! items-start! gap-6! md:gap-10! w-full! float-none! min-w-0! m-0! text-start!
+                [&_.newsletter]:w-full! [&_.newsletter]:max-w-[28rem]! [&_.newsletter]:min-w-0! [&_.newsletter]:flex-none! [&_.newsletter]:float-none! [&_.newsletter]:m-0! [&_.newsletter]:p-0! [&_.newsletter]:bg-transparent! [&_.newsletter]:rounded-none!
+                [&_.newsletter_.title]:text-sm! [&_.newsletter_.title]:font-bold! [&_.newsletter_.title]:leading-5! [&_.newsletter_.title]:m-0! [&_.newsletter_.title]:mb-2! [&_.newsletter_.title]:p-0! [&_.newsletter_.title]:bg-none! [&_.newsletter_.title]:text-foreground!
+                [&_.newsletter-email]:flex! [&_.newsletter-email]:flex-wrap! [&_.newsletter-email]:items-center! [&_.newsletter-email]:gap-2! [&_.newsletter-email]:m-0!
+                [&_.newsletter-email>input]:h-10! [&_.newsletter-email>input]:w-auto! [&_.newsletter-email>input]:min-w-0! [&_.newsletter-email>input]:flex-1! [&_.newsletter-email>input]:basis-[12rem]! [&_.newsletter-email>input]:float-none! [&_.newsletter-email>input]:m-0! [&_.newsletter-email>input]:px-3! [&_.newsletter-email>input]:text-sm! [&_.newsletter-email>input]:bg-background! [&_.newsletter-email>input]:rounded-md! [&_.newsletter-email>input]:border-[0.0625rem]! [&_.newsletter-email>input]:border-solid! [&_.newsletter-email>input]:border-input!
+                [&_.newsletter-email>input]:focus-visible:outline-[0.125rem]! [&_.newsletter-email>input]:focus-visible:outline-solid! [&_.newsletter-email>input]:focus-visible:outline-ring! [&_.newsletter-email>input]:focus-visible:outline-offset-[0.125rem]!
+                [&_.newsletter-subscribe-button]:h-10! [&_.newsletter-subscribe-button]:w-auto! [&_.newsletter-subscribe-button]:shrink-0! [&_.newsletter-subscribe-button]:float-none! [&_.newsletter-subscribe-button]:m-0! [&_.newsletter-subscribe-button]:px-4! [&_.newsletter-subscribe-button]:py-2! [&_.newsletter-subscribe-button]:text-sm! [&_.newsletter-subscribe-button]:font-semibold! [&_.newsletter-subscribe-button]:bg-primary! [&_.newsletter-subscribe-button]:text-primary-foreground! [&_.newsletter-subscribe-button]:rounded-md! [&_.newsletter-subscribe-button]:border-0!
+                [&_.newsletter-email_.options]:w-full! [&_.newsletter-email_.options]:flex! [&_.newsletter-email_.options]:flex-wrap! [&_.newsletter-email_.options]:gap-3! [&_.newsletter-email_.options]:m-0! [&_.newsletter-email_.captcha-box]:w-full!
+                [&_.newsletter-validation]:text-xs! [&_.newsletter-validation]:leading-5! [&_.newsletter-result]:text-sm! [&_.newsletter-result]:leading-6!">
+                <div class="social shrink-0! w-auto! float-none! m-0! [&_ul]:flex! [&_ul]:flex-wrap! [&_ul]:gap-2! [&_ul]:m-0! [&_ul]:p-0! [&_li]:m-0!">
+                    <h2 class="title text-sm! font-bold! leading-5! m-0! mb-2! p-0!">@T("Footer.FollowUs")</h2>
                     @await Component.InvokeAsync(typeof(SocialButtonsViewComponent))
                 </div>
                 @await Component.InvokeAsync(typeof(NewsLetterBoxViewComponent))
             </div>
         </section>
-        <section class="footer-lower">
-            <div class="footer-info">
+        <section class="footer-lower w-full! max-w-[80rem]! mx-auto! px-8! max-md:px-4.5! py-3! flex! flex-wrap! items-center! justify-between! gap-2! text-xs! [&_.theme-selector]:float-none! [&_.theme-selector]:m-0!">
+            <div class="footer-info float-none! leading-6!">
                 <span class="footer-disclaimer">@T("Content.CopyrightNotice", DateTime.Now.Year, Model.StoreName)</span>
                 @if (Model.DisplayTaxShippingInfoFooter)
                 {
@@ -36,7 +44,7 @@
             </div>
             @if (!Model.HidePoweredByNopCommerce)
             {
-                <div class="footer-powered-by">Powered by <a href="@(OfficialSite.Main)" target="_blank" @(Model.IsHomePage ? string.Empty : "rel=nofollow")>nopCommerce</a></div>
+                <div class="footer-powered-by float-none! m-0! leading-6!">Powered by <a href="@(OfficialSite.Main)" target="_blank" @(Model.IsHomePage ? string.Empty : "rel=nofollow")>nopCommerce</a></div>
             }
             @await Component.InvokeAsync(typeof(StoreThemeSelectorViewComponent))
         </section>

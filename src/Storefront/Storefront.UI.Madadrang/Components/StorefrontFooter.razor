@@ -1,26 +1,26 @@
-<footer class="sf-footer bg-surface [border-top-width:0.0625rem] border-solid border-border [padding:2.625rem_0_1.125rem] max-md:pb-20">
+<footer id="site-footer" class="sf-footer bg-surface! border-t-[0.0625rem]! border-solid! border-border! py-6!">
     <div class="wrap max-w-320 mx-auto px-8 max-md:px-4.5">
-        <div class="grid md:grid-cols-[2fr_1fr_1fr] gap-8">
-            <div><a href="@HomeUrl" class="sf-brand mb-4 flex items-center gap-2.5 [font-size:1.5rem] font-bold [letter-spacing:-0.0625rem] max-md:text-xl"><span class="brand-mark bg-primary text-primary-foreground grid place-items-center w-10.5 h-11 rounded-lg -rotate-7 max-md:[width:2.1875rem] max-md:[height:2.1875rem] max-md:rounded-md">
+        <div class="grid! items-start! md:grid-cols-[2fr_1fr_1fr]! gap-6!">
+            <div><a href="@HomeUrl" class="sf-brand mb-3! flex! items-center! gap-2! text-xl! font-bold! tracking-[-0.0625rem]!"><span class="brand-mark bg-primary! text-primary-foreground! grid! place-items-center! size-9! shrink-0! rounded-lg! -rotate-[7deg]!">
                 <SfIcon />
             </span><span>مداد رنگی</span></a>
-            <p class="text-xs text-muted-foreground leading-7 max-w-sm">برای ما، لوازم‌تحریر فقط ابزار نیست؛ یک بهانهٔ کوچک
+            <p class="text-xs! text-muted-foreground! leading-6! max-w-sm! m-0!">برای ما، لوازم‌تحریر فقط ابزار نیست؛ یک بهانهٔ کوچک
                 برای نوشتن، یاد گرفتن و رنگی‌تر دیدن دنیاست.</p>
             </div>
             @foreach (var menu in Menus)
             {
-                <div>
-                    <h2 class="text-sm font-bold mb-4">@menu.Name</h2>
-                    <div class="flex flex-col gap-3 text-xs text-muted-foreground">
+                <div class="h-auto! min-h-0! self-start!">
+                    <h2 class="text-sm! font-bold! mt-0! mb-2!">@FooterHeading(menu.Name)</h2>
+                    <nav class="flex! flex-col! justify-start! items-stretch! h-auto! min-h-0! gap-1! text-xs! text-muted-foreground! [&_a]:block! [&_a]:flex-none! [&_a]:h-auto! [&_a]:min-h-7! [&_a]:m-0! [&_a]:px-0! [&_a]:py-1! [&_a]:leading-5! [&_span]:block! [&_span]:flex-none! [&_span]:h-auto! [&_span]:min-h-7! [&_span]:m-0! [&_span]:px-0! [&_span]:py-1! [&_span]:leading-5!" aria-label="@FooterHeading(menu.Name)">
                         @foreach (var item in menu.Items)
                         {
                             <StorefrontMenuBranch Item="item" Plain="true" />
                         }
-                    </div>
+                    </nav>
                 </div>
             }
         </div>
-        <div class="[border-top-width:0.0625rem] mt-8 pt-5 text-xs text-muted-foreground flex justify-between gap-5"><span>مداد رنگی؛ همراه
+        <div class="border-t-[0.0625rem]! border-solid! border-border! mt-5! pt-3! text-xs! text-muted-foreground! flex! flex-wrap! items-center! justify-between! gap-2!"><span>مداد رنگی؛ همراه
             ایده‌های کوچک و بزرگ</span><span>ساخته‌شده برای نوشتن و خیال‌کردن</span></div>
         </div>
     </footer>
@@ -28,4 +28,10 @@
 @code {
     [Parameter] public List<StoreMenu> Menus { get; set; } = [];
     [Parameter] public string HomeUrl { get; set; } = "/";
+
+    private static string FooterHeading(string heading) => heading switch
+    {
+        "دنیای مدادرنگ" or "دنیای مداد رنگ" => "دنیای مداد رنگی",
+        _ => heading
+    };
 }

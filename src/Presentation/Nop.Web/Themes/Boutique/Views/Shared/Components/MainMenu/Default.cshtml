@@ -8,8 +8,11 @@
 </script>
 
 
-<nav class="menu-container menu-dropdown static! m-0! p-0! w-full! block!">
-    <button type="button" id="menu-@Model.Id" class="menu__toggle border-0! bg-transparent! text-foreground! rounded-lg! text-[0.75rem]! font-medium! max-[62.5rem]:inline-flex! max-[62.5rem]:items-center! max-[62.5rem]:justify-start! max-[62.5rem]:gap-2! max-[62.5rem]:w-auto! max-[62.5rem]:min-h-11! max-[62.5rem]:h-11! max-[62.5rem]:py-0! max-[62.5rem]:px-[0.625rem]! max-[62.5rem]:m-0! max-[62.5rem]:cursor-pointer! hover:bg-secondary! aria-expanded:bg-secondary!" aria-expanded="false" aria-controls="boutique-menu-content-@Model.Id">
+<nav class="menu-container menu-dropdown static! m-0! p-0! w-full! block!
+            max-[62.5rem]:[&_[role=menuitem]]:block! max-[62.5rem]:[&_[role=menuitem]]:w-full! max-[62.5rem]:[&_[role=menuitem]]:m-0! max-[62.5rem]:[&_[role=menuitem]]:p-0! max-[62.5rem]:[&_[role=menuitem]]:border-[0rem]!
+            max-[62.5rem]:[&_a[role=button]]:flex! max-[62.5rem]:[&_a[role=button]]:items-center! max-[62.5rem]:[&_a[role=button]]:min-h-[2.75rem]! max-[62.5rem]:[&_a[role=button]]:px-[0.75rem]! max-[62.5rem]:[&_a[role=button]]:py-[0.5rem]! max-[62.5rem]:[&_a[role=button]]:rounded-[0.5rem]! max-[62.5rem]:[&_a[role=button]]:text-start! max-[62.5rem]:[&_a[role=button]]:leading-[1.6]! max-[62.5rem]:[&_a[role=button]:hover]:bg-muted!
+            max-[62.5rem]:[&_[aria-haspopup=menu]:not(a)]:p-0!">
+    <button type="button" id="menu-@Model.Id" class="menu__toggle border-0! bg-transparent! bg-none! text-foreground! rounded-lg! text-[0.75rem]! font-medium! max-[62.5rem]:inline-flex! max-[62.5rem]:items-center! max-[62.5rem]:justify-start! max-[62.5rem]:gap-2! max-[62.5rem]:w-auto! max-[62.5rem]:min-h-11! max-[62.5rem]:h-11! max-[62.5rem]:py-0! max-[62.5rem]:px-[0.625rem]! max-[62.5rem]:m-0! max-[62.5rem]:cursor-pointer! hover:bg-secondary! aria-expanded:bg-secondary!" aria-expanded="false" aria-controls="boutique-menu-content-@Model.Id">
         <component type="typeof(SfIcon)" render-mode="Static" param-Name='@("menu")' param-Size="@(1.25m)" />
         <span>@Model.Name</span>
     </button>

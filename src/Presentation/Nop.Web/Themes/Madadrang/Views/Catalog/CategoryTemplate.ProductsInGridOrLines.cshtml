@@ -73,17 +73,17 @@
         </section>
     }
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CategoryDetailsAfterFeaturedProducts, additionalData = Model })
-    <div class="py-6 [border-bottom-width:0.0625rem] mb-7">
-        @await Component.InvokeAsync("MadadrangCatalogControls", new { model = Model.CatalogProductsModel, placement = "toolbar" })
-    </div>
-    <div class="flex flex-col md:flex-row gap-8">
+    <div class="mt-5 flex flex-col md:flex-row gap-8">
         <aside class="md:shrink-0">
             @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CategoryDetailsBeforeFilters, additionalData = Model })
-            @await Component.InvokeAsync("MadadrangCatalogControls", new { model = Model.CatalogProductsModel, placement = "filters" })
+            @await Component.InvokeAsync("MadadrangCatalogControls", new { model = Model.CatalogProductsModel, placement = "filters", compactToolbar = true })
         </aside>
         <section class="flex-1 min-w-0" aria-label="محصولات دسته‌بندی">
             @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CategoryDetailsBeforeProductList, additionalData = Model })
             @await Html.PartialAsync("_ProductsInGridOrLines", Model.CatalogProductsModel)
+            <div class="mt-4 border-t-[0.0625rem] border-border pt-3">
+                @await Component.InvokeAsync("MadadrangCatalogControls", new { model = Model.CatalogProductsModel, placement = "toolbar", compactToolbar = true })
+            </div>
         </section>
     </div>
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CategoryDetailsBottom, additionalData = Model })

@@ -1,14 +1,14 @@
 @model List<MenuModel>
 
-<nav class="footer-navigation">
+<nav class="footer-navigation grid! w-auto! min-w-0! grid-cols-2! items-start! gap-6! max-[40rem]:col-span-full!">
     @foreach (var menu in Model)
     {
-        <div class="footer-menu @menu.CssClass" role="none">
-            <h2 id="footer-menu-@menu.Id" class="footer-menu__title footer-menu__toggle text-[0.8125rem]! font-medium! text-foreground! bg-transparent! py-3! px-0! border-border!" tabindex="0" role="button" aria-haspopup="menu" aria-expanded="false">
+        <div class="footer-menu @menu.CssClass m-0! w-full! min-w-0! max-w-none! text-start!" role="none">
+            <h2 id="footer-menu-@menu.Id" class="footer-menu__title footer-menu__toggle m-0! w-full! bg-transparent! bg-none! px-0! py-2! text-start! text-[0.875rem]! font-medium! leading-[1.8]! text-foreground! min-[62.5625rem]:pt-0! min-[62.5625rem]:pb-3!" tabindex="0" role="button" aria-haspopup="menu" aria-expanded="false">
                 @menu.Name
             </h2>
 
-            <div class="footer-menu__list" role="menu" aria-labelledby="footer-menu-@menu.Id">
+            <div class="footer-menu__list bg-transparent!" role="menu" aria-labelledby="footer-menu-@menu.Id">
                 @foreach (var menuItem in menu.Items)
                 {
                     @await Html.PartialAsync("~/Views/Shared/Components/FooterMenu/_FooterItem.cshtml", menuItem)
