@@ -1,26 +1,27 @@
+@inject Nop.Web.Framework.UI.INopHtmlHelper NopHtml
 @model Nop.Plugin.Misc.PersianStorefront.Controllers.BoutiqueThemeConfigurationModel
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 @addTagHelper *, Nop.Web.Framework
-@{ Layout = "_ConfigurePlugin"; }
+@{ Layout = "_ConfigurePlugin"; NopHtml.AppendCssFileParts("~/Plugins/Misc.PersianStorefront/Content/admin-tailwind.css"); }
 <form asp-controller="StorefrontThemeSettings" asp-action="Configure" asp-area="Admin" method="post">
-    <div class="card card-default">
-        <div class="card-body">
+    <div class="storefront-admin adm:rounded-lg adm:border-[.0625rem] adm:border-solid adm:border-slate-200 adm:bg-white adm:text-slate-900">
+        <div class="adm:p-6 adm:[&_h3]:mb-4 adm:[&_h3]:text-xl adm:[&_h3]:font-semibold adm:[&_p]:my-3 adm:[&_p]:leading-7 adm:[&_ul]:my-4 adm:[&_ul]:list-disc adm:[&_ul]:ps-5">
             <h3>ظاهر فروشگاه لباس</h3>
             <p>نام برند از تنظیمات نام فروشگاه خوانده می‌شود. تصویر واقعی فروشگاه و متن صفحهٔ اصلی را اینجا انتخاب کنید.</p>
             <div asp-validation-summary="All"></div>
-            <div class="form-group row">
-                <div class="col-md-3"><label for="HeroPictureId">تصویر صفحهٔ اصلی</label></div>
-                <div class="col-md-9"><nop-editor asp-for="HeroPictureId" /></div>
+            <div class="adm:my-4 adm:grid adm:items-start adm:gap-3 adm:md:grid-cols-[minmax(0,1fr)_minmax(0,3fr)]">
+                <div class="adm:pt-2 adm:text-sm adm:font-medium"><label for="HeroPictureId">تصویر صفحهٔ اصلی</label></div>
+                <div class="adm:min-w-0"><nop-editor asp-for="HeroPictureId" /></div>
             </div>
-            <div class="form-group row">
-                <div class="col-md-3"><label asp-for="HeroHeading">عنوان صفحهٔ اصلی</label></div>
-                <div class="col-md-9"><input asp-for="HeroHeading" class="form-control" /><span asp-validation-for="HeroHeading"></span></div>
+            <div class="adm:my-4 adm:grid adm:items-start adm:gap-3 adm:md:grid-cols-[minmax(0,1fr)_minmax(0,3fr)]">
+                <div class="adm:pt-2 adm:text-sm adm:font-medium"><label asp-for="HeroHeading">عنوان صفحهٔ اصلی</label></div>
+                <div class="adm:min-w-0"><input asp-for="HeroHeading" class="adm:w-full adm:box-border adm:rounded-md adm:border-[.0625rem] adm:border-solid adm:border-slate-300 adm:bg-white adm:px-3 adm:py-2 adm:text-slate-900 adm:focus:border-sky-600 adm:focus:[outline:none] adm:focus:ring-[0.125rem] adm:focus:ring-sky-600/20" /><span asp-validation-for="HeroHeading"></span></div>
             </div>
-            <div class="form-group row">
-                <div class="col-md-3"><label asp-for="HeroDescription">توضیح کوتاه</label></div>
-                <div class="col-md-9"><textarea asp-for="HeroDescription" class="form-control"></textarea><span asp-validation-for="HeroDescription"></span></div>
+            <div class="adm:my-4 adm:grid adm:items-start adm:gap-3 adm:md:grid-cols-[minmax(0,1fr)_minmax(0,3fr)]">
+                <div class="adm:pt-2 adm:text-sm adm:font-medium"><label asp-for="HeroDescription">توضیح کوتاه</label></div>
+                <div class="adm:min-w-0"><textarea asp-for="HeroDescription" class="adm:w-full adm:box-border adm:rounded-md adm:border-[.0625rem] adm:border-solid adm:border-slate-300 adm:bg-white adm:px-3 adm:py-2 adm:text-slate-900 adm:focus:border-sky-600 adm:focus:[outline:none] adm:focus:ring-[0.125rem] adm:focus:ring-sky-600/20"></textarea><span asp-validation-for="HeroDescription"></span></div>
             </div>
-            <button type="submit" class="btn btn-primary">ذخیره</button>
+            <button type="submit" class="adm:inline-flex adm:min-h-11 adm:items-center adm:justify-center adm:rounded-md adm:border-[0rem] adm:bg-sky-700 adm:px-5 adm:py-2 adm:text-sm adm:font-medium adm:text-white adm:hover:bg-sky-800 adm:focus-visible:outline-solid adm:focus-visible:outline-[0.125rem] adm:focus-visible:outline-offset-[0.125rem] adm:focus-visible:outline-sky-700">ذخیره</button>
         </div>
     </div>
 </form>

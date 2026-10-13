@@ -20,6 +20,29 @@ Changing the password alone does not re-encrypt an existing certificate.
 
 ## First installation
 
+### Publishing the Madadrang stationery store
+
+From the installed Compose project directory:
+
+```sh
+# Deploy the current image without adding sample catalogue data:
+sh deploy.sh
+# Add the sample stationery catalogue explicitly:
+sh deploy.sh --seed-data
+# Deploy a release image already loaded on the host:
+sh deploy.sh --image nopcommerce:<release-tag> --seed-data
+```
+
+Image replacement alone leaves installer menus, widgets and language settings
+in the database. This entry point prepares Madadrang presentation, takes a
+backup, applies optional idempotent seed data and verifies the rendered site.
+It requires an installed single-store PostgreSQL instance and installed
+`Misc.PersianStorefront` plugin. It uses the image name from the selected Compose
+configuration; instance names and volumes remain under Compose control.
+
+See [the deployment guide](../docs/madadrang-deployment.md) for release files,
+prerequisites, flag behavior, backups, recovery and regression tests.
+
 The database initialization enables `citext` and `pgcrypto` before the application starts.
 Set `ADMIN_EMAIL` in `.env` to prefill the administrator email (default
 `admin@example.com`). The first request opens the nopCommerce installer with

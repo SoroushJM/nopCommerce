@@ -1,11 +1,11 @@
 <BbDirectionProvider Direction="@(Menu.Rtl ? TextDirection.RightToLeft : TextDirection.LeftToRight)">
     @if (Mobile)
     {
-        <BbButton Variant="ButtonVariant.Ghost" Class="icon-btn" OnClick="() => _open = true" aria-label="@Menu.Labels.Get("Categories")">
-            <SfIcon Name="menu" Size="20" />
+        <BbButton Variant="ButtonVariant.Ghost" Class="icon-btn flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-md" OnClick="() => _open = true" aria-label="@Menu.Labels.Get("Categories")">
+            <SfIcon Name="menu" Size="1.25m" />
         </BbButton>
         <BbSheet Open="_open" OpenChanged="value => _open = value" Side="@(Menu.Rtl ? SheetSide.Right : SheetSide.Left)">
-            <BbSheetContent Class="sf-sheet" ShowClose="false" dir="@(Menu.Rtl ? "rtl" : "ltr")">
+            <BbSheetContent Class="sf-sheet flex w-[27.5rem] max-w-screen flex-col bg-card text-foreground font-sans pb-[max(1.5rem,env(safe-area-inset-bottom))]" ShowClose="false" dir="@(Menu.Rtl ? "rtl" : "ltr")">
                 <BbSheetClose AsChild="false" class="absolute top-4 end-4" aria-label="@Menu.Labels.Get("Common.Close")"><SfIcon Name="x" /></BbSheetClose>
                 <BbSheetHeader>
                     <BbSheetTitle>@Menu.Labels.Get("Categories")</BbSheetTitle>
@@ -22,7 +22,7 @@
     }
     else
     {
-        <BbNavigationMenu Class="sf-native-menu flex max-w-none" EnableKeyboardNavigation="true"
+        <BbNavigationMenu Class="sf-native-menu flex max-w-none [&>div]:w-full" EnableKeyboardNavigation="true"
                           aria-label="@Menu.Labels.Get("Categories")">
             <BbNavigationMenuList Class="gap-8 w-full">
                 @for (var index = 0; index < Menu.Items.Count; index++)
@@ -31,7 +31,7 @@
                     <BbNavigationMenuItem Value="@($"menu-{Menu.Id}-{index}")" Class="@item.CssClass">
                         @if (item.Children.Count > 0)
                         {
-                            <BbNavigationMenuTrigger Class="nav-link bg-transparent">@item.Title</BbNavigationMenuTrigger>
+                            <BbNavigationMenuTrigger Class="nav-link whitespace-nowrap bg-transparent py-4 text-sm text-muted-foreground hover:text-primary">@item.Title</BbNavigationMenuTrigger>
                             <BbNavigationMenuContent>
                                 <div class="min-w-60 max-w-md p-3 max-h-96 overflow-y-auto">
                                     @if (item.Url.Length > 0)
@@ -47,21 +47,21 @@
                         }
                         else if (item.Url.Length > 0)
                         {
-                            <BbNavigationMenuLink Href="@item.Url" Class="nav-link flex items-center gap-2">
+                            <BbNavigationMenuLink Href="@item.Url" Class="nav-link flex items-center gap-2 whitespace-nowrap py-4 text-sm text-muted-foreground hover:text-primary">
                                 @if (item.CssClass.Split(' ').Contains("sf-menu-all"))
                                 {
-                                    <SfIcon Name="menu" Size="17" />
+                                    <SfIcon Name="menu" Size="1.0625m" />
                                 }
                                 @if (item.CssClass.Split(' ').Contains("sf-menu-offer"))
                                 {
-                                    <SfIcon Name="star" Size="15" />
+                                    <SfIcon Name="star" Size="0.9375m" />
                                 }
                                 @item.Title
                             </BbNavigationMenuLink>
                         }
                         else
                         {
-                            <span class="nav-link">@item.Title</span>
+                            <span class="nav-link whitespace-nowrap py-4 text-sm text-muted-foreground">@item.Title</span>
                         }
                     </BbNavigationMenuItem>
                 }

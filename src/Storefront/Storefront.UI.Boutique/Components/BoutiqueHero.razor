@@ -1,24 +1,24 @@
 <BbDirectionProvider Direction="TextDirection.RightToLeft">
-    <section class="boutique-hero" aria-label="مجموعهٔ @BrandName">
-        <div class="boutique-hero-copy">
-            <span class="boutique-eyebrow">@BrandName</span>
-            <h1>@Heading</h1>
-            <p>@Description</p>
-            <BbButton Href="@CatalogUrl" Size="ButtonSize.Large" Class="boutique-hero-cta">مشاهدهٔ محصولات <SfIcon Name="arrow" Size="18" /></BbButton>
+    <section class="boutique-hero grid! grid-cols-[1fr_1fr]! rounded-[1.5rem]! overflow-hidden! bg-[#f0e4d8]! m-[0.5rem_0_3rem]! min-hmin-h-115![62.5rem]:min-h-[23.125rem]! max-[62.5rem]:mb-9! max-[40rem]:grid-cols-[1fr]! max-[40rem]:rounded-[1.125rem]! max-[40rem]:mt-0!" aria-label="مجموعهٔ @BrandName">
+        <div class="boutique-hero-copy py-17.5! px-[clamp(1.75rem,5vw,4.6875rem)]! flex! flex-col! justify-center! items-start! max-[62.5rem]:p-[2.1875rem]! max-[40rem]:[padding:2.25rem_1.75rem_2rem]! max-[40rem]:items-center! max-[40rem]:text-center!">
+            <span class="boutique-eyebrow text-[0.75rem]! tracking-[0.0625rem]! [color:#735b48]! mb-[1.125rem]!">@BrandName</span>
+            <h1 class="font-medium! text-[clamp(2rem,4vw,3.0625rem)]! leading-[1.6]! tracking-[-0.0625rem]! [margin:0_0_1.125rem]! text-balance! max-[40rem]:text-[clamp(1.75rem,7.6vw,2rem)]! max-[40rem]:leading-[1.55]! max-[40rem]:text-balance!">@Heading</h1>
+            <p class="text-[0.875rem]! [color:#6e5a49]! [margin:0_0_1.875rem]! max-[40rem]:text-[0.75rem]! max-[40rem]:mb-6!">@Description</p>
+            <BbButton Href="@CatalogUrl" Size="ButtonSize.Large" Class="boutique-hero-cta rounded-[9999rem]! inline-flex! gap-4! items-center! py-3! px-[1.625rem]! bg-primary! text-primary-foreground!">مشاهدهٔ محصولات <SfIcon Name="arrow" Size="1.125m" /></BbButton>
         </div>
-        <div class="boutique-hero-media">
+        <div class="boutique-hero-media min-h-115! bg-[#e7d5c3]! max-[62.5rem]:min-h-[23.125rem]! max-[40rem]:min-h-80! max-[40rem]:max-h-[28.75rem]!">
             @if (!string.IsNullOrWhiteSpace(ImageUrl))
             {
-                <img src="@ImageUrl" alt="@ImageAlt" fetchpriority="high" />
+                <img src="@ImageUrl" alt="@ImageAlt" fetchpriority="high" class="block! w-full! h-full! object-cover! max-[40rem]:h-90!" />
             }
             else
             {
-                <div class="boutique-photo-slot">
-                    <span class="boutique-photo-symbol" aria-hidden="true">✧</span>
-                    <p>جای تصویر مجموعهٔ شما</p>
+                <div class="boutique-photo-slot h-full! min-h-[28.75rem]! flex! flex-col! items-center! justify-center! text-center! p-10! [color:#79604d]! bg-[linear-gradient(145deg,#f0e5d8,#deccb9)]! [&_p]:m-0! [&_p]:text-[0.8125rem]! [&_small]:max-w-[14.375rem]! [&_small]:block! [&_small]:text-[0.6875rem]! [&_small]:mt-3! [&_small]:leading-[2]! max-[62.5rem]:min-h-[23.125rem]! max-[40rem]:min-h-80! max-[40rem]:max-h-[28.75rem]!">
+                    <span class="boutique-photo-symbol font-serif! text-[5rem]! leading-[1.6]! opacity-[.45]!" aria-hidden="true">✧</span>
+                    <p class="m-0! text-[0.8125rem]!">جای تصویر مجموعهٔ شما</p>
                     @if (ShowSetupHint)
                     {
-                        <small>تصویر اصلی فروشگاه را در تنظیمات قالب Boutique انتخاب کنید.</small>
+                        <small class="block! max-w-57.5! text-[0.6875rem]! mt-3! leading-loose!">تصویر اصلی فروشگاه را در تنظیمات قالب Boutique انتخاب کنید.</small>
                     }
                 </div>
             }

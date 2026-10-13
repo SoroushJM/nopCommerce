@@ -1,5 +1,5 @@
-<BlazorBlueprint.Icons.Lucide.Components.LucideIcon Name="@IconName" Size="Size" StrokeWidth="1.7"
-    aria-hidden="true" @attributes="AdditionalAttributes" />
+<BlazorBlueprint.Icons.Lucide.Components.LucideIcon Name="@IconName" StrokeWidth="1.7"
+    aria-hidden="true" @attributes="IconAttributes" />
 
 @code {
     [Parameter(CaptureUnmatchedValues = true)]
@@ -8,8 +8,24 @@
     [Parameter]
     public string Name { get; set; } = "pencil";
 
+    /// <summary>The icon's width and height in rem.</summary>
     [Parameter]
-    public int Size { get; set; } = 20;
+    public decimal Size { get; set; } = 1.25m;
+
+    private Dictionary<string, object> IconAttributes
+    {
+        get
+        {
+            var attributes = AdditionalAttributes is null
+                ? new Dictionary<string, object>()
+                : new Dictionary<string, object>(AdditionalAttributes);
+            attributes.TryGetValue("class", out var classes);
+            attributes.TryGetValue("style", out var values);
+            attributes["class"] = ClassNames.cn("size-(--icon-size)", classes?.ToString());
+            attributes["style"] = $"--icon-size:{Size.ToString(System.Globalization.CultureInfo.InvariantCulture)}rem;{values}";
+            return attributes;
+        }
+    }
 
     private string IconName => Name switch
     {

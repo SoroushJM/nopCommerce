@@ -10,10 +10,10 @@
             <input type="hidden" id="@field.Key.Replace('.', '_')" name="@field.Key" value="@field.Value" />
         }
         <main id="main-content">
-            <section class="wrap py-7">
+            <section class="wrap mx-auto max-w-[80rem] px-8 max-md:px-5 [.boutique-shell_&]:w-[calc(100%-2.5rem)] [.boutique-shell_&]:max-w-[73.75rem] [.boutique-shell_&]:px-0 max-md:[.boutique-shell_&]:w-[calc(100%-1.75rem)] py-7">
                 @if (Initial.BreadcrumbEnabled)
                 {
-                <BbBreadcrumb Class="sf-product-breadcrumb text-xs text-muted-foreground mb-7" aria-label="@Initial.Name">
+                <BbBreadcrumb Class="sf-product-breadcrumb [&_ol]:text-xs text-xs text-muted-foreground mb-7" aria-label="@Initial.Name">
                     <BbBreadcrumbItem><BbBreadcrumbLink Href="@Initial.HomeUrl">@Labels.Get("Homepage")</BbBreadcrumbLink></BbBreadcrumbItem>
                     <BbBreadcrumbSeparator>/</BbBreadcrumbSeparator>
                     @foreach (var link in Initial.Breadcrumb)
@@ -29,31 +29,31 @@
                     <BbAlert Variant="AlertVariant.Danger" Class="mb-5">@_error</BbAlert>
                 }
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-12 max-md:gap-7">
-                    <div @ref="_gallery" class="sf-product-gallery">
-                        <BbCard Class="sf-product-image">
-                            <BbCardHeader Class="sr-only"><BbCardTitle>@Labels.Format("Media.Product.ImageAlternateTextFormat.Details", Initial.Name)</BbCardTitle></BbCardHeader>
+                    <div @ref="_gallery" class="sf-product-gallery min-w-0">
+                        <BbCard Class="sf-product-image aspect-square overflow-hidden [&>div]:h-full [.boutique-shell_&]:aspect-auto [.boutique-shell_&]:rounded-2xl [.boutique-shell_&]:border-[0rem] [.boutique-shell_&]:bg-muted">
+                            <BbCardHeader Class="absolute size-[.0625rem] -m-[.0625rem] overflow-hidden whitespace-nowrap border-[0rem] p-0 [clip-path:inset(50%)]"><BbCardTitle>@Labels.Format("Media.Product.ImageAlternateTextFormat.Details", Initial.Name)</BbCardTitle></BbCardHeader>
                             <BbCardContent Class="p-0">
                             @if (Initial.ZoomEnabled && !string.IsNullOrEmpty(_fullSizeImage))
                             {
-                                <BbDialogTrigger AsChild="false" class="sf-product-zoom" aria-label="@Labels.Format("Media.Product.ImageLinkTitleFormat.Details", Initial.Name)">
-                                    <img src="@_image" alt="@_imageAlt" title="@_imageTitle" />
+                                <BbDialogTrigger AsChild="false" class="sf-product-zoom block h-full w-full cursor-zoom-in" aria-label="@Labels.Format("Media.Product.ImageLinkTitleFormat.Details", Initial.Name)">
+                                    <img class="h-full w-full object-contain [.boutique-shell_&]:aspect-[3/4] [.boutique-shell_&]:h-auto [.boutique-shell_&]:object-cover" src="@_image" alt="@_imageAlt" title="@_imageTitle" />
                                 </BbDialogTrigger>
                             }
                             else
                             {
-                                <img src="@_image" alt="@_imageAlt" title="@_imageTitle" />
+                                <img class="h-full w-full object-contain [.boutique-shell_&]:aspect-[3/4] [.boutique-shell_&]:h-auto [.boutique-shell_&]:object-cover" src="@_image" alt="@_imageAlt" title="@_imageTitle" />
                             }
                             </BbCardContent>
                         </BbCard>
                         @if (Initial.Pictures.Count > 1)
                         {
-                            <div class="sf-product-thumbnails" aria-label="@Labels.Format("Media.Product.ImageAlternateTextFormat.Details", Initial.Name)">
+                            <div class="sf-product-thumbnails mt-4 flex flex-wrap gap-3 [.boutique-shell_&]:gap-2.5" aria-label="@Labels.Format("Media.Product.ImageAlternateTextFormat.Details", Initial.Name)">
                                 @foreach (var picture in VisiblePictures)
                                 {
-                                    <button type="button" class="@(_image == picture.Image ? "selected" : "")"
+                                    <button type="button" class="@ClassNames.cn("size-[4.5rem] overflow-hidden rounded-md border-[0.125rem] bg-background p-1 [.boutique-shell_&]:h-auto [.boutique-shell_&]:w-16 [.boutique-shell_&]:rounded-lg [.boutique-shell_&]:border-[.0625rem] [.boutique-shell_&]:p-0", _image == picture.Image ? "selected border-primary [.boutique-shell_&]:border-ring" : "border-border")"
                                             aria-label="@picture.Title" aria-pressed="@((_image == picture.Image).ToString().ToLowerInvariant())"
                                             @onclick="() => SelectPicture(picture)">
-                                        <img src="@picture.Thumbnail" alt="@picture.Alt" loading="lazy" />
+                                        <img class="h-full w-full object-contain [.boutique-shell_&]:aspect-[3/4] [.boutique-shell_&]:h-auto [.boutique-shell_&]:object-cover" src="@picture.Thumbnail" alt="@picture.Alt" loading="lazy" />
                                     </button>
                                 }
                             </div>
@@ -66,13 +66,13 @@
                                 <a class="mr-2" href="@manufacturer.Url">@manufacturer.Name</a>
                             }
                         </p>
-                        <h1 class="sf-product-name text-3xl max-md:text-2xl font-bold leading-relaxed">@Initial.Name</h1>
+                        <h1 class="sf-product-name [overflow-wrap:anywhere] text-3xl max-md:text-2xl font-bold leading-relaxed">@Initial.Name</h1>
                         <p class="text-sm text-muted-foreground leading-8 mt-4">@((MarkupString)Initial.Description)</p>
                         @if (StockLabel.Length > 0)
                         {
-                            <BbBadge Variant="@(StockAvailable ? BadgeVariant.SoftSuccess : BadgeVariant.SoftWarning)" Class="sf-product-stock mt-5">@StockLabel</BbBadge>
+                            <BbBadge Variant="@(StockAvailable ? BadgeVariant.SoftSuccess : BadgeVariant.SoftWarning)" Class="sf-product-stock mt-5 [overflow-wrap:anywhere]">@StockLabel</BbBadge>
                         }
-                        <dl class="sf-product-metadata">
+                        <dl class="sf-product-metadata mt-4 flex flex-wrap gap-x-6 gap-y-3 text-xs [&_div]:flex [&_div]:gap-2 [&_dt]:text-muted-foreground [&_dd]:[overflow-wrap:anywhere]">
                             @if (Initial.ShowSku && _sku.Length > 0)
                             {
                                 <div><dt>@Labels.Get("Products.Sku")</dt><dd data-product-sku>@_sku</dd></div>
@@ -94,14 +94,14 @@
                         {
                             @if (_freeShipping && Initial.FreeShippingNotificationEnabled)
                             {
-                                <p class="sf-product-delivery">@Labels.Get("Products.FreeShipping")</p>
+                                <p class="sf-product-delivery mt-3 text-xs text-success">@Labels.Get("Products.FreeShipping")</p>
                             }
                             @if (Initial.DeliveryDate.Length > 0)
                             {
-                                <p class="sf-product-delivery">@Labels.Get("Products.DeliveryDate"): @Initial.DeliveryDate</p>
+                                <p class="sf-product-delivery mt-3 text-xs text-success">@Labels.Get("Products.DeliveryDate"): @Initial.DeliveryDate</p>
                             }
                         }
-                        <BbSeparator Class="sf-product-separator my-6" />
+                        <BbSeparator Class="sf-product-separator my-6 h-[.0625rem] bg-border" />
                         @foreach (var attribute in Initial.Attributes.Where(item =>
                         !_disabledAttributes.Contains(item.Id)))
                         {
@@ -109,13 +109,13 @@
                                 <legend class="text-sm font-bold mb-3">@AttributePrompt(attribute)
                                     @if (attribute.Required)
                                     {
-                                        <span class="required">*</span>
+                                        <span class="required text-destructive">*</span>
                                     }
                                     : <span class="font-normal text-muted-foreground">@(attribute.Options.FirstOrDefault(option =>
                                     option.Id == _selected.GetValueOrDefault(attribute.Id)) is { } selectedOption ? OptionLabel(selectedOption) : "")</span></legend>
                                 @if (!string.IsNullOrEmpty(attribute.Description))
                                 {
-                                    <div class="attribute-description">@((MarkupString)attribute.Description)</div>
+                                    <div class="attribute-description mb-3 text-xs leading-relaxed text-muted-foreground">@((MarkupString)attribute.Description)</div>
                                 }
                                     @if (attribute.ControlType == 1)
                                     {
@@ -129,18 +129,18 @@
                                         Value="_selected.GetValueOrDefault(attribute.Id)"
                                         ValueChanged="value => SelectOption(attribute.Id, value)"
                                         Disabled="@(!_ready || _busy)" Required="attribute.Required"
-                                        AriaLabel="@AttributePrompt(attribute)" class="flex gap-4">
+                                        AriaLabel="@AttributePrompt(attribute)" class="flex flex-wrap gap-4">
                                         @foreach (var option in attribute.Options)
                                         {
                                             <BlazorBlueprint.Primitives.RadioGroup.BbRadioGroupItem @key="option.Id" TValue="int" Value="option.Id"
-                                                    class="@ClassNames.cn(attribute.ControlType is 40 or 45 ? "color-choice" : "filter-pill", _selected.GetValueOrDefault(attribute.Id) == option.Id ? "selected" : null)"
-                                                    style="@(attribute.ControlType == 40 ? "background:" + option.Color : "")"
+                                                    class="@ClassNames.cn(attribute.ControlType is 40 or 45 ? "color-choice grid size-[2.125rem] place-items-center overflow-hidden rounded-[9999rem] border-[0.1875rem] border-background text-primary-foreground outline-[0.0625rem] outline-input disabled:opacity-30 focus-visible:ring-[0.125rem] focus-visible:ring-ring [.boutique-shell_&]:size-8 [.boutique-shell_&]:border-card [.boutique-shell_&]:outline-border" : "filter-pill rounded-md border-[.0625rem] border-border bg-background px-3.5 py-[0.5625rem] text-xs [.boutique-shell_&]:rounded-[9999rem] [.boutique-shell_&]:bg-secondary [.boutique-shell_&]:px-5 [.boutique-shell_&]:py-2", attribute.ControlType == 40 ? "bg-(--swatch-color)" : null, _selected.GetValueOrDefault(attribute.Id) == option.Id ? attribute.ControlType is 40 or 45 ? "selected outline-[0.125rem] outline-primary outline-offset-[0.1875rem] [.boutique-shell_&]:outline-offset-[0rem]" : "selected border-primary bg-secondary text-primary [.boutique-shell_&]:bg-accent" : null)"
+                                                    style="@(attribute.ControlType == 40 ? "--swatch-color:" + option.Color : "")"
                                                     AriaLabel="@($"{AttributePrompt(attribute)} {OptionLabel(option)}")"
                                                     title="@OptionLabel(option)"
                                                     tabindex="@AttributeOptionTabIndex(attribute, option)">
                                                 @if (attribute.ControlType == 45)
                                                 {
-                                                    <img src="@option.Image" alt="@OptionLabel(option)" />
+                                                    <img class="h-full w-full object-cover" src="@option.Image" alt="@OptionLabel(option)" />
                                                 }
                                                 else if (attribute.ControlType != 40)
                                                 {
@@ -149,7 +149,7 @@
                                                 }
                                                 else if (_selected.GetValueOrDefault(attribute.Id) == option.Id)
                                                 {
-                                                    <SfIcon Name="check" Size="16" />
+                                                    <SfIcon Name="check" Size="1m" />
                                                 }
                                             </BlazorBlueprint.Primitives.RadioGroup.BbRadioGroupItem>
                                         }
@@ -164,7 +164,7 @@
                             @if (Initial.Quantities.Count > 0)
                             {
                                 <BbSelect TValue="int" Value="_quantity" ValueChanged="ChangeQuantity" AriaLabel="@Labels.Get("Products.Qty.AriaLabel")" Disabled="@(!_ready || _busy)">
-                                    <BbSelectTrigger Class="sf-select h-11">
+                                    <BbSelectTrigger Class="sf-select h-11 min-h-[var(--control-height)] text-start [&>span]:truncate">
                                         <BbSelectValue />
                                     </BbSelectTrigger>
                                     <BbSelectContent>
@@ -177,15 +177,15 @@
                         }
                             else
                         {
-                            <BbButtonGroup Class="sf-quantity qty"><button aria-label="@(Labels.Get("Products.Qty") + " −")"
+                            <BbButtonGroup Class="sf-quantity qty inline-flex items-center rounded-md border-[.0625rem] border-border bg-background [&_button]:grid [&_button]:h-[var(--control-height)] [&_button]:w-10 [&_button]:place-items-center [&_span]:min-w-[1.875rem] [&_span]:text-center [&_span]:text-sm"><button aria-label="@(Labels.Get("Products.Qty") + " −")"
                                                                            disabled="@(_quantity <= Initial.MinimumQuantity || !_ready || _busy || _updating)"
                                                                            @onclick="() => ChangeQuantity(_quantity - 1)">
-                                <SfIcon Name="minus" Size="14" />
-                        </button><input @key="_quantityInputRevision" @ref="_quantityInput" class="sf-product-quantity-input" type="number" aria-label="@Labels.Get("Products.Qty.AriaLabel")"
+                                <SfIcon Name="minus" Size="0.875m" />
+                        </button><input @key="_quantityInputRevision" @ref="_quantityInput" class="sf-product-quantity-input w-16 min-w-0 text-center text-sm" type="number" aria-label="@Labels.Get("Products.Qty.AriaLabel")"
                                             min="@Initial.MinimumQuantity" step="1" value="@_quantity" @onchange="EnterQuantity"
                                             disabled="@(!_ready || _busy || _updating)" /><button aria-label="@(Labels.Get("Products.Qty") + " +")" disabled="@(!_ready || _busy || _updating)"
                                                                 @onclick="() => ChangeQuantity(_quantity + 1)">
-                            <SfIcon Name="plus" Size="14" />
+                            <SfIcon Name="plus" Size="0.875m" />
                         </button></BbButtonGroup>
                     }
                 </div>
@@ -196,7 +196,7 @@
                         }
                 @if (DisplayTierPrices)
                 {
-                    <div class="sf-product-tiers">
+                    <div class="sf-product-tiers mb-6 rounded-md border-[.0625rem] border-border p-4 text-xs [&_h2]:mb-3 [&_h2]:font-bold [&_table]:w-full [&_td]:border-b-[.0625rem] [&_td]:border-border [&_td]:py-2 [&_td]:text-start [&_th]:border-b-[.0625rem] [&_th]:border-border [&_th]:py-2 [&_th]:text-start">
                         <h2>@Labels.Get("Products.TierPrices")</h2>
                         <table><thead><tr><th>@Labels.Get("Products.TierPrices.Quantity")</th><th>@Labels.Get("Products.TierPrices.Price")</th></tr></thead><tbody>
                             @foreach (var tier in Initial.TierPrices)
@@ -208,8 +208,8 @@
                 }
                 @if (!Initial.HidePrices || !Initial.DisableBuy)
                 {
-                <BbCard Class="sf-price-card">
-                    <BbCardHeader Class="sr-only"><BbCardTitle>@Initial.PurchaseLabel @Initial.Name</BbCardTitle></BbCardHeader>
+                <BbCard Class="sf-price-card rounded-xl border-[.0625rem] border-border bg-card">
+                    <BbCardHeader Class="absolute size-[.0625rem] -m-[.0625rem] overflow-hidden whitespace-nowrap border-[0rem] p-0 [clip-path:inset(50%)]"><BbCardTitle>@Initial.PurchaseLabel @Initial.Name</BbCardTitle></BbCardHeader>
                     <BbCardContent Class="pt-6">
                     @if (!Initial.HidePrices)
                     {
@@ -262,13 +262,13 @@
 </main>
 
 </div>
-    <BbDialogContent Class="sf-product-image-dialog" ShowClose="false" dir="@Labels.Direction">
+    <BbDialogContent Class="sf-product-image-dialog w-[min(56.25rem,calc(100vw-2rem))] max-w-none max-h-[calc(100dvh-2rem)] overflow-y-auto" ShowClose="false" dir="@Labels.Direction">
         <BbDialogClose AsChild="false" class="absolute top-4 end-4" aria-label="@Labels.Get("Common.Close")"><SfIcon Name="x" /></BbDialogClose>
         <BbDialogHeader>
             <BbDialogTitle>@Initial.Name</BbDialogTitle>
             <BbDialogDescription>@Labels.Format("Media.Product.ImageAlternateTextFormat.Details", Initial.Name)</BbDialogDescription>
         </BbDialogHeader>
-        <img src="@_fullSizeImage" alt="@_imageAlt" title="@_imageTitle" />
+        <img class="max-h-[70dvh] w-full object-contain" src="@_fullSizeImage" alt="@_imageAlt" title="@_imageTitle" />
     </BbDialogContent>
 </BbDialog>
 </BbDirectionProvider>

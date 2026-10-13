@@ -46,22 +46,22 @@
                     }
                     else
                     {
-                        <label class="qty">
-                            <span class="sr-only">تعداد @item.ProductName</span>
+                        <label class="qty inline-flex items-center [border-width:0.0625rem] border-solid border-border rounded-md bg-background [&_button]:w-10! [&_button]:h-11! [&_button]:grid! [&_button]:place-items-center! [&_span]:min-w-7.5! [&_span]:text-center! [&_span]:text-sm!">
+                            <span class="absolute size-[.0625rem] -m-[.0625rem] overflow-hidden whitespace-nowrap border-[0rem] p-0 [clip-path:inset(50%)]">تعداد @item.ProductName</span>
                             <input type="number" class="sf-quantity-input" name="itemquantity@(item.Id)" id="itemquantity@(item.Id)" value="@item.Quantity" min="0" inputmode="numeric" />
                         </label>
                     }
                     @if (!item.DisableRemoval)
                     {
-                        <button type="button" class="icon-btn text-muted-foreground sf-cart-remove" data-remove-cart-item="@item.Id" aria-label="حذف @item.ProductName"><span aria-hidden="true">×</span></button>
+                        <button type="button" class="icon-btn text-muted-foreground sf-cart-remove flex items-center justify-center gap-2 min-w-11 min-h-11 rounded-md" data-remove-cart-item="@item.Id" aria-label="حذف @item.ProductName"><span aria-hidden="true">×</span></button>
                     }
                 </div>
                 @foreach (var warning in item.Warnings)
                 {
-                    <div role="alert" class="sf-native-warning mt-3">@Html.Raw(warning)</div>
+                    <div role="alert" class="sf-native-warning mt-3 p-4 [border:0.0625rem_solid_color-mix(in_srgb,_var(--warning)_30%,_transparent)] rounded-lg bg-warning-muted text-warning text-sm [line-height:1.5]">@Html.Raw(warning)</div>
                 }
             </div>
-            <div class="text-sm font-bold text-left price">
+            <div class="text-sm font-bold text-left price tabular-nums">
                 <span class="product-subtotal" data-cart-subtotal="@item.Id">@item.SubTotal</span>
                 <p class="text-xs font-normal text-muted-foreground mt-2">هر عدد: <span class="product-unit-price">@item.UnitPrice</span></p>
                 @if (Model.ShowItemDiscount && !string.IsNullOrEmpty(item.Discount))

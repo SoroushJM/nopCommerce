@@ -10,7 +10,7 @@
                        Placeholder="@_state.Label" SearchPlaceholder="@(_state.Rtl ? "جست‌وجو…" : "Search…")"
                        EmptyMessage="@(_state.Rtl ? "گزینه‌ای پیدا نشد" : "No options found")" ShowSelectAll="false"
                        ClearLabel="@(_state.Rtl ? "پاک کردن" : "Clear")" CloseLabel="@(_state.Rtl ? "بستن" : "Close")"
-                       Class="sf-native-select-control" aria-invalid="@(_state.Invalid ? "true" : null)">
+                       Class="sf-native-select-control w-full [&_button[role=combobox]]:min-h-11 [&_button[role=combobox]]:max-w-full [&_button[role=combobox]]:font-[inherit] [&_[aria-invalid=true]]:border-destructive" aria-invalid="@(_state.Invalid ? "true" : null)">
             @foreach (var option in _state.Options)
             {
                 <BbMultiSelectItem TValue="MultiSelectOption" @key="option.Index" Value="@(new MultiSelectOption(option.Value, option.Text))" Text="@option.Text" Disabled="@option.Disabled" />
@@ -20,8 +20,8 @@
     else
     {
         <BbSelect TValue="string" @key="_optionsKey" Value="@_state.Value" ValueChanged="SetValue" Disabled="_state.Disabled" Required="_state.Required"
-                  AriaLabel="@_state.Label" DisplayTextSelector="DisplayText" Class="sf-native-select-control">
-            <BbSelectTrigger TValue="string" id="@(_state.Id + "__bb")" aria-describedby="@_state.DescribedBy"
+                  AriaLabel="@_state.Label" DisplayTextSelector="DisplayText" Class="sf-native-select-control w-full [&_button[role=combobox]]:min-h-11 [&_button[role=combobox]]:max-w-full [&_button[role=combobox]]:font-[inherit] [&_[aria-invalid=true]]:border-destructive">
+            <BbSelectTrigger TValue="string" Class="min-h-11 max-w-full font-[inherit] aria-invalid:border-destructive" id="@(_state.Id + "__bb")" aria-describedby="@_state.DescribedBy"
                              aria-invalid="@(_state.Invalid ? "true" : null)" aria-required="@(_state.Required ? "true" : null)">
                 <BbSelectValue Placeholder="@_state.Label" />
             </BbSelectTrigger>

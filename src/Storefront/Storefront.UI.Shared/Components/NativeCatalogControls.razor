@@ -24,7 +24,7 @@
     }
     else
     {
-        <div class="desktop-filter">
+        <div class="desktop-filter w-[13.75rem] shrink-0 max-md:hidden">
             <h2 class="font-bold text-sm flex items-center gap-2 mb-5"><SfIcon Name="filter" />@Initial.Labels.Get("Filtering.SpecificationFilter")</h2>
             <CatalogFilterPanel Initial="Initial" InstanceId="sf-catalog-desktop" Change="Change" />
         </div>
@@ -32,7 +32,7 @@
             <div class="md:hidden mb-5" @ref="_filterTrigger">
                 <BbSheetTrigger AsChild="true"><BbButton Variant="ButtonVariant.Outline" Class="w-full"><SfIcon Name="filter" />@Initial.Labels.Get("Filtering.SpecificationFilter")</BbButton></BbSheetTrigger>
             </div>
-            <BbSheetContent Class="sf-sheet" ShowClose="false" dir="@(Initial.Rtl ? "rtl" : "ltr")">
+            <BbSheetContent Class="sf-sheet flex w-[27.5rem] max-w-screen flex-col bg-card text-foreground font-sans pb-[max(1.5rem,env(safe-area-inset-bottom))]" ShowClose="false" dir="@(Initial.Rtl ? "rtl" : "ltr")">
                 <BbSheetClose AsChild="false" class="absolute top-4 end-4" aria-label="@Initial.Labels.Get("Common.Close")"><SfIcon Name="x" /></BbSheetClose>
                 <BbSheetHeader><BbSheetTitle>@Initial.Labels.Get("Filtering.SpecificationFilter")</BbSheetTitle><BbSheetDescription>@Initial.Labels.Get("Search.Category")</BbSheetDescription></BbSheetHeader>
                 <div class="overflow-y-auto my-6"><CatalogFilterPanel Initial="Initial" InstanceId="sf-catalog-mobile" Change="Change" /></div>

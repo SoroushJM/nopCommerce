@@ -18,9 +18,9 @@
         NopHtml.AddCanonicalUrlParts(canonical, seoSettings.QueryStringInCanonicalUrlsEnabled);
     }
 }
-<main id="main-content" class="wrap py-8 sf-catalog">
+<main id="main-content" class="wrap mx-auto max-w-[80rem] px-8 max-md:px-5 py-8 sf-catalog">
     <p class="text-xs text-muted-foreground mb-5"><a href="@Url.Content("~/")">خانه</a> / فروشگاه</p>
-    <h1 class="page-heading">دنیای رنگی نوشت‌افزار</h1>
+    <h1 class="page-heading text-3xl max-md:text-2xl font-bold tracking-[-0.0625rem]">دنیای رنگی نوشت‌افزار</h1>
     <p class="text-sm text-muted-foreground mt-3">همراه کوچکِ هر ایده را اینجا پیدا کن.</p>
     @await Html.PartialAsync("~/Themes/Madadrang/Views/Catalog/_MadadrangCatalogBody.cshtml", Model)
 </main>

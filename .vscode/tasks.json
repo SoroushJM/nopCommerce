@@ -5,7 +5,7 @@
       "label": "nop: restore",
       "type": "process",
       "command": "dotnet",
-      "args": ["restore", "src/NopCommerce.sln"],
+      "args": ["restore", "src/NopCommerce.sln", "-p:StorefrontTheme=All"],
       "options": { "cwd": "${workspaceFolder}" },
       "problemMatcher": "$msCompile"
     },
@@ -13,16 +13,26 @@
       "label": "nop: build solution",
       "type": "process",
       "command": "dotnet",
-      "args": ["build", "src/NopCommerce.sln", "--configuration", "Debug", "--verbosity", "minimal"],
+      "args": ["build", "src/NopCommerce.sln", "--configuration", "Debug", "-p:StorefrontTheme=All", "-maxcpucount:1", "--verbosity", "minimal"],
       "options": { "cwd": "${workspaceFolder}" },
       "group": { "kind": "build", "isDefault": true },
+      "problemMatcher": "$msCompile"
+    },
+    {
+      "label": "nop: build storefront",
+      "type": "process",
+      "command": "dotnet",
+      "args": ["build", "src/Plugins/Nop.Plugin.Misc.PersianStorefront/Nop.Plugin.Misc.PersianStorefront.csproj", "--configuration", "Debug", "-p:StorefrontTheme=All", "-maxcpucount:1", "--verbosity", "minimal"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "detail": "F5 builds Nop.Web, Storefront and both themes. Use the default solution build after editing other plugins or for initial setup.",
+      "group": "build",
       "problemMatcher": "$msCompile"
     },
     {
       "label": "nop: build web",
       "type": "process",
       "command": "dotnet",
-      "args": ["build", "src/Presentation/Nop.Web/Nop.Web.csproj", "--configuration", "Debug", "--verbosity", "minimal"],
+      "args": ["build", "src/Presentation/Nop.Web/Nop.Web.csproj", "--configuration", "Debug", "-p:StorefrontTheme=All", "--verbosity", "minimal"],
       "options": { "cwd": "${workspaceFolder}" },
       "group": "build",
       "problemMatcher": "$msCompile"

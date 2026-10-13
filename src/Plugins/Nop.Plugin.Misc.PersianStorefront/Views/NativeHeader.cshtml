@@ -14,30 +14,30 @@
 <div class="bg-secondary text-secondary-foreground text-center text-xs py-2.5 px-4">یک شروع رنگی برای روزهای تازه <span
     class="mx-2 text-primary">✦</span> لوازم‌تحریری که دوستشان داری</div>
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderBefore })
-    <header class="sf-header">
-        <div class="wrap sf-native-selectors">
+    <header class="sf-header border-b-[.0625rem] border-border bg-background">
+        <div class="wrap mx-auto max-w-[80rem] px-8 max-md:px-5 sf-native-selectors flex flex-wrap items-center justify-end gap-3 text-xs">
             @await Component.InvokeAsync(typeof(TaxTypeSelectorViewComponent))
             @await Component.InvokeAsync(typeof(CurrencySelectorViewComponent))
             @await Component.InvokeAsync(typeof(LanguageSelectorViewComponent))
             @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderSelectors })
         </div>
-        <div class="wrap flex items-center justify-between gap-7 py-5 max-md:py-4">
+        <div class="wrap mx-auto max-w-[80rem] px-8 max-md:px-5 flex items-center justify-between gap-7 py-5 max-md:flex-wrap max-md:gap-3 max-md:py-3.5">
             @if (storeSettings.LogoPictureId > 0)
             {
-                <div class="sf-brand sf-configured-logo shrink-0">@await Component.InvokeAsync(typeof(LogoViewComponent))</div>
+                <div class="sf-brand sf-configured-logo flex shrink-0 items-center gap-2.5 text-2xl font-bold tracking-[-0.0625rem] max-md:text-xl [&_img]:max-h-12 [&_img]:w-auto">@await Component.InvokeAsync(typeof(LogoViewComponent))</div>
             }
             else
             {
-            <a href="@profile.HomeUrl" class="sf-brand shrink-0" aria-label="مداد رنگی، صفحه اصلی">
-                <span class="brand-mark">
-                    <component type="typeof(SfIcon)" render-mode="Static" param-Size="23" />
+            <a href="@profile.HomeUrl" class="sf-brand flex shrink-0 items-center gap-2.5 text-2xl font-bold tracking-[-0.0625rem] max-md:text-xl" aria-label="مداد رنگی، صفحه اصلی">
+                <span class="brand-mark grid h-[var(--control-height)] w-[2.625rem] -rotate-[7deg] place-items-center rounded-lg bg-primary text-primary-foreground max-md:size-9">
+                    <component type="typeof(SfIcon)" render-mode="Static" param-Size="@(1.4375m)" />
                 </span>
-                <span class="brand-word">مداد <span class="text-primary">رنگی</span><small
+                <span class="brand-word whitespace-nowrap">مداد <span class="text-primary">رنگی</span><small
                     class="block text-xs font-normal tracking-normal text-muted-foreground mt-0.5">دنیای کوچکِ ایده‌های
                     بزرگ</small></span>
                 </a>
             }
-                <div class="sf-native-search">@await Component.InvokeAsync(typeof(SearchBoxViewComponent))</div>
+                <div class="sf-native-search w-full max-w-[29.375rem] max-md:order-3 max-md:basis-full max-md:max-w-none [&_.search-box]:float-none [&_.search-box]:m-0 [&_.search-box]:w-full [&_form]:flex [&_form]:w-full [&_form]:gap-1.5 [&_input[type=text]]:h-[var(--control-height)] [&_input[type=text]]:w-full [&_input[type=text]]:min-w-0 [&_input[type=text]]:rounded-[var(--radius)] [&_input[type=text]]:border-[.0625rem] [&_input[type=text]]:border-border [&_input[type=text]]:bg-muted [&_input[type=text]]:px-3 [&_input[type=text]]:py-2 [&_input[type=text]]:font-[inherit] [&_.search-box-button]:h-[var(--control-height)] [&_.search-box-button]:min-w-[4.5rem] [&_.search-box-button]:rounded-[var(--radius)] [&_.search-box-button]:bg-primary [&_.search-box-button]:font-[inherit] [&_.search-box-button]:text-primary-foreground">@await Component.InvokeAsync(typeof(SearchBoxViewComponent))</div>
                 <div class="flex items-center gap-2">
                     @if (!nativeMenu)
                     {
@@ -61,12 +61,12 @@
                                param-Theme="@profile" />
                 </div>
             </div>
-            <div class="wrap header-upper sf-native-header-links">
+            <div class="wrap mx-auto max-w-[80rem] px-8 max-md:px-5 header-upper sf-native-header-links relative pb-3 [&_.header-links]:float-none [&_.header-links]:m-0 [&_.header-links]:w-full [&_.header-links]:p-0 [&_.header-links]:text-start [&_ul]:flex [&_ul]:flex-wrap [&_ul]:items-center [&_ul]:gap-3.5 [&_li]:m-0 [&_li]:p-0 [&_a]:text-xs [&_a]:text-muted-foreground [&_a]:normal-case [&_#topcartlink]:m-0 [&_#topcartlink]:min-w-0 [&_#topcartlink]:bg-transparent [&_#topcartlink]:p-0 [&_#flyout-cart]:start-0 [&_#flyout-cart]:end-auto [&_#flyout-cart]:text-sm max-md:[&_ul]:justify-center max-md:[&_ul]:gap-3">
                 @await Component.InvokeAsync(typeof(HeaderLinksViewComponent))
                 @await Component.InvokeAsync(typeof(FlyoutShoppingCartViewComponent))
             </div>
             @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderMiddle })
-            <div class="wrap border-t border-border @(nativeMenu ? "sf-native-menu" : "max-md:hidden")">
+            <div class="wrap mx-auto max-w-[80rem] px-8 max-md:px-5 border-t-[.0625rem] border-border [&_.menu\_\_item-link]:font-[inherit] [&_.menu\_\_item-link]:text-foreground @(nativeMenu ? "sf-native-menu py-3 [&_.menu-container]:m-0 [&_.menu-container]:max-w-none" : "max-md:hidden")">
                 @await Component.InvokeAsync(typeof(WidgetViewComponent), new
                 {
                     widgetZone = PublicWidgetZones.HeaderMenuBefore

@@ -1,0 +1,55 @@
+<Project>
+  <PropertyGroup>
+    <!-- Cache local Debug publications; Release retains the full publish path. -->
+    <StorefrontClientIncrementalPublish Condition="'$(StorefrontClientIncrementalPublish)' == '' and '$(Configuration)' == 'Debug'">true</StorefrontClientIncrementalPublish>
+    <StorefrontClientIncrementalPublish Condition="'$(StorefrontClientIncrementalPublish)' == ''">false</StorefrontClientIncrementalPublish>
+  </PropertyGroup>
+
+  <Target Name="PrepareStorefrontClientPublish" DependsOnTargets="PrepareIncrementalStorefrontClientPublish">
+    <!-- An explicitly empty Outputs attribute skips a target. Use a missing output
+         when caching is disabled so Release and forced publication always run. -->
+    <PropertyGroup Condition="'$(StorefrontClientIncrementalPublish)' != 'true'">
+      <_StorefrontClientPublishInputs>$(MSBuildProjectFullPath)</_StorefrontClientPublishInputs>
+      <_StorefrontClientPublishOutput>$(IntermediateOutputPath)storefront-client.always-publish</_StorefrontClientPublishOutput>
+    </PropertyGroup>
+    <!-- Debug and Release publish to the same plugin directory. An uncached
+         publication must invalidate the previous configuration's cache too. -->
+    <Delete Files="$(_StorefrontClientPublishOutput);$(BaseIntermediateOutputPath)storefront-client.stamp" Condition="'$(StorefrontClientIncrementalPublish)' != 'true'" />
+  </Target>
+
+  <Target Name="PrepareIncrementalStorefrontClientPublish" Condition="'$(StorefrontClientIncrementalPublish)' == 'true'">
+    <PropertyGroup>
+      <_StorefrontClientCache>$(BaseIntermediateOutputPath)storefront-client</_StorefrontClientCache>
+      <_StorefrontClientPublishOutput>$(_StorefrontClientCache).stamp</_StorefrontClientPublishOutput>
+    </PropertyGroup>
+    <ItemGroup>
+      <!-- Track file membership as well as timestamps, including generated CSS. -->
+      <_StorefrontClientSource Include="../../Storefront/Storefront.Client/**/*;../../Storefront/Storefront.UI.Shared/**/*;../../Storefront/Storefront.UI.Madadrang/**/*;../../Storefront/Storefront.UI.Boutique/**/*"
+                               Exclude="../../Storefront/**/bin/**;../../Storefront/**/obj/**;../../Storefront/**/node_modules/**" />
+      <_StorefrontClientSource Include="Views/**/*.cshtml;../../Presentation/Nop.Web/Themes/Madadrang/Views/**/*.cshtml;../../Presentation/Nop.Web/Themes/Boutique/Views/**/*.cshtml" />
+      <_StorefrontClientSource Include="../../Storefront/**/obj/project.assets.json;../../Storefront/**/obj/*.nuget.g.props;../../Storefront/**/obj/*.nuget.g.targets" />
+      <_StorefrontClientConfigurationFile Include="$(MSBuildAllProjects);$(MSBuildProjectFullPath);../../Storefront/*;../../*.props;../../*.targets;../../NuGet.Config;../../../global.json;../../../NuGet.Config;../../../*.props;../../../*.targets;../../../vendor/blazorblueprint-primitives/packages/*.nupkg;$(StorefrontClientPublishAdditionalInputs)" />
+      <_StorefrontClientSource Include="@(_StorefrontClientConfigurationFile)"
+                               Condition="Exists('%(_StorefrontClientConfigurationFile.Identity)')" />
+      <_StorefrontClientSettings Include="Configuration=$(Configuration);Theme=$(StorefrontTheme);Output=$(OutDir);Compiler=$(UseSharedCompilation);SDK=$(NETCoreSdkVersion);FindRazor=$(EnableFindRazorSourceFile);Compression=$(CompressionExcludePatterns);Trimmed=$(PublishTrimmed);AOT=$(RunAOTCompilation);Globalization=$(InvariantGlobalization)" />
+    </ItemGroup>
+    <WriteLinesToFile File="$(_StorefrontClientCache).inputs" Lines="@(_StorefrontClientSettings);@(_StorefrontClientSource->'%(FullPath)')"
+                      Overwrite="true" WriteOnlyWhenDifferent="true" />
+    <ReadLinesFromFile File="$(_StorefrontClientCache).outputs" Condition="Exists('$(_StorefrontClientCache).outputs')">
+      <Output TaskParameter="Lines" ItemName="_StorefrontClientPreviousOutput" />
+    </ReadLinesFromFile>
+    <ItemGroup>
+      <_StorefrontClientMissingOutput Include="@(_StorefrontClientPreviousOutput)" Condition="!Exists('%(Identity)')" />
+    </ItemGroup>
+    <!-- Missing published files must invalidate an otherwise current stamp. -->
+    <Touch Files="$(_StorefrontClientCache).inputs"
+           Condition="'@(_StorefrontClientMissingOutput)' != '' or '@(_StorefrontClientPreviousOutput)' == ''" />
+    <PropertyGroup>
+      <_StorefrontClientPublishInputs>@(_StorefrontClientSource);$(_StorefrontClientCache).inputs</_StorefrontClientPublishInputs>
+    </PropertyGroup>
+  </Target>
+
+  <Target Name="CleanStorefrontClientPublishCache" AfterTargets="Clean">
+    <Delete Files="$(BaseIntermediateOutputPath)storefront-client.inputs;$(BaseIntermediateOutputPath)storefront-client.outputs;$(BaseIntermediateOutputPath)storefront-client.stamp" />
+  </Target>
+</Project>

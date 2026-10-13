@@ -1,7 +1,7 @@
 @typeparam TValue
-<BbSelect TValue="TValue" Class="sf-select" AriaLabel="@Label" Value="@Value"
+<BbSelect TValue="TValue" Class="sf-select w-full min-w-0" AriaLabel="@Label" Value="@Value"
           ValueChanged="@ValueChanged" Disabled="Disabled" DisplayTextSelector="@GetDisplayText">
-    <BbSelectTrigger TValue="TValue" Class="h-11">
+    <BbSelectTrigger TValue="TValue" Class="h-11 min-h-[var(--control-height)] text-start [&>span]:truncate">
         <BbSelectValue Placeholder="@Label" />
     </BbSelectTrigger>
     <BbSelectContent TValue="TValue">

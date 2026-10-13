@@ -8,10 +8,10 @@
         (Tone: "school", Icon: "bag"), (Tone: "art", Icon: "leaf") };
     var style = styles[(int)ViewData["Style"]!];
 }
-<a href="@(await NopUrl.RouteGenericUrlAsync<Category>(new { SeName = Model.SeName }))" class="category-tile"
+<a href="@(await NopUrl.RouteGenericUrlAsync<Category>(new { SeName = Model.SeName }))" class="category-tile flex items-center gap-[0.9375rem] rounded-lg border-[.0625rem] border-border px-[1.375rem] py-5 transition-colors hover:bg-surface max-md:gap-2.5 max-md:p-3.5 motion-reduce:transition-none"
    data-categoryid="@Model.Id">
-    <span class="category-icon" data-tone="@style.Tone">
-        <component type="typeof(SfIcon)" render-mode="Static" param-Name="style.Icon" param-Size="23" />
+    <span class="category-icon grid h-[var(--control-height)] w-12 shrink-0 place-items-center rounded-lg max-md:size-10 data-[tone=notebook]:bg-secondary data-[tone=notebook]:text-secondary-foreground data-[tone=stationery]:bg-stationery data-[tone=stationery]:text-stationery-foreground data-[tone=school]:bg-school data-[tone=school]:text-school-foreground data-[tone=art]:bg-art data-[tone=art]:text-art-foreground" data-tone="@style.Tone">
+        <component type="typeof(SfIcon)" render-mode="Static" param-Name="style.Icon" param-Size="@(1.4375m)" />
     </span>
     <div><strong class="text-sm max-md:text-xs block">@Model.Name</strong><span
         class="text-xs text-muted-foreground">کشف کن <span class="mr-1">←</span></span></div>

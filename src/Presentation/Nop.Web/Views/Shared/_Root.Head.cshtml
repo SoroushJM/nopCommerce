@@ -78,7 +78,7 @@
     
     @Html.Raw(commonSettings.HeaderCustomHtml)
 </head>
-<body>
+<body class="@ViewData["StorefrontBodyClasses"]">
     <nop-antiforgery-token />
     @RenderBody()
 

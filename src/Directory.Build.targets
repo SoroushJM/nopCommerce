@@ -1,0 +1,19 @@
+<Project>
+  <!-- Keep development tooling separate from the storefront projects and theme build rules. -->
+  <PropertyGroup>
+    <EnableFindRazorSourceFile Condition="'$(EnableFindRazorSourceFile)' == '' and '$(Configuration)' == 'Debug'">true</EnableFindRazorSourceFile>
+    <EnableFindRazorSourceFile Condition="'$(Configuration)' != 'Debug'">false</EnableFindRazorSourceFile>
+    <!-- This development-only config has no publish endpoint. Keep compression
+         enabled for application assets in CLI, IDE and nested Client publishes. -->
+    <CompressionExcludePatterns Condition="'$(EnableFindRazorSourceFile)' == 'true'">$(CompressionExcludePatterns);**/FindRazorSourceFileConfig.json</CompressionExcludePatterns>
+  </PropertyGroup>
+  <ItemGroup Condition="'$(Configuration)' == 'Debug' and '$(EnableFindRazorSourceFile)' == 'true' and
+                        ('$(MSBuildProjectName)' == 'Storefront.Client' or
+                         '$(MSBuildProjectName)' == 'Storefront.Preview' or
+                         '$(MSBuildProjectName)' == 'Storefront.UI.Shared' or
+                         '$(MSBuildProjectName)' == 'Storefront.UI.Madadrang' or
+                         '$(MSBuildProjectName)' == 'Storefront.UI.Boutique' or
+                         '$(MSBuildProjectName)' == 'Nop.Web')">
+    <PackageReference Include="FindRazorSourceFile" Version="1.1.1" PrivateAssets="all" />
+  </ItemGroup>
+</Project>

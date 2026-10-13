@@ -5,8 +5,8 @@
     NopHtml.AddTitleParts(T("PageTitle.Search").Text);
     NopHtml.AppendPageCssClassParts("html-search-page");
 }
-<main id="main-content" class="wrap py-8 sf-catalog">
+<main id="main-content" class="wrap py-8 sf-catalog max-w-320 mx-auto px-8 max-md:px-4.5 [scroll-margin-top:1.25rem]">
     <p class="text-xs text-muted-foreground mb-5"><a href="@Url.RouteUrl(NopRouteNames.General.HOMEPAGE)">@T("Homepage")</a> / @T("Search")</p>
-    <h1 class="page-heading">@T("Search")</h1>
+    <h1 class="page-heading text-3xl font-bold [letter-spacing:-0.0625rem] max-md:text-2xl">@T("Search")</h1>
     @await Html.PartialAsync("_MadadrangCatalogBody", Model)
 </main>

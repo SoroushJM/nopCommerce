@@ -2,6 +2,6 @@
 @using Nop.Web.Framework.Infrastructure
 @addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
 
-<div class="sf-native-footer">
+<div class="sf-native-footer [&_.footer]:bg-muted [&_.footer]:font-[inherit] [&_.footer]:text-foreground [&_.footer_a]:text-muted-foreground [&_.newsletter-email]:flex [&_.newsletter-email]:justify-center [&_.newsletter-email]:gap-1.5 [&_.newsletter-email_input]:min-w-0 [&_.newsletter-email_input]:rounded-[var(--radius)] [&_.newsletter-email_input]:border-[.0625rem] [&_.newsletter-email_input]:border-border [&_.newsletter-email_input]:bg-background [&_.newsletter-email_input]:font-[inherit] [&_.newsletter-subscribe-button]:rounded-[var(--radius)] [&_.newsletter-subscribe-button]:bg-primary [&_.newsletter-subscribe-button]:font-[inherit]">
     @await Component.InvokeAsync(typeof(FooterViewComponent))
 </div>

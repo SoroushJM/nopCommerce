@@ -2,38 +2,30 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "nopCommerce: Nop.Web (Dev Kit)",
-      "type": "dotnet",
-      "request": "launch",
-      "projectPath": "${workspaceFolder}/src/Presentation/Nop.Web/Nop.Web.csproj",
-      "preLaunchTask": "nop: build solution"
-    },
-    {
-      "name": "nopCommerce: Nop.Web (HTTP)",
+      "name": "nopCommerce: Select Launch Profile",
       "type": "coreclr",
       "request": "launch",
-      "preLaunchTask": "nop: build solution",
+      "preLaunchTask": "nop: build storefront",
       "program": "${workspaceFolder}/src/Presentation/Nop.Web/bin/Debug/net10.0/Nop.Web.dll",
       "cwd": "${workspaceFolder}/src/Presentation/Nop.Web",
       "args": [],
-      "launchSettingsProfile": "",
-      "env": {
-        "ASPNETCORE_ENVIRONMENT": "Development",
-        "DOTNET_ENVIRONMENT": "Development",
-        "ASPNETCORE_URLS": "http://localhost:6992"
-      },
+      "launchSettingsFilePath": "${workspaceFolder}/src/Presentation/Nop.Web/Properties/launchSettings.json",
+      "launchSettingsProfile": "${input:launchProfile}",
       "console": "internalConsole",
       "stopAtEntry": false,
       "serverReadyAction": {
         "action": "openExternally",
         "pattern": "\\bNow listening on:\\s+(https?://\\S+)"
       }
-    },
+    }
+  ],
+  "inputs": [
     {
-      "name": "nopCommerce: Attach to .NET process",
-      "type": "coreclr",
-      "request": "attach",
-      "processId": "${command:pickProcess}"
+      "id": "launchProfile",
+      "type": "pickString",
+      "description": "Which Launch Profile do you want to run?",
+      "options": ["Madadrang", "Boutique", "Nop.Web"],
+      "default": "Madadrang"
     }
   ]
 }

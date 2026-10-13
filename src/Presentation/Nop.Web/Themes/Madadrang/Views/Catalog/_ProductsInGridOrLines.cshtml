@@ -23,7 +23,7 @@ else
                 .BooleanParameterName("isc").BooleanParameterName("sid").BooleanParameterName("sit").RenderEmptyParameters(true);
             if (!await pager.IsEmpty())
             {
-                <nav class="pager sf-catalog-pager mt-8" aria-label="صفحه‌های محصولات">@pager</nav>
+                <nav class="pager sf-catalog-pager mt-8 [&_ul]:flex! [&_ul]:flex-wrap! [&_ul]:gap-2! [&_ul]:justify-center! [&_a]:grid! [&_a]:place-items-center! [&_a]:min-w-9.5! [&_a]:h-9.5! [&_a]:[padding:0_0.625rem]! [&_a]:[border-width:0.0625rem]! [&_a]:border-solid! [&_a]:border-border! [&_a]:rounded-md! [&_a]:text-xs! [&_span]:grid! [&_span]:place-items-center! [&_span]:min-w-9.5! [&_span]:h-9.5! [&_span]:[padding:0_0.625rem]! [&_span]:[border-width:0.0625rem]! [&_span]:border-solid! [&_span]:border-border! [&_span]:rounded-md! [&_span]:text-xs! [&_.current-page_span]:bg-primary! [&_.current-page_span]:text-primary-foreground! [&_.current-page_span]:border-primary!" aria-label="صفحه‌های محصولات">@pager</nav>
             }
         }
         else if (!string.IsNullOrEmpty(Model.NoResultMessage))

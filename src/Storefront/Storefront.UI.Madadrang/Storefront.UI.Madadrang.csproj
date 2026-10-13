@@ -10,12 +10,22 @@
   </ItemGroup>
   <ItemGroup>
     <Content Update="package.json;package-lock.json" CopyToPublishDirectory="Never" />
-    <TailwindSources Include="**/*.razor;../Storefront.UI.Shared/**/*.razor;../Storefront.UI.Shared/wwwroot/native-select.css;Styles/input.css;package-lock.json;../../Plugins/Nop.Plugin.Misc.PersianStorefront/Views/**/*.cshtml;../../Presentation/Nop.Web/Themes/Madadrang/Views/**/*.cshtml" />
+    <TailwindSources Include="**/*.razor;../Storefront.UI.Shared/**/*.razor;../Storefront.UI.Shared/*.razor;../Storefront.UI.Shared/wwwroot/native-select.js;Styles/**/*.css;package.json;package-lock.json;../../Plugins/Nop.Plugin.Misc.PersianStorefront/Views/**/*.cshtml;../../Presentation/Nop.Web/Themes/Madadrang/Views/**/*.cshtml" />
   </ItemGroup>
-  <Target Name="RestoreStorefrontNodeModules" BeforeTargets="PrepareForBuild" Inputs="package-lock.json" Outputs="node_modules/.package-lock.json">
+  <Target Name="RestoreStorefrontNodeModules" BeforeTargets="PrepareForBuild" Inputs="package.json;package-lock.json" Outputs="node_modules/.package-lock.json">
     <Exec Command="npm ci --no-audit --no-fund" WorkingDirectory="$(MSBuildProjectDirectory)" />
   </Target>
-  <Target Name="BuildStorefrontStyles" BeforeTargets="PrepareForBuild" DependsOnTargets="RestoreStorefrontNodeModules" Inputs="@(TailwindSources)" Outputs="wwwroot/storefront.css">
+  <Target Name="PrepareStorefrontStyleInputs" DependsOnTargets="RestoreStorefrontNodeModules">
+    <!-- Track additions/removals as well as edits. Tailwind preserves CSS timestamps when output is unchanged. -->
+    <WriteLinesToFile File="$(IntermediateOutputPath)tailwind.inputs" Lines="@(TailwindSources->'%(FullPath)')" Overwrite="true" WriteOnlyWhenDifferent="true" />
+    <Touch Files="$(IntermediateOutputPath)tailwind.inputs" Condition="!Exists('wwwroot/storefront.css')" />
+    <ItemGroup>
+      <FileWrites Include="$(IntermediateOutputPath)tailwind.inputs;$(IntermediateOutputPath)tailwind.stamp" />
+    </ItemGroup>
+  </Target>
+  <Target Name="BuildStorefrontStyles" BeforeTargets="PrepareForBuild" DependsOnTargets="PrepareStorefrontStyleInputs"
+          Inputs="@(TailwindSources);$(MSBuildProjectFullPath);$(IntermediateOutputPath)tailwind.inputs" Outputs="$(IntermediateOutputPath)tailwind.stamp">
     <Exec Command="npm run build" WorkingDirectory="$(MSBuildProjectDirectory)" />
+    <Touch Files="$(IntermediateOutputPath)tailwind.stamp" AlwaysCreate="true" />
   </Target>
 </Project>

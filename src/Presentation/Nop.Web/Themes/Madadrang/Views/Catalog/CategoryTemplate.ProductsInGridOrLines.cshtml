@@ -24,7 +24,7 @@
 {
     @if (Model.DisplayCategoryBreadcrumb)
     {
-        <nav class="wrap pt-7 text-xs text-muted-foreground flex items-center gap-2 flex-wrap" aria-label="مسیر دسته‌بندی">
+        <nav class="wrap pt-7 text-xs text-muted-foreground flex items-center gap-2 flex-wrap max-w-320 mx-auto px-8 max-md:px-4.5" aria-label="مسیر دسته‌بندی">
             <a href="@Url.RouteUrl(NopRouteNames.General.HOMEPAGE)">@T("Categories.Breadcrumb.Top")</a>
             @foreach (var category in Model.CategoryBreadcrumb)
             {
@@ -42,8 +42,8 @@
         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CategoryDetailsAfterBreadcrumb, additionalData = Model })
     }
 }
-<main id="main-content" class="wrap py-8 sf-catalog">
-    <h1 class="page-heading">@Model.Name</h1>
+<main id="main-content" class="wrap py-8 sf-catalog max-w-320 mx-auto px-8 max-md:px-4.5 [scroll-margin-top:1.25rem]">
+    <h1 class="page-heading text-3xl font-bold [letter-spacing:-0.0625rem] max-md:text-2xl">@Model.Name</h1>
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CategoryDetailsTop, additionalData = Model })
     @if (!string.IsNullOrWhiteSpace(Model.Description))
     {
@@ -55,7 +55,7 @@
         <div class="flex flex-wrap gap-2 mt-5" aria-label="زیردسته‌ها">
             @foreach (var category in Model.SubCategories)
             {
-                <a class="filter-pill" href="@(await NopUrl.RouteGenericUrlAsync<Category>(new { SeName = category.SeName }))">@category.Name</a>
+                <a class="filter-pill [border-width:0.0625rem] border-solid border-border rounded-md [padding:0.5625rem_0.875rem] text-xs bg-background [&.selected]:border-primary! [&.selected]:bg-secondary! [&.selected]:text-primary!" href="@(await NopUrl.RouteGenericUrlAsync<Category>(new { SeName = category.SeName }))">@category.Name</a>
             }
         </div>
     }
@@ -73,7 +73,7 @@
         </section>
     }
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.CategoryDetailsAfterFeaturedProducts, additionalData = Model })
-    <div class="py-6 border-b mb-7">
+    <div class="py-6 [border-bottom-width:0.0625rem] mb-7">
         @await Component.InvokeAsync("MadadrangCatalogControls", new { model = Model.CatalogProductsModel, placement = "toolbar" })
     </div>
     <div class="flex flex-col md:flex-row gap-8">

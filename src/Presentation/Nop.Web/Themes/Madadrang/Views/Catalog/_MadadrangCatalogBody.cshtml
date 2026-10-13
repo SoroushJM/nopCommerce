@@ -5,7 +5,7 @@
 }
 @if (allProducts)
 {
-<form method="get" action="@(Context.Request.PathBase + Context.Request.Path)" class="sf-input-group mt-6" role="search">
+<form method="get" action="@(Context.Request.PathBase + Context.Request.Path)" class="sf-input-group mt-6 flex items-center min-h-11 [border-width:0.0625rem] border-solid border-input rounded-md bg-background [&:focus-within]:border-ring! [&:focus-within]:[outline:0.1875rem_solid_color-mix(in_srgb,_var(--ring)_50%,_transparent)]! [&:focus-within]:[outline-offset:0.125rem]! [&_[data-slot='input-group-control']]:min-w-0! [&_[data-slot='input-group-control']]:flex-1! [&_[data-slot='input-group-control']]:w-full! [&_[data-slot='input-group-control']]:[border-width:0rem]! [&_[data-slot='input-group-control']]:bg-transparent! [&_[data-slot='input-group-control']]:px-3! [&_[data-slot='input-group-control']]:[outline-width:0rem]! [&_[data-slot='input-group-addon']]:flex! [&_[data-slot='input-group-addon']]:items-center! [&_[data-slot='input-group-addon']]:px-1!" role="search">
     <input data-slot="input-group-control" type="search" name="q" value="@Model.q" aria-label="جست‌وجو در فروشگاه" placeholder="نام محصول یا برند..." />
     @foreach (var key in new[] { "advs", "cid", "isc", "mid", "vid", "sid", "sit", "price", "ms", "specs", "orderby", "pagesize", "viewmode" })
     {
@@ -14,16 +14,16 @@
             <input type="hidden" name="@key" value="@value" />
         }
     }
-    <span data-slot="input-group-addon"><button type="submit" class="icon-btn text-primary">بگرد</button></span>
+    <span data-slot="input-group-addon"><button type="submit" class="icon-btn text-primary flex items-center justify-center gap-2 min-w-11 min-h-11 rounded-md">بگرد</button></span>
 </form>
 }
 else
 {
 <form method="get" action="@Url.RouteUrl(NopRouteNames.General.SEARCH)" class="mt-6" role="search">
     <label asp-for="q" class="text-sm font-bold">@T("Search.SearchTerm")</label>
-    <div class="sf-input-group mt-3">
+    <div class="sf-input-group mt-3 flex items-center min-h-11 [border-width:0.0625rem] border-solid border-input rounded-md bg-background [&:focus-within]:border-ring! [&:focus-within]:[outline:0.1875rem_solid_color-mix(in_srgb,_var(--ring)_50%,_transparent)]! [&:focus-within]:[outline-offset:0.125rem]! [&_[data-slot='input-group-control']]:min-w-0! [&_[data-slot='input-group-control']]:flex-1! [&_[data-slot='input-group-control']]:w-full! [&_[data-slot='input-group-control']]:[border-width:0rem]! [&_[data-slot='input-group-control']]:bg-transparent! [&_[data-slot='input-group-control']]:px-3! [&_[data-slot='input-group-control']]:[outline-width:0rem]! [&_[data-slot='input-group-addon']]:flex! [&_[data-slot='input-group-addon']]:items-center! [&_[data-slot='input-group-addon']]:px-1!">
         <input asp-for="q" data-slot="input-group-control" type="search" placeholder="@T("Search.SearchTerm")" />
-        <span data-slot="input-group-addon"><button type="submit" class="icon-btn text-primary">@T("Search.Button")</button></span>
+        <span data-slot="input-group-addon"><button type="submit" class="icon-btn text-primary flex items-center justify-center gap-2 min-w-11 min-h-11 rounded-md">@T("Search.Button")</button></span>
     </div>
     @foreach (var key in new[] { "price", "orderby", "pagesize", "viewmode" })
     {
@@ -38,13 +38,13 @@ else
         <label asp-for="advs" for="sf-search-advanced">@T("Search.AdvancedSearch")</label>
     </div>
     <fieldset id="sf-search-advanced-fields" class="mt-4" hidden="@(!Model.advs)">
-        <legend class="sr-only">@T("Search.AdvancedSearch")</legend>
+        <legend class="absolute size-[.0625rem] -m-[.0625rem] overflow-hidden whitespace-nowrap border-[0rem] p-0 [clip-path:inset(50%)]">@T("Search.AdvancedSearch")</legend>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
             @if (Model.AvailableCategories.Count > 0)
             {
                 <div>
                     <label asp-for="cid" class="block text-sm mb-2">@T("Search.Category")</label>
-                    <select asp-for="cid" asp-items="Model.AvailableCategories" class="sf-select h-11 w-full"></select>
+                    <select asp-for="cid" asp-items="Model.AvailableCategories" class="sf-select h-11 w-full min-w-0 w-full [&_[role='combobox']]:min-h-11! [&_[role='combobox']]:text-start! [&[role='combobox']]:min-h-11! [&[role='combobox']]:text-start! [&_[role='combobox']_>_span]:overflow-hidden! [&_[role='combobox']_>_span]:text-ellipsis! [&_[role='combobox']_>_span]:whitespace-nowrap! [&[role='combobox']_>_span]:overflow-hidden! [&[role='combobox']_>_span]:text-ellipsis! [&[role='combobox']_>_span]:whitespace-nowrap!"></select>
                 </div>
                 <div class="flex items-center gap-2">
                     <input asp-for="isc" />
@@ -55,14 +55,14 @@ else
             {
                 <div>
                     <label asp-for="mid" class="block text-sm mb-2">@T("Search.Manufacturer")</label>
-                    <select asp-for="mid" asp-items="Model.AvailableManufacturers" class="sf-select h-11 w-full"></select>
+                    <select asp-for="mid" asp-items="Model.AvailableManufacturers" class="sf-select h-11 w-full min-w-0 w-full [&_[role='combobox']]:min-h-11! [&_[role='combobox']]:text-start! [&[role='combobox']]:min-h-11! [&[role='combobox']]:text-start! [&_[role='combobox']_>_span]:overflow-hidden! [&_[role='combobox']_>_span]:text-ellipsis! [&_[role='combobox']_>_span]:whitespace-nowrap! [&[role='combobox']_>_span]:overflow-hidden! [&[role='combobox']_>_span]:text-ellipsis! [&[role='combobox']_>_span]:whitespace-nowrap!"></select>
                 </div>
             }
             @if (Model.asv && Model.AvailableVendors.Count > 0)
             {
                 <div>
                     <label asp-for="vid" class="block text-sm mb-2">@T("Search.Vendor")</label>
-                    <select asp-for="vid" asp-items="Model.AvailableVendors" class="sf-select h-11 w-full"></select>
+                    <select asp-for="vid" asp-items="Model.AvailableVendors" class="sf-select h-11 w-full min-w-0 w-full [&_[role='combobox']]:min-h-11! [&_[role='combobox']]:text-start! [&[role='combobox']]:min-h-11! [&[role='combobox']]:text-start! [&_[role='combobox']_>_span]:overflow-hidden! [&_[role='combobox']_>_span]:text-ellipsis! [&_[role='combobox']_>_span]:whitespace-nowrap! [&[role='combobox']_>_span]:overflow-hidden! [&[role='combobox']_>_span]:text-ellipsis! [&[role='combobox']_>_span]:whitespace-nowrap!"></select>
                 </div>
             }
             <div class="flex items-center gap-2">
@@ -91,7 +91,7 @@ else
     });
 </script>
 }
-<div class="py-6 border-b mb-7">
+<div class="py-6 [border-bottom-width:0.0625rem] mb-7">
     @await Component.InvokeAsync("MadadrangCatalogControls", new { model = products, placement = "toolbar", search = Model, allProducts })
 </div>
 <div class="flex flex-col md:flex-row gap-8">

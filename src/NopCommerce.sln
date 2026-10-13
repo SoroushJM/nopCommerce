@@ -103,6 +103,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storefront.UI.Madadrang", "
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storefront.UI.Boutique", "Storefront\Storefront.UI.Boutique\Storefront.UI.Boutique.csproj", "{705D4070-EEC1-426D-B6A3-6A0F5739D532}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nop.Plugin.Misc.PersianStorefront", "Plugins\Nop.Plugin.Misc.PersianStorefront\Nop.Plugin.Misc.PersianStorefront.csproj", "{797ABF27-1CD4-4CE0-9286-911C38521EB8}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -815,6 +817,22 @@ Global
 		{705D4070-EEC1-426D-B6A3-6A0F5739D532}.Release|x86.Build.0 = Release|Any CPU
 		{705D4070-EEC1-426D-B6A3-6A0F5739D532}.Release|x64.ActiveCfg = Release|Any CPU
 		{705D4070-EEC1-426D-B6A3-6A0F5739D532}.Release|x64.Build.0 = Release|Any CPU
+		{797ABF27-1CD4-4CE0-9286-911C38521EB8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{797ABF27-1CD4-4CE0-9286-911C38521EB8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{797ABF27-1CD4-4CE0-9286-911C38521EB8}.Debug|Mixed Platforms.ActiveCfg = Debug|Any CPU
+		{797ABF27-1CD4-4CE0-9286-911C38521EB8}.Debug|Mixed Platforms.Build.0 = Debug|Any CPU
+		{797ABF27-1CD4-4CE0-9286-911C38521EB8}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{797ABF27-1CD4-4CE0-9286-911C38521EB8}.Debug|x86.Build.0 = Debug|Any CPU
+		{797ABF27-1CD4-4CE0-9286-911C38521EB8}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{797ABF27-1CD4-4CE0-9286-911C38521EB8}.Debug|x64.Build.0 = Debug|Any CPU
+		{797ABF27-1CD4-4CE0-9286-911C38521EB8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{797ABF27-1CD4-4CE0-9286-911C38521EB8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{797ABF27-1CD4-4CE0-9286-911C38521EB8}.Release|Mixed Platforms.ActiveCfg = Release|Any CPU
+		{797ABF27-1CD4-4CE0-9286-911C38521EB8}.Release|Mixed Platforms.Build.0 = Release|Any CPU
+		{797ABF27-1CD4-4CE0-9286-911C38521EB8}.Release|x86.ActiveCfg = Release|Any CPU
+		{797ABF27-1CD4-4CE0-9286-911C38521EB8}.Release|x86.Build.0 = Release|Any CPU
+		{797ABF27-1CD4-4CE0-9286-911C38521EB8}.Release|x64.ActiveCfg = Release|Any CPU
+		{797ABF27-1CD4-4CE0-9286-911C38521EB8}.Release|x64.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -865,6 +883,7 @@ Global
 		{5060125B-181B-4C3C-AADF-E46F089ACE9D} = {E8FC6874-E230-468A-9685-4747354B92FF}
 		{D95C9ECD-52F6-471B-9D97-07853CB289FF} = {7FF06CC1-F810-E43D-2D7F-037A03C62B37}
 		{705D4070-EEC1-426D-B6A3-6A0F5739D532} = {7FF06CC1-F810-E43D-2D7F-037A03C62B37}
+		{797ABF27-1CD4-4CE0-9286-911C38521EB8} = {7881B112-7843-4542-B1F7-F99553FB9BB7}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {EE72A8B2-332A-4175-9319-6726D36E9D25}

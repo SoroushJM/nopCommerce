@@ -25,8 +25,8 @@
     var addtowishlistlink = Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_CART_CATALOG, new { productId = Model.Id, shoppingCartTypeId = (int)ShoppingCartType.Wishlist, quantity = 1 });
     var addtocomparelink = Url.RouteUrl(NopRouteNames.Ajax.ADD_PRODUCT_TO_COMPARE, new { productId = Model.Id });
 }
-<article class="product-card" data-productid="@Model.Id" data-product-stock="@inStock.ToString().ToLowerInvariant()">
-        <div class="product-photo">
+<article class="product-card group overflow-hidden rounded-lg border-[.0625rem] border-border bg-background transition-[box-shadow,transform] duration-200 hover:-translate-y-0.5 hover:shadow-(--shadow-hover) motion-reduce:transform-none motion-reduce:translate-none motion-reduce:transition-none" data-productid="@Model.Id" data-product-stock="@inStock.ToString().ToLowerInvariant()">
+        <div class="product-photo relative h-56 overflow-hidden bg-surface max-md:h-[11.875rem] [&_img]:h-full [&_img]:w-full [&_img]:object-cover [&_img]:transition-transform [&_img]:duration-[400ms] group-hover:[&_img]:scale-[1.04] motion-reduce:[&_img]:transform-none motion-reduce:[&_img]:scale-100 motion-reduce:[&_img]:transition-none">
             @if (Model.PictureModels.Count > 1)
             {
                 <div class="swiper h-full" id="swiper-@Model.Id" dir="@Html.GetUIDirection(!await Html.ShouldUseRtlThemeAsync())">
@@ -52,7 +52,7 @@
             }
             @if (label.Length > 0)
             {
-                <span class="tag absolute right-3 top-3">@label</span>
+                <span class="tag absolute right-3 top-3 inline-flex items-center rounded-[.25rem] bg-background px-[0.5625rem] py-[0.3125rem] text-xs font-semibold text-foreground">@label</span>
             }
         </div>
     <a href="@url" aria-label="@Model.Name">
@@ -62,7 +62,7 @@
             <div class="flex gap-1.5 mt-2" aria-label="رنگ‌های محصول">
                 @foreach (var color in (List<string>)ViewData["Colors"]!)
                 {
-                    <span style="background:@color" class="size-2.5 rounded-full border border-background ring-1 ring-border"></span>
+                    <span style="--swatch-color:@color" class="bg-(--swatch-color) size-2.5 rounded-[9999rem] border-[.0625rem] border-background ring-[0.0625rem] ring-border"></span>
                 }
             </div>
         </div>
@@ -77,8 +77,8 @@
             var ratingPercent = Model.ReviewOverviewModel.TotalReviews == 0 ? 0
                 : ((Model.ReviewOverviewModel.RatingSum * 100) / Model.ReviewOverviewModel.TotalReviews) / 5;
             <div class="product-rating-box inline-block mb-2" title="@string.Format(T("Reviews.TotalReviews").Text, Model.ReviewOverviewModel.TotalReviews)">
-                <div class="rating" style="background: url('@Url.Content("~/Themes/DefaultClean/Content/images/rating1.png")') repeat-x; width: 95px; height: 14px;">
-                    <div style="background: url('@Url.Content("~/Themes/DefaultClean/Content/images/rating2.png")') repeat-x; height: 14px; width: @(ratingPercent)%"></div>
+                <div class="rating h-3.5 w-[5.9375rem] bg-(image:--rating-image) bg-repeat-x" style="--rating-image:url('@Url.Content("~/Themes/DefaultClean/Content/images/rating1.png")')">
+                    <div class="h-3.5 w-(--rating-percent) bg-(image:--rating-image) bg-repeat-x" style="--rating-percent:@(ratingPercent)%;--rating-image:url('@Url.Content("~/Themes/DefaultClean/Content/images/rating2.png")')"></div>
                 </div>
             </div>
         }
@@ -104,7 +104,7 @@
         </div>
         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductBoxAddinfoMiddle, additionalData = Model })
         <a href="@url" aria-label="مشاهدهٔ @Model.Name" class="size-8 rounded-lg bg-muted text-muted-foreground grid place-items-center">
-            <component type="typeof(SfIcon)" render-mode="Static" param-Name='@("arrow")' param-Size="16" />
+            <component type="typeof(SfIcon)" render-mode="Static" param-Name='@("arrow")' param-Size="@(1m)" />
         </a>
     </div>
     <div class="buttons px-4 pb-4 flex gap-2 flex-wrap text-xs">

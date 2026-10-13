@@ -1,0 +1,5 @@
+@layer theme, utilities;
+@import "tailwindcss/theme.css" layer(theme) prefix(adm);
+@import "tailwindcss/utilities.css" layer(utilities) prefix(adm) source(none);
+@source "../../../Plugins/Nop.Plugin.Misc.PersianStorefront/Views/Configure.cshtml";
+@source "../../../Plugins/Nop.Plugin.Misc.PersianStorefront/Views/BoutiqueConfigure.cshtml";

@@ -6,23 +6,27 @@
     var theme = ViewData["ThemeProfile"] as StorefrontThemeProfile ?? new StorefrontThemeProfile { BrandName = store.Name, CatalogUrl = Url.RouteUrl(NopRouteNames.General.SEARCH), EnableOtp = false };
 }
 @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderBefore })
-<header class="boutique-header header">
-    <div class="boutique-header-row header-upper">
-        <div role="search" class="search-box store-search-box">
+<header class="boutique-header header relative! z-30! w-full! bg-card! border-b-[0.0625rem]! border-border! text-start! mx-auto! mt-0! mb-6! py-0! px-5! max-[62.5rem]:px-4! max-[62.5rem]:mb-[1.125rem]! max-[40rem]:px-[0.875rem]! max-[40rem]:mb-[0.875rem]!">
+    <div class="boutique-header-row header-upper grid! w-full! max-w-[73.75rem]! mx-auto! my-0! float-none! grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)]! gap-7! items-center! py-5! px-0! min-h-0! h-auto! border-0! before:hidden! after:hidden! max-[62.5rem]:grid-cols-[minmax(0,1fr)_auto]! max-[62.5rem]:gap-3! max-[62.5rem]:py-3! max-[40rem]:gap-2! max-[40rem]:py-[0.625rem]!">
+        <div role="search" class="search-box store-search-box relative! col-start-1! row-start-1! m-0! p-0! float-none! w-full! min-w-0! text-start! max-[62.5rem]:col-span-full! max-[62.5rem]:row-start-2!">
             @await Component.InvokeAsync(typeof(SearchBoxViewComponent))
         </div>
         <component type="typeof(BoutiqueHeader)" render-mode="Static" param-BrandName="theme.BrandName" param-HomeUrl="@(Url.RouteUrl(NopRouteNames.General.HOMEPAGE))" param-LogoUrl="@(ViewData["LogoUrl"] as string ?? "")" />
-        <div class="header-links-wrapper">
+        <div class="header-links-wrapper relative! flex! justify-end! m-0! p-0! float-none! w-auto! min-w-0! text-start! col-start-3! row-start-1! max-[62.5rem]:col-start-2!">
             @await Component.InvokeAsync(typeof(HeaderLinksViewComponent))
             @await Component.InvokeAsync(typeof(FlyoutShoppingCartViewComponent))
         </div>
     </div>
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderMiddle })
-    <div class="boutique-header-bottom">
-        <div class="header-menu boutique-menu">
+    <div class="boutique-header-bottom relative! flex! items-center! justify-between! gap-3! max-w-[73.75rem]! mx-auto! my-0! border-t-[0.0625rem]! border-border! max-[62.5rem]:gap-2! max-[62.5rem]:min-h-12!">
+        <div class="header-menu boutique-menu static! flex-1! max-w-none! min-w-0! w-auto! m-0! p-0! border-0! bg-transparent! text-start! max-[62.5rem]:flex-[1_0_auto]!">
             @await Component.InvokeAsync(typeof(MainMenuViewComponent))
         </div>
-        <div class="boutique-selectors header-selectors-wrapper">
+        <div class="boutique-selectors header-selectors-wrapper flex! items-center! justify-end! flex-wrap! gap-2! w-auto! max-w-none! m-0! p-0! min-h-11! text-[0.6875rem]! float-none! flex-none! max-[62.5rem]:gap-1! max-[62.5rem]:flex-[0_1_auto]!
+                    [&>div]:m-0! [&>div]:p-0! [&>div]:float-none! [&>div]:min-w-0!
+                    [&_select]:bg-transparent! [&_select]:border-0! [&_select]:text-muted-foreground! [&_select]:w-auto! [&_select]:max-w-35! [&_select]:min-h-11! [&_select]:p-1!
+                    [&_.sf-native-select]:w-auto! [&_.sf-native-select]:min-w-19! [&_.sf-native-select]:max-w-35!
+                    [&_button[role=combobox]]:w-auto! [&_button[role=combobox]]:min-w-19! [&_button[role=combobox]]:py-0! [&_button[role=combobox]]:px-[0.625rem]! [&_button[role=combobox]]:border-0! [&_button[role=combobox]]:bg-transparent! [&_button[role=combobox]]:rounded-lg! [&_button[role=combobox]]:shadow-none! [&_button[role=combobox]]:text-[0.6875rem]! [&_button[role=combobox]]:gap-2! [&_button[role=combobox]]:text-muted-foreground! [&_button[role=combobox]:hover]:bg-muted!">
             @await Component.InvokeAsync(typeof(TaxTypeSelectorViewComponent))
             @await Component.InvokeAsync(typeof(CurrencySelectorViewComponent))
             @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderSelectors })

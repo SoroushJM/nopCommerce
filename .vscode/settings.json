@@ -1,6 +1,9 @@
 {
   "dotnet.defaultSolution": "src/NopCommerce.sln",
   "dotnet.server.useOmnisharp": false,
+  "dotnet.server.environmentVariables": {
+    "StorefrontTheme": "All"
+  },
   "dotnet.preferCSharpExtension": false,
   "dotnet.backgroundAnalysis.analyzerDiagnosticsScope": "fullSolution",
   "dotnet.backgroundAnalysis.compilerDiagnosticsScope": "fullSolution",

@@ -29,14 +29,34 @@
                       LogicalName="Nop.Plugin.Misc.PersianStorefront.Localization.fa-IR.public.xml" />
     <Content Update="plugin.json" CopyToOutputDirectory="PreserveNewest" />
     <Content Update="Views/**/*.cshtml" CopyToOutputDirectory="PreserveNewest" />
+    <Content Include="Content/admin-tailwind.css" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+    <AdminTailwindSources Include="Views/Configure.cshtml;Views/BoutiqueConfigure.cshtml;../../Storefront/Storefront.UI.Madadrang/Styles/admin.css;../../Storefront/Storefront.UI.Madadrang/package-lock.json" />
   </ItemGroup>
-  <Target Name="BuildStorefrontClient" AfterTargets="Build" BeforeTargets="CopyStorefrontAssets">
+  <Target Name="RestoreAdminTailwind" BeforeTargets="BuildAdminTailwind">
+    <MSBuild Projects="../../Storefront/Storefront.UI.Madadrang/Storefront.UI.Madadrang.csproj" Targets="RestoreStorefrontNodeModules" />
+  </Target>
+  <Target Name="BuildAdminTailwind" BeforeTargets="PrepareForBuild" DependsOnTargets="RestoreAdminTailwind"
+          Inputs="@(AdminTailwindSources);$(MSBuildProjectFullPath)" Outputs="Content/admin-tailwind.css">
+    <MakeDir Directories="Content" />
+    <Exec WorkingDirectory="../../Storefront/Storefront.UI.Madadrang"
+          Command="npm exec --offline -- tailwindcss -i ./Styles/admin.css -o ../../Plugins/Nop.Plugin.Misc.PersianStorefront/Content/admin-tailwind.css --minify" />
+  </Target>
+  <Import Project="Storefront.Client.Publish.targets" />
+  <Target Name="BuildStorefrontClient" AfterTargets="Build" BeforeTargets="CopyStorefrontAssets"
+          DependsOnTargets="PrepareStorefrontClientPublish"
+          Inputs="$(_StorefrontClientPublishInputs)" Outputs="$(_StorefrontClientPublishOutput)">
     <!-- A separate process reevaluates the WASM SDK after restore and keeps host RID/solution properties out of the browser build. -->
     <PropertyGroup>
       <StorefrontClientCompilerArguments Condition="'$(UseSharedCompilation)' != ''">-p:UseSharedCompilation=&quot;$(UseSharedCompilation)&quot;</StorefrontClientCompilerArguments>
     </PropertyGroup>
     <Exec WorkingDirectory="$(MSBuildProjectDirectory)"
-          Command="dotnet publish &quot;../../Storefront/Storefront.Client/Storefront.Client.csproj&quot; --configuration &quot;$(Configuration)&quot; -p:StorefrontTheme=&quot;$(StorefrontTheme)&quot; $(StorefrontClientCompilerArguments) -p:GenerateCompressedFiles=false --output &quot;$(OutDir)Content/Client/&quot; --nologo" />
+          Command="dotnet publish &quot;../../Storefront/Storefront.Client/Storefront.Client.csproj&quot; --configuration &quot;$(Configuration)&quot; -p:StorefrontTheme=&quot;$(StorefrontTheme)&quot; $(StorefrontClientCompilerArguments) --output &quot;$(OutDir)Content/Client/&quot; --nologo" />
+    <ItemGroup Condition="'$(StorefrontClientIncrementalPublish)' == 'true'">
+      <_StorefrontClientPublishedFile Include="$(OutDir)Content/Client/**/*" />
+    </ItemGroup>
+    <WriteLinesToFile File="$(_StorefrontClientCache).outputs" Lines="@(_StorefrontClientPublishedFile->'%(FullPath)')"
+                      Overwrite="true" WriteOnlyWhenDifferent="true" Condition="'$(StorefrontClientIncrementalPublish)' == 'true'" />
+    <Touch Files="$(_StorefrontClientPublishOutput)" AlwaysCreate="true" Condition="'$(StorefrontClientIncrementalPublish)' == 'true'" />
   </Target>
   <Target Name="CopyStorefrontAssets" AfterTargets="Build">
     <ItemGroup>

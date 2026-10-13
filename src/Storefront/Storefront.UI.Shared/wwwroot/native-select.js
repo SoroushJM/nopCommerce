@@ -4,6 +4,37 @@ let observer;
 let nextKey = 0;
 let scheduled = false;
 let running = false;
+// Keep a measurable native control for jQuery validation's :visible contract.
+// Important utilities override native theme select rules without custom CSS.
+const mirrorUtilities = "absolute! w-[.0625rem]! h-[.0625rem]! min-w-0! min-h-0! -m-[.0625rem]! p-0! border-[0rem]! [clip-path:inset(50%)]! overflow-hidden! whitespace-nowrap!".split(" ");
+const hostUtilities = "inline-block align-middle min-w-[min(8rem,100%)] max-w-full [&[hidden]]:hidden [.inputs_&]:w-full [.date-picker-wrapper_&]:flex-1 [.date-picker-wrapper_&]:min-w-20 [.date-picker-wrapper_&]:w-auto [&.qty-dropdown]:min-w-20";
+const dateLayouts = new Map();
+const dateUtilities = "flex gap-2 flex-wrap".split(" ");
+
+function dateLayoutFor(entry) {
+  const parent = entry.select.closest(".date-picker-wrapper");
+  if (parent === entry.dateParent) return;
+  releaseDateLayout(entry);
+  if (!parent) return;
+  let layout = dateLayouts.get(parent);
+  if (!layout) {
+    layout = { count: 0, added: dateUtilities.filter(name => !parent.classList.contains(name)) };
+    parent.classList.add(...layout.added);
+    dateLayouts.set(parent, layout);
+  }
+  layout.count++;
+  entry.dateParent = parent;
+}
+
+function releaseDateLayout(entry) {
+  const parent = entry.dateParent;
+  const layout = dateLayouts.get(parent);
+  if (layout && --layout.count === 0) {
+    parent.classList.remove(...layout.added);
+    dateLayouts.delete(parent);
+  }
+  entry.dateParent = null;
+}
 
 function schedule() {
   if (!running || scheduled) return;
@@ -78,8 +109,8 @@ async function update(entry) {
   const json = snapshot(entry);
   const hidden = entry.select.hidden || entry.select.style.display === "none";
   if (entry.host.hidden !== hidden) entry.host.hidden = hidden;
-  const className = "sf-native-select " + Array.from(entry.select.classList)
-    .filter(name => name !== "sf-select-mirror").join(" ");
+  const className = "sf-native-select " + hostUtilities + " " + Array.from(entry.select.classList)
+    .filter(name => name !== "sf-select-mirror" && !mirrorUtilities.includes(name)).join(" ");
   // Do not write unchanged observed attributes: that would retrigger the observer.
   if (entry.host.className !== className) entry.host.className = className;
   if (json === entry.json) return;
@@ -106,13 +137,13 @@ async function update(entry) {
 async function mount(select) {
   const key = `sf-native-select-${++nextKey}`;
   const host = document.createElement("span");
-  host.className = "sf-native-select";
+  host.className = "sf-native-select " + hostUtilities;
   host.dataset.nativeSelect = key;
   host.hidden = true;
   const entry = {
     key, select, host, component: null, json: "", updating: false, dirty: false,
     options: new WeakSet(), restorers: [], ariaHidden: select.getAttribute("aria-hidden"),
-    tabIndex: select.getAttribute("tabindex"),
+    tabIndex: select.getAttribute("tabindex"), mirrorAdded: [],
   };
   entries.set(key, entry);
   select.dataset.bbSelect = key;
@@ -132,6 +163,9 @@ async function mount(select) {
       return;
     }
     select.classList.add("sf-select-mirror");
+    entry.mirrorAdded = mirrorUtilities.filter(name => !select.classList.contains(name));
+    select.classList.add(...entry.mirrorAdded);
+    dateLayoutFor(entry);
     select.setAttribute("aria-hidden", "true");
     select.tabIndex = -1;
     host.hidden = select.hidden || select.style.display === "none";
@@ -151,6 +185,8 @@ function release(entry) {
   if (entry.component) Promise.resolve(entry.component.dispose()).catch(() => {});
   entry.restorers.forEach(restore => restore());
   entry.select.classList.remove("sf-select-mirror");
+  entry.select.classList.remove(...entry.mirrorAdded);
+  releaseDateLayout(entry);
   delete entry.select.dataset.bbSelect;
   for (const [name, value] of [["aria-hidden", entry.ariaHidden], ["tabindex", entry.tabIndex]]) {
     if (value === null) entry.select.removeAttribute(name);
@@ -163,6 +199,7 @@ function refresh() {
   for (const entry of entries.values()) {
     if (!entry.select.isConnected || !entry.host.isConnected) { release(entry); continue; }
     if (entry.select.nextElementSibling !== entry.host) entry.select.after(entry.host);
+    dateLayoutFor(entry);
     watchOptions(entry);
     update(entry);
   }

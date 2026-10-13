@@ -1,7 +1,10 @@
-<article class="@ClassNames.cn("cart-row", ShowImage ? null : "sf-cart-no-picture")" data-native-cart-line="@Line.Id" dir="@Labels.Direction">
+<article
+    class="@ClassNames.cn("cart-row grid items-center gap-3.5 border-b-[.0625rem] border-border py-6 [&>div]:min-w-0", ShowImage ? "grid-cols-[4.5rem_minmax(0,1fr)]" : "sf-cart-no-picture grid-cols-1")"
+    data-native-cart-line="@Line.Id" dir="@Labels.Direction">
     @if (ShowImage)
     {
-        <a href="@Line.Url"><img src="@Line.Image" alt="@Line.ImageAlt" title="@Line.ImageTitle" /></a>
+        <a href="@Line.Url"><img class="h-[5.125rem] w-[4.5rem] rounded-md object-cover" src="@Line.Image"
+                                     alt="@Line.ImageAlt" title="@Line.ImageTitle" /></a>
     }
     <div class="min-w-0">
         <a href="@Line.Url" class="text-sm font-bold">@Line.Name</a>
@@ -23,7 +26,8 @@
             }
             else
             {
-                <div class="qty">
+                    <div
+                        class="qty inline-flex items-center rounded-md border-[.0625rem] border-border bg-background [&_button]:grid [&_button]:h-[var(--control-height)] [&_button]:w-10 [&_button]:place-items-center [&_span]:min-w-[1.875rem] [&_span]:text-center [&_span]:text-sm">
                     <BbButton Variant="ButtonVariant.Ghost" Size="ButtonSize.IconLarge" AriaLabel="@(Labels.Get("Products.Qty") + " − " + Line.Name)" Disabled="@(Busy || Line.Quantity <= 1)" OnClick="() => SetQuantity(Line.Quantity - 1)"><SfIcon Name="minus" data-icon="inline-start" /></BbButton>
                     <span>@Line.Quantity</span>
                     <BbButton Variant="ButtonVariant.Ghost" Size="ButtonSize.IconLarge" AriaLabel="@(Labels.Get("Products.Qty") + " + " + Line.Name)" Disabled="@Busy" OnClick="() => SetQuantity(Line.Quantity + 1)"><SfIcon Name="plus" data-icon="inline-start" /></BbButton>
@@ -35,7 +39,7 @@
             }
         </div>
     </div>
-    <div class="text-sm font-bold text-end price">
+        <div class="price text-start text-sm font-bold @(ShowImage ? "col-start-2" : "")">
         @Line.SubTotal
         <p class="text-xs font-normal text-muted-foreground mt-2">@Labels.Get("ShoppingCart.Mini.UnitPrice"): @Line.UnitPrice</p>
         @if (!string.IsNullOrEmpty(Line.Discount))

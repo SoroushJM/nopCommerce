@@ -96,3 +96,13 @@ The preview selects the compiled theme CSS through assembly metadata, with an op
 ## Release verification
 
 Verify both selected packages independently: the browser output must contain `Storefront.UI.Shared` and the active brand assembly only; the packaged `Themes` directory must contain `DefaultClean` and the active brand only. Confirm the active theme at runtime, then test native guest/customer cart, checkout, actual payment plugin callbacks, customer registration/login, order history, and native fallback pages. Build/package checks do not prove gateway behavior or every configurable plugin feature.
+
+## Installed Madadrang database setup
+
+For PostgreSQL Madadrang installations, image publication and installed database
+setup are separate steps. Use `sh docker/deploy-madadrang.sh --image <loaded-image>`
+to publish against the selected Compose instance. Add `--seed-data` only when the
+sample stationery catalogue is wanted. The script prepares native menus,
+language, routes and untouched installer widgets, then checks the rendered site.
+See [the Madadrang deployment guide](madadrang-deployment.md) for the complete
+release bundle and repeatable tests. Boutique follows its own setup process.

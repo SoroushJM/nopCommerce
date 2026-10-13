@@ -29,7 +29,7 @@
             </div>
         }
         @*we add enctype = "multipart/form-data" because "File upload" attribute control type requires it*@
-        <form asp-route="@NopRouteNames.General.CART" method="post" enctype="multipart/form-data" id="shopping-cart-form" class="sf-cart-form">
+        <form asp-route="@NopRouteNames.General.CART" method="post" enctype="multipart/form-data" id="shopping-cart-form" class="sf-cart-form grid grid-cols-[minmax(0,_1fr)_21.875rem] [gap:1.5rem_2rem] [align-items:start] [&_>_*]:col-start-1! [&_>_*]:min-w-0! [&_.sf-cart-summary]:col-start-2! [&_.sf-cart-summary]:[grid-row:1_/_span_8]! [&_.sf-cart-summary]:[border-width:0.0625rem]! [&_.sf-cart-summary]:border-solid! [&_.sf-cart-summary]:border-border! [&_.sf-cart-summary]:rounded-xl! [&_.sf-cart-summary]:p-6! [&_.sf-cart-summary]:bg-background! max-md:block max-md:[&_>_*]:mb-5! max-md:[&_.sf-cart-summary]:p-5! max-md:[&_.sf-cart-summary]:mt-6!">
             @if (Model.IsEditable && Model.DisplayVendorList)
             {
                 <div class="sc-vendor">
@@ -95,7 +95,7 @@
                     {
                         if (Model.TermsOfServiceOnShoppingCartPage)
                         {
-                            <div id="terms-of-service-warning-box" title="@T("Checkout.TermsOfService")" style="display: none;">
+                            <div id="terms-of-service-warning-box" title="@T("Checkout.TermsOfService")" class="[display:none]">
                                 <p>@T("Checkout.TermsOfService.PleaseAccept")</p>
                             </div>
                             <div class="terms-of-service">

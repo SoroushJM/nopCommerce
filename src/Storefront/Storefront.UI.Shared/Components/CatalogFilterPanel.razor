@@ -70,7 +70,8 @@
                         <BbFieldLabel For="@(InstanceId + "-spec-" + option.Value)">
                             @if (option.Color.Length > 0)
                             {
-                                <span class="size-3 rounded-full border border-border" style="background:@option.Color"></span>
+                                <span class="size-3 rounded-[9999rem] border border-border bg-(--swatch-color)"
+                                      style="--swatch-color:@option.Color"></span>
                             }
                             @option.Text
                         </BbFieldLabel>

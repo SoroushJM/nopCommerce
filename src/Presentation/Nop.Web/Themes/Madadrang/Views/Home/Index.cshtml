@@ -14,7 +14,7 @@
         NopHtml.AddMetaDescriptionParts(description);
     NopHtml.AppendPageCssClassParts("html-home-page");
 }
-<main id="main-content" class="wrap pt-7 max-md:pt-5">
+<main id="main-content" class="wrap pt-7 max-md:pt-5 max-w-320 mx-auto px-8 max-md:px-4.5">
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HomepageTop })
     @await Component.InvokeAsync("MadadrangHero")
     @await Component.InvokeAsync(typeof(TopicBlockViewComponent), new { systemName = "HomepageText" })
