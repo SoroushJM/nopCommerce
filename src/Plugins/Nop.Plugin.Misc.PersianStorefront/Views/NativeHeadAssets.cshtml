@@ -1,0 +1,15 @@
+@using Nop.Web.Extensions
+@inject Nop.Core.Domain.Catalog.CatalogSettings catalogSettings
+@inject Nop.Web.Framework.UI.INopHtmlHelper NopHtml
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@removeTagHelper Nop.Web.Framework.TagHelpers.Shared.NopLinkTagHelper, Nop.Web.Framework
+@{
+    // Keep the native wrapper versioned without passing its link to nopCommerce's bundler.
+    var rtl = await Html.ShouldUseRtlThemeAsync();
+    <link rel="stylesheet" href="@Url.Content($"~/css/storefront-native-base{(rtl ? ".rtl" : "")}.css")" asp-append-version="true" />
+    NopHtml.AppendCssFileParts("~/lib_npm/jquery-ui-dist/jquery-ui.min.css");
+    if (catalogSettings.DisplayAllPicturesOnCatalogPages)
+    {
+        NopHtml.AppendCssFileParts("~/lib_npm/swiper/swiper-bundle.min.css");
+    }
+}

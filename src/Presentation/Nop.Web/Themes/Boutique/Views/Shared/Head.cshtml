@@ -1,14 +1,5 @@
-@inject Nop.Core.Domain.Catalog.CatalogSettings catalogSettings
-@removeTagHelper Nop.Web.Framework.TagHelpers.Shared.NopLinkTagHelper, Nop.Web.Framework
 @{
     Layout = "";
-    // The native base keeps every third-party/plugin form and advanced control usable.
-    var rtl = await Html.ShouldUseRtlThemeAsync();
-    <link rel="stylesheet" href="@Url.Content($"~/css/storefront-native-base{(rtl ? ".rtl" : "")}.css")" asp-append-version="true" />
-    NopHtml.AppendCssFileParts("~/lib_npm/jquery-ui-dist/jquery-ui.min.css");
-    if (catalogSettings.DisplayAllPicturesOnCatalogPages)
-    {
-        NopHtml.AppendCssFileParts("~/lib_npm/swiper/swiper-bundle.min.css");
-    }
 }
+@await Html.PartialAsync("~/Plugins/Misc.PersianStorefront/Views/NativeHeadAssets.cshtml")
 <base href="@Url.Content("~/")" />
