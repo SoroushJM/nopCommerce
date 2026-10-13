@@ -3,10 +3,10 @@
 
 <BbDirectionProvider Direction="TextDirection.RightToLeft">
     <BbDialog Open="_open" OpenChanged="SetOpen">
-        <BbDialogContent Class="w-[min(34rem,calc(100vw-2rem))] max-w-none max-h-[calc(100dvh-2rem)] overflow-y-auto rounded-xl border-[.0625rem] border-border bg-background p-5" dir="rtl">
-            <BbDialogHeader Class="pe-8">
-                <BbDialogTitle>@(_product?.Name ?? "افزودن به سبد خرید")</BbDialogTitle>
-                <BbDialogDescription>گزینه‌های دلخواه و تعداد را انتخاب کنید.</BbDialogDescription>
+        <BbDialogContent Class="w-[min(28rem,calc(100vw-2rem))] max-w-none max-h-[calc(100dvh-2rem)] overflow-y-auto gap-3! rounded-xl border-[.0625rem]! border-border bg-background p-4!" dir="rtl">
+            <BbDialogHeader Class="gap-1! pe-7">
+                <BbDialogTitle Class="text-base! leading-7!">@(_product?.Name ?? "افزودن به سبد خرید")</BbDialogTitle>
+                <BbDialogDescription Class="text-xs! leading-6!">گزینه‌های دلخواه و تعداد را انتخاب کنید.</BbDialogDescription>
             </BbDialogHeader>
             @if (_loading)
             {

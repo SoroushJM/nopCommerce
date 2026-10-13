@@ -4,7 +4,7 @@
 
 <BbDirectionProvider Direction="@(Labels.Rtl ? TextDirection.RightToLeft : TextDirection.LeftToRight)">
 <BbDialog Open="_zoomOpen" OpenChanged="SetZoomOpen">
-    <div class="storefront" dir="@Labels.Direction">
+    <div class="@(QuickPurchase ? "storefront sf-quick-purchase [&_.sf-price-card]:gap-0! [&_.sf-price-card]:min-h-0! [&_.sf-price-card]:h-auto!" : "storefront")" dir="@Labels.Direction">
         @foreach (var field in FormFields().Where(_ => !QuickPurchase))
         {
             <input type="hidden" id="@field.Key.Replace('.', '_')" name="@field.Key" value="@field.Value" />
@@ -76,7 +76,7 @@
                         }
                         @if (StockLabel.Length > 0)
                         {
-                            <BbBadge Variant="@(StockAvailable ? BadgeVariant.SoftSuccess : BadgeVariant.SoftWarning)" Class="sf-product-stock mt-5 [overflow-wrap:anywhere]">@StockLabel</BbBadge>
+                            <BbBadge Variant="@(StockAvailable ? BadgeVariant.SoftSuccess : BadgeVariant.SoftWarning)" Class="@(QuickPurchase ? "sf-product-stock mb-3 [overflow-wrap:anywhere]" : "sf-product-stock mt-5 [overflow-wrap:anywhere]")">@StockLabel</BbBadge>
                         }
                         @if (!QuickPurchase)
                         {
@@ -114,8 +114,8 @@
                         @foreach (var attribute in Initial.Attributes.Where(item =>
                         !_disabledAttributes.Contains(item.Id)))
                         {
-                            <fieldset @key="attribute.Id" class="mb-6">
-                                <legend class="text-sm font-bold mb-3">@AttributePrompt(attribute)
+                            <fieldset @key="attribute.Id" class="@(QuickPurchase ? "min-w-0 mb-4" : "mb-6")">
+                                <legend class="@(QuickPurchase ? "text-sm font-bold mb-2 leading-6" : "text-sm font-bold mb-3")">@AttributePrompt(attribute)
                                     @if (attribute.Required)
                                     {
                                         <span class="required text-destructive">*</span>
@@ -138,7 +138,7 @@
                                         Value="_selected.GetValueOrDefault(attribute.Id)"
                                         ValueChanged="value => SelectOption(attribute.Id, value)"
                                         Disabled="@(!_ready || _busy)" Required="attribute.Required"
-                                        AriaLabel="@AttributePrompt(attribute)" class="flex flex-wrap gap-4">
+                                        AriaLabel="@AttributePrompt(attribute)" class="@(QuickPurchase ? "flex flex-wrap gap-2 [&_.color-choice]:size-11! [&_.color-choice]:p-1.5! [&_.color-choice]:border-[.0625rem]! [&_.color-choice]:[background-clip:content-box]! [&_.color-choice]:outline-offset-[0rem]! [&_.filter-pill]:min-h-11! [&_.filter-pill]:px-3! [&_.filter-pill]:py-2!" : "flex flex-wrap gap-4")">
                                         @foreach (var option in attribute.Options)
                                         {
                                             <BlazorBlueprint.Primitives.RadioGroup.BbRadioGroupItem @key="option.Id" TValue="int" Value="option.Id"
@@ -168,7 +168,7 @@
                         }
                         @if (!Initial.DisableBuy)
                         {
-                        <div class="flex items-center gap-5 mb-6">
+                        <div class="@(QuickPurchase ? "flex flex-wrap items-center gap-3 mb-4 [&_.sf-quantity]:h-11! [&_.sf-quantity_button]:h-11! [&_.sf-quantity_button]:w-11! [&_.sf-product-quantity-input]:w-12! [&_.sf-product-quantity-input]:h-11! [&_.sf-product-quantity-input]:p-0!" : "flex items-center gap-5 mb-6")">
                             <span class="text-sm">@Labels.Get("Products.Qty")</span>
                             @if (Initial.Quantities.Count > 0)
                             {
@@ -217,9 +217,9 @@
                 }
                 @if (!Initial.HidePrices || !Initial.DisableBuy)
                 {
-                <BbCard Class="sf-price-card rounded-xl border-[.0625rem] border-border bg-card">
+                <BbCard Class="@(QuickPurchase ? "sf-price-card flex flex-col gap-0! rounded-lg border-[.0625rem]! border-border bg-muted/40 shadow-none!" : "sf-price-card rounded-xl border-[.0625rem] border-border bg-card")">
                     <BbCardHeader Class="absolute size-[.0625rem] -m-[.0625rem] overflow-hidden whitespace-nowrap border-[0rem] p-0 [clip-path:inset(50%)]"><BbCardTitle>@Initial.PurchaseLabel @Initial.Name</BbCardTitle></BbCardHeader>
-                    <BbCardContent Class="pt-6">
+                    <BbCardContent Class="@(QuickPurchase ? "p-3! min-h-0! space-y-2 [&_p]:mb-0!" : "pt-6")">
                     @if (!Initial.HidePrices)
                     {
                     @if (Initial.CallForPrice)
@@ -228,11 +228,11 @@
                     }
                     else
                     {
-                    <div class="flex items-end justify-between mb-5"><span class="text-xs text-muted-foreground">@Labels.Get("Products.Price")</span>
-                        <div class="text-end">@if (!string.IsNullOrWhiteSpace(Initial.OldPrice)) {
+                    <div class="@(QuickPurchase ? "flex items-center justify-between gap-3 mb-0! [&_del]:leading-5!" : "flex items-end justify-between mb-5")"><span class="text-xs text-muted-foreground">@Labels.Get("Products.Price")</span>
+                        <div class="@(QuickPurchase ? "flex flex-col items-end gap-0.5 text-end [&_del]:m-0!" : "text-end")">@if (!string.IsNullOrWhiteSpace(Initial.OldPrice)) {
                             <del class="text-xs text-muted-foreground block mb-1">@Initial.OldPrice</del>
                         }
-                        <strong class="text-2xl price">@_price</strong>
+                        <strong class="@(QuickPurchase ? "price m-0! text-xl! leading-7!" : "text-2xl price")">@_price</strong>
                         @if (Initial.ReferencePrice.Length > 0)
                         {
                             <del class="text-xs text-muted-foreground block">@Initial.ReferencePrice</del>
@@ -252,8 +252,8 @@
                     </BbCardContent>
                 @if (!Initial.DisableBuy)
                 {
-                    <BbCardFooter>
-                <BbButton Size="ButtonSize.Large" Class="w-full" Disabled="@(!Available || _busy || _updating || !_ready || !_selectionReady)"
+                    <BbCardFooter Class="@(QuickPurchase ? "p-3! pt-0!" : null)">
+                <BbButton Size="@(QuickPurchase ? ButtonSize.Default : ButtonSize.Large)" Class="@(QuickPurchase ? "w-full h-11! min-h-11! rounded-md text-sm! gap-2! [&_svg]:size-4!" : "w-full")" Disabled="@(!Available || _busy || _updating || !_ready || !_selectionReady)"
                           Loading="_busy" OnClick="AddToCart">
                     <SfIcon Name="bag" data-icon="inline-start" /><span>@PurchaseLabel</span>
                 </BbButton>
