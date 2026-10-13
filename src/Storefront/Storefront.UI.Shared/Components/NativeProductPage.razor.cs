@@ -253,6 +253,19 @@ public partial class NativeProductPage
         Initial.HidePrices || Initial.CallForPrice || string.IsNullOrEmpty(option.DisplayName)
             ? option.Name : option.DisplayName;
 
+    private int AttributeOptionTabIndex(NativeAttribute attribute, NativeOption option)
+    {
+        if (!_ready || _busy)
+            return -1;
+
+        var selected = _selected.GetValueOrDefault(attribute.Id);
+        // The pinned primitive only tabs to a checked item. Keep an unselected
+        // native attribute reachable without silently choosing its first option.
+        var isTabStop = selected == option.Id
+            || (!attribute.Options.Any(item => item.Id == selected) && attribute.Options.FirstOrDefault()?.Id == option.Id);
+        return isTabStop ? 0 : -1;
+    }
+
     private IEnumerable<SelectOption<int>> AttributeOptions(NativeAttribute attribute)
     {
         yield return new SelectOption<int>(0, attribute.Required ? Labels.Get("Products.ProductAttributes.DropdownList.DefaultItem") : "---");

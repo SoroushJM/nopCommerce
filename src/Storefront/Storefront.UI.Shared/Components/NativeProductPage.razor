@@ -13,12 +13,16 @@
             <section class="wrap py-7">
                 @if (Initial.BreadcrumbEnabled)
                 {
-                <p class="text-xs text-muted-foreground mb-7"><a href="@Initial.HomeUrl">@Labels.Get("Homepage")</a> / @foreach (var link in Initial.Breadcrumb)
+                <BbBreadcrumb Class="sf-product-breadcrumb text-xs text-muted-foreground mb-7" aria-label="@Initial.Name">
+                    <BbBreadcrumbItem><BbBreadcrumbLink Href="@Initial.HomeUrl">@Labels.Get("Homepage")</BbBreadcrumbLink></BbBreadcrumbItem>
+                    <BbBreadcrumbSeparator>/</BbBreadcrumbSeparator>
+                    @foreach (var link in Initial.Breadcrumb)
                     {
-                        <a href="@link.Url">@link.Name</a><span> / </span>
+                        <BbBreadcrumbItem><BbBreadcrumbLink Href="@link.Url">@link.Name</BbBreadcrumbLink></BbBreadcrumbItem>
+                        <BbBreadcrumbSeparator>/</BbBreadcrumbSeparator>
                     }
-                    @Initial.Name
-                </p>
+                    <BbBreadcrumbItem><BbBreadcrumbPage>@Initial.Name</BbBreadcrumbPage></BbBreadcrumbItem>
+                </BbBreadcrumb>
                 }
                 @if (_error.Length > 0)
                 {
@@ -101,7 +105,7 @@
                         @foreach (var attribute in Initial.Attributes.Where(item =>
                         !_disabledAttributes.Contains(item.Id)))
                         {
-                            <fieldset class="mb-6">
+                            <fieldset @key="attribute.Id" class="mb-6">
                                 <legend class="text-sm font-bold mb-3">@AttributePrompt(attribute)
                                     @if (attribute.Required)
                                     {
@@ -121,17 +125,19 @@
                                 }
                                 else
                                 {
-                                    <div class="flex gap-4">
+                                    <BlazorBlueprint.Primitives.RadioGroup.BbRadioGroup TValue="int"
+                                        Value="_selected.GetValueOrDefault(attribute.Id)"
+                                        ValueChanged="value => SelectOption(attribute.Id, value)"
+                                        Disabled="@(!_ready || _busy)" Required="attribute.Required"
+                                        AriaLabel="@AttributePrompt(attribute)" class="flex gap-4">
                                         @foreach (var option in attribute.Options)
                                         {
-                                            <button type="button"
+                                            <BlazorBlueprint.Primitives.RadioGroup.BbRadioGroupItem @key="option.Id" TValue="int" Value="option.Id"
                                                     class="@ClassNames.cn(attribute.ControlType is 40 or 45 ? "color-choice" : "filter-pill", _selected.GetValueOrDefault(attribute.Id) == option.Id ? "selected" : null)"
                                                     style="@(attribute.ControlType == 40 ? "background:" + option.Color : "")"
-                                                    disabled="@(!_ready || _busy)"
-                                                    aria-label="@($"{AttributePrompt(attribute)} {OptionLabel(option)}")"
+                                                    AriaLabel="@($"{AttributePrompt(attribute)} {OptionLabel(option)}")"
                                                     title="@OptionLabel(option)"
-                                                    aria-pressed="@((_selected.GetValueOrDefault(attribute.Id) == option.Id).ToString().ToLowerInvariant())"
-                                                    @onclick="() => SelectOption(attribute.Id, option.Id)">
+                                                    tabindex="@AttributeOptionTabIndex(attribute, option)">
                                                 @if (attribute.ControlType == 45)
                                                 {
                                                     <img src="@option.Image" alt="@OptionLabel(option)" />
@@ -145,9 +151,9 @@
                                                 {
                                                     <SfIcon Name="check" Size="16" />
                                                 }
-                                            </button>
+                                            </BlazorBlueprint.Primitives.RadioGroup.BbRadioGroupItem>
                                         }
-                                    </div>
+                                    </BlazorBlueprint.Primitives.RadioGroup.BbRadioGroup>
                                 }
                             </fieldset>
                         }
