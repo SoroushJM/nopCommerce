@@ -1,11 +1,20 @@
 param(
     [string]$BaseUrl = 'http://localhost:5090',
-    [Parameter(Mandatory = $true)][string]$AdminEmail,
-    [Parameter(Mandatory = $true)][securestring]$AdminPassword
+    [string]$AdminEmail,
+    [securestring]$AdminPassword,
+    [ValidateSet('Madadrang','Boutique')][string]$Theme = 'Madadrang',
+    [string]$AppPath = (Join-Path $PSScriptRoot '../src/Presentation/Nop.Web'),
+    [string]$CredentialsPath = (Join-Path $env:LOCALAPPDATA 'MadadrangDev/local-settings.json'),
+    [switch]$AdminOnly
 )
 $ErrorActionPreference = 'Stop'
+if ($AdminOnly -or (Test-Path -LiteralPath $CredentialsPath)) {
+    & python (Join-Path $PSScriptRoot 'DeployTestServer/native-admin.py') $Theme.ToLowerInvariant() --local-app $AppPath --credentials $CredentialsPath
+    if ($LASTEXITCODE -ne 0) { throw 'Local administrator provisioning failed.' }
+    if ($AdminOnly) { return }
+}
 $BaseUrl = $BaseUrl.TrimEnd('/')
-$pluginFile = Join-Path $PSScriptRoot '../src/Presentation/Nop.Web/App_Data/plugins.json'
+$pluginFile = Join-Path $AppPath 'App_Data/plugins.json'
 if (Test-Path $pluginFile) {
     $plugins = Get-Content $pluginFile -Raw | ConvertFrom-Json
     if (($plugins.InstalledPluginNames -contains 'Misc.PersianStorefront') -or
@@ -14,6 +23,7 @@ if (Test-Path $pluginFile) {
         return
     }
 }
+if (!$AdminEmail -or !$AdminPassword) { throw 'Plugin installation requires AdminEmail and SecureString AdminPassword; use -AdminOnly for local provisioning without HTTP.' }
 function Get-AntiforgeryToken([string]$Html) {
     $inputTag = [regex]::Match($Html, '<input[^>]*name="__RequestVerificationToken"[^>]*>').Value
     $token = [regex]::Match($inputTag, 'value="([^"]+)"').Groups[1].Value

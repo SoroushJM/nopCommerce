@@ -2,7 +2,7 @@
 import argparse, hashlib, json, pathlib, re, shlex, subprocess, sys, tarfile, tempfile, time
 import paramiko
 sys.stdout.reconfigure(encoding='utf-8')
-p=argparse.ArgumentParser(); p.add_argument('--theme',choices=['madadrang','boutique'],required=True); p.add_argument('--app',required=True); p.add_argument('--config',required=True); p.add_argument('--resume-release',help='Resume this previously uploaded release directory after a safe pre-update failure'); a=p.parse_args()
+p=argparse.ArgumentParser(); p.add_argument('--theme',choices=['madadrang','boutique'],required=True); p.add_argument('--app',required=True); p.add_argument('--config',required=True); p.add_argument('--resume-release',help='Resume this previously uploaded release directory after a safe pre-update failure'); p.add_argument('--skip-http-verification',action='store_true',help='Use process/database metadata only; no HTTP requests'); a=p.parse_args()
 c=json.loads(pathlib.Path(a.config).read_text(encoding='utf-8-sig')); root=c['remoteRoot']; app=pathlib.Path(a.app).resolve(); here=pathlib.Path(__file__).resolve().parent
 brand=a.theme.title(); brand='Madadrang' if a.theme=='madadrang' else 'Boutique'; opposite='Boutique' if brand=='Madadrang' else 'Madadrang'
 for required in ['Nop.Web.dll','Nop.Docker.Views.dll','libSkiaSharp.so','Microsoft.OpenApi.dll','Scalar.AspNetCore.dll','Swashbuckle.AspNetCore.Swagger.dll','Swashbuckle.AspNetCore.SwaggerGen.dll','Swashbuckle.AspNetCore.SwaggerUI.dll']:
@@ -92,6 +92,7 @@ if native_icons.is_dir():
 (pathlib.Path(release)/'before.json').write_text(json.dumps(before,indent=2))
 PY
 python3 native-admin.py {q(a.theme)}
+if [ {q('skip' if a.skip_http_verification else 'run')} = run ]; then
 python3 - {q(a.theme)} <<'PY'
 import sys,time,urllib.request
 port='9011' if sys.argv[1]=='madadrang' else '9012'; public='http://80.75.5.82:'+port
@@ -103,6 +104,10 @@ for attempt in range(60):
 else: raise SystemExit('Application readiness failed')
 PY
 python3 verify-native-http.py {q(a.theme)}
+else
+echo 'HTTP readiness and login checks omitted by request'
+docker compose logs --tail=12 {q(a.theme)}
+fi
 python3 - {q(remote)} {q(a.theme)} <<'PY'
 import sys,pathlib,json,subprocess
 release=pathlib.Path(sys.argv[1]); theme=sys.argv[2]; before=json.loads((release/'before.json').read_text())

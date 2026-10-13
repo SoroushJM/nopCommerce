@@ -4,7 +4,8 @@ param(
     [string]$MadadrangAppPath,
     [string]$BoutiqueAppPath,
     [string]$PrivateConfig = 'C:/Users/s_jamili/Desktop/nopcomerce/dual-store-deployment-20261012/deploy.private.json',
-    [string]$OutputDirectory = 'C:/Users/s_jamili/Desktop/nopcomerce/server-release-packages'
+    [string]$OutputDirectory = 'C:/Users/s_jamili/Desktop/nopcomerce/server-release-packages',
+    [switch]$SkipHttpVerification
 )
 $ErrorActionPreference = 'Stop'
 $themes = if ($Theme -eq 'Both') { @('Madadrang','Boutique') } else { @($Theme) }
@@ -15,6 +16,8 @@ foreach ($selected in $themes) {
         $manifest = Get-ChildItem -LiteralPath $OutputDirectory -Directory -Filter "$($selected.ToLowerInvariant())-test-*" | Sort-Object LastWriteTimeUtc -Descending | Select-Object -First 1
         $appPath = (Get-Content -LiteralPath (Join-Path $manifest.FullName 'package.json') -Raw | ConvertFrom-Json).AppPath
     }
-    & python (Join-Path $PSScriptRoot 'deploy.py') --theme $selected.ToLowerInvariant() --app $appPath --config $PrivateConfig
+    $deployArguments = @((Join-Path $PSScriptRoot 'deploy.py'), '--theme', $selected.ToLowerInvariant(), '--app', $appPath, '--config', $PrivateConfig)
+    if ($SkipHttpVerification) { $deployArguments += '--skip-http-verification' }
+    & python @deployArguments
     if ($LASTEXITCODE -ne 0) { throw "Deployment failed for $selected; other application/database services were not recreated." }
 }

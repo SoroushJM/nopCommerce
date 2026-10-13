@@ -16,7 +16,24 @@ For an already verified Linux release, pass `-BoutiqueAppPath` or `-MadadrangApp
 
 The default private configuration is `C:/Users/s_jamili/Desktop/nopcomerce/dual-store-deployment-20261012/deploy.private.json`. It references the owner SSH handoff, pinned SSH host key, and private administrator credentials. Copy `config.example.json` to a private location if configuring a different workstation; use `-PrivateConfig` to choose it. Passwords belong only in the private administrator file, with the shape `{ "madadrang": { "email": "...", "password": "..." }, "boutique": { "email": "...", "password": "..." } }`. Do not add credential files to Git. On the server this file has mode 600, under a mode-700 directory.
 
-Every deployment activates and unlocks the designated installed administrator, ensures the Registered role, and applies the native configured salted hash only if the password differs. Native HTTP login and an authorized `/Admin` response are required. Verification sends a normal browser user agent because nopCommerce assigns crawler requests a search-engine customer before processing authentication.
+Every deployment idempotently provisions only the designated administrator, activates and unlocks it, ensures the Registered and Administrators roles, and applies the native configured salted hash only if the password differs. Existing accounts and store data are preserved. By default deployment checks native HTTP login and `/Admin`. When the owner will review the UI and requests no automated checks, pass `-SkipHttpVerification`: deployment uses database/account metadata and container startup logs, and sends no readiness or authentication requests.
+
+For the two initialized local PostgreSQL stores, use the private settings in `%LOCALAPPDATA%/MadadrangDev/local-settings.json` (`AdminEmail` and `AdminPassword`) and run:
+
+```powershell
+./scripts/seed-storefront.ps1 -AdminOnly -Theme Madadrang
+./scripts/seed-storefront.ps1 -AdminOnly -Theme Boutique -AppPath 'C:/Users/s_jamili/Desktop/nopcomerce/runtime-verification/local-mishashop-20261013/app'
+```
+
+This path runs before the installed-plugin shortcut, never makes HTTP requests, does not reinstall the plugin or reseed products, and guards the configured localhost database names. It uses the same native salted-hash helper as remote deployment. Keep credentials in the private settings file; never commit it.
+
+To provision both existing remote test administrators without rebuilding applications or making HTTP requests:
+
+```powershell
+python ./scripts/DeployTestServer/provision-admin.py --config 'C:/Users/s_jamili/Desktop/nopcomerce/dual-store-deployment-20261012/deploy.private.json' --theme both
+```
+
+The helper uses the configured pinned SSH host key and private administrator file. It prints only designated account/role metadata and whether the configured native password was applied or already matched.
 
 Readiness and authentication verification use the configured public storefront host. The guarded selected-store media setting uses relative native thumbnail paths, and verification rejects rendered private-network image URLs. This prevents a container-address health request from filling native picture caches with inaccessible URLs. Missing native `icons_0` assets are copied into the selected persistent icon volume without replacing existing files.
 
