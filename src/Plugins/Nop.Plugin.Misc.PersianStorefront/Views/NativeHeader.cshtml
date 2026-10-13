@@ -95,3 +95,20 @@
             </div>
             @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderAfter })
         </header>
+<script asp-location="Footer">
+    $(function () {
+        // Keep the native failure alert, adding only safe transport metadata for the owner's next attempt.
+        // Never expose the response body, exception details, request URL or antiforgery token.
+        AjaxCart.ajaxFailure = function (xhr, textStatus) {
+            var status = Number.isInteger(xhr && xhr.status) ? xhr.status : 0;
+            var kind = ['parsererror', 'timeout', 'abort'].includes(textStatus) ? textStatus : 'error';
+            var detail = kind === 'parsererror' ? 'پاسخ سرور قابل خواندن نبود'
+                : kind === 'timeout' ? 'زمان انتظار درخواست تمام شد'
+                : kind === 'abort' ? 'درخواست لغو شد'
+                : status === 0 ? 'ارتباط با سرور برقرار نشد' : 'درخواست از طرف سرور پذیرفته نشد';
+            var message = AjaxCart.localized_data && AjaxCart.localized_data.AjaxCartFailure;
+            console.warn('Madadrang native cart request failed', { status: status, kind: kind });
+            alert((message || 'افزودن محصول انجام نشد.') + '\n' + detail + ' (HTTP ' + status + ')');
+        };
+    });
+</script>
