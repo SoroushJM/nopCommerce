@@ -1,4 +1,4 @@
-﻿@model OrderSearchModel
+@model OrderSearchModel
 
 @inject IStoreService storeService
 @using Nop.Services.Stores
@@ -23,6 +23,7 @@
                 @T("Admin.Orders")
             </h1>
             <div class="float-right">
+                @await Html.PartialAsync("_AdminTransferCalendar", new AdminTransferCalendarModel())
                 <div class="btn-group">
                     <button type="button" class="btn btn-success">
                         <i class="fas fa-download"></i>
@@ -516,6 +517,7 @@
 
 @*export selected (XML). We don't use GET approach because it's limited to 2K-4K chars and won't work for large number of entities*@
 <form asp-controller="Order" asp-action="ExportXmlSelected" method="post" id="export-xml-selected-form">
+    @await Html.PartialAsync("_AdminTransferCalendarValue")
     <input type="hidden" id="selectedIds" name="selectedIds" value="" />
 </form>
 
@@ -541,6 +543,7 @@
 
 @*export selected (Excel). We don't use GET approach because it's limited to 2K-4K chars and won't work for large number of entities*@
 <form asp-controller="Order" asp-action="ExportExcelSelected" method="post" id="export-excel-selected-form">
+    @await Html.PartialAsync("_AdminTransferCalendarValue")
     <input type="hidden" id="selectedIds" name="selectedIds" value="" />
 </form>
 
@@ -566,6 +569,7 @@
 
 @*Print packaging slips selected (XML). We don't use GET approach because it's limited to 2K-4K chars and won't work for large number of entities*@
 <form asp-controller="Order" asp-action="PdfInvoiceSelected" method="post" id="pdf-invoice-selected-form">
+    @await Html.PartialAsync("_AdminTransferCalendarValue")
     <input type="hidden" id="selectedIds" name="selectedIds" value="" />
 </form>
 
@@ -595,7 +599,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="importexcel-window-title">@T("Admin.Common.ImportFromExcel")</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>                
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <form asp-controller="Order" asp-action="ImportFromXlsx" method="post" enctype="multipart/form-data">
                 <div class="form-horizontal">
@@ -618,6 +622,7 @@
                             </div>
                             <div class="col-md-10">
                                 <input type="file" id="importexcelfile" name="importexcelfile" class="form-control" />
+                                @await Html.PartialAsync("_AdminTransferCalendar", new AdminTransferCalendarModel { IsImport = true })
                             </div>
                         </div>
                     </div>

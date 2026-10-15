@@ -1,4 +1,4 @@
-﻿@model ProductSearchModel
+@model ProductSearchModel
 
 @using Nop.Core.Domain.Catalog;
 
@@ -22,6 +22,7 @@
                 @T("Admin.Catalog.Products")
             </h1>
             <div class="float-right">
+                @await Html.PartialAsync("_AdminTransferCalendar", new AdminTransferCalendarModel())
                 <a asp-action="Create" class="btn btn-primary">
                     <i class="fas fa-square-plus"></i>
                     @T("Admin.Common.AddNew")
@@ -45,31 +46,31 @@
                     </button>
                     <ul class="dropdown-menu" role="menu">
                         <li class="dropdown-item">
-                            
+
                                 <button asp-action="ExportToXml" type="submit" name="exportxml-all">
                                     <i class="far fa-file-code"></i>
                                     @T("Admin.Common.ExportToXml.All")
-                                </button>                            
+                                </button>
                         </li>
                         <li class="dropdown-item">
-                           
+
                                 <button type="button" id="exportxml-selected">
                                     <i class="far fa-file-code"></i>
                                     @T("Admin.Common.ExportToXml.Selected")
-                                </button>                            
+                                </button>
                         </li>
                         <li class="dropdown-divider"></li>
-                        <li class="dropdown-item">                            
+                        <li class="dropdown-item">
                                 <button asp-action="ExportToExcel" type="submit" name="exportexcel-all">
                                     <i class="far fa-file-excel"></i>
                                     @T("Admin.Common.ExportToExcel.All")
-                                </button>                            
+                                </button>
                         </li>
-                        <li class="dropdown-item">                            
+                        <li class="dropdown-item">
                                 <button type="button" id="exportexcel-selected">
                                     <i class="far fa-file-excel"></i>
                                     @T("Admin.Common.ExportToExcel.Selected")
-                                </button>                            
+                                </button>
                         </li>
                     </ul>
                 </div>
@@ -259,7 +260,7 @@
                                       new ColumnProperty(nameof(ProductModel.StockQuantityStr))
                                       {
                                           Title = T("Admin.Catalog.Products.Fields.StockQuantity").Text
-                                      },                                      
+                                      },
                                       new ColumnProperty(nameof(ProductModel.Published))
                                       {
                                           Title = T("Admin.Catalog.Products.Fields.Published").Text,
@@ -277,7 +278,7 @@
                                   }
                          })
 
-                              <script>                           
+                              <script>
 
                             $(function() {
                                 $('#delete-selected-action-confirmation-submit-button').on('click', function () {
@@ -373,7 +374,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h4 class="modal-title" id="importexcel-window-title">@T("Admin.Common.ImportFromExcel")</h4>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>                    
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 </div>
                 <form asp-controller="Product" asp-action="ImportExcel" method="post" enctype="multipart/form-data">
                     <div class="form-horizontal">
@@ -396,6 +397,7 @@
                                 </div>
                                 <div class="col-md-10">
                                     <input type="file" id="importexcelfile" name="importexcelfile" class="form-control" />
+                                    @await Html.PartialAsync("_AdminTransferCalendar", new AdminTransferCalendarModel { IsImport = true })
                                 </div>
                             </div>
                         </div>
@@ -412,6 +414,7 @@
 
     @*export selected (XML). We don't use GET approach because it's limited to 2K-4K chars and won't work for large number of entities*@
     <form asp-controller="Product" asp-action="ExportXmlSelected" method="post" id="export-xml-selected-form">
+    @await Html.PartialAsync("_AdminTransferCalendarValue")
         <input type="hidden" id="selectedIds" name="selectedIds" value="" />
     </form>
 
@@ -436,6 +439,7 @@
 
     @*export selected (Excel). We don't use GET approach because it's limited to 2K-4K chars and won't work for large number of entities*@
     <form asp-controller="Product" asp-action="ExportExcelSelected" method="post" id="export-excel-selected-form">
+    @await Html.PartialAsync("_AdminTransferCalendarValue")
         <input type="hidden" id="selectedIds" name="selectedIds" value="" />
     </form>
 

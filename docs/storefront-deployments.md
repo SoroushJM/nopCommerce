@@ -14,7 +14,7 @@ Legacy `Boutique` build/runtime selections are accepted as aliases for `MishaSho
 | `MishaShop` | Compile and package MishaShop only |
 | `All` | Development compilation of both themes; not a release package |
 
-Invalid values fail the build. For selected-theme production builds use `src/Docker.slnx` or the publish script. The full `src/NopCommerce.sln` explicitly includes both UI libraries for development, so a full solution build is not the mechanism for producing an isolated brand release.
+Invalid values fail the build. For selected-theme production builds use `src/Docker.slnx` or the publish script. The full `src/Storefront.sln` explicitly includes both UI libraries for development, so a full solution build is not the mechanism for producing an isolated brand release.
 
 `Storefront.Client` conditionally references the selected brand assembly plus `Storefront.UI.Shared`. The Persian storefront plugin does the same, publishes the matching browser application, and copies assets into its `Content/Storefront.UI.<theme>` and `Content/Storefront.UI.Shared` folders. For `MishaShop`, the four Madadrang-only plugin views are excluded from Razor compilation and copying. `Nop.Docker.Views` precompiles all native/default views and only the selected theme/plugin views.
 

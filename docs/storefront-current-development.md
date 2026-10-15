@@ -6,6 +6,8 @@
 
 ## پروژه‌ها و مرز مسئولیت
 
+طبق تصمیم ۲۰۲۶-۱۰-۱۵، کد اصلی nopCommerce فقط برای فارسی‌سازی پنل ادمین تغییر می‌کند. توسعهٔ کامل از `src/Storefront.sln` و اتصال‌های build سفارشی انجام می‌شود؛ فایل‌های پروژه و solution اصلی حفظ می‌شوند. جزئیات و دستور بررسی در [مرز کد اصلی](nopcommerce-core-boundary.md) آمده است.
+
 | پروژه | مسئولیت و وابستگی |
 | --- | --- |
 | `src/Storefront/Storefront.UI.Shared` | قراردادهای نمایشی و تعامل عمومی، محصول و سبد؛ بدون ارجاع به دو برند یا سرویس‌های سرور nopCommerce |
@@ -49,7 +51,7 @@ Shared سرویس مستقل یا دیتابیس ندارد. هر خروجی ا�
 
 ## اجرای VS Code و ساخت پیش از F5
 
-تنظیم و بررسی: ۲۰۲۶-۱۰-۱۳. پوشهٔ ریشهٔ مخزن، یعنی `nopCommerce` که `.vscode` و `src` داخل آن هستند، را در VS Code باز کنید. برای نسخهٔ اصلی پروژه، پوشهٔ والد `nopcomerce` یا یکی از worktreeها را انتخاب نکنید. .NET 10 مطابق `global.json`، Node/npm و افزونه‌های Microsoft C# و C# Dev Kit لازم‌اند. تنظیمات `.vscode/settings.json`، فایل `src/NopCommerce.sln` را برای IntelliSense انتخاب می‌کنند و مقدار `StorefrontTheme=All` را به language server می‌دهند.
+تنظیم و بررسی: ۲۰۲۶-۱۰-۱۳. پوشهٔ ریشهٔ مخزن، یعنی `nopCommerce` که `.vscode` و `src` داخل آن هستند، را در VS Code باز کنید. برای نسخهٔ اصلی پروژه، پوشهٔ والد `nopcomerce` یا یکی از worktreeها را انتخاب نکنید. .NET 10 مطابق `global.json`، Node/npm و افزونه‌های Microsoft C# و C# Dev Kit لازم‌اند. تنظیمات `.vscode/settings.json`، فایل `src/Storefront.sln` را برای IntelliSense انتخاب می‌کنند و مقدار `StorefrontTheme=All` را به language server می‌دهند.
 
 فایل `src/Presentation/Nop.Web/Properties/launchSettings.json` محلی و خارج از Git است. در checkout تازه، پروفایل‌های [نمونهٔ launchSettings](examples/launchSettings.storefront.json) را با تنظیم محلی خود ادغام کنید؛ مشخصات خصوصی اتصال در این نمونه نیست.
 
@@ -94,7 +96,7 @@ Shared سرویس مستقل یا دیتابیس ندارد. هر خروجی ا�
 ```powershell
 
 # ساخت کامل؛ معادل مسیر Ctrl+Shift+B
-dotnet build src/NopCommerce.sln --configuration Debug -p:StorefrontTheme=All -maxcpucount:1 --verbosity minimal -clp:PerformanceSummary
+dotnet build src/Storefront.sln --configuration Debug -p:StorefrontTheme=All -maxcpucount:1 --verbosity minimal -clp:PerformanceSummary
 
 # ساخت محدود؛ معادل مرحلهٔ پیش از اجرای F5
 dotnet build src/Plugins/Nop.Plugin.Misc.PersianStorefront/Nop.Plugin.Misc.PersianStorefront.csproj --configuration Debug -p:StorefrontTheme=All -maxcpucount:1 --verbosity minimal -clp:PerformanceSummary
@@ -199,7 +201,7 @@ pwsh -File ./scripts/test-storefront-incremental.ps1 -Suite All -Runs 3
 
 ### رفع خطای build مستقیم و حفظ فشرده‌سازی publish
 
-فرمان `dotnet build NopCommerce.sln` از پوشهٔ `src` در publish تو‌در‌توی Client با `MSB4018 / ApplyCompressionNegotiation` و پیام `Endpoints not found for compressed asset: FindRazorSourceFileConfig.json.gz` شکست می‌خورد. تست‌ها و taskهای قدیمی VS Code متغیر محیطی مخصوصی داشتند که این اختلاف با ترمینال را پنهان می‌کرد.
+فرمان `dotnet build Storefront.sln` از پوشهٔ `src` در publish تو‌در‌توی Client با `MSB4018 / ApplyCompressionNegotiation` و پیام `Endpoints not found for compressed asset: FindRazorSourceFileConfig.json.gz` شکست می‌خورد. تست‌ها و taskهای قدیمی VS Code متغیر محیطی مخصوصی داشتند که این اختلاف با ترمینال را پنهان می‌کرد.
 
 در `src/Directory.Build.targets`، هنگام فعال‌بودن FindRazorSourceFile فقط `**/FindRazorSourceFileConfig.json` به `CompressionExcludePatterns` موجود اضافه می‌شود. این فایل توسعه endpoint انتشار ندارد. فشرده‌سازی دارایی‌های برنامه فعال می‌ماند. تعریف تکراری از taskهای VS Code و اسکریپت‌ها حذف شد. Release همچنان FindRazorSourceFile را غیرفعال می‌کند.
 
@@ -219,7 +221,7 @@ pwsh -File ./scripts/test-storefront-compression.ps1
 
 اعتبارسنجی ۲۰۲۶-۱۰-۱۳ پس از اصلاح، روی checkout اصلی:
 
-- همان `dotnet build NopCommerce.sln` از `src` بدون متغیر کمکی در 266.947 ثانیه موفق شد؛ صفر خطا و یک هشدار موجود `CS0108` در `EuropaCheckVatService/Reference.cs`. این ساخت کل Solution است و زمان آن معیار ساخت گرم F5 نیست. لاگ در `runtime-verification/compression-fix/solution-build.log` ثبت شد.
+- همان `dotnet build Storefront.sln` از `src` بدون متغیر کمکی در 266.947 ثانیه موفق شد؛ صفر خطا و یک هشدار موجود `CS0108` در `EuropaCheckVatService/Reference.cs`. این ساخت کل Solution است و زمان آن معیار ساخت گرم F5 نیست. لاگ در `runtime-verification/compression-fix/solution-build.log` ثبت شد.
 - publish تازهٔ Debug در 30.498 ثانیه و Release در 29.762 ثانیه موفق شدند. تمام نسخه‌های فشردهٔ زیر پس از بازشدن hash برابر با فایل اصلی داشتند. نتیجهٔ کامل در `runtime-verification/compression-tests-20261013-123837-ad70d6/result.json` ثبت شد.
 
 | پیکربندی | فایل اصلی WASM/JS | نسخهٔ فشردهٔ بررسی‌شده | حجم اصلی، بایت | Gzip، بایت | Brotli، بایت |

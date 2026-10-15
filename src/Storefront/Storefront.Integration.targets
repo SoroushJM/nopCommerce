@@ -1,0 +1,15 @@
+<Project>
+  <!-- Native project files stay unchanged; storefront references and packaging live here. -->
+  <ItemGroup>
+    <ProjectReference Include="$(MSBuildThisFileDirectory)Storefront.UI.Shared/Storefront.UI.Shared.csproj" />
+    <ProjectReference Include="$(MSBuildThisFileDirectory)Storefront.UI.Madadrang/Storefront.UI.Madadrang.csproj"
+                      Condition="'$(StorefrontBrand)' == 'Madadrang' Or '$(StorefrontBrand)' == 'All'" />
+    <ProjectReference Include="$(MSBuildThisFileDirectory)Storefront.UI.MishaShop/Storefront.UI.MishaShop.csproj"
+                      Condition="'$(StorefrontBrand)' == 'MishaShop' Or '$(StorefrontBrand)' == 'All'" />
+    <Content Remove="Themes/MishaShop/**" Condition="'$(StorefrontBrand)' == 'Madadrang'" />
+    <Content Remove="Themes/Madadrang/**" Condition="'$(StorefrontBrand)' == 'MishaShop'" />
+    <Content Remove="App_Data/Localization/PersianAdmin/*.json" />
+    <Content Update="App_Data/Localization/PersianAdmin/*.xml"
+             CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

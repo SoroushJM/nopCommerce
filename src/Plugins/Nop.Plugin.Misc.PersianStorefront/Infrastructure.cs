@@ -24,7 +24,6 @@ public sealed class StorefrontStartup : INopStartup
         services.PostConfigure<RazorViewEngineOptions>(options =>
         {
             options.ViewLocationExpanders.Add(new StorefrontCatalogViewLocationExpander());
-            options.ViewLocationExpanders.Add(new AdminCalendarViewLocationExpander());
         });
         services.Configure<Microsoft.AspNetCore.Mvc.MvcOptions>(options =>
         {

@@ -1,4 +1,4 @@
-﻿@model NewsLetterSubscriptionSearchModel
+@model NewsLetterSubscriptionSearchModel
 
 @using Nop.Services.Stores
 
@@ -22,6 +22,7 @@
             @T("Admin.Promotions.NewsLetterSubscriptions")
         </h1>
         <div class="float-right">
+            @await Html.PartialAsync("_AdminTransferCalendar", new AdminTransferCalendarModel())
             <a asp-action="Create" class="btn btn-primary">
                 <i class="fas fa-square-plus"></i>
                 @T("Admin.Common.AddNew")
@@ -188,7 +189,7 @@
                                         Width = "100",
                                         ClassName =  NopColumnClassDefaults.Button,
                                         Render = new RenderButtonEdit(new DataUrl("~/Admin/NewsLetterSubscription/Edit/"))
-                                    }                                    
+                                    }
                                 }
                         })
                     </div>
@@ -205,7 +206,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="importcsv-window-title">@T("Admin.Common.ImportFromCsv")</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>                
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <form asp-controller="NewsLetterSubscription" asp-action="ImportCsv" method="post" enctype="multipart/form-data">
                 <div class="form-horizontal">

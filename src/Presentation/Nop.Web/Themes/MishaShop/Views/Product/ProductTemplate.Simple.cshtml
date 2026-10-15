@@ -202,7 +202,7 @@
         }
         else if (Model.ProductReviewOverview.AllowCustomerReviews)
         {
-            @await Html.PartialAsync("_EmptyProductReviewForm", Model.ProductReviews)
+            @await Html.PartialAsync("~/Plugins/Misc.PersianStorefront/Views/_EmptyProductReviewForm.cshtml", Model.ProductReviews)
         }
         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductDetailsBottom, additionalData = Model })
     </div>

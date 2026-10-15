@@ -23,16 +23,12 @@
     <ProjectReference Include="..\..\Libraries\Nop.Data\Nop.Data.csproj" />
     <ProjectReference Include="..\..\Libraries\Nop.Services\Nop.Services.csproj" />
     <ProjectReference Include="..\Nop.Web.Framework\Nop.Web.Framework.csproj" />
-    <ProjectReference Include="../../Storefront/Storefront.UI.Shared/Storefront.UI.Shared.csproj" />
-    <ProjectReference Include="../../Storefront/Storefront.UI.Madadrang/Storefront.UI.Madadrang.csproj" Condition="'$(StorefrontBrand)' == 'Madadrang' Or '$(StorefrontBrand)' == 'All'" />
-    <ProjectReference Include="../../Storefront/Storefront.UI.MishaShop/Storefront.UI.MishaShop.csproj" Condition="'$(StorefrontBrand)' == 'MishaShop' Or '$(StorefrontBrand)' == 'All'" />
   </ItemGroup>
 
   <ItemGroup>
     <!-- We copy the entire \App_Data directory. But we ignore JSON files and data protection keys  -->
-    <Content Include="App_Data\**" CopyToPublishDirectory="PreserveNewest" Exclude="App_Data\*.json;App_Data\Localization\PersianAdmin\*.json" />
+    <Content Include="App_Data\**" CopyToPublishDirectory="PreserveNewest" Exclude="App_Data\*.json" />
     <Content Remove="App_Data\*.json" />
-    <Content Update="App_Data\Localization\PersianAdmin\*.xml" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
     <Content Remove="App_Data\Installation\SampleData.json" />
     <None Include="App_Data\Installation\SampleData.json" CopyToPublishDirectory="PreserveNewest" />
     <Content Update="App_Data\DataProtectionKeys\*.xml" CopyToPublishDirectory="Never" />
@@ -44,8 +40,6 @@
     <None Include="Plugins\**" CopyToPublishDirectory="PreserveNewest" Exclude="Plugins\**\runtimes\**;Plugins\**\ref\**;Plugins\**\*.pdb" />
 
     <Content Include="Themes\**" CopyToPublishDirectory="PreserveNewest" CopyToOutputDirectory="Never" />
-    <Content Remove="Themes\MishaShop\**" Condition="'$(StorefrontBrand)' == 'Madadrang'" />
-    <Content Remove="Themes\Madadrang\**" Condition="'$(StorefrontBrand)' == 'MishaShop'" />
 
     <!-- We copy the \Logs directory -->
     <Content Include="Logs\**" CopyToPublishDirectory="PreserveNewest" />

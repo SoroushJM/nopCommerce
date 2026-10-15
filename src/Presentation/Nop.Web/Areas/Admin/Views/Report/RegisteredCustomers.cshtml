@@ -1,4 +1,4 @@
-﻿@model CustomerReportsSearchModel
+@model CustomerReportsSearchModel
 
 @{
     //page title
@@ -13,6 +13,7 @@
     </h1>
     <form asp-controller="Report" method="post">
             <div class="float-right">
+                @await Html.PartialAsync("_AdminTransferCalendar", new AdminTransferCalendarModel())
                 <div class="btn-group">
                     <button type="button" class="btn btn-success">
                         <i class="fas fa-download"></i>
@@ -41,7 +42,7 @@
             </form>
 </div>
 <section class="content">
-    <div class="container-fluid">    
+    <div class="container-fluid">
         <div class="form-horizontal">
             <div class="cards-group">
                 <div class="card card-default">

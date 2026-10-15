@@ -1,4 +1,4 @@
-﻿@model NeverSoldReportSearchModel
+@model NeverSoldReportSearchModel
 
 @{
     //page title
@@ -18,6 +18,7 @@
             @T("Admin.Reports.Sales.NeverSold")
         </h1>
         <div class="float-right">
+            @await Html.PartialAsync("_AdminTransferCalendar", new AdminTransferCalendarModel())
             <div class="btn-group">
                 <button type="button" class="btn btn-success">
                     <i class="fas fa-download"></i>
@@ -110,7 +111,7 @@
                                             <nop-editor asp-for="EndDate" />
                                         </div>
                                     </div>
-                                </div>                            
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="text-center col-12">

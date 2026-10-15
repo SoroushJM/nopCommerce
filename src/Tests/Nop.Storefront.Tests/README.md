@@ -44,6 +44,12 @@ dotnet run --project src/Tests/Nop.Storefront.Tests -- --report-trx
 dotnet run --project src/Tests/Nop.Storefront.Tests -- --treenode-filter '/*/*/PersianAdminLocalizationTests/*'
 ```
 
+بررسی‌های مستقل runtime افزونه نیز به سرور یا دیتابیس نیاز ندارند. این مجموعه، جداسازی cookieها در درخواست/پاسخ/حذف و نوشتن دیرهنگام session، lookup نمای کامپایل‌شده، و حفظ اعتبارسنجی نصب همراه با عدم نمایش credentialهای bootstrap را بررسی می‌کند:
+
+```powershell
+dotnet run --project src/Tests/Nop.Storefront.Tests -c Release -- --treenode-filter '/*/*/StorefrontRuntimeTests/*'
+```
+
 مطابق تصمیم جدید کاربر، بررسی‌های بصری و کلیک‌های دسکتاپ/موبایل به خود کاربر سپرده شده‌اند؛ Luna یا computer-use برای ادامه اجرا نمی‌شوند. gateهای قدیمی و تغییر نقش اضافیِ مختص بررسی مرورگر حذف شده‌اند. ابزارهای اجرا، قالب‌بندی و seed همچنان PowerShell هستند.
 
 آخرین اجرای پاک‌سازی در ۲۰۲۶-۱۰-۱۰: ۴۱ تست موفق، صفر شکست و صفر skip در ۵۰٫۵۱۷ ثانیه. مسیر ورود مستقیم WASM و حذف endpointهای قدیمی دو سناریوی تازه‌اند. [گزارش پاک‌سازی](../../../docs/refactor-legacy-cleanup.md).

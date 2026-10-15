@@ -307,16 +307,9 @@ public static class ServiceCollectionExtensions
         //add basic MVC feature
         var mvcBuilder = services.AddControllersWithViews();
 
-        var appSettings = Singleton<AppSettings>.Instance;
-        if (appSettings.Get<CommonConfig>().UsePrecompiledViews)
-        {
-            var viewsAssembly = System.Reflection.Assembly.LoadFrom(
-                Path.Combine(AppContext.BaseDirectory, "Nop.Docker.Views.dll"));
-            mvcBuilder.AddApplicationPart(viewsAssembly);
-        }
-        else
-            mvcBuilder.AddRazorRuntimeCompilation();
+        mvcBuilder.AddRazorRuntimeCompilation();
 
+        var appSettings = Singleton<AppSettings>.Instance;
         if (appSettings.Get<CommonConfig>().UseSessionStateTempDataProvider)
         {
             //use session-based temp data provider

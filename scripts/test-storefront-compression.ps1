@@ -47,7 +47,7 @@ function Get-ExpandedHash([string]$Path) {
 Push-Location $repo
 try {
     Write-Host "Verification artifacts: $artifacts"
-    if ($BuildSolution) { Invoke-CheckedDotnet 'solution-build' @('build', 'src/NopCommerce.sln') }
+    if ($BuildSolution) { Invoke-CheckedDotnet 'solution-build' @('build', 'src/Storefront.sln') }
     foreach ($config in $Configuration) {
         $settingsJson = & dotnet msbuild $client "-p:Configuration=$config" '-p:StorefrontTheme=All' '-getProperty:CompressionEnabled,PublishCompressionFormats,EnableFindRazorSourceFile,CompressionExcludePatterns'
         Assert ($LASTEXITCODE -eq 0) 'Could not evaluate compression settings.'

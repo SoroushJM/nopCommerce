@@ -1,0 +1,28 @@
+<Project>
+  <!-- Set the RID per project; the SDK does not support a solution-level RID build. -->
+  <PropertyGroup Condition="'$(DockerRuntimeIdentifier)' != ''">
+    <RuntimeIdentifier>$(DockerRuntimeIdentifier)</RuntimeIdentifier>
+    <SelfContained>false</SelfContained>
+  </PropertyGroup>
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <StorefrontTheme Condition="'$(StorefrontTheme)' == ''">Madadrang</StorefrontTheme>
+    <!-- Keep legacy global -p:StorefrontTheme=Boutique inputs valid. -->
+    <StorefrontBrand>$(StorefrontTheme)</StorefrontBrand>
+    <StorefrontBrand Condition="'$(StorefrontTheme)' == 'Boutique'">MishaShop</StorefrontBrand>
+    <StorefrontBlueprintPrimitivesVersion>4.1.1-storefront.1</StorefrontBlueprintPrimitivesVersion>
+    <RestoreAdditionalProjectSources>$(RestoreAdditionalProjectSources);$(MSBuildThisFileDirectory)../vendor/blazorblueprint-primitives/packages</RestoreAdditionalProjectSources>
+    <RepositoryType>Git</RepositoryType>
+    <!--The Implicit usings feature automatically adds common global using directives for the type of project you are building. For more information, see this implicit usings article https://aka.ms/csharp-implicit-usings.-->
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  <Target Name="ValidateStorefrontTheme" BeforeTargets="PrepareForBuild">
+    <Error Condition="'$(StorefrontBrand)' != 'Madadrang' and '$(StorefrontBrand)' != 'MishaShop' and '$(StorefrontBrand)' != 'All'"
+           Text="StorefrontTheme must be Madadrang, MishaShop or All." />
+  </Target>
+
+  <PropertyGroup>
+    <!-- Since we are constantly updating dependent packages, we decided to disable warnings: "A package restored for your project has a known vulnerability" (nu1901-nu1904). For more information, see this article https://learn.microsoft.com/nuget/reference/errors-and-warnings/nu1901-nu1904-->
+    <NoWarn>NU1901;NU1902;NU1903;NU1904</NoWarn>
+  </PropertyGroup>
+</Project>

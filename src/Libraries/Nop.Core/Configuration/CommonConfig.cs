@@ -6,11 +6,6 @@
 public partial class CommonConfig : IConfig
 {
     /// <summary>
-    /// Use the view assembly built for the fixed Docker plugin set instead of compiling views on the host.
-    /// </summary>
-    public bool UsePrecompiledViews { get; set; }
-
-    /// <summary>
     /// Gets or sets a value indicating whether to display the full error in production environment. It's ignored (always enabled) in development environment
     /// </summary>
     public bool DisplayFullErrorStack { get; protected set; } = false;

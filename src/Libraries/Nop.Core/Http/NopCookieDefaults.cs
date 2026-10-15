@@ -8,12 +8,7 @@ public static partial class NopCookieDefaults
     /// <summary>
     /// Gets the cookie name prefix
     /// </summary>
-    // Cookies are scoped to hosts, not ports. Independent installations sharing
-    // a test host can choose distinct names without changing the native cookies.
-    public static string Prefix { get; } =
-        Environment.GetEnvironmentVariable("NOP_COOKIE_PREFIX") is { Length: > 0 } prefix
-            ? prefix
-            : ".Nop";
+    public static string Prefix => ".Nop";
 
     /// <summary>
     /// Gets a cookie name of the customer

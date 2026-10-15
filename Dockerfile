@@ -8,7 +8,8 @@ RUN case "$STOREFRONT_THEME" in Madadrang|MishaShop|Boutique) ;; *) echo "STOREF
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 DOTNET_NOLOGO=1
 # Restore metadata first: source edits do not invalidate the NuGet layer.
 COPY global.json ./
-COPY src/Directory.Build.props src/Docker.slnx src/
+COPY src/Directory.Build.props src/Directory.Build.targets src/Storefront.Build.props src/Docker.slnx src/
+COPY src/Storefront/Storefront.Integration.targets src/Storefront/
 COPY src/Libraries/Nop.Core/Nop.Core.csproj src/Libraries/Nop.Core/
 COPY src/Libraries/Nop.Data/Nop.Data.csproj src/Libraries/Nop.Data/
 COPY src/Libraries/Nop.Services/Nop.Services.csproj src/Libraries/Nop.Services/

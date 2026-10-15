@@ -12,10 +12,14 @@
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <ProjectReference Include="../../Libraries/Nop.Services/Nop.Services.csproj" />
+    <ProjectReference Include="../../Presentation/Nop.Web/Nop.Web.csproj" />
     <!-- Compile the exact plugin helper without building/publishing the entire UI for unit tests. -->
     <Compile Include="../../Plugins/Nop.Plugin.Misc.PersianStorefront/StorefrontWebHelper.cs" Link="Plugin/StorefrontWebHelper.cs" />
     <Compile Include="../../Plugins/Nop.Plugin.Misc.PersianStorefront/StorefrontHostConfig.cs" Link="Plugin/StorefrontHostConfig.cs" />
     <Compile Include="../../Plugins/Nop.Plugin.Misc.PersianStorefront/PersianPublicResourcesStartup.cs" Link="Plugin/PersianPublicResourcesStartup.cs" />
+    <Compile Include="../../Plugins/Nop.Plugin.Misc.PersianStorefront/StorefrontCookieScope.cs" Link="Plugin/StorefrontCookieScope.cs" />
+    <Compile Include="../../Plugins/Nop.Plugin.Misc.PersianStorefront/StorefrontCompiledViews.cs" Link="Plugin/StorefrontCompiledViews.cs" />
+    <Compile Include="../../Plugins/Nop.Plugin.Misc.PersianStorefront/StorefrontInstallation.cs" Link="Plugin/StorefrontInstallation.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="../../Presentation/Nop.Web/App_Data/Localization/defaultResources.nopres.xml" Link="Localization/defaultResources.nopres.xml" CopyToOutputDirectory="PreserveNewest" />

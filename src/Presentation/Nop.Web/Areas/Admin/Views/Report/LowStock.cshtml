@@ -1,4 +1,4 @@
-﻿@model LowStockProductSearchModel
+@model LowStockProductSearchModel
 
 @{
     //page title
@@ -18,6 +18,7 @@
             @T("Admin.Reports.LowStock")
         </h1>
         <div class="float-right">
+            @await Html.PartialAsync("_AdminTransferCalendar", new AdminTransferCalendarModel())
             <div class="btn-group">
                 <button type="button" class="btn btn-success">
                     <i class="fas fa-download"></i>
@@ -67,7 +68,7 @@
                                         <div class="col-md-8">
                                             <nop-select asp-for="SearchPublishedId" asp-items="Model.AvailablePublishedOptions" />
                                         </div>
-                                    </div>                                    
+                                    </div>
                                 </div>
                             </div>
                             <div class="row">

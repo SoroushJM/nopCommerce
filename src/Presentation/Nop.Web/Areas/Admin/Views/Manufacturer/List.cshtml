@@ -17,6 +17,7 @@
         @T("Admin.Catalog.Manufacturers")
     </h1>
     <div class="float-right">
+        @await Html.PartialAsync("_AdminTransferCalendar", new AdminTransferCalendarModel())
         <a asp-action="Create" class="btn btn-primary">
             <i class="fas fa-square-plus"></i>
             @T("Admin.Common.AddNew")
@@ -32,13 +33,13 @@
             </button>
             <ul class="dropdown-menu" role="menu">
                 <li class="dropdown-item">
-                    <a asp-action="ExportXml">
+                    <a asp-action="ExportXml" asp-route-transferCalendar="@AdminTransferCalendarPreference.GetSelectedCalendar(Context.Request)">
                         <i class="far fa-file-code"></i>
                         @T("Admin.Common.ExportToXml")
                     </a>
                 </li>
                 <li class="dropdown-item">
-                    <a asp-action="ExportXlsx">
+                    <a asp-action="ExportXlsx" asp-route-transferCalendar="@AdminTransferCalendarPreference.GetSelectedCalendar(Context.Request)">
                         <i class="far fa-file-excel"></i>
                         @T("Admin.Common.ExportToExcel")
                     </a>
@@ -195,7 +196,7 @@
                 </div>
             </div>
         </div>
-    </div>   
+    </div>
 </section>
 @*import manufacturers form*@
 <div id="importexcel-window" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="importexcel-window-title">
@@ -203,7 +204,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <h4 class="modal-title" id="importexcel-window-title">@T("Admin.Common.ImportFromExcel")</h4>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>                                
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
             </div>
             <form asp-controller="Manufacturer" asp-action="ImportFromXlsx" method="post" enctype="multipart/form-data">
                 <div class="form-horizontal">
@@ -226,6 +227,7 @@
                             </div>
                             <div class="col-md-10">
                                 <input type="file" id="importexcelfile" name="importexcelfile" class="form-control" />
+                                @await Html.PartialAsync("_AdminTransferCalendar", new AdminTransferCalendarModel { IsImport = true })
                             </div>
                         </div>
                     </div>

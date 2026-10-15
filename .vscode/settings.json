@@ -1,5 +1,5 @@
 {
-  "dotnet.defaultSolution": "src/NopCommerce.sln",
+  "dotnet.defaultSolution": "src/Storefront.sln",
   "dotnet.server.useOmnisharp": false,
   "dotnet.server.environmentVariables": {
     "StorefrontTheme": "All"

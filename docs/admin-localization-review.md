@@ -52,7 +52,7 @@ No new actionable P1/P2 source issue was identified. Actual regenerated download
 
 ## یادداشت تاریخی ادغام شاخهٔ محلی — ۲۰۲۶-۱۰-۱۵
 
-بخش زیر از commit قدیمی `eab6dcd2d9` حفظ شده و گزارش همان مرحله است. در اجرای فعلی، viewهای انتخاب تقویم و POST ترجیح در افزونهٔ `Misc.PersianStorefront` قرار دارند؛ اشارهٔ زیر به `CommonController` و نتیجهٔ build مربوط به نسخهٔ تاریخی است. قابلیت‌های commit `a758113dbe` در overrideهای افزونه حفظ شده‌اند و پروژهٔ منسوخ `Storefront.UI` دوباره وارد solution نشده است.
+بخش زیر از commit قدیمی `eab6dcd2d9` حفظ شده و گزارش همان مرحله است؛ نتیجهٔ build آن مدرک مرحلهٔ تاریخی است. طبق درخواست نهایی کاربر، کنترل‌های تقویمِ ۲۱ صفحه به مسیر اصلی مدیریت بازگردانده شدند و POST ترجیح نیز از `CommonController` استفاده می‌کند. پروژهٔ منسوخ `Storefront.UI` دوباره وارد solution نشده است.
 
 ## بازسازی انتخاب تقویم فایل با Razor و C#
 

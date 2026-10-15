@@ -1,4 +1,4 @@
-﻿@model CountryReportSearchModel
+@model CountryReportSearchModel
 
 @{
     //page title
@@ -16,8 +16,9 @@
         <h1 class="float-left">
             @T("Admin.Reports.Sales.Country")
         </h1>
-        
+
         <div class="float-right">
+            @await Html.PartialAsync("_AdminTransferCalendar", new AdminTransferCalendarModel())
             <div class="btn-group">
                 <button type="button" class="btn btn-success">
                     <i class="fas fa-download"></i>

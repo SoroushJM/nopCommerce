@@ -1,4 +1,6 @@
-@model ProductReviewsModel
+@model Nop.Web.Models.Catalog.ProductReviewsModel
+@using Nop.Web.Framework.UI
+@addTagHelper *, Nop.Web.Framework
 
 @if (Model.AddProductReview.CanCurrentCustomerLeaveReview && Model.AddProductReview.CanAddNewReview)
 {
