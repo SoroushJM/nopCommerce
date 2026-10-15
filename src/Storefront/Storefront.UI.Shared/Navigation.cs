@@ -28,4 +28,9 @@ public sealed record StoreNavigation
     public bool CartEnabled { get; init; }
     public int CartCount { get; init; }
     public string CartUrl { get; init; } = "";
+    public bool RegistrationEnabled { get; init; }
+    public string RegisterUrl { get; init; } = "";
+    public bool WishlistEnabled { get; init; }
+    public string WishlistUrl { get; init; } = "";
+    public string WishlistQuantity { get; init; } = "";
 }

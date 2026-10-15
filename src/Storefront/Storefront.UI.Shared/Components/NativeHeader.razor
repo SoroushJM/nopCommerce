@@ -3,19 +3,40 @@
 @inject NavigationManager Navigation
 <BbDirectionProvider Direction="@(Labels.Rtl ? TextDirection.RightToLeft : TextDirection.LeftToRight)">
     <div class="flex items-center gap-4 max-md:gap-1">
-        @if (AccountDropdown && _signedIn)
+        @if (AccountDropdown)
         {
             <div class="max-md:hidden">
-                <BbDropdownMenu Dir="@Labels.Direction">
+                <BbDropdownMenu Dir="@Labels.Direction" Open="_accountOpen" OpenChanged="SetAccountOpen">
                     <BbDropdownMenuTrigger AsChild="true">
                         <BbButton Variant="ButtonVariant.Ghost" Size="ButtonSize.Large">
-                            <SfIcon Name="user" data-icon="inline-start" /><span>@Labels.Get("Account.MyAccount")</span>
+                            <SfIcon Name="user" data-icon="inline-start" /><span>@Labels.Get(_signedIn ? "Account.MyAccount" : "Account.Login")</span>
                         </BbButton>
                     </BbDropdownMenuTrigger>
                     <BbDropdownMenuContent Class="min-w-[11rem]! border-[0.0625rem]! border-solid! border-border! rounded-[0.5rem]! bg-card! text-foreground! font-sans! [box-shadow:0_0.25rem_0.75rem_rgb(32_43_54_/_0.12)]!">
-                        <BbDropdownMenuItem Href="@Theme.AccountUrl">@Labels.Get("Account.MyAccount")</BbDropdownMenuItem>
-                        <BbDropdownMenuItem Href="@Initial.CartUrl">@Labels.Get("ShoppingCart")</BbDropdownMenuItem>
-                        <BbDropdownMenuItem Href="@Theme.LogoutUrl" Class="text-destructive!">@Labels.Get("Account.Logout")</BbDropdownMenuItem>
+                        <BbDropdownMenuGroup>
+                            <BbDropdownMenuItem Href="@AccountUrl">@Labels.Get(_signedIn ? "Account.MyAccount" : "Account.Login")</BbDropdownMenuItem>
+                            @if (!_signedIn && Initial.RegistrationEnabled)
+                            {
+                                <BbDropdownMenuItem Href="@Initial.RegisterUrl">@Labels.Get("Account.Register")</BbDropdownMenuItem>
+                            }
+                            @if (Initial.WishlistEnabled)
+                            {
+                                <BbDropdownMenuItem Href="@Initial.WishlistUrl">
+                                    <span class="flex w-full items-center justify-between gap-4"><span>@Labels.Get("Wishlist")</span><span class="text-xs tabular-nums text-muted-foreground">@_wishlistQuantity</span></span>
+                                </BbDropdownMenuItem>
+                            }
+                            @if (Initial.CartEnabled)
+                            {
+                                <BbDropdownMenuItem Href="@Initial.CartUrl">@Labels.Get("ShoppingCart")</BbDropdownMenuItem>
+                            }
+                        </BbDropdownMenuGroup>
+                        @if (_signedIn)
+                        {
+                            <BbDropdownMenuSeparator Class="!h-[0.0625rem] !bg-border" />
+                            <BbDropdownMenuGroup>
+                                <BbDropdownMenuItem Href="@Theme.LogoutUrl" Class="text-destructive!">@Labels.Get("Account.Logout")</BbDropdownMenuItem>
+                            </BbDropdownMenuGroup>
+                        }
                     </BbDropdownMenuContent>
                 </BbDropdownMenu>
             </div>

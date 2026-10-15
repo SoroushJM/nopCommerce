@@ -21,6 +21,7 @@ public sealed record NativeUiLabels
     {
         ["Homepage"] = "خانه", ["Homepage.Products"] = "فروشگاه", ["Menu"] = "منو",
         ["Account.MyAccount"] = "حساب من", ["Account.Login"] = "ورود / عضویت", ["Account.Logout"] = "خروج از حساب",
+        ["Account.Register"] = "ثبت‌نام", ["Wishlist"] = "علاقه‌مندی‌ها", ["Wishlist.HeaderQuantity"] = "({0})",
         ["ShoppingCart"] = "سبد خرید", ["ShoppingCart.HeaderQuantity"] = "({0})",
         ["ShoppingCart.CartIsEmpty"] = "سبدت هنوز خالیه.", ["ShoppingCart.ContinueShopping"] = "ادامهٔ خرید",
         ["ShoppingCart.Mini.ViewCart"] = "دیدن سبد و ادامهٔ خرید", ["Checkout.Button"] = "ادامهٔ خرید",

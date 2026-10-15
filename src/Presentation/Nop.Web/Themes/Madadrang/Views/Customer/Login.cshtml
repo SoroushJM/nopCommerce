@@ -42,28 +42,27 @@
         string.Equals(note.Message, alreadyLoginMessage, StringComparison.Ordinal))).ToList();
 
     var registrationDisabled = Model.RegistrationType == UserRegistrationType.Disabled;
+    var persian = CultureInfo.CurrentUICulture.Name.StartsWith("fa", StringComparison.OrdinalIgnoreCase);
+    var pageTitle = persian ? "ورود به مداد رنگی" : T("Account.Login.ReturningCustomer").Text;
+    var pageDescription = persian ? "وارد شو و خریدت را از همین‌جا ادامه بده." : T("Account.Login.Welcome").Text;
+    var rememberMeText = T("Account.Login.Fields.RememberMe").Text;
     var registrationTitle = T(registrationDisabled ? "Account.Register" :
         Model.CheckoutAsGuest ? "Account.Login.CheckoutAsGuestOrRegister" : "Account.Login.NewCustomer").Text;
+    if (persian && !registrationDisabled && !Model.CheckoutAsGuest)
+        registrationTitle = "هنوز حساب نساختی؟";
     var registrationDescription = T(registrationDisabled ? "Account.Register.Result.Disabled" : "Account.Login.NewCustomerText").Text;
     if (Model.CheckoutAsGuest && !registrationDisabled)
         registrationDescription = RenderHtml(await Component.InvokeAsync(typeof(TopicBlockViewComponent), new { systemName = "CheckoutAsGuestOrRegister" }));
     var validationHtml = RenderHtml(Html.ValidationSummary(true, T("Account.Login.Unsuccessful").Text, new { @class = "message-error" }));
     var externalErrorsHtml = RenderHtml(await Html.PartialAsync("_ExternalAuthentication.Errors"));
+    var inputClasses = "m-0! block! h-[2.75rem]! w-full! min-w-0! max-w-none! rounded-[.625rem]! " +
+        "border-[.0625rem]! border-solid! border-input! bg-background! py-[.5rem]! text-[1rem]! font-[inherit]! " +
+        "focus-visible:border-primary! focus-visible:[outline:.125rem_solid_var(--ring)]! focus-visible:outline-offset-[.125rem]!";
 }
-<main id="main" class="sf-native-login mx-auto! my-10! w-full! max-w-[58rem]! px-6! text-start! max-[40rem]:my-6! max-[40rem]:px-4!
-    [&_input:not([type=checkbox]):not([type=hidden])]:w-full! [&_input:not([type=checkbox]):not([type=hidden])]:min-w-0!
-    [&_input:not([type=checkbox]):not([type=hidden])]:max-w-none! [&_input:not([type=checkbox]):not([type=hidden])]:h-[2.875rem]!
-    [&_input:not([type=checkbox]):not([type=hidden])]:rounded-[.75rem]! [&_input:not([type=checkbox]):not([type=hidden])]:border-[.0625rem]!
-    [&_input:not([type=checkbox]):not([type=hidden])]:border-solid! [&_input:not([type=checkbox]):not([type=hidden])]:border-input!
-    [&_input:not([type=checkbox]):not([type=hidden])]:bg-background! [&_input:not([type=checkbox]):not([type=hidden])]:px-3!
-    [&_input:not([type=checkbox]):not([type=hidden])]:py-2! [&_input]:text-[.875rem]! [&_input]:font-[inherit]!
-    [&_input:focus-visible]:[outline:.125rem_solid_var(--ring)]! [&_input:focus-visible]:[outline-offset:.125rem]!
+<main id="main" class="sf-native-login mx-auto! my-[2.5rem]! w-full! max-w-[56rem]! px-[1.5rem]! text-start! max-[40rem]:my-[1.5rem]! max-[40rem]:px-[1rem]!
     [&_input.input-validation-error]:border-destructive! [&_.field-validation-error]:text-[.75rem]! [&_.field-validation-error]:text-destructive!
     [&_[hidden]]:hidden! [&_.external-authentication]:m-0! [&_.external-authentication]:p-0! [&_.external-authentication:empty]:hidden!">
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.MainColumnBefore })
-    <header class="mb-6! text-start!">
-        <h1 class="m-0! text-[clamp(1.375rem,3vw,1.875rem)]! font-bold! leading-[1.6]!">@T("Account.Login.Welcome")</h1>
-    </header>
     @if (visibleNotes.Any() || !string.IsNullOrWhiteSpace(externalErrorsHtml))
     {
     <div class="mb-5! flex! flex-col! gap-3!">
@@ -79,46 +78,51 @@
     </div>
     }
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.LoginTop, additionalData = Model })
-    <div class="grid! grid-cols-1! items-start! gap-6! min-[48rem]:grid-cols-[minmax(0,1.25fr)_minmax(0,1fr)]!">
-        <section class="min-w-0! rounded-[1rem]! border-[.0625rem]! border-solid! border-border! bg-card! p-6! max-[40rem]:p-5!" aria-labelledby="madadrang-login-title">
-            <h2 id="madadrang-login-title" class="m-0! mb-5! text-[1.125rem]! font-semibold! leading-[1.7]!">@T("Account.Login.ReturningCustomer")</h2>
-            <form id="madadrang-native-login-form" asp-route="@NopRouteNames.General.LOGIN" asp-route-returnurl="@Context.Request.Query["ReturnUrl"]" method="post" autocomplete="off" class="flex! flex-col! gap-5!">
+    <div class="grid! grid-cols-1! items-stretch! overflow-hidden! rounded-[1.25rem]! border-[.0625rem]! border-solid! border-border! bg-card! min-[48rem]:grid-cols-[minmax(0,1.2fr)_minmax(0,1fr)]!">
+        <section class="min-w-0! px-[1.75rem]! py-[2rem]! max-[40rem]:px-[1.25rem]! max-[40rem]:py-[1.5rem]!" aria-labelledby="madadrang-login-title">
+            <header class="mb-[1.5rem]! flex! flex-col! gap-[.5rem]! text-start!">
+                <h1 id="madadrang-login-title" class="m-0! text-[1.5rem]! font-bold! leading-[1.6]!">@pageTitle</h1>
+                <p class="m-0! text-[.875rem]! leading-[1.8]! text-muted-foreground!">@pageDescription</p>
+            </header>
+            <form id="madadrang-native-login-form" asp-route="@NopRouteNames.General.LOGIN" asp-route-returnurl="@Context.Request.Query["ReturnUrl"]" method="post" class="flex! flex-col! gap-[1.25rem]!">
                 <component type="typeof(MadadrangLoginAlert)" render-mode="Static" param-Message="validationHtml" param-HtmlContent="true" param-Variant="AlertVariant.Danger" />
-                <fieldset class="m-0! flex! min-w-0! flex-col! gap-4! border-[0rem]! p-0!">
+                <fieldset class="m-0! flex! min-w-0! flex-col! gap-[1rem]! border-[0rem]! p-0!">
                     <legend class="absolute! size-[.0625rem]! overflow-hidden! [clip-path:inset(50%)]! whitespace-nowrap! border-[0rem]! p-0! m-[-.0625rem]!">@T("Account.Login.ReturningCustomer")</legend>
-                    <div data-mode="email" hidden="@Model.LoginByPhone" class="flex! flex-col! gap-2!">
+                    <div data-mode="email" hidden="@Model.LoginByPhone" class="flex! flex-col! gap-[.375rem]!">
                         @if (Model.UsernamesEnabled)
                         {
                             <label asp-for="Username" class="text-[.875rem]! font-medium!"></label>
-                            <input asp-for="Username" class="username" autofocus="autofocus" autocomplete="username" />
+                            <input asp-for="Username" class="username @inputClasses px-[.75rem]!" autocomplete="username" autocapitalize="none" spellcheck="false" />
                             <span asp-validation-for="Username"></span>
                         }
                         else
                         {
                             <label asp-for="Email" class="text-[.875rem]! font-medium!"></label>
-                            <input asp-for="Email" class="email" autofocus="autofocus" autocomplete="username" dir="ltr" />
+                            <input asp-for="Email" class="email @inputClasses px-[.75rem]!" autocomplete="username" inputmode="email" autocapitalize="none" spellcheck="false" dir="ltr" />
                             <span asp-validation-for="Email"></span>
                         }
                     </div>
-                    <div data-mode="phone" hidden="@(!Model.LoginByPhone)" class="flex! flex-col! gap-2!">
+                    <div data-mode="phone" hidden="@(!Model.LoginByPhone)" class="flex! flex-col! gap-[.375rem]!">
                         <label asp-for="Phone" class="text-[.875rem]! font-medium!"></label>
-                        <input asp-for="Phone" class="phone" placeholder="@T("PhoneVerification.Placeholder")" autocomplete="tel" dir="ltr" />
+                        <input asp-for="Phone" class="phone @inputClasses px-[.75rem]!" placeholder="@T("PhoneVerification.Placeholder")" autocomplete="tel" inputmode="tel" dir="ltr" />
                         <span asp-validation-for="Phone"></span>
                     </div>
-                    <div data-mode="email" hidden="@Model.LoginByPhone" class="flex! flex-col! gap-2!">
+                    <div data-mode="email" hidden="@Model.LoginByPhone" class="flex! flex-col! gap-[.375rem]!">
                         <label asp-for="Password" class="text-[.875rem]! font-medium!"></label>
-                        <div class="flex! min-w-0! items-center! gap-1!">
-                            <input asp-for="Password" class="password flex-1!" autocomplete="current-password" />
-                            <component type="typeof(MadadrangLoginAction)" render-mode="Static" param-PasswordToggle="true" />
+                        <div class="relative! min-w-0!">
+                            <input asp-for="Password" class="password @inputClasses pl-[3rem]! pr-[.75rem]!" autocomplete="current-password" dir="ltr" />
+                            <div class="absolute! inset-y-0! left-[.125rem]! flex! items-center!">
+                                <component type="typeof(MadadrangLoginAction)" render-mode="Static" param-PasswordToggle="true" />
+                            </div>
                         </div>
                         <span asp-validation-for="Password"></span>
                     </div>
-                    <div data-mode="email" hidden="@Model.LoginByPhone" class="flex! flex-wrap! items-center! justify-between! gap-3! text-[.8125rem]!">
-                        <label for="@Html.IdFor(m => m.RememberMe)" class="m-0! flex! w-auto! cursor-pointer! items-center! gap-2! text-[.8125rem]!">
+                    <div data-mode="email" hidden="@Model.LoginByPhone" class="flex! flex-wrap! items-center! justify-between! gap-x-[1rem]! gap-y-[.25rem]! text-[.8125rem]!">
+                        <label for="@Html.IdFor(m => m.RememberMe)" class="m-0! flex! min-h-[2.75rem]! w-auto! cursor-pointer! items-center! gap-[.5rem]! text-[.8125rem]!">
                             <input asp-for="RememberMe" class="m-0! size-[1rem]! shrink-0! accent-primary!" />
-                            <span>@Html.DisplayNameFor(m => m.RememberMe)</span>
+                            <span>@rememberMeText</span>
                         </label>
-                        <a asp-route="@NopRouteNames.Standard.PASSWORD_RECOVERY" class="text-primary! underline-offset-[.1875rem]! hover:underline!">@T("Account.Login.ForgotPassword")</a>
+                        <a asp-route="@NopRouteNames.Standard.PASSWORD_RECOVERY" class="inline-flex! min-h-[2.75rem]! items-center! text-primary! underline-offset-[.1875rem]! hover:underline!">@T("Account.Login.ForgotPassword")</a>
                     </div>
                     @if (Model.DisplayCaptcha)
                     {
@@ -154,18 +158,18 @@
         const form = document.getElementById('madadrang-native-login-form');
         const checkbox = form?.querySelector('#LoginByPhone');
         if (!checkbox) return;
-        function applyMode() {
+        function applyMode(moveFocus = false) {
             const mode = checkbox.checked ? 'phone' : 'email';
             form.querySelectorAll('[data-mode]').forEach(field => { field.hidden = field.dataset.mode !== mode; });
             form.querySelector('#emailModeBtn').hidden = mode !== 'phone';
             form.querySelector('#phoneModeBtn').hidden = mode !== 'email';
-            form.querySelector(`[data-mode="${mode}"] input`)?.focus();
+            if (moveFocus) form.querySelector(`[data-mode="${mode}"] input`)?.focus();
         }
         form.querySelector('[data-mode-root]').addEventListener('click', function (event) {
             const button = event.target.closest('[data-set-mode]');
             if (!button) return;
             checkbox.checked = button.dataset.setMode === 'phone';
-            applyMode();
+            applyMode(true);
         });
         form.querySelector('#madadrang-password-toggle').addEventListener('click', function () {
             const password = form.querySelector('#@Html.IdFor(m => m.Password)');

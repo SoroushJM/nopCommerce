@@ -1,7 +1,9 @@
+@implements IAsyncDisposable
+@inject IJSRuntime JS
 <BbDirectionProvider Direction="@(Menu.Rtl ? TextDirection.RightToLeft : TextDirection.LeftToRight)">
     @if (Mobile)
     {
-        <BbButton Variant="ButtonVariant.Ghost" Class="icon-btn flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-md" OnClick="() => _open = true" aria-label="@Menu.Labels.Get("Categories")">
+        <BbButton Variant="ButtonVariant.Ghost" Class="icon-btn flex min-h-11 min-w-11 items-center justify-center gap-2 rounded-md" OnClick="OpenMenu" aria-label="@Menu.Labels.Get("Categories")">
             <SfIcon Name="menu" Size="1.25m" />
         </BbButton>
         <BbSheet Open="_open" OpenChanged="value => _open = value" Side="@(Menu.Rtl ? SheetSide.Right : SheetSide.Left)">
@@ -11,10 +13,39 @@
                     <BbSheetTitle>@Menu.Labels.Get("Categories")</BbSheetTitle>
                     <BbSheetDescription>@Menu.Name</BbSheetDescription>
                 </BbSheetHeader>
-                <nav aria-label="@Menu.Labels.Get("Categories")" class="overflow-y-auto my-4">
+                <nav aria-label="@Menu.Labels.Get("Categories")" class="min-h-0 flex-1 overflow-y-auto my-4">
                     @foreach (var item in Menu.Items)
                     {
                         <StorefrontMenuBranch Item="item" />
+                    }
+                    @if (Access != null && Theme != null)
+                    {
+                        <BbSeparator Class="!my-4 !h-[0.0625rem] !bg-border" />
+                        <div class="flex flex-col gap-1">
+                            <BbButton Href="@(Access.SignedIn ? Theme.AccountUrl : Theme.LoginUrl)" Variant="ButtonVariant.Ghost" Class="!justify-start !gap-3 !px-3 !min-h-11 !h-auto !py-2">
+                                <SfIcon Name="user" data-icon="inline-start" />
+                                @Menu.Labels.Get(Access.SignedIn ? "Account.MyAccount" : "Account.Login")
+                            </BbButton>
+                            @if (!Access.SignedIn && Access.RegistrationEnabled)
+                            {
+                                <BbButton Href="@Access.RegisterUrl" Variant="ButtonVariant.Ghost" Class="!justify-start !px-3 !min-h-11 !h-auto !py-2 !text-primary">
+                                    @Menu.Labels.Get("Account.Register")
+                                </BbButton>
+                            }
+                            @if (Access.WishlistEnabled)
+                            {
+                                <BbButton Href="@Access.WishlistUrl" Variant="ButtonVariant.Ghost" Class="!justify-start !gap-3 !px-3 !min-h-11 !h-auto !py-2">
+                                    <SfIcon Name="heart" data-icon="inline-start" />
+                                    <span>@Menu.Labels.Get("Wishlist")</span><span class="ms-auto text-xs tabular-nums text-muted-foreground">@_wishlistQuantity</span>
+                                </BbButton>
+                            }
+                            @if (Access.SignedIn)
+                            {
+                                <BbButton Href="@Theme.LogoutUrl" Variant="ButtonVariant.Ghost" Class="!justify-start !px-3 !min-h-11 !h-auto !py-2 !text-destructive">
+                                    @Menu.Labels.Get("Account.Logout")
+                                </BbButton>
+                            }
+                        </div>
                     }
                 </nav>
             </BbSheetContent>
@@ -71,10 +102,38 @@
 </BbDirectionProvider>
 @code {
     [Parameter] public StoreMenu Menu { get; set; } = new();
+    [Parameter] public StoreNavigation? Access { get; set; }
+    [Parameter] public StorefrontThemeProfile? Theme { get; set; }
     [Parameter]
     public bool Mobile
     {
         get; set;
     }
     private bool _open;
+    private string _wishlistQuantity = "";
+    private IJSObjectReference? _module;
+
+    private async Task OpenMenu()
+    {
+        _wishlistQuantity = Access?.WishlistQuantity ?? "";
+        if (Access?.WishlistEnabled == true)
+        {
+            try
+            {
+                _module ??= await JS.InvokeAsync<IJSObjectReference>("import", "./_content/Storefront.UI.Shared/storefront.js");
+                _wishlistQuantity = await _module.InvokeAsync<string>("getNativeWishlistQuantity", _wishlistQuantity);
+            }
+            catch (JSException)
+            {
+                // Opening navigation remains available if the native count cannot be read.
+            }
+        }
+        _open = true;
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_module != null)
+            await _module.DisposeAsync();
+    }
 }

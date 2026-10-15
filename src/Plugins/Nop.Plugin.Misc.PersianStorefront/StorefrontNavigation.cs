@@ -1,5 +1,8 @@
+using Microsoft.AspNetCore.Http;
 using Nop.Core;
 using Nop.Core.Domain.Menus;
+using Nop.Core.Domain.Customers;
+using Nop.Services.Helpers;
 using Nop.Services.Localization;
 using Nop.Web.Factories;
 using Nop.Core.Http;
@@ -10,7 +13,8 @@ using Storefront.UI.Shared;
 namespace Nop.Plugin.Misc.PersianStorefront;
 
 public sealed class StorefrontNavigation(IMenuModelFactory menus,
-    ICommonModelFactory common, INopUrlHelper urls, IWorkContext work, ILocalizationService localization)
+    ICommonModelFactory common, INopUrlHelper urls, IWorkContext work, ILocalizationService localization,
+    IWebHelper web, IHttpContextAccessor http)
 {
     public async Task<bool> RequiresNativeMainMenuAsync()
     {
@@ -27,6 +31,11 @@ public sealed class StorefrontNavigation(IMenuModelFactory menus,
         var footer = await menus.PrepareMenuModelsAsync(MenuType.Footer);
         header ??= await common.PrepareHeaderLinksModelAsync();
         var labels = await NativeUiLocalization.PrepareAsync(localization, work);
+        var request = http.HttpContext?.Request;
+        var returnUrl = request == null ? "" : web.GetRawUrl(request);
+        if (request != null && request.Query.TryGetValue("returnUrl", out var continuation)
+            && !string.IsNullOrEmpty(continuation.ToString()))
+            returnUrl = continuation.ToString();
         return new StoreNavigation
         {
             Main = main == null ? new() { Rtl = labels.Rtl, Labels = labels } : From(main, labels),
@@ -34,7 +43,12 @@ public sealed class StorefrontNavigation(IMenuModelFactory menus,
             SignedIn = header.IsAuthenticated,
             CartEnabled = header.ShoppingCartEnabled,
             CartCount = header.ShoppingCartItems,
-            CartUrl = urls.RouteUrl(NopRouteNames.General.CART)
+            CartUrl = urls.RouteUrl(NopRouteNames.General.CART),
+            RegistrationEnabled = header.RegistrationType != UserRegistrationType.Disabled,
+            RegisterUrl = urls.RouteUrl(NopRouteNames.Standard.REGISTER, new { returnUrl }),
+            WishlistEnabled = header.WishlistEnabled,
+            WishlistUrl = urls.RouteUrl(NopRouteNames.General.WISHLIST),
+            WishlistQuantity = labels.Format("Wishlist.HeaderQuantity", header.WishlistItems)
         };
     }
 

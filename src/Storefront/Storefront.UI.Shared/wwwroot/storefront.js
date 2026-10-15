@@ -53,6 +53,12 @@ const cartListeners = new Map();
 let nextCartListener = 0;
 const nativeSuccessOriginal = Symbol.for("Storefront.AjaxCart.successOriginal");
 
+export function getNativeWishlistQuantity(fallback) {
+  // HeaderLinks remains the native AjaxCart update target, including localized digits.
+  return document.querySelector(".sf-native-header-links .wishlist-qty")?.textContent?.trim()
+    || fallback;
+}
+
 function hasNativeSections(response) {
   return !!(response?.updatetopcartsectionhtml
     || response?.updatetopwishlistsectionhtml

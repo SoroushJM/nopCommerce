@@ -19,6 +19,24 @@ public partial class NativeHeader
 
     private string AccountUrl => _signedIn ? Theme.AccountUrl : Theme.LoginUrl;
     private NativeUiLabels Labels => Theme.Labels;
+    private bool _accountOpen;
+    private string _wishlistQuantity = "";
+
+    private async Task SetAccountOpen(bool open)
+    {
+        _accountOpen = open;
+        if (open && module != null && Initial.WishlistEnabled)
+        {
+            try
+            {
+                _wishlistQuantity = await module.InvokeAsync<string>("getNativeWishlistQuantity", Initial.WishlistQuantity);
+            }
+            catch (JSException)
+            {
+                // Account navigation remains available with its server-rendered count.
+            }
+        }
+    }
 
     [Parameter]
     public bool OpenLoginOnLoad
@@ -37,6 +55,7 @@ public partial class NativeHeader
         loginOpen = Theme.EnableOtp && OpenLoginOnLoad;
         _count = Initial.CartCount;
         _signedIn = Initial.SignedIn;
+        _wishlistQuantity = Initial.WishlistQuantity;
         cart = new NativeCart
         {
             SignedIn = Initial.SignedIn,

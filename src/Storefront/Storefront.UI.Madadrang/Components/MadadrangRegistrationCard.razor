@@ -1,8 +1,11 @@
-<BbCard Class="flex! h-auto! min-h-0! flex-col! gap-0! rounded-[1rem]! border-[.0625rem]! border-solid! border-border! bg-secondary! py-0! [box-shadow:none]!">
-    <BbCardHeader Class="gap-2! p-6! pb-0! text-start! max-[40rem]:p-5! max-[40rem]:pb-0!">
+<BbCard Class="flex! h-full! min-h-0! flex-col! justify-center! gap-0! rounded-[0rem]! border-[0rem]! bg-secondary! px-[1.75rem]! py-[2rem]! [box-shadow:none]! max-[40rem]:px-[1.25rem]! max-[40rem]:py-[1.5rem]!">
+    <BbCardHeader Class="gap-[.75rem]! p-0! text-start!">
+        <div aria-hidden="true" class="mb-[.5rem] hidden size-[3rem] items-center justify-center rounded-[.875rem] bg-background text-primary min-[48rem]:flex">
+            <SfIcon Name="pencil" Size="1.5m" />
+        </div>
         <BbCardTitle Class="text-[1.125rem]! font-semibold! leading-[1.7]!">@Title</BbCardTitle>
     </BbCardHeader>
-    <BbCardContent Class="p-6! pt-3! text-start! text-[.875rem]! leading-[1.9]! max-[40rem]:p-5! max-[40rem]:pt-3! [&_.topic-block]:m-0! [&_.topic-block-body]:m-0! [&_p]:m-0!">
+    <BbCardContent Class="px-0! pb-0! pt-[.75rem]! text-start! text-[.875rem]! leading-[1.9]! [&_.topic-block]:m-0! [&_.topic-block-body]:m-0! [&_p]:m-0!">
         @if (HtmlDescription)
         {
             @((MarkupString)Description)
@@ -14,7 +17,7 @@
     </BbCardContent>
     @if (!Disabled)
     {
-        <BbCardFooter Class="flex! flex-col! items-stretch! gap-3! p-6! pt-0! max-[40rem]:p-5! max-[40rem]:pt-0!">
+        <BbCardFooter Class="flex! flex-col! items-stretch! gap-[.75rem]! px-0! pb-0! pt-[1.25rem]!">
             @if (!string.IsNullOrEmpty(GuestUrl))
             {
                 <MadadrangLoginAction Text="@GuestText" Url="@GuestUrl" />

@@ -15,8 +15,8 @@
     class="mx-2 text-primary">✦</span> لوازم‌تحریری که دوستشان داری</div>
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderBefore })
     <header class="sf-header border-b-[.0625rem] border-border bg-background">
-        <div class="wrap mx-auto max-w-[80rem] px-8 max-md:px-5 sf-header-utility flex flex-wrap items-center justify-between gap-2 py-1 text-xs">
-            <div class="sf-native-header-links relative [&_li:has(.ico-account)]:hidden! [&_li:has(.ico-login)]:hidden! [&_li:has(.ico-logout)]:hidden! [&_#topcartlink]:hidden! [&_.header-links]:float-none [&_.header-links]:m-0 [&_.header-links]:p-0 [&_ul]:flex [&_ul]:flex-wrap [&_ul]:items-center [&_ul]:gap-3 [&_li]:m-0 [&_li]:p-0 [&_a]:text-xs [&_a]:text-muted-foreground [&_a]:normal-case">
+        <div class="wrap mx-auto max-w-[80rem] px-8 max-md:px-5 sf-header-utility flex flex-wrap items-center justify-between gap-2 text-xs">
+            <div class="sf-native-header-links relative [&_li:has(.ico-account)]:hidden! [&_li:has(.ico-login)]:hidden! [&_li:has(.ico-logout)]:hidden! [&_li:has(.ico-register)]:hidden! [&_li:has(.ico-wishlist)]:hidden! [&_#topcartlink]:hidden! [&_.header-links]:float-none [&_.header-links]:m-0 [&_.header-links]:p-0 [&_ul]:m-0 [&_ul]:p-0 [&_ul]:flex [&_ul]:flex-wrap [&_ul]:items-center [&_ul]:gap-3 [&_li]:m-0 [&_li]:p-0 [&_a]:text-xs [&_a]:text-muted-foreground [&_a]:normal-case">
                 @await Component.InvokeAsync(typeof(HeaderLinksViewComponent))
                 <div class="hidden">@await Component.InvokeAsync(typeof(FlyoutShoppingCartViewComponent))</div>
             </div>
@@ -53,8 +53,6 @@
             }
                 <div class="sf-native-search w-full max-w-[29.375rem] max-md:order-3 max-md:basis-full max-md:max-w-none [&_.search-box]:float-none [&_.search-box]:m-0 [&_.search-box]:w-full [&_form]:flex [&_form]:w-full [&_form]:gap-1.5 [&_input[type=text]]:h-9 [&_input[type=text]]:w-full [&_input[type=text]]:min-w-0 [&_input[type=text]]:rounded-[var(--radius)] [&_input[type=text]]:border-[.0625rem] [&_input[type=text]]:border-border [&_input[type=text]]:bg-muted [&_input[type=text]]:px-3 [&_input[type=text]]:py-1.5 [&_input[type=text]]:font-[inherit] [&_.search-box-button]:h-9 [&_.search-box-button]:min-w-[4.5rem] [&_.search-box-button]:rounded-[var(--radius)] [&_.search-box-button]:bg-primary [&_.search-box-button]:font-[inherit] [&_.search-box-button]:text-primary-foreground">@await Component.InvokeAsync(typeof(SearchBoxViewComponent))</div>
                 <div class="flex items-center gap-2">
-                    @if (!nativeMenu)
-                    {
                     <div class="md:hidden">
                         @await Component.InvokeAsync(typeof(WidgetViewComponent), new
                         {
@@ -62,14 +60,13 @@
                         PublicWidgetZones.MobHeaderMenuBefore
                         })
                         <component type="typeof(StorefrontMainMenu)" render-mode="WebAssemblyPrerendered"
-                                   param-Menu="Model.Main" param-Mobile="true" />
+                                   param-Menu="Model.Main" param-Mobile="true" param-Access="Model" param-Theme="profile" />
                         @await Component.InvokeAsync(typeof(WidgetViewComponent), new
                         {
                             widgetZone =
                         PublicWidgetZones.MobHeaderMenuAfter
                         })
                     </div>
-                    }
                     <component type="typeof(NativeHeader)" render-mode="WebAssemblyPrerendered" param-Initial="Model"
                                param-OpenLoginOnLoad="@(Context.Items["Madadrang.OpenLogin"] is true)"
                                param-AccountDropdown="true"
@@ -78,20 +75,14 @@
                 </div>
             </div>
             @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.HeaderMiddle })
-            <div class="wrap mx-auto max-w-[80rem] px-8 max-md:px-5 border-t-[.0625rem] border-border [&_.menu\_\_item-link]:font-[inherit] [&_.menu\_\_item-link]:text-foreground @(nativeMenu ? "sf-native-menu py-1 [&_.menu-container]:m-0 [&_.menu-container]:max-w-none" : "max-md:hidden")">
+            <div class="wrap mx-auto max-w-[80rem] px-8 max-md:px-5 max-md:hidden border-t-[.0625rem] border-border [&_.menu\_\_item-link]:font-[inherit] [&_.menu\_\_item-link]:text-foreground @(nativeMenu ? "sf-native-menu py-1 [&_.menu-container]:m-0 [&_.menu-container]:max-w-none" : "")">
                 @await Component.InvokeAsync(typeof(WidgetViewComponent), new
                 {
                     widgetZone = PublicWidgetZones.HeaderMenuBefore
                 })
                 @if (nativeMenu)
                 {
-                    <div class="md:hidden">
-                        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.MobHeaderMenuBefore })
-                    </div>
                     @await Component.InvokeAsync(typeof(MainMenuViewComponent))
-                    <div class="md:hidden">
-                        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.MobHeaderMenuAfter })
-                    </div>
                 }
                 else
                 {
