@@ -7,6 +7,10 @@ pwsh -File ./scripts/deploy-madadrang.ps1
 pwsh -File ./scripts/deploy-mishashop.ps1
 ```
 
+This path requires PowerShell 7.4 or newer and uses SSH.NET in the existing .NET
+runtime. It has no Python or Paramiko dependency. Named PowerShell functions keep
+configuration, image building, transfer, startup, rollback and cleanup separate.
+
 They build the selected image locally, transfer it over pinned SSH, replace only that
 storefront, attempt rollback on startup failure, and retire its immediately previous
 unused image after successful startup. They do not run HTTP checks, administrator

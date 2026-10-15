@@ -49,7 +49,8 @@ foreach ($relativePath in ($sourceFiles | Sort-Object -Unique)) {
     $destinationPath = Join-Path $sourceRoot $relativePath
     [System.IO.Directory]::CreateDirectory([System.IO.Path]::GetDirectoryName($destinationPath)) | Out-Null
     [System.IO.File]::Copy($inputPath, $destinationPath)
-    $snapshotEntries.Add("$relativePath`t$((Get-FileHash -LiteralPath $destinationPath -Algorithm SHA256).Hash.ToLowerInvariant())")
+    $copiedFileHash = (Get-FileHash -LiteralPath $destinationPath -Algorithm SHA256).Hash
+    $snapshotEntries.Add("$relativePath`t$($copiedFileHash.ToLowerInvariant())")
 }
 # Identify the actual working files, including uncommitted changes, before build
 # targets generate files in this isolated copy. HEAD alone cannot identify them.
@@ -57,14 +58,27 @@ $sourceCommit = & git -C $repoRoot rev-parse HEAD
 if ($LASTEXITCODE -ne 0) { throw 'Cannot identify the source revision.' }
 $snapshotBytes = [System.Text.Encoding]::UTF8.GetBytes(($snapshotEntries -join "`n"))
 $snapshotHasher = [System.Security.Cryptography.SHA256]::Create()
-try { $sourceSha256 = ([BitConverter]::ToString($snapshotHasher.ComputeHash($snapshotBytes))).Replace('-', '').ToLowerInvariant() }
-finally { $snapshotHasher.Dispose() }
+try {
+    $snapshotHash = $snapshotHasher.ComputeHash($snapshotBytes)
+    $sourceSha256 = ([BitConverter]::ToString($snapshotHash)).Replace('-', '').ToLowerInvariant()
+}
+finally {
+    $snapshotHasher.Dispose()
+}
 Write-Output "Building $Theme in isolated source snapshot."
 
 $previousLocation = Get-Location
 try {
     Set-Location -LiteralPath $sourceRoot
-    $buildArguments = @('-c', 'Release', "-p:StorefrontTheme=$Theme", "-p:DockerRuntimeIdentifier=$RuntimeIdentifier", '-p:ShouldUnsetParentConfigurationAndPlatform=false', '-p:DebugType=None', '-p:DebugSymbols=false', '-p:UseSharedCompilation=false')
+    $buildArguments = @(
+        '-c', 'Release'
+        "-p:StorefrontTheme=$Theme"
+        "-p:DockerRuntimeIdentifier=$RuntimeIdentifier"
+        '-p:ShouldUnsetParentConfigurationAndPlatform=false'
+        '-p:DebugType=None'
+        '-p:DebugSymbols=false'
+        '-p:UseSharedCompilation=false'
+    )
     $helperOutput = Join-Path $packageRoot 'build-helper'
     Invoke-Dotnet -Arguments (@('build', 'src/Build/src/ClearPluginAssemblies/ClearPluginAssemblies.csproj', '-c', 'Release', '-o', $helperOutput))
     Get-ChildItem -LiteralPath $helperOutput -Filter 'ClearPluginAssemblies.*' -File | Copy-Item -Destination (Join-Path $sourceRoot 'src/Build')
@@ -116,7 +130,17 @@ HTTPS_CERT_PASSWORD=replace-with-a-unique-certificate-password
 ADMIN_EMAIL=admin@example.com
 "@
 [System.IO.File]::WriteAllText((Join-Path $packageRoot 'deployment.env.example'), $composeTemplate)
-$manifest = [ordered]@{ Theme = $Theme; Environment = $Environment; RuntimeIdentifier = $RuntimeIdentifier; Instance = $instanceName; HttpPort = $HttpPort; HttpsPort = $HttpsPort; PublishedAtUtc = [DateTime]::UtcNow.ToString('o'); AppPath = $publishRoot; SourceSnapshot = $sourceRoot }
+$manifest = [ordered]@{
+    Theme = $Theme
+    Environment = $Environment
+    RuntimeIdentifier = $RuntimeIdentifier
+    Instance = $instanceName
+    HttpPort = $HttpPort
+    HttpsPort = $HttpsPort
+    PublishedAtUtc = [DateTime]::UtcNow.ToString('o')
+    AppPath = $publishRoot
+    SourceSnapshot = $sourceRoot
+}
 $manifest.PrecompiledViewPluginDependencies = @($viewPluginDependencies.Name)
 $manifest.PrecompiledViewRuntimeDependencies = @($viewRuntimeDependencies.Name)
 $manifest.SourceCommit = $sourceCommit.Trim()

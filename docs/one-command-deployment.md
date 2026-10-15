@@ -72,17 +72,36 @@ pwsh -File ./scripts/deploy-mishashop.ps1
 `knownHostsPath` باید قبلاً با host key تأییدشدهٔ سرور پر شده باشد؛ کلید ناشناس
 خودکار پذیرفته نمی‌شود.
 
-ابزارهای لازم: PowerShell 7، Git، SDK سازگار با `global.json`، Node.js/npm،
-Docker Desktop با موتور Linux amd64 و Python همراه Paramiko. برای نصب یک‌بارهٔ
-Paramiko:
+ابزارهای لازم: PowerShell 7.4 یا جدیدتر، Git، SDK سازگار با `global.json`،
+Node.js/npm و Docker Desktop با موتور Linux amd64.
 
-```powershell
-python -m pip install paramiko
-```
+تمام هماهنگی انتشار در PowerShell انجام می‌شود. انتقال SSH/SFTP از کتابخانهٔ
+[SSH.NET](https://www.nuget.org/packages/SSH.NET/2026.0.0) در همان runtime داخلی
+.NET استفاده می‌کند. نسخه‌های کتابخانه و وابستگی‌هایش ثابت‌اند؛ اولین اجرا آن‌ها
+را از NuGet رسمی دریافت و SHA256 را بررسی می‌کند و اجراهای بعدی از cache استفاده
+می‌کنند. نصب ماژول PowerShell، Python یا Paramiko لازم نیست.
 
-سرور باید Docker Compose، Python 3 با پشتیبانی `fcntl.flock` و دسترسی کاربر SSH به Docker داشته
-باشد. آدرس سرور و پورت‌ها از config و Compose موجود گرفته می‌شوند. فایل‌های
-خصوصی شامل credential و host key بیرون Git می‌مانند.
+سرور به PowerShell یا Python نیاز ندارد؛ اسکریپت محلی فرمان‌های عادی Docker
+Compose و ابزارهای استاندارد Linux مانند `flock`، `sha256sum`، `df` و `stat` را
+از SSH اجرا می‌کند. فایل اسکریپت Python یا Bash روی سرور ارسال نمی‌شود.
+آدرس سرور و پورت‌ها از config و Compose موجود گرفته می‌شوند. فایل‌های خصوصی
+شامل credential و host key بیرون Git می‌مانند.
+
+## ساختار خوانای کد
+
+دو فایل `deploy-madadrang.ps1` و `deploy-mishashop.ps1` فقط برند را انتخاب می‌کنند.
+جریان ساخت و انتشار در `deploy-storefront.ps1` با تابع‌های مستقل خوانده می‌شود:
+
+- `Get-DeploymentConfiguration`: پیدا کردن و بررسی تنظیمات خصوصی.
+- `Start-LocalDocker`: آماده کردن موتور محلی Docker.
+- `New-StorefrontPackage`: ساخت بسته از snapshot فایل‌های کاری.
+- `New-StorefrontImage`: ساخت image دارای شناسهٔ سورس.
+- `Remove-LocalBuildArtifacts`: پاک کردن خروجی موقت همان اجرا.
+
+`DeployTestServer/Deploy-Image.ps1` مسئول انتقال، قفل سرور، جابه‌جایی نسخه، بازگشت
+در خطا و پاک‌سازی image قبلی است. `Import-StorefrontSsh.ps1` فقط کتابخانهٔ اتصال
+را آماده می‌کند. پارامترهای طولانی به صورت hashtable با نام‌های واضح فرستاده
+می‌شوند؛ جزئیات هر مرحله داخل تابع مربوط به خودش قرار دارند.
 
 ## گزارش و گزینه‌ها
 
