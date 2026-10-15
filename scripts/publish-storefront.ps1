@@ -38,6 +38,7 @@ function Invoke-Dotnet {
 $sourceFiles = & git -C $repoRoot -c core.quotepath=false ls-files --cached --others --exclude-standard
 if ($LASTEXITCODE -ne 0) { throw 'The source snapshot requires a Git checkout.' }
 Write-Output "Preparing isolated $Theme source snapshot: $sourceRoot"
+$snapshotEntries = [System.Collections.Generic.List[string]]::new()
 foreach ($relativePath in ($sourceFiles | Sort-Object -Unique)) {
     if ($relativePath -match '(^|/)(bin|obj|node_modules|runtime-verification|\.git|\.artifacts)(/|$)' -or
         $relativePath -match '^src/Presentation/Nop.Web/(Plugins/|App_Data/DataProtectionKeys/)' -or
@@ -48,7 +49,16 @@ foreach ($relativePath in ($sourceFiles | Sort-Object -Unique)) {
     $destinationPath = Join-Path $sourceRoot $relativePath
     [System.IO.Directory]::CreateDirectory([System.IO.Path]::GetDirectoryName($destinationPath)) | Out-Null
     [System.IO.File]::Copy($inputPath, $destinationPath)
+    $snapshotEntries.Add("$relativePath`t$((Get-FileHash -LiteralPath $destinationPath -Algorithm SHA256).Hash.ToLowerInvariant())")
 }
+# Identify the actual working files, including uncommitted changes, before build
+# targets generate files in this isolated copy. HEAD alone cannot identify them.
+$sourceCommit = & git -C $repoRoot rev-parse HEAD
+if ($LASTEXITCODE -ne 0) { throw 'Cannot identify the source revision.' }
+$snapshotBytes = [System.Text.Encoding]::UTF8.GetBytes(($snapshotEntries -join "`n"))
+$snapshotHasher = [System.Security.Cryptography.SHA256]::Create()
+try { $sourceSha256 = ([BitConverter]::ToString($snapshotHasher.ComputeHash($snapshotBytes))).Replace('-', '').ToLowerInvariant() }
+finally { $snapshotHasher.Dispose() }
 Write-Output "Building $Theme in isolated source snapshot."
 
 $previousLocation = Get-Location
@@ -109,6 +119,8 @@ ADMIN_EMAIL=admin@example.com
 $manifest = [ordered]@{ Theme = $Theme; Environment = $Environment; RuntimeIdentifier = $RuntimeIdentifier; Instance = $instanceName; HttpPort = $HttpPort; HttpsPort = $HttpsPort; PublishedAtUtc = [DateTime]::UtcNow.ToString('o'); AppPath = $publishRoot; SourceSnapshot = $sourceRoot }
 $manifest.PrecompiledViewPluginDependencies = @($viewPluginDependencies.Name)
 $manifest.PrecompiledViewRuntimeDependencies = @($viewRuntimeDependencies.Name)
+$manifest.SourceCommit = $sourceCommit.Trim()
+$manifest.SourceSha256 = $sourceSha256
 $manifest | ConvertTo-Json | Set-Content -LiteralPath (Join-Path $packageRoot 'package.json') -Encoding utf8
 Write-Output "Prepared $Theme/$Environment package: $publishRoot"
 Write-Output "Compose template: $(Join-Path $packageRoot 'deployment.env.example')"

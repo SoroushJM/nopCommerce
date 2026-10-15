@@ -1,5 +1,23 @@
 # Deploy these two test storefronts
 
+For routine deployment, use the one-command image-transfer scripts from the repository root:
+
+```powershell
+pwsh -File ./scripts/deploy-madadrang.ps1
+pwsh -File ./scripts/deploy-mishashop.ps1
+```
+
+They build the selected image locally, transfer it over pinned SSH, replace only that
+storefront, attempt rollback on startup failure, and retire its immediately previous
+unused image after successful startup. They do not run HTTP checks, administrator
+provisioning or SQL maintenance. See [setup, records and cleanup rules](../../docs/one-command-deployment.md).
+
+## Older source-transfer and maintenance tools
+
+The commands below are the older path, which builds images on the remote server
+and also provisions administrator accounts. They remain documented for explicit
+maintenance work; routine image deployments use the entry points above.
+
 Use PowerShell 7 and Python with Paramiko (`python -m pip install paramiko`). This updates the existing server at 10.11.11.223; it does not create a new PostgreSQL service or reinstall the store.
 
 ```powershell

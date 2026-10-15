@@ -1,0 +1,8 @@
+{
+  "host": "10.11.11.223",
+  "username": "web",
+  "remoteRoot": "/home/web/nop-dual-store-20261012",
+  "knownHostsPath": "known_hosts",
+  "handoffPath": "ssh-credentials.txt",
+  "imageRepository": "nop-dual"
+}
