@@ -7,7 +7,7 @@
         @T("Newsletter.Title")
     </h2>
     <div class="newsletter-subscribe" id="newsletter-subscribe-block" role="form" aria-label="@T("Newsletter.Title")">
-        <div class="newsletter-email m-0! w-full! min-w-0! border-[0rem]! bg-transparent! p-0! [&_button.newsletter-subscribe-button]:float-none! [&_input.newsletter-subscribe-text]:float-none!">
+        <div class="boutique-newsletter-controls m-0! w-full! min-w-0! border-[0rem]! bg-transparent! p-0!">
             <component type="typeof(BoutiqueNewsletterFields)" render-mode="Static"
                        param-Email='@(Html.Value(nameof(Model.NewsLetterEmail)))'
                        param-Placeholder='@(T("Newsletter.Email.Placeholder").Text)'
