@@ -308,14 +308,15 @@ function Write-RemoteBytes {
     param([string]$Path, [byte[]]$Bytes)
     Assert-DeploymentLock
     $script:sftp.WriteAllBytes($Path, $Bytes)
-    $script:sftp.ChangePermissions($Path, [short]384)
+    # SSH.NET accepts the octal digits (600), rather than their decimal value.
+    $script:sftp.ChangePermissions($Path, [short]600)
 }
 
 function Get-UpdatedOverride {
     param([byte[]]$OriginalBytes, [string]$NewImage)
     $encoding = [Text.UTF8Encoding]::new($false, $true)
     $text = $encoding.GetString($OriginalBytes)
-    $bom = $text.StartsWith([string][char]0xFEFF)
+    $bom = $text.StartsWith([string][char]0xFEFF, [StringComparison]::Ordinal)
     if ($bom) { $text = $text.Substring(1) }
     if ($text.TrimStart().StartsWith('{')) {
         $document = $text | ConvertFrom-Json -AsHashtable -Depth 100
@@ -413,7 +414,7 @@ function Send-ImageArchive {
     $destinationStream = $null
     try {
         $destinationStream = $script:sftp.Open($Destination, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write)
-        $script:sftp.ChangePermissions($Destination, [short]384)
+        $script:sftp.ChangePermissions($Destination, [short]600)
         $buffer = [byte[]]::new(1MB)
         $transferred = 0L
         $nextProgress = 64MB
@@ -739,6 +740,10 @@ catch {
     # Keep arbitrary SSH, Docker and configuration exception details out of logs.
     $script:receipt.status = 'failed'
     $script:receipt.Error = 'Deployment could not be confirmed; review the private receipt and original override backup.'
+    # Exception types and source locations identify the failing operation without
+    # recording provider messages, command output or authentication values.
+    $script:receipt.FailureType = $_.Exception.GetType().FullName
+    $script:receipt.FailureLocation = $_.ScriptStackTrace
     if ($switched -and !$committed) {
         try {
             Set-CanonicalOverride "$script:releasePath/images.override.before.yml"
