@@ -49,3 +49,11 @@ Reviewed subsequent fixes prompted by inspection of actual downloaded files, wit
 - The packaging verification seed checks `current_database()` against `nop_stationery_dev`, uses the marked verification order/item, and avoids duplicate shipment/item insertion. It creates an unshipped local fixture rather than completing a real shipment.
 
 No new actionable P1/P2 source issue was identified. Actual regenerated download/render findings belong in the execution/download QA report.
+
+## یادداشت تاریخی ادغام شاخهٔ محلی — ۲۰۲۶-۱۰-۱۵
+
+بخش زیر از commit قدیمی `eab6dcd2d9` حفظ شده و گزارش همان مرحله است. در اجرای فعلی، viewهای انتخاب تقویم و POST ترجیح در افزونهٔ `Misc.PersianStorefront` قرار دارند؛ اشارهٔ زیر به `CommonController` و نتیجهٔ build مربوط به نسخهٔ تاریخی است. قابلیت‌های commit `a758113dbe` در overrideهای افزونه حفظ شده‌اند و پروژهٔ منسوخ `Storefront.UI` دوباره وارد solution نشده است.
+
+## بازسازی انتخاب تقویم فایل با Razor و C#
+
+به درخواست کاربر، admin-transfer-calendar.js حذف شد. کنترل مشترک در ۲۱ View صریحاً رندر می‌شود؛ فرم‌های Excel ورودی کنترل required جدا دارند. POST ترجیح تقویم در CommonController زیر مجوز Admin و AutoValidateAntiforgeryToken قرار دارد؛ مقدار تقویم اعتبارسنجی و returnUrl محلی کنترل می‌شود. فرم ترجیح در layout بیرون از فرم‌های صفحه است و ارتباط کنترل با آن از طریق form استاندارد HTML است. لینک‌های GET و فرم‌های انتخاب‌شده مقدار تقویم را صریحاً از Razor می‌گیرند. فیلتر خروجی ترجیح cookie را فقط برای export می‌خواند؛ import همچنان به انتخاب صریح وابسته است. تبدیل فایل‌ها و قرارداد افزونه‌ها تغییر نکرده‌اند. بازبینی این مرحله توسط خود عامل اصلی انجام شد؛ agent یا E2E جدیدی اجرا نشد. Build موفق: صفر خطا و یک هشدار موجود CS0108 در کد تولیدشده VAT.
