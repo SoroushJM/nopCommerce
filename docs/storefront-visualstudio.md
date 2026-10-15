@@ -2,7 +2,7 @@
 
 برای VS Code، انتخاب Launch Profile با F5، تفاوت ساخت محدود و `Ctrl+Shift+B` و نتایج بنچمارک، به بخش «اجرای VS Code و ساخت پیش از F5» در [راهنمای توسعهٔ فعلی](storefront-current-development.md) مراجعه کنید. دستورهای این سند مربوط به Visual Studio هستند.
 
-فایل `src/NopCommerce.sln` را باز کنید و پروژهٔ `Nop.Web` را به‌عنوان Startup Project انتخاب کنید. دو پروفایل `Madadrang` و `Boutique` در `Properties/launchSettings.json` تعریف شده‌اند. پروفایل اول مداد رنگی را روی `http://localhost:5602` و پروفایل دوم تم لباس را روی `http://localhost:5630` اجرا می‌کند. پروفایل قبلی `Nop.Web` نیز باقی است.
+فایل `src/NopCommerce.sln` را باز کنید و پروژهٔ `Nop.Web` را به‌عنوان Startup Project انتخاب کنید. دو پروفایل `Madadrang` و `MishaShop` در `Properties/launchSettings.json` تعریف شده‌اند. پروفایل اول مداد رنگی را روی `http://localhost:5602` و پروفایل دوم تم لباس را روی `http://localhost:5630` اجرا می‌کند. پروفایل قبلی `Nop.Web` نیز باقی است.
 
 فایل `launchSettings.json` طبق قاعدهٔ موجود مخزن محلی و خارج از Git است. نمونهٔ بدون اطلاعات اتصال در `docs/examples/launchSettings.storefront.json` نگهداری می‌شود؛ در یک checkout تازه پروفایل‌های آن را با فایل محلی خود ادغام کنید. فایل فعلی این workspace همین پروفایل‌ها را دارد.
 
@@ -20,4 +20,4 @@
 
 پروفایل تم، دیتابیس یا رسانهٔ فروشگاه را انتخاب نمی‌کند. اتصال محلی از تنظیم خصوصی `Nop.Web/App_Data/appsettings.json` می‌آید؛ رمز دیتابیس را داخل فایل پروفایلِ ثبت‌شده در Git نگذارید. دو نصب مستقل باید پوشهٔ اجرا، تنظیم اتصال، دیتابیس و رسانهٔ مستقل داشته باشند. برای اجرای همزمان دو فروشگاه از خروجی‌های مستقل انتشار استفاده کنید.
 
-انتشار هر فروشگاه با `scripts/publish-storefront.ps1 -Theme Madadrang|Boutique` انجام می‌شود. آن اسکریپت مقدار ساخت را صریح تعیین می‌کند، پس مقدار `All` در محیط توسعه را به بستهٔ انتشار منتقل نمی‌کند. راهنمای انتشار در `storefront-deployments.md` است.
+انتشار هر فروشگاه با `scripts/publish-storefront.ps1 -Theme Madadrang|MishaShop` انجام می‌شود. آن اسکریپت مقدار ساخت را صریح تعیین می‌کند، پس مقدار `All` در محیط توسعه را به بستهٔ انتشار منتقل نمی‌کند. راهنمای انتشار در `storefront-deployments.md` است.

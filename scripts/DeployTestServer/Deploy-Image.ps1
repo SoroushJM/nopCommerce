@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory)][ValidateSet('Madadrang', 'Boutique')][string]$Theme,
+    [Parameter(Mandatory)][ValidateSet('Madadrang', 'MishaShop', 'Boutique')][string]$Theme,
     [Parameter(Mandatory)][string]$Image,
     [Parameter(Mandatory)][ValidateRange(1, [long]::MaxValue)][long]$ImageSize,
     [Parameter(Mandatory)][string]$ArchivePath,
@@ -14,7 +14,7 @@ param(
 $ErrorActionPreference = 'Stop'
 Set-StrictMode -Version Latest
 if ($PSVersionTable.PSVersion -lt [version]'7.4') { throw 'PowerShell 7.4 or newer is required.' }
-$Theme = if ($Theme -ieq 'Boutique') { 'Boutique' } else { 'Madadrang' }
+$Theme = if ($Theme -in @('MishaShop', 'Boutique')) { 'MishaShop' } else { 'Madadrang' }
 
 # The bootstrap loads pinned .NET libraries, not a separate scripting runtime.
 . (Join-Path $PSScriptRoot 'Import-StorefrontSsh.ps1')
@@ -498,18 +498,26 @@ function Test-ImageReferenced {
     return $false
 }
 
+function Test-StorefrontImageTag {
+    param([string]$Tag)
+    foreach ($slug in $script:imageSlugs) {
+        $prefix = $script:imageRepository + ':' + $slug + '-'
+        if ($Tag.StartsWith($prefix, [StringComparison]::Ordinal)) { return $true }
+    }
+    return $false
+}
+
 function Remove-PreviousImage {
     $previousId = $script:before[$script:themeSlug].ImageId
     if ((Get-ServiceState $script:themeSlug).ImageId -ceq $previousId) { return @{ Status = 'skipped'; Reason = 'Previous image is still current.' } }
     if (Test-ImageReferenced $previousId) { return @{ Status = 'skipped'; Reason = 'A running or stopped container references the previous image.' } }
     $oldImage = Get-ImageInformation $previousId
     $oldLabels = $oldImage.Config.Labels
-    if ($oldLabels -and $oldLabels.ContainsKey('com.nop.storefront.theme') -and $oldLabels['com.nop.storefront.theme'] -cne $Theme) {
+    if ($oldLabels -and $oldLabels.ContainsKey('com.nop.storefront.theme') -and $(if ($oldLabels['com.nop.storefront.theme'] -eq 'Boutique') { 'MishaShop' } else { $oldLabels['com.nop.storefront.theme'] }) -cne $Theme) {
         return @{ Status = 'skipped'; Reason = 'Previous image declares a different storefront theme.' }
     }
     $tags = @($oldImage.RepoTags | Where-Object { $_ })
-    $prefix = $script:imageRepository + ':' + $script:themeSlug + '-'
-    if (!$tags.Count -or @($tags | Where-Object { !$_.StartsWith($prefix, [StringComparison]::Ordinal) }).Count) {
+    if (!$tags.Count -or @($tags | Where-Object { !(Test-StorefrontImageTag $_) }).Count) {
         return @{ Status = 'skipped'; Reason = 'Previous image has missing or foreign ownership tags.' }
     }
     if ($tags.Count -ne 1) { return @{ Status = 'skipped'; Reason = 'Previous image has multiple tags; no tag was removed.' } }
@@ -571,7 +579,9 @@ $script:receipt = [ordered]@{
     NoHttpChecks = $true
     NoDatabaseOrAdminCommands = $true
 }
-$script:themeSlug = $Theme.ToLowerInvariant()
+$script:themeSlug = if ($Theme -eq 'MishaShop') { 'boutique' } else { 'madadrang' }
+# Compose service names keep existing state; new image tags use the primary brand name.
+$script:imageSlugs = @($Theme.ToLowerInvariant(), $script:themeSlug) | Select-Object -Unique
 $script:otherStore = if ($script:themeSlug -eq 'madadrang') { 'boutique' } else { 'madadrang' }
 $script:runId = [Guid]::NewGuid().ToString('N')
 $switched = $false
@@ -596,8 +606,7 @@ try {
     }
     $script:imageRepository = if ($settings.ContainsKey('imageRepository')) { [string]$settings.imageRepository } else { 'nop-dual' }
     $validDockerReference = $Image -match '^[A-Za-z0-9][A-Za-z0-9._:/-]*:[A-Za-z0-9_][A-Za-z0-9_.-]*$'
-    $selectedStorePrefix = $script:imageRepository + ':' + $script:themeSlug + '-'
-    $ownedImageTag = $Image.StartsWith($selectedStorePrefix, [StringComparison]::Ordinal)
+    $ownedImageTag = Test-StorefrontImageTag $Image
     if (!$validDockerReference -or !$ownedImageTag) {
         throw 'The image must have an explicit unique tag owned by the selected store.'
     }

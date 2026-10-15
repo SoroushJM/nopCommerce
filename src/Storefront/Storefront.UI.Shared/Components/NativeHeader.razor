@@ -72,7 +72,7 @@
             }
         }
     </div>
-    <nav class="mobile-nav fixed inset-x-0 bottom-0 z-30 flex justify-around border-t-[.0625rem] border-border bg-background/96 px-2 pt-[0.4375rem] pb-2.5 backdrop-blur-[0.625rem] md:hidden [&_a]:flex [&_a]:min-h-11 [&_a]:min-w-[3.75rem] [&_a]:flex-col [&_a]:items-center [&_a]:gap-[0.1875rem] [&_a]:text-xs [&_a]:text-muted-foreground [&_button]:flex [&_button]:min-h-11 [&_button]:min-w-[3.75rem] [&_button]:flex-col [&_button]:items-center [&_button]:gap-[0.1875rem] [&_button]:text-xs [&_button]:text-muted-foreground [.boutique-shell_&]:z-50 [.boutique-shell_&]:bg-card [.boutique-shell_&]:p-3 [.boutique-shell_&]:backdrop-blur-none" aria-label="@Labels.Get("Menu")">
+    <nav class="mobile-nav fixed inset-x-0 bottom-0 z-30 flex justify-around border-t-[.0625rem] border-border bg-background/96 px-2 pt-[0.4375rem] pb-2.5 backdrop-blur-[0.625rem] md:hidden [&_a]:flex [&_a]:min-h-11 [&_a]:min-w-[3.75rem] [&_a]:flex-col [&_a]:items-center [&_a]:gap-[0.1875rem] [&_a]:text-xs [&_a]:text-muted-foreground [&_button]:flex [&_button]:min-h-11 [&_button]:min-w-[3.75rem] [&_button]:flex-col [&_button]:items-center [&_button]:gap-[0.1875rem] [&_button]:text-xs [&_button]:text-muted-foreground [.mishashop-shell_&]:z-50 [.mishashop-shell_&]:bg-card [.mishashop-shell_&]:p-3 [.mishashop-shell_&]:backdrop-blur-none" aria-label="@Labels.Get("Menu")">
         <a href="@Theme.HomeUrl">
             <SfIcon Name="@Theme.HomeIcon" /><span>@Labels.Get("Homepage")</span>
         </a>
@@ -100,7 +100,7 @@
     </nav>
     @if (error.Length > 0)
     {
-        <div class="wrap mx-auto max-w-[80rem] px-8 max-md:px-5 [.boutique-shell_&]:w-[calc(100%-2.5rem)] [.boutique-shell_&]:max-w-[73.75rem] [.boutique-shell_&]:px-0 max-md:[.boutique-shell_&]:w-[calc(100%-1.75rem)] mt-4">
+        <div class="wrap mx-auto max-w-[80rem] px-8 max-md:px-5 [.mishashop-shell_&]:w-[calc(100%-2.5rem)] [.mishashop-shell_&]:max-w-[73.75rem] [.mishashop-shell_&]:px-0 max-md:[.mishashop-shell_&]:w-[calc(100%-1.75rem)] mt-4">
             <BbAlert Variant="AlertVariant.Danger">@error</BbAlert>
         </div>
     }

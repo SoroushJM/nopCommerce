@@ -2,14 +2,15 @@ param(
     [string]$BaseUrl = 'http://localhost:5090',
     [string]$AdminEmail,
     [securestring]$AdminPassword,
-    [ValidateSet('Madadrang','Boutique')][string]$Theme = 'Madadrang',
+    [ValidateSet('Madadrang','MishaShop','Boutique')][string]$Theme = 'Madadrang',
     [string]$AppPath = (Join-Path $PSScriptRoot '../src/Presentation/Nop.Web'),
     [string]$CredentialsPath = (Join-Path $env:LOCALAPPDATA 'MadadrangDev/local-settings.json'),
     [switch]$AdminOnly
 )
 $ErrorActionPreference = 'Stop'
+$Theme = if ($Theme -in @('MishaShop', 'Boutique')) { 'MishaShop' } else { 'Madadrang' }
 if ($AdminOnly -or (Test-Path -LiteralPath $CredentialsPath)) {
-    & python (Join-Path $PSScriptRoot 'DeployTestServer/native-admin.py') $Theme.ToLowerInvariant() --local-app $AppPath --credentials $CredentialsPath
+    & python (Join-Path $PSScriptRoot 'DeployTestServer/native-admin.py') $(if ($Theme -eq 'MishaShop') { 'boutique' } else { 'madadrang' }) --local-app $AppPath --credentials $CredentialsPath
     if ($LASTEXITCODE -ne 0) { throw 'Local administrator provisioning failed.' }
     if ($AdminOnly) { return }
 }

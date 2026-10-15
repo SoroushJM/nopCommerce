@@ -1,0 +1,48 @@
+@model FooterModel
+
+@using Nop.Core
+@using Nop.Core.Domain.Tax
+@using Storefront.UI.MishaShop.Components
+@using Storefront.UI.Shared
+
+@inject IWorkContext workContext
+@inject IStoreContext storeContext
+
+@{
+    var store = await storeContext.GetCurrentStoreAsync();
+    var theme = ViewData["ThemeProfile"] as StorefrontThemeProfile;
+}
+
+<footer class="footer bg-transparent! text-start! text-foreground!">
+    <section class="footer-upper mx-auto! grid! w-[calc(100%_-_2.5rem)]! max-w-[73.75rem]! grid-cols-2! items-start! gap-8! border-[0rem]! px-0! py-8! min-[62.5625rem]:grid-cols-[minmax(0,1fr)_minmax(0,1.35fr)_minmax(0,1fr)]! max-[40rem]:w-[calc(100%_-_2rem)]! max-[40rem]:gap-6! max-[40rem]:py-6!">
+        <div class="col-span-full! min-w-0! min-[62.5625rem]:col-span-1!">
+            <component type="typeof(MishaShopFooter)" render-mode="Static" param-BrandName="@(theme?.BrandName ?? store.Name)" param-HomeUrl="@(Url.RouteUrl(NopRouteNames.General.HOMEPAGE))" />
+        </div>
+        @await Component.InvokeAsync(typeof(FooterMenuViewComponent))
+        <div class="footer-block follow-us m-0! flex! w-auto! min-w-0! flex-col! gap-5! text-start! max-[40rem]:col-span-full!">
+            <div class="social flex! flex-col! gap-3!">
+                <h2 class="title m-0! border-[0rem]! bg-transparent! bg-none! p-0! text-[0.875rem]! font-medium! leading-[1.8]! text-foreground!">@T("Footer.FollowUs")</h2>
+                @await Component.InvokeAsync(typeof(SocialButtonsViewComponent))
+            </div>
+            @await Component.InvokeAsync(typeof(NewsLetterBoxViewComponent))
+        </div>
+    </section>
+    <section class="footer-lower mx-auto! flex! w-[calc(100%_-_2.5rem)]! max-w-[73.75rem]! flex-wrap! items-center! justify-between! gap-3! overflow-visible! border-t-[0.0625rem]! border-solid! border-border! bg-transparent! px-0! py-4! text-[0.6875rem]! leading-[1.8]! text-muted-foreground! after:hidden! max-[40rem]:w-[calc(100%_-_2rem)]!">
+        <div class="footer-info float-none! flex! min-w-0! flex-col! gap-1! leading-[1.8]!">
+            <span class="footer-disclaimer">@T("Content.CopyrightNotice", DateTime.Now.Year, Model.StoreName)</span>
+            @if (Model.DisplayTaxShippingInfoFooter)
+            {
+                var inclTax = await workContext.GetTaxDisplayTypeAsync() == TaxDisplayType.IncludingTax;
+                <span class="footer-tax-shipping">@T(inclTax ? "Footer.TaxShipping.InclTax" : "Footer.TaxShipping.ExclTax", await NopUrl.RouteTopicUrlAsync("shippinginfo"))</span>
+            }
+        </div>
+        @if (!Model.HidePoweredByNopCommerce)
+        {
+            <div class="footer-powered-by float-none! m-0! text-[0.6875rem]! leading-[1.8]! text-muted-foreground!">
+                Powered by <a href="@(OfficialSite.Main)" target="_blank" @(Model.IsHomePage ? string.Empty : "rel=nofollow")>nopCommerce</a>
+            </div>
+        }
+        @await Component.InvokeAsync(typeof(StoreThemeSelectorViewComponent))
+    </section>
+    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.Footer, additionalData = Model })
+</footer>

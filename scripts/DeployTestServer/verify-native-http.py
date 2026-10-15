@@ -19,14 +19,14 @@ for path in ['/','/catalog/all',slug,'/cart','/login','/register','/search?advs=
  status,url,html=get(path); assert 'internal error occurred' not in html.lower(), 'Native error page rendered: '+path
  records.append({'path':path,'status':status,'bytes':len(html.encode())})
  if path=='/':
-  selected='Madadrang' if theme=='madadrang' else 'Boutique'; opposite='Boutique' if theme=='madadrang' else 'Madadrang'
+  selected='Madadrang' if theme=='madadrang' else 'MishaShop'; opposite='MishaShop' if theme=='madadrang' else 'Madadrang'
   assert f'_content/Storefront.UI.{selected}/' in html
   assert f'_content/Storefront.UI.{opposite}/' not in html
   assert 'dir="rtl"' in html
   assert not re.search(r'https?://(?:172\.(?:1[6-9]|2\d|3[01])\.|10\.|192\.168\.)[^\s"\']*/images/',html), 'Rendered media URL exposes an internal address'
   links=Inputs(); links.feed(html)
   matches=[x for x in links.styles if f'/_content/Storefront.UI.{selected}/' in x]
-  cssurl=matches[0] if matches else f'/_content/Storefront.UI.{selected}/'+('storefront.css' if selected=='Madadrang' else 'boutique.css')
+  cssurl=matches[0] if matches else f'/_content/Storefront.UI.{selected}/'+('storefront.css' if selected=='Madadrang' else 'mishashop.css')
   if cssurl.startswith('http'): cssurl=urllib.parse.urlsplit(cssurl).path+'?'+urllib.parse.urlsplit(cssurl).query
   status,_,body=get(cssurl); assert len(body)>1000; records.append({'path':cssurl,'status':status,'bytes':len(body)})
   for linked in links.styles:

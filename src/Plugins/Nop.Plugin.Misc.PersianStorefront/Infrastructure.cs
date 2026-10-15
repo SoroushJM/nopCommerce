@@ -22,7 +22,10 @@ public sealed class StorefrontStartup : INopStartup
     public void ConfigureServices(IServiceCollection services, IConfiguration configuration)
     {
         services.PostConfigure<RazorViewEngineOptions>(options =>
-            options.ViewLocationExpanders.Add(new StorefrontCatalogViewLocationExpander()));
+        {
+            options.ViewLocationExpanders.Add(new StorefrontCatalogViewLocationExpander());
+            options.ViewLocationExpanders.Add(new AdminCalendarViewLocationExpander());
+        });
         services.Configure<Microsoft.AspNetCore.Mvc.MvcOptions>(options =>
         {
             options.Filters.Add<NativeProductFallbackFilter>();
@@ -57,7 +60,7 @@ public sealed class StorefrontStartup : INopStartup
         {
             "Storefront.UI.Shared",
             "Storefront.UI.Madadrang",
-            "Storefront.UI.Boutique",
+            "Storefront.UI.MishaShop",
             "BlazorBlueprint.Components",
             "BlazorBlueprint.Primitives"
         }
@@ -106,6 +109,11 @@ public sealed class StorefrontRoutes : BaseRouteProvider, IRouteProvider
             action = "LegacyCatalog"
         });
         endpoints.MapControllerRoute("BoutiqueLegacyCatalog", $"{language}/boutique/catalog", new
+        {
+            controller = "MadadrangCatalog",
+            action = "LegacyCatalog"
+        });
+        endpoints.MapControllerRoute("MishaShopLegacyCatalog", $"{language}/mishashop/catalog", new
         {
             controller = "MadadrangCatalog",
             action = "LegacyCatalog"

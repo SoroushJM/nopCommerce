@@ -13,14 +13,14 @@
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
     <ProjectReference Include="../../Presentation/Nop.Web/Nop.Web.csproj" Private="false" />
     <ProjectReference Include="../../Storefront/Storefront.UI.Shared/Storefront.UI.Shared.csproj" />
-    <ProjectReference Include="../../Storefront/Storefront.UI.Madadrang/Storefront.UI.Madadrang.csproj" Condition="'$(StorefrontTheme)' == 'Madadrang' Or '$(StorefrontTheme)' == 'All'" />
-    <ProjectReference Include="../../Storefront/Storefront.UI.Boutique/Storefront.UI.Boutique.csproj" Condition="'$(StorefrontTheme)' == 'Boutique' Or '$(StorefrontTheme)' == 'All'" />
+    <ProjectReference Include="../../Storefront/Storefront.UI.Madadrang/Storefront.UI.Madadrang.csproj" Condition="'$(StorefrontBrand)' == 'Madadrang' Or '$(StorefrontBrand)' == 'All'" />
+    <ProjectReference Include="../../Storefront/Storefront.UI.MishaShop/Storefront.UI.MishaShop.csproj" Condition="'$(StorefrontBrand)' == 'MishaShop' Or '$(StorefrontBrand)' == 'All'" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="10.2.3" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="10.2.3" />
     <PackageReference Include="Scalar.AspNetCore" Version="2.17.13" />
     <PackageReference Include="BlazorBlueprint.Primitives" Version="$(StorefrontBlueprintPrimitivesVersion)" GeneratePathProperty="true" />
   </ItemGroup>
-  <ItemGroup Condition="'$(StorefrontTheme)' == 'Boutique'">
+  <ItemGroup Condition="'$(StorefrontBrand)' == 'MishaShop'">
     <Content Remove="Views/HomeHero.cshtml;Views/HomepageBanners.cshtml;Views/NativeHeader.cshtml;Views/NativeFooter.cshtml" />
     <RazorGenerate Remove="Views/HomeHero.cshtml;Views/HomepageBanners.cshtml;Views/NativeHeader.cshtml;Views/NativeFooter.cshtml" />
   </ItemGroup>
@@ -30,7 +30,7 @@
     <Content Update="plugin.json" CopyToOutputDirectory="PreserveNewest" />
     <Content Update="Views/**/*.cshtml" CopyToOutputDirectory="PreserveNewest" />
     <Content Include="Content/admin-tailwind.css" CopyToOutputDirectory="PreserveNewest" CopyToPublishDirectory="PreserveNewest" />
-    <AdminTailwindSources Include="Views/Configure.cshtml;Views/BoutiqueConfigure.cshtml;../../Storefront/Storefront.UI.Madadrang/Styles/admin.css;../../Storefront/Storefront.UI.Madadrang/package-lock.json" />
+    <AdminTailwindSources Include="Views/Configure.cshtml;Views/MishaShopConfigure.cshtml;../../Storefront/Storefront.UI.Madadrang/Styles/admin.css;../../Storefront/Storefront.UI.Madadrang/package-lock.json" />
   </ItemGroup>
   <Target Name="RestoreAdminTailwind" BeforeTargets="BuildAdminTailwind">
     <MSBuild Projects="../../Storefront/Storefront.UI.Madadrang/Storefront.UI.Madadrang.csproj" Targets="RestoreStorefrontNodeModules" />
@@ -50,7 +50,7 @@
       <StorefrontClientCompilerArguments Condition="'$(UseSharedCompilation)' != ''">-p:UseSharedCompilation=&quot;$(UseSharedCompilation)&quot;</StorefrontClientCompilerArguments>
     </PropertyGroup>
     <Exec WorkingDirectory="$(MSBuildProjectDirectory)"
-          Command="dotnet publish &quot;../../Storefront/Storefront.Client/Storefront.Client.csproj&quot; --configuration &quot;$(Configuration)&quot; -p:StorefrontTheme=&quot;$(StorefrontTheme)&quot; $(StorefrontClientCompilerArguments) --output &quot;$(OutDir)Content/Client/&quot; --nologo" />
+          Command="dotnet publish &quot;../../Storefront/Storefront.Client/Storefront.Client.csproj&quot; --configuration &quot;$(Configuration)&quot; -p:StorefrontTheme=&quot;$(StorefrontBrand)&quot; $(StorefrontClientCompilerArguments) --output &quot;$(OutDir)Content/Client/&quot; --nologo" />
     <ItemGroup Condition="'$(StorefrontClientIncrementalPublish)' == 'true'">
       <_StorefrontClientPublishedFile Include="$(OutDir)Content/Client/**/*" />
     </ItemGroup>
@@ -61,14 +61,14 @@
   <Target Name="CopyStorefrontAssets" AfterTargets="Build">
     <ItemGroup>
       <SharedAssets Include="../../Storefront/Storefront.UI.Shared/wwwroot/**/*" />
-      <MadadrangAssets Include="../../Storefront/Storefront.UI.Madadrang/wwwroot/**/*" Condition="'$(StorefrontTheme)' == 'Madadrang' Or '$(StorefrontTheme)' == 'All'" />
-      <BoutiqueAssets Include="../../Storefront/Storefront.UI.Boutique/wwwroot/**/*" Condition="'$(StorefrontTheme)' == 'Boutique' Or '$(StorefrontTheme)' == 'All'" />
+      <MadadrangAssets Include="../../Storefront/Storefront.UI.Madadrang/wwwroot/**/*" Condition="'$(StorefrontBrand)' == 'Madadrang' Or '$(StorefrontBrand)' == 'All'" />
+      <MishaShopAssets Include="../../Storefront/Storefront.UI.MishaShop/wwwroot/**/*" Condition="'$(StorefrontBrand)' == 'MishaShop' Or '$(StorefrontBrand)' == 'All'" />
       <BBAssets Include="$(NuGetPackageRoot)blazorblueprint.components/4.1.0/staticwebassets/**/*" />
       <PrimitiveAssets Include="$(PkgBlazorBlueprint_Primitives)/staticwebassets/**/*" />
     </ItemGroup>
     <Copy SourceFiles="@(SharedAssets)" DestinationFiles="@(SharedAssets->'$(OutDir)Content/Storefront.UI.Shared/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
     <Copy SourceFiles="@(MadadrangAssets)" DestinationFiles="@(MadadrangAssets->'$(OutDir)Content/Storefront.UI.Madadrang/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
-    <Copy SourceFiles="@(BoutiqueAssets)" DestinationFiles="@(BoutiqueAssets->'$(OutDir)Content/Storefront.UI.Boutique/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
+    <Copy SourceFiles="@(MishaShopAssets)" DestinationFiles="@(MishaShopAssets->'$(OutDir)Content/Storefront.UI.MishaShop/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
     <Copy SourceFiles="@(BBAssets)" DestinationFiles="@(BBAssets->'$(OutDir)Content/BlazorBlueprint.Components/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
     <Copy SourceFiles="@(PrimitiveAssets)" DestinationFiles="@(PrimitiveAssets->'$(OutDir)Content/BlazorBlueprint.Primitives/%(RecursiveDir)%(Filename)%(Extension)')" SkipUnchangedFiles="true" />
   </Target>

@@ -6,7 +6,7 @@ $projects = @(
     'src/Plugins/Nop.Plugin.Misc.PersianStorefront/Nop.Plugin.Misc.PersianStorefront.csproj',
     'src/Storefront/Storefront.UI.Shared/Storefront.UI.Shared.csproj',
     'src/Storefront/Storefront.UI.Madadrang/Storefront.UI.Madadrang.csproj',
-    'src/Storefront/Storefront.UI.Boutique/Storefront.UI.Boutique.csproj',
+    'src/Storefront/Storefront.UI.MishaShop/Storefront.UI.MishaShop.csproj',
     'src/Storefront/Storefront.Client/Storefront.Client.csproj',
     'src/Storefront/Storefront.Preview/Storefront.Preview.csproj'
 )

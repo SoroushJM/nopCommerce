@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-    [Parameter(Mandatory)][ValidateSet('Madadrang', 'Boutique')][string]$Theme,
+    [Parameter(Mandatory)][ValidateSet('Madadrang', 'MishaShop', 'Boutique')][string]$Theme,
     [ValidateSet('test', 'production')][string]$Environment = 'test',
     [string]$RuntimeIdentifier = 'win-x64',
     [string]$OutputDirectory = (Join-Path ([System.IO.Path]::GetTempPath()) 'storefront-packages'),
@@ -9,7 +9,7 @@ param(
 )
 
 $ErrorActionPreference = 'Stop'
-$Theme = if ($Theme -ieq 'Boutique') { 'Boutique' } else { 'Madadrang' }
+$Theme = if ($Theme -in @('MishaShop', 'Boutique')) { 'MishaShop' } else { 'Madadrang' }
 $Environment = $Environment.ToLowerInvariant()
 $repoRoot = [System.IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $themeSlug = $Theme.ToLowerInvariant()
@@ -20,7 +20,7 @@ $sourceRoot = Join-Path $packageRoot 'source'
 $publishRoot = Join-Path $packageRoot 'app'
 $instanceName = "nopcommerce-$themeSlug-$Environment"
 if ($HttpPort -eq 0) {
-    $HttpPort = 2020 + $(if ($Theme -eq 'Boutique') { 10 } else { 0 }) + $(if ($Environment -eq 'production') { 1000 } else { 0 })
+    $HttpPort = 2020 + $(if ($Theme -eq 'MishaShop') { 10 } else { 0 }) + $(if ($Environment -eq 'production') { 1000 } else { 0 })
 }
 if ($HttpsPort -eq 0) { $HttpsPort = $HttpPort + 1 }
 if ($HttpPort -eq $HttpsPort -or $HttpsPort -gt 65535) { throw 'Choose different valid HTTP and HTTPS ports.' }
@@ -94,7 +94,7 @@ try {
     if ($viewRuntimeDependencies.Count -ne 5) { throw 'Missing storefront startup dependencies for a fresh native installation.' }
     $viewRuntimeDependencies | Copy-Item -Destination $publishRoot
 
-    $themeCss = if ($Theme -eq 'Boutique') { 'boutique.css' } else { 'storefront.css' }
+    $themeCss = if ($Theme -eq 'MishaShop') { 'mishashop.css' } else { 'storefront.css' }
     $activeAssets = Join-Path $publishRoot "Plugins/Misc.PersianStorefront/Content/Storefront.UI.$Theme/$themeCss"
     $wasmAssets = Join-Path $publishRoot 'Plugins/Misc.PersianStorefront/Content/Client/wwwroot/_framework'
     if (!(Test-Path -LiteralPath $activeAssets) -or !(Test-Path -LiteralPath $wasmAssets)) { throw 'The selected theme CSS or browser app was not packaged.' }
@@ -107,7 +107,7 @@ try {
          !(Test-Path -LiteralPath (Join-Path $publishRoot "Storefront.UI.$Theme.dll"))) -or
         !(Test-Path -LiteralPath (Join-Path $publishRoot "Themes/$Theme")) -or
         !(Test-Path -LiteralPath (Join-Path $publishRoot 'Themes/DefaultClean'))) { throw 'The selected brand/shared assemblies or native theme folders are missing.' }
-    $inactiveTheme = if ($Theme -eq 'Madadrang') { 'Boutique' } else { 'Madadrang' }
+    $inactiveTheme = if ($Theme -eq 'Madadrang') { 'MishaShop' } else { 'Madadrang' }
     $inactiveFiles = Get-ChildItem -LiteralPath $publishRoot -Recurse -File | Where-Object { $_.Name -like "Storefront.UI.$inactiveTheme*" -or $_.FullName -match "[\\/](Themes[\\/]$inactiveTheme|Storefront\.UI\.$inactiveTheme)[\\/]" }
     if ($inactiveFiles) { throw "The release contains inactive $inactiveTheme artifacts; refusing to label this package as isolated." }
     New-Item -ItemType Directory -Path (Join-Path $publishRoot 'logs'), (Join-Path $publishRoot 'bin'), (Join-Path $publishRoot 'App_Data/DataProtectionKeys') -Force | Out-Null

@@ -1,0 +1,16 @@
+<BbDirectionProvider Direction="TextDirection.RightToLeft">
+    <section class="mx-auto! my-8! max-w-[35rem]! text-center! max-[40rem]:my-6!" aria-labelledby="mishashop-not-found-title">
+        <h1 id="mishashop-not-found-title" class="m-0! text-[clamp(1.5rem,4vw,2rem)]! font-medium! leading-[1.6]!">این صفحه پیدا نشد</h1>
+        <BbEmpty Size="EmptySize.Small" Description="ممکن است نشانی تغییر کرده باشد. لباس‌ها و انتخاب‌های تازه را در فروشگاه ببینید." Class="px-3! [&_p]:m-0! [&_p]:max-w-[28rem]! [&_p]:leading-[1.9]!">
+            <div class="flex! flex-wrap! justify-center! gap-3!">
+                <BbButton Href="@CatalogUrl" Size="ButtonSize.Large" Class="rounded-[9999rem]! border-[0rem]! [box-shadow:none]! focus-visible:[outline:0.125rem_solid_var(--ring)]! focus-visible:[outline-offset:0.1875rem]!">مشاهدهٔ همهٔ محصولات</BbButton>
+                <BbButton Href="@HomeUrl" Variant="ButtonVariant.Outline" Size="ButtonSize.Large" Class="rounded-[9999rem]! border-[0.0625rem]! border-solid! [box-shadow:none]! focus-visible:[outline:0.125rem_solid_var(--ring)]! focus-visible:[outline-offset:0.1875rem]!">صفحهٔ اصلی</BbButton>
+            </div>
+        </BbEmpty>
+    </section>
+</BbDirectionProvider>
+
+@code {
+    [Parameter] public string CatalogUrl { get; set; } = "/catalog/all";
+    [Parameter] public string HomeUrl { get; set; } = "/";
+}

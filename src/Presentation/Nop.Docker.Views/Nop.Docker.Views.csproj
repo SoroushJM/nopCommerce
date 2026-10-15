@@ -3,7 +3,7 @@
     <TargetFramework>net10.0</TargetFramework>
     <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
     <EnableDefaultContentItems>false</EnableDefaultContentItems>
-    <ExcludedStorefrontViews Condition="'$(StorefrontTheme)' == 'Boutique'">../../Plugins/Nop.Plugin.Misc.PersianStorefront/Views/HomeHero.cshtml;../../Plugins/Nop.Plugin.Misc.PersianStorefront/Views/HomepageBanners.cshtml;../../Plugins/Nop.Plugin.Misc.PersianStorefront/Views/NativeHeader.cshtml;../../Plugins/Nop.Plugin.Misc.PersianStorefront/Views/NativeFooter.cshtml</ExcludedStorefrontViews>
+    <ExcludedStorefrontViews Condition="'$(StorefrontBrand)' == 'MishaShop'">../../Plugins/Nop.Plugin.Misc.PersianStorefront/Views/HomeHero.cshtml;../../Plugins/Nop.Plugin.Misc.PersianStorefront/Views/HomepageBanners.cshtml;../../Plugins/Nop.Plugin.Misc.PersianStorefront/Views/NativeHeader.cshtml;../../Plugins/Nop.Plugin.Misc.PersianStorefront/Views/NativeFooter.cshtml</ExcludedStorefrontViews>
   </PropertyGroup>
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />
@@ -18,8 +18,8 @@
     <Content Include="../Nop.Web/Views/**/*.cshtml" Link="Views/%(RecursiveDir)%(Filename)%(Extension)" />
     <Content Include="../Nop.Web/Areas/Admin/Views/**/*.cshtml" Link="Areas/Admin/Views/%(RecursiveDir)%(Filename)%(Extension)" />
     <Content Include="../Nop.Web/Themes/DefaultClean/**/*.cshtml" Link="Themes/DefaultClean/%(RecursiveDir)%(Filename)%(Extension)" />
-    <Content Include="../Nop.Web/Themes/Madadrang/**/*.cshtml" Link="Themes/Madadrang/%(RecursiveDir)%(Filename)%(Extension)" Condition="'$(StorefrontTheme)' == 'Madadrang' Or '$(StorefrontTheme)' == 'All'" />
-    <Content Include="../Nop.Web/Themes/Boutique/**/*.cshtml" Link="Themes/Boutique/%(RecursiveDir)%(Filename)%(Extension)" Condition="'$(StorefrontTheme)' == 'Boutique' Or '$(StorefrontTheme)' == 'All'" />
+    <Content Include="../Nop.Web/Themes/Madadrang/**/*.cshtml" Link="Themes/Madadrang/%(RecursiveDir)%(Filename)%(Extension)" Condition="'$(StorefrontBrand)' == 'Madadrang' Or '$(StorefrontBrand)' == 'All'" />
+    <Content Include="../Nop.Web/Themes/MishaShop/**/*.cshtml" Link="Themes/MishaShop/%(RecursiveDir)%(Filename)%(Extension)" Condition="'$(StorefrontBrand)' == 'MishaShop' Or '$(StorefrontBrand)' == 'All'" />
     <Content Include="../../Plugins/Nop.Plugin.Misc.PersianStorefront/Views/**/*.cshtml" Link="Plugins/Misc.PersianStorefront/Views/%(RecursiveDir)%(Filename)%(Extension)" Exclude="$(ExcludedStorefrontViews)" />
     <Content Include="../../Plugins/Nop.Plugin.Payments.CheckMoneyOrder/Views/**/*.cshtml" Link="Plugins/Payments.CheckMoneyOrder/Views/%(RecursiveDir)%(Filename)%(Extension)" />
     <Content Include="../../Plugins/Nop.Plugin.Shipping.FixedByWeightByTotal/Views/**/*.cshtml" Link="Plugins/Shipping.FixedByWeightByTotal/Views/%(RecursiveDir)%(Filename)%(Extension)" />

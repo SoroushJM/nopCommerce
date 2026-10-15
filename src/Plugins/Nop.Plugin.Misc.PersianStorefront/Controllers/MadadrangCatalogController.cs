@@ -23,8 +23,8 @@ public sealed class MadadrangCatalogController(NativeCatalogModelFactory factory
             return NotFound();
         // Native search AJAX requires a search term; this endpoint also lists the entire catalogue.
         model.CatalogProductsModel.UseAjaxLoading = false;
-        return View(await themes.GetWorkingThemeNameAsync() == "Boutique"
-            ? "~/Themes/Boutique/Views/Catalog/AllProducts.cshtml"
+        return View(await themes.GetWorkingThemeNameAsync() == "MishaShop"
+            ? "~/Themes/MishaShop/Views/Catalog/AllProducts.cshtml"
             : "~/Plugins/Misc.PersianStorefront/Views/AllProducts.cshtml", model);
     }
 

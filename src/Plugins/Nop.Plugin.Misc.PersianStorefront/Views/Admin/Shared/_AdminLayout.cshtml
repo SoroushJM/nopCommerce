@@ -1,0 +1,16 @@
+@{
+    Layout = "~/Areas/Admin/Views/Shared/_AdminLayout.cshtml";
+
+    // Forward optional native header sections through this layout wrapper.
+    foreach (var sectionName in new[] { "header", "headermenu" })
+    {
+        if (IsSectionDefined(sectionName))
+        {
+            var name = sectionName;
+            DefineSection(name, async () => { await RenderSectionAsync(name); });
+        }
+    }
+}
+@RenderBody()
+@* The page's forms are closed before this preference form is rendered. *@
+@await Html.PartialAsync("~/Plugins/Misc.PersianStorefront/Views/Admin/Shared/_AdminTransferCalendarForm.cshtml")

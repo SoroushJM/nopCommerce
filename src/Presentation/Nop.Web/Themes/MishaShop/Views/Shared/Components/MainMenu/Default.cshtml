@@ -1,0 +1,65 @@
+@model MenuModel
+
+@using Nop.Core.Domain.Menus;
+
+@{
+    StoreMenuItem MapItem(MenuItemModel item) => new()
+    {
+        Id = item.Id,
+        EntityId = item.EntityId,
+        EntityType = (int)item.MenuItemType,
+        Title = item.Title ?? "",
+        Url = item.Url ?? "",
+        CssClass = item.CssClass ?? "",
+        Children = item.ChildrenItems.Select(MapItem).ToList()
+    };
+    var mobileMenu = new StoreMenu
+    {
+        Id = Model.Id,
+        Name = Model.Name ?? "",
+        Rtl = await Html.ShouldUseRtlThemeAsync(),
+        Labels = new NativeUiLabels
+        {
+            Values = new()
+            {
+                ["Categories"] = T("Categories").Text,
+                ["Common.Close"] = T("Common.Close").Text
+            }
+        },
+        Items = Model.Items.Select(MapItem).ToList()
+    };
+}
+
+<script src="~/js/public.menu.js" asp-location="Footer"></script>
+<script asp-location="Footer">
+    mainMenu.init('.mishashop-desktop-menu .menu__item-toggle', 'menu-dropdown--active');
+</script>
+
+
+<nav class="menu-container menu-dropdown static! m-0! p-0! w-full! block!">
+    <component type="typeof(MishaShopMenuTrigger)" render-mode="WebAssemblyPrerendered" param-TriggerId='@($"menu-{Model.Id}")' param-Menu="mobileMenu" />
+    <div id="mishashop-menu-content-@Model.Id" role="menu" class="menu @Model.CssClass
+            mishashop-desktop-menu max-[62.5rem]:hidden!" aria-label="@Model.Name">
+        @foreach (var menuItem in Model.Items)
+        {
+            @if (menuItem.ChildrenItems.Any())
+            {
+                @switch (menuItem.Template)
+                {
+                    case MenuItemTemplate.Grid:
+                        @await Html.PartialAsync("~/Views/Shared/Components/MainMenu/_MenuItem.Grid.cshtml", menuItem)
+                        break;
+                    default:
+                        @await Html.PartialAsync("~/Views/Shared/Components/MainMenu/_MenuItem.List.cshtml", menuItem)
+                        break;
+                }
+            }
+            else
+            {
+                <div class="menu__item @menuItem.CssClass" role="menuitem">
+                    @await Html.PartialAsync("~/Views/Shared/Components/MainMenu/_MenuItem.cshtml", menuItem)
+                </div>
+            }
+        }
+    </div>
+</nav>

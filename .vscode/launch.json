@@ -24,7 +24,7 @@
       "id": "launchProfile",
       "type": "pickString",
       "description": "Which Launch Profile do you want to run?",
-      "options": ["Madadrang", "Boutique", "Nop.Web"],
+      "options": ["Madadrang", "MishaShop", "Nop.Web"],
       "default": "Madadrang"
     }
   ]

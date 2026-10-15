@@ -1,8 +1,0 @@
-@using Storefront.UI.Boutique.Components
-@inject Nop.Core.IStoreContext storeContext
-@{
-    var store = await storeContext.GetCurrentStoreAsync();
-    var brand = ViewData["BrandName"] as string ?? store.Name;
-    var catalogUrl = ViewData["CatalogUrl"] as string ?? Url.RouteUrl(NopRouteNames.General.SEARCH);
-}
-<component type="typeof(BoutiqueHero)" render-mode="Static" param-BrandName="brand" param-Heading="@(ViewData["Heading"] as string ?? "زیبایی در سادگی")" param-Description="@(ViewData["Description"] as string ?? "انتخاب‌هایی برای استایلِ خودت")" param-ImageUrl="@(ViewData["ImageUrl"] as string ?? "")" param-ImageAlt="@(ViewData["ImageAlt"] as string ?? "")" param-CatalogUrl="catalogUrl" param-ShowSetupHint="@(ViewData["ShowSetupHint"] is true)" />

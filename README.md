@@ -5,6 +5,26 @@
 
 ![nopCommerce demo](https://www.nopcommerce.com/images/github/responsive_devices_codeplex.png#v1)
 
+## اجرای محلی فروشگاه و پنل فارسی
+
+در Windows روی [start-local.cmd](start-local.cmd) دوبارکلیک کنید. راه‌انداز، پروژهٔ وب، افزونهٔ فروشگاه و دارایی‌های تم مداد رنگی را build می‌کند و سپس سایت را در حالت Development اجرا می‌کند:
+
+- [فروشگاه مداد رنگی](http://localhost:5602/)
+- [پنل مدیریت](http://localhost:5602/admin)
+
+پیش‌نیازها: .NET SDK مطابق [global.json](global.json)، Node.js/npm روی PATH و تنظیم خصوصی اتصال دیتابیس در `src/Presentation/Nop.Web/App_Data/appsettings.json`. کلون تازه تنظیمات خصوصی نصب قبلی را ندارد؛ ابتدا اتصال نصب محلی خود را آماده کنید. اگر سرویس محلی PostgreSQL 17 متوقف باشد، راه‌انداز برای روشن‌کردنش تلاش می‌کند؛ در صورت نداشتن دسترسی، سرویس را دستی روشن کنید.
+
+برای انتخاب تم لباس یا تغییر پورت، از ریشهٔ مخزن اجرا کنید:
+
+```powershell
+./scripts/run-storefront.ps1 -Theme MishaShop
+./scripts/run-storefront.ps1 -Theme Madadrang -Port 5091
+```
+
+پورت پیش‌فرض مداد رنگی `5602` و تم لباس `5630` است. پنجره را باز نگه دارید؛ `Ctrl+C` سایت را متوقف می‌کند. اجرای دوباره، سرور قبلی همین checkout را پیش از build متوقف می‌کند؛ اگر پورت متعلق به برنامه یا checkout دیگری باشد، باید پورت دیگری انتخاب کنید.
+
+انتخاب تم، دیتابیس یا نصب مستقل ایجاد نمی‌کند؛ هر دو تم در این روش از تنظیمات همان checkout استفاده می‌کنند. برای اجرای همزمان نصب‌های مستقل، [راهنمای انتشار](docs/storefront-deployments.md) را ببینید. تنظیمات اجرای VS Code و Visual Studio در [راهنمای توسعهٔ فعلی](docs/storefront-current-development.md) و رفتار انتخاب تقویم در [راهنمای پنل فارسی](docs/admin-localization-runbook.md) آمده است.
+
 ### Key features ###
 
 * The product is being developed and supported by the professional team since 2008.

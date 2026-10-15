@@ -12,7 +12,7 @@
                          '$(MSBuildProjectName)' == 'Storefront.Preview' or
                          '$(MSBuildProjectName)' == 'Storefront.UI.Shared' or
                          '$(MSBuildProjectName)' == 'Storefront.UI.Madadrang' or
-                         '$(MSBuildProjectName)' == 'Storefront.UI.Boutique' or
+                         '$(MSBuildProjectName)' == 'Storefront.UI.MishaShop' or
                          '$(MSBuildProjectName)' == 'Nop.Web')">
     <PackageReference Include="FindRazorSourceFile" Version="1.1.1" PrivateAssets="all" />
   </ItemGroup>

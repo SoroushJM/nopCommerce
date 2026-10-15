@@ -18,12 +18,11 @@ public sealed class ConfiguredStorefrontThemeContext(IGenericAttributeService at
 {
     public override async Task<string> GetWorkingThemeNameAsync()
     {
-        if (string.IsNullOrWhiteSpace(configuration.Theme))
-            return await base.GetWorkingThemeNameAsync();
         if (!string.IsNullOrEmpty(_cachedThemeName))
             return _cachedThemeName;
-        if (!StorefrontThemeService.IsSupported(configuration.Theme) ||
-            !await _themeProvider.ThemeExistsAsync(configuration.Theme))
+        var configured = StorefrontThemeService.NormalizeThemeName(configuration.Theme);
+        if (!string.IsNullOrEmpty(configured) &&
+            (!StorefrontThemeService.IsSupported(configured) || !await _themeProvider.ThemeExistsAsync(configured)))
             throw new InvalidOperationException($"Configured storefront theme '{configuration.Theme}' is not available in this deployment.");
         // Preserve the native customer selector when the merchant explicitly enables it.
         if (_storeInformationSettings.AllowCustomerToSelectTheme)
@@ -32,14 +31,24 @@ public sealed class ConfiguredStorefrontThemeContext(IGenericAttributeService at
             if (customer != null)
             {
                 var store = await _storeContext.GetCurrentStoreAsync();
-                var selected = await _genericAttributeService.GetAttributeAsync<string>(customer,
-                    NopCustomerDefaults.WorkingThemeNameAttribute, store.Id);
+                var selected = StorefrontThemeService.NormalizeThemeName(
+                    await _genericAttributeService.GetAttributeAsync<string>(customer,
+                        NopCustomerDefaults.WorkingThemeNameAttribute, store.Id));
                 if (!string.IsNullOrEmpty(selected) && await _themeProvider.ThemeExistsAsync(selected))
                     return _cachedThemeName = selected;
             }
         }
-        return _cachedThemeName = configuration.Theme;
+        var theme = string.IsNullOrEmpty(configured)
+            ? StorefrontThemeService.NormalizeThemeName(_storeInformationSettings.DefaultStoreTheme)
+            : configured;
+        if (!await _themeProvider.ThemeExistsAsync(theme))
+            theme = (await _themeProvider.GetThemesAsync()).FirstOrDefault()?.SystemName
+                ?? throw new InvalidOperationException("No theme could be loaded");
+        return _cachedThemeName = theme;
     }
+
+    public override Task SetWorkingThemeNameAsync(string workingThemeName) =>
+        base.SetWorkingThemeNameAsync(StorefrontThemeService.NormalizeThemeName(workingThemeName));
 }
 
 public sealed class StorefrontThemeStartup : INopStartup
@@ -50,8 +59,9 @@ public sealed class StorefrontThemeStartup : INopStartup
     {
         var selection = new StorefrontThemeConfig();
         configuration.GetSection(nameof(StorefrontThemeConfig)).Bind(selection);
+        selection.Theme = StorefrontThemeService.NormalizeThemeName(selection.Theme);
         if (!string.IsNullOrWhiteSpace(selection.Theme) && !StorefrontThemeService.IsSupported(selection.Theme))
-            throw new InvalidOperationException("StorefrontThemeConfig.Theme must be Madadrang or Boutique.");
+            throw new InvalidOperationException("StorefrontThemeConfig.Theme must be Madadrang or MishaShop.");
         services.AddSingleton(selection);
         services.AddScoped<IThemeContext, ConfiguredStorefrontThemeContext>();
     }

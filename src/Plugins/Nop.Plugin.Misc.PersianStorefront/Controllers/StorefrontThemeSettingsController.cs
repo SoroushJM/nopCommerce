@@ -12,7 +12,7 @@ using Nop.Web.Framework.Mvc.Filters;
 
 namespace Nop.Plugin.Misc.PersianStorefront.Controllers;
 
-public record BoutiqueThemeConfigurationModel : BaseNopModel
+public record MishaShopThemeConfigurationModel : BaseNopModel
 {
     [UIHint("Picture")]
     public int HeroPictureId { get; set; }
@@ -31,11 +31,11 @@ public sealed class StorefrontThemeSettingsController(IThemeContext themes, ISto
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
     public async Task<IActionResult> Configure()
     {
-        if (await themes.GetWorkingThemeNameAsync() != "Boutique")
+        if (await themes.GetWorkingThemeNameAsync() != "MishaShop")
             return RedirectToAction("Configure", "PersianStorefrontMaintenance");
         var storeId = (await stores.GetCurrentStoreAsync()).Id;
         var saved = await settings.LoadSettingAsync<BoutiqueThemeSettings>(storeId);
-        return View("~/Plugins/Misc.PersianStorefront/Views/BoutiqueConfigure.cshtml", new BoutiqueThemeConfigurationModel
+        return View("~/Plugins/Misc.PersianStorefront/Views/MishaShopConfigure.cshtml", new MishaShopThemeConfigurationModel
         {
             HeroPictureId = saved.HeroPictureId, HeroHeading = saved.HeroHeading, HeroDescription = saved.HeroDescription
         });
@@ -43,14 +43,14 @@ public sealed class StorefrontThemeSettingsController(IThemeContext themes, ISto
 
     [HttpPost]
     [CheckPermission(StandardPermission.Configuration.MANAGE_SETTINGS)]
-    public async Task<IActionResult> Configure(BoutiqueThemeConfigurationModel model)
+    public async Task<IActionResult> Configure(MishaShopThemeConfigurationModel model)
     {
-        if (await themes.GetWorkingThemeNameAsync() != "Boutique")
+        if (await themes.GetWorkingThemeNameAsync() != "MishaShop")
             return Forbid();
         if (model.HeroPictureId < 0 || model.HeroPictureId > 0 && await pictures.GetPictureByIdAsync(model.HeroPictureId) == null)
             ModelState.AddModelError(nameof(model.HeroPictureId), "تصویر انتخاب‌شده موجود نیست.");
         if (!ModelState.IsValid)
-            return View("~/Plugins/Misc.PersianStorefront/Views/BoutiqueConfigure.cshtml", model);
+            return View("~/Plugins/Misc.PersianStorefront/Views/MishaShopConfigure.cshtml", model);
         var storeId = (await stores.GetCurrentStoreAsync()).Id;
         await settings.SaveSettingAsync(new BoutiqueThemeSettings
         {

@@ -6,9 +6,9 @@ Example PowerShell setup (use the actual host URLs and a published, supported fi
 
 ```powershell
 $env:STOREFRONT_QA_MADADRANG_URL = 'http://127.0.0.1:6240/'
-$env:STOREFRONT_QA_BOUTIQUE_URL = 'http://127.0.0.1:6250/'
+$env:STOREFRONT_QA_MISHASHOP_URL = 'http://127.0.0.1:6250/'
 $env:STOREFRONT_QA_MADADRANG_PRODUCT_ID = '1'
-$env:STOREFRONT_QA_BOUTIQUE_PRODUCT_ID = '3583'
+$env:STOREFRONT_QA_MISHASHOP_PRODUCT_ID = '3583'
 dotnet test src/Tests/Storefront.Theme.Tests/Storefront.Theme.Tests.csproj --filter 'TestCategory=Runtime&TestCategory!=IsolatedCart'
 # Only after verifying both URLs use isolated copied QA databases:
 $env:STOREFRONT_QA_ISOLATED = '1'
@@ -17,7 +17,7 @@ dotnet test src/Tests/Storefront.Theme.Tests/Storefront.Theme.Tests.csproj --fil
 
 `*_PRODUCT_MARKERS` may contain a JSON string array of expected controls for the chosen product, for example `["add-to-wishlist-button","compare-products-button","product-reviews"]`. These assertions should reflect enabled native settings and the specific fixture. `*_FALLBACKS` may contain JSON `[{"productId":2,"markers":["giftcard_2.RecipientName"]}]`. Supply actual gift/rental/file/customer-price/grouped fixture IDs and native HTML markers. No fallback fixture is created by these tests.
 
-The example above matches the separate local copies recorded on 2026-10-12, not a portable fixture contract. Boutique's clothing seed publishes product 3583 and unpublishes the old stationery products 1–8; do not reuse Boutique fallback IDs 2/3 or an old `*_FALLBACKS` environment value. Madadrang keeps its own product 1 and separately prepared gift/rental fixtures. Ports 2020/2030 fall inside an excluded TCP range on this Windows host. Boutique6250 now runs the corrected final package and Home200 was observed after its guarded startup; verify Madadrang6240 is also healthy before running both-host cases. Earlier Home500 reports describe the previous assemblies.
+The example above matches the separate local copies recorded on 2026-10-12, not a portable fixture contract. MishaShop's clothing seed publishes product 3583 and unpublishes the old stationery products 1–8; do not reuse MishaShop fallback IDs 2/3 or an old `*_FALLBACKS` environment value. Madadrang keeps its own product 1 and separately prepared gift/rental fixtures. Ports 2020/2030 fall inside an excluded TCP range on this Windows host. MishaShop6250 now runs the corrected final package and Home200 was observed after its guarded startup; verify Madadrang6240 is also healthy before running both-host cases. Earlier Home500 reports describe the previous assemblies.
 
 ## Automated HTTP checks in this project
 
@@ -27,7 +27,7 @@ The example above matches the separate local copies recorded on 2026-10-12, not 
 | Header/footer | Native search control, HeaderLinks and AjaxCart initialization, native footer copyright | Currency/language/tax selectors depend on settings and number of configured choices |
 | Native navigation | Login password and CSRF, registration page, wishlist/compare/cart reachable | Does not register or authenticate a user |
 | Search | q/advs/sid/sit selectable, query booleans restored | Category/vendor choices depend on fixture data; browser interaction still required |
-| Supported product | Madadrang: Shared WebAssembly prerender. Boutique: full native product body, actual native attribute controls and add action, accessible details/review accordion for the sample fixture. Both: native details form, quantity field and CSRF, optional native action/review markers | Does not execute attribute-change requests or browser events; sample fixture must include details/specification/review content for its accordion |
+| Supported product | Madadrang: Shared WebAssembly prerender. MishaShop: full native product body, actual native attribute controls and add action, accessible details/review accordion for the sample fixture. Both: native details form, quantity field and CSRF, optional native action/review markers | Does not execute attribute-change requests or browser events; sample fixture must include details/specification/review content for its accordion |
 | Unsupported product | Explicit fixture markers retained in native body and custom product body absent | Requires separately supplied fixture IDs |
 | Isolated guest cart | Missing-CSRF add rejected; native add; persistent own line; foreign guest cannot change it; mini quantity update/removal; formatted native count/flyout sections; full native cart totals | Requires normal quantity-1/2 product and visible mini line; does not place an order |
 

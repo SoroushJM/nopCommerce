@@ -9,7 +9,7 @@ namespace Storefront.Theme.Tests;
 public sealed class RuntimeThemeTests
 {
     [TestCase("MADADRANG", "Madadrang", "storefront.css")]
-    [TestCase("BOUTIQUE", "Boutique", "boutique.css")]
+    [TestCase("MISHASHOP", "MishaShop", "mishashop.css")]
     public async Task ThemeServesItsOwnShellNativeHeaderFooterAndRealAssets(string key, string theme, string css)
     {
         using var client = Client(key);
@@ -19,12 +19,12 @@ public sealed class RuntimeThemeTests
         {
             Assert.That(Regex.Matches(home, "<!DOCTYPE html>", RegexOptions.IgnoreCase), Has.Count.EqualTo(1));
             Assert.That(home, Does.Not.Contain("_content/Storefront.UI/storefront.css"));
-            Assert.That(home, Does.Not.Contain(theme == "Boutique" ? "_content/Storefront.UI.Madadrang/storefront.css" : "_content/Storefront.UI.Boutique/boutique.css"));
+            Assert.That(home, Does.Not.Contain(theme == "MishaShop" ? "_content/Storefront.UI.Madadrang/storefront.css" : "_content/Storefront.UI.MishaShop/mishashop.css"));
             Assert.That(home, Does.Contain("header-links"));
             Assert.That(home, Does.Contain("small-searchterms"), "The native search/autocomplete box must remain present.");
             Assert.That(home, Does.Contain("AjaxCart.init"));
             Assert.That(home, Does.Contain("footer-disclaimer"));
-            Assert.That(home, Does.Contain(theme == "Boutique" ? "boutique-brand" : "sf-brand"));
+            Assert.That(home, Does.Contain(theme == "MishaShop" ? "mishashop-brand" : "sf-brand"));
         });
         foreach (var (path, mediaType) in new[]
         {
@@ -51,14 +51,14 @@ public sealed class RuntimeThemeTests
             stylesheetContents.Add(await response.Content.ReadAsStringAsync());
         }
         var renderedCss = string.Join("\n", stylesheetContents);
-        Assert.That(renderedCss, Does.Contain(theme == "Boutique" ? ".boutique-brand" : ".brand-word"),
+        Assert.That(renderedCss, Does.Contain(theme == "MishaShop" ? ".mishashop-brand" : ".brand-word"),
             "The CSS actually linked by the page must contain the current theme's branding styles.");
-        Assert.That(renderedCss, Does.Not.Contain(theme == "Boutique" ? ".brand-word" : ".boutique-brand"),
+        Assert.That(renderedCss, Does.Not.Contain(theme == "MishaShop" ? ".brand-word" : ".mishashop-brand"),
             "The rendered stylesheet must not carry the other theme's branding styles.");
     }
 
     [TestCase("MADADRANG")]
-    [TestCase("BOUTIQUE")]
+    [TestCase("MISHASHOP")]
     public async Task SearchAndAccountRoutesRetainNativeSelectableControls(string key)
     {
         using var client = Client(key);
@@ -80,7 +80,7 @@ public sealed class RuntimeThemeTests
     }
 
     [TestCase("MADADRANG")]
-    [TestCase("BOUTIQUE")]
+    [TestCase("MISHASHOP")]
     public async Task ProductRendererPreservesNativeFormsSelectionAndSupplementalActions(string key)
     {
         using var client = Client(key);
@@ -100,32 +100,32 @@ public sealed class RuntimeThemeTests
         }
         else
         {
-            Assert.That(html, Does.Contain("class=\"product-name\""), "Boutique preserves the full native product renderer.");
+            Assert.That(html, Does.Contain("class=\"product-name\""), "MishaShop preserves the full native product renderer.");
             Assert.That(html, Does.Contain($"add-to-cart-button-{productId}"));
-            Assert.That(html, Does.Contain("<details class=\"boutique-accordion\""), "The configured sample product includes native details/review content in accessible accordions.");
+            Assert.That(html, Does.Contain("<details class=\"mishashop-accordion\""), "The configured sample product includes native details/review content in accessible accordions.");
             using var response = await client.GetAsync($"product/combinations?productId={productId}");
             response.EnsureSuccessStatusCode();
             using var combinations = JsonDocument.Parse(await response.Content.ReadAsStringAsync());
             foreach (var attribute in combinations.RootElement.EnumerateArray()
                 .SelectMany(item => item.GetProperty("Attributes").EnumerateArray()).Select(item => item.GetProperty("Id").GetInt32()).Distinct())
                 Assert.That(Controls(html).Any(item => Attribute(item, "name") == $"product_attribute_{attribute}"), Is.True,
-                    $"Native attribute {attribute} must retain an actual form control on Boutique.");
+                    $"Native attribute {attribute} must retain an actual form control on MishaShop.");
         }
         var home = await Html(client, "");
         if (home.Contains("ico-wishlist", StringComparison.Ordinal))
             Assert.That(html, Does.Contain("add-to-wishlist-button"), "A wishlist-enabled fixture must preserve the native product action.");
-        var expectations = Environment.GetEnvironmentVariable($"STOREFRONT_QA_{key}_PRODUCT_MARKERS");
+        var expectations = QaEnvironment(key, "PRODUCT_MARKERS");
         if (!string.IsNullOrWhiteSpace(expectations))
             foreach (var marker in JsonSerializer.Deserialize<string[]>(expectations)!)
                 Assert.That(html, Does.Contain(marker), "Configured native product fixture marker");
     }
 
     [TestCase("MADADRANG")]
-    [TestCase("BOUTIQUE")]
+    [TestCase("MISHASHOP")]
     public async Task ConfiguredUnsupportedProductsKeepTheirNativeControls(string key)
     {
         using var client = Client(key);
-        var fixtures = Environment.GetEnvironmentVariable($"STOREFRONT_QA_{key}_FALLBACKS");
+        var fixtures = QaEnvironment(key, "FALLBACKS");
         if (string.IsNullOrWhiteSpace(fixtures))
             Assert.Ignore("Supply isolated fixture fallback expectations as JSON [{\"productId\":2,\"markers\":[\"rental\"]}].");
         using var json = JsonDocument.Parse(fixtures!);
@@ -136,7 +136,7 @@ public sealed class RuntimeThemeTests
             if (key == "MADADRANG")
                 Assert.That(html, Does.Not.Contain("sf-product-name"), "Unsupported Madadrang products must leave the Shared product body.");
             else
-                Assert.That(html, Does.Contain("class=\"product-name\""), "Boutique retains native rendering for all attribute types.");
+                Assert.That(html, Does.Contain("class=\"product-name\""), "MishaShop retains native rendering for all attribute types.");
             Assert.That(html, Does.Contain("product-details-form"));
             Assert.That(Token(html), Is.Not.Empty);
             foreach (var marker in fixture.GetProperty("markers").EnumerateArray())
@@ -145,7 +145,7 @@ public sealed class RuntimeThemeTests
     }
 
     [TestCase("MADADRANG")]
-    [TestCase("BOUTIQUE")]
+    [TestCase("MISHASHOP")]
     [Category("IsolatedCart")]
     public async Task GuestNativeCartRequiresCsrfOwnsItemsAndSynchronizesSections(string key)
     {
@@ -211,9 +211,13 @@ public sealed class RuntimeThemeTests
         }
     }
 
+    private static string? QaEnvironment(string key, string suffix) =>
+        Environment.GetEnvironmentVariable($"STOREFRONT_QA_{key}_{suffix}")
+        ?? (key == "MISHASHOP" ? Environment.GetEnvironmentVariable($"STOREFRONT_QA_BOUTIQUE_{suffix}") : null);
+
     private static HttpClient Client(string key)
     {
-        var configured = Environment.GetEnvironmentVariable($"STOREFRONT_QA_{key}_URL");
+        var configured = QaEnvironment(key, "URL");
         if (string.IsNullOrWhiteSpace(configured)) Assert.Ignore($"Set STOREFRONT_QA_{key}_URL to the separate local QA host.");
         var uri = new Uri(configured!, UriKind.Absolute);
         if (!uri.IsLoopback || uri.Scheme != "http" || uri.UserInfo.Length > 0 || uri.Port == 5090)
@@ -224,7 +228,7 @@ public sealed class RuntimeThemeTests
 
     private static int ProductId(string key)
     {
-        var value = Environment.GetEnvironmentVariable($"STOREFRONT_QA_{key}_PRODUCT_ID");
+        var value = QaEnvironment(key, "PRODUCT_ID");
         if (!int.TryParse(value, out var id) || id <= 0) Assert.Ignore($"Supply STOREFRONT_QA_{key}_PRODUCT_ID for a published supported product fixture.");
         return id;
     }

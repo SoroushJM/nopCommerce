@@ -1,0 +1,120 @@
+@model NewsLetterBoxModel
+@{
+    var invalidEmail = ViewData.ModelState.TryGetValue(nameof(Model.NewsLetterEmail), out var emailState) && emailState.Errors.Count > 0;
+}
+<div class="newsletter mishashop-newsletter m-0! w-full! min-w-0! max-w-[26rem]! border-t-[0.0625rem]! border-solid! border-border! bg-transparent! pt-4! text-start!">
+    <h2 class="title m-0! mb-3! border-[0rem]! bg-transparent! bg-none! p-0! text-[0.875rem]! font-medium! leading-[1.6]! text-foreground!">
+        @T("Newsletter.Title")
+    </h2>
+    <div class="newsletter-subscribe" id="newsletter-subscribe-block" role="form" aria-label="@T("Newsletter.Title")">
+        <div class="mishashop-newsletter-controls m-0! w-full! min-w-0! border-[0rem]! bg-transparent! p-0!">
+            <component type="typeof(MishaShopNewsletterFields)" render-mode="Static"
+                       param-Email='@(Html.Value(nameof(Model.NewsLetterEmail)))'
+                       param-Placeholder='@(T("Newsletter.Email.Placeholder").Text)'
+                       param-EmailLabel='@(T("Newsletter.Subscribe").Text)'
+                       param-ButtonText='@(T(Model.AllowToUnsubscribe ? "Newsletter.Options.Send" : "Newsletter.Options.Subscribe").Text)'
+                       param-Invalid="invalidEmail" />
+            @if (Model.AllowToUnsubscribe)
+            {
+                <div class="options mt-3! flex! flex-wrap! gap-4! text-[0.75rem]!">
+                    <span class="subscribe inline-flex! items-center! gap-2!">
+                        <input id="newsletter_subscribe" type="radio" value="newsletter_subscribe" name="newsletter_block" checked="checked" />
+                        <label for="newsletter_subscribe">@T("Newsletter.Options.Subscribe")</label>
+                    </span>
+                    <span class="unsubscribe inline-flex! items-center! gap-2!">
+                        <input id="newsletter_unsubscribe" type="radio" value="newsletter_unsubscribe" name="newsletter_block" />
+                        <label for="newsletter_unsubscribe">@T("Newsletter.Options.Unsubscribe")</label>
+                    </span>
+                </div>
+            }
+            @if (Model.DisplayCaptcha)
+            {
+                <nop-captcha />
+            }
+        </div>
+        <div class="newsletter-validation mt-2! text-[0.75rem]! leading-[1.6]! text-destructive!" aria-live="polite">
+            <span id="subscribe-loading-progress" class="please-wait hidden text-muted-foreground">@T("Common.Wait")</span>
+            <span asp-validation-for="NewsLetterEmail" id="newsletter-email-validation"></span>
+        </div>
+    </div>
+    <div class="newsletter-result m-0! text-[0.75rem]! leading-[1.7]!" id="newsletter-result-block" aria-live="polite"></div>
+    <script asp-location="Footer">
+        async function getCaptchaToken(action, reCaptchaPublicKey, isReCaptchaV3) {
+            var recaptchaToken = '';
+            if (isReCaptchaV3) {
+                grecaptcha.ready(() => {
+                    grecaptcha.execute(reCaptchaPublicKey, { action: action }).then((token) => {
+                        recaptchaToken = token;
+                    });
+                });
+
+                while (recaptchaToken == '') {
+                    await new Promise(t => setTimeout(t, 100));
+                }
+            } else {
+                recaptchaToken = $('#newsletter-subscribe-block .captcha-box textarea[name="g-recaptcha-response"').val();
+            }
+
+            return recaptchaToken;
+        }
+
+        async function newsletter_subscribe(subscribe) {
+            var subscribeProgress = $("#subscribe-loading-progress");
+            subscribeProgress.show();
+            var captchaTok = '';
+            if (@Model.DisplayCaptcha.ToString().ToLowerInvariant() == true) {
+                captchaTok = await getCaptchaToken('SubscribeNewsletter', '@Model.ReCaptchaPublicKey', @Model.IsReCaptchaV3.ToString().ToLowerInvariant());
+            }
+            var postData = {
+                subscribe: subscribe,
+                email: $("#newsletter-email").val(),
+                'g-recaptcha-response': captchaTok
+            };
+            addAntiForgeryToken(postData);
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: "@(Url.RouteUrl(NopRouteNames.Ajax.SUBSCRIBE_NEWSLETTER))",
+                data: postData,
+                success: function (data, textStatus, jqXHR) {
+                    $("#newsletter-result-block").html(data.Result);
+                    if (data.Success) {
+                        $('#newsletter-subscribe-block').hide();
+                        $('#newsletter-result-block').show();
+                    } else {
+                        $('#newsletter-result-block').fadeIn("slow").delay(2000).fadeOut("slow");
+                    }
+                },
+                error: function (jqXHR, textStatus, errorThrown) {
+                    alert('Failed to subscribe.');
+                },
+                complete: function (jqXHR, textStatus) {
+                    subscribeProgress.hide();
+                }
+            });
+        }
+
+        $(function() {
+            $('#newsletter-subscribe-button').on('click', function () {
+                @if (Model.AllowToUnsubscribe)
+                {
+                    <text>if ($('#newsletter_subscribe').is(':checked')) {
+                    newsletter_subscribe('true');
+                } else {
+                    newsletter_subscribe('false');
+                }</text>
+                }
+                else
+                {
+                    <text>newsletter_subscribe('true');</text>
+                }
+            });
+            $("#newsletter-email").on("keydown", function (event) {
+                if (event.keyCode == 13) {
+                    $("#newsletter-subscribe-button").trigger("click");
+                    return false;
+                }
+            });
+        });
+    </script>
+</div>

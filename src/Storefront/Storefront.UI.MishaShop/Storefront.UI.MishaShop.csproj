@@ -1,0 +1,34 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>Storefront.UI.MishaShop</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <SupportedPlatform Include="browser" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="10.0.12" />
+    <PackageReference Include="BlazorBlueprint.Components" Version="4.1.0" />
+    <ProjectReference Include="../Storefront.UI.Shared/Storefront.UI.Shared.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="package.json;package-lock.json" CopyToPublishDirectory="Never" />
+    <TailwindSources Include="**/*.razor;Styles/**/*.css;package.json;package-lock.json;../Storefront.UI.Shared/**/*.razor;../Storefront.UI.Shared/*.razor;../Storefront.UI.Shared/wwwroot/native-select.js;../../Plugins/Nop.Plugin.Misc.PersianStorefront/Views/**/*.cshtml;../../Presentation/Nop.Web/Themes/MishaShop/Views/**/*.cshtml" />
+  </ItemGroup>
+  <Target Name="RestoreMishaShopNodeModules" BeforeTargets="PrepareForBuild" Inputs="package.json;package-lock.json" Outputs="node_modules/.package-lock.json">
+    <Exec Command="npm ci --no-audit --no-fund" WorkingDirectory="$(MSBuildProjectDirectory)" />
+  </Target>
+  <Target Name="PrepareMishaShopStyleInputs" DependsOnTargets="RestoreMishaShopNodeModules">
+    <!-- Track additions/removals as well as edits. Tailwind preserves CSS timestamps when output is unchanged. -->
+    <WriteLinesToFile File="$(IntermediateOutputPath)tailwind.inputs" Lines="@(TailwindSources->'%(FullPath)')" Overwrite="true" WriteOnlyWhenDifferent="true" />
+    <Touch Files="$(IntermediateOutputPath)tailwind.inputs" Condition="!Exists('wwwroot/mishashop.css')" />
+    <ItemGroup>
+      <FileWrites Include="$(IntermediateOutputPath)tailwind.inputs;$(IntermediateOutputPath)tailwind.stamp" />
+    </ItemGroup>
+  </Target>
+  <Target Name="BuildMishaShopStyles" BeforeTargets="PrepareForBuild" DependsOnTargets="PrepareMishaShopStyleInputs"
+          Inputs="@(TailwindSources);$(MSBuildProjectFullPath);$(IntermediateOutputPath)tailwind.inputs" Outputs="$(IntermediateOutputPath)tailwind.stamp">
+    <Exec Command="npm run build" WorkingDirectory="$(MSBuildProjectDirectory)" />
+    <Touch Files="$(IntermediateOutputPath)tailwind.stamp" AlwaysCreate="true" />
+  </Target>
+</Project>

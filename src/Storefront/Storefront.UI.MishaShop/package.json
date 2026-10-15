@@ -1,0 +1,1 @@
+{"name":"mishashop-storefront-styles","private":true,"scripts":{"build":"tailwindcss -i ./Styles/input.css -o ./wwwroot/mishashop.css --minify","watch":"tailwindcss -i ./Styles/input.css -o ./wwwroot/mishashop.css --watch"},"devDependencies":{"@tailwindcss/cli":"4.1.18","tailwindcss":"4.1.18"}}

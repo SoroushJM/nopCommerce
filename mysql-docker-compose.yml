@@ -1,4 +1,4 @@
-name: nopcommerce-${STOREFRONT_THEME_SLUG:?Set STOREFRONT_THEME_SLUG to madadrang or boutique}-${STOREFRONT_ENVIRONMENT:?Set STOREFRONT_ENVIRONMENT to test or production}
+name: nopcommerce-${STOREFRONT_THEME_SLUG:?Set STOREFRONT_THEME_SLUG to madadrang or mishashop (legacy boutique is supported)}-${STOREFRONT_ENVIRONMENT:?Set STOREFRONT_ENVIRONMENT to test or production}
 services:
   nopcommerce_web:
     image: nopcommerce:${STOREFRONT_THEME_SLUG:?Set STOREFRONT_THEME_SLUG}-${STOREFRONT_ENVIRONMENT:?Set STOREFRONT_ENVIRONMENT}

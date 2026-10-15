@@ -24,14 +24,14 @@
     </PropertyGroup>
     <ItemGroup>
       <!-- Track file membership as well as timestamps, including generated CSS. -->
-      <_StorefrontClientSource Include="../../Storefront/Storefront.Client/**/*;../../Storefront/Storefront.UI.Shared/**/*;../../Storefront/Storefront.UI.Madadrang/**/*;../../Storefront/Storefront.UI.Boutique/**/*"
+      <_StorefrontClientSource Include="../../Storefront/Storefront.Client/**/*;../../Storefront/Storefront.UI.Shared/**/*;../../Storefront/Storefront.UI.Madadrang/**/*;../../Storefront/Storefront.UI.MishaShop/**/*"
                                Exclude="../../Storefront/**/bin/**;../../Storefront/**/obj/**;../../Storefront/**/node_modules/**" />
-      <_StorefrontClientSource Include="Views/**/*.cshtml;../../Presentation/Nop.Web/Themes/Madadrang/Views/**/*.cshtml;../../Presentation/Nop.Web/Themes/Boutique/Views/**/*.cshtml" />
+      <_StorefrontClientSource Include="Views/**/*.cshtml;../../Presentation/Nop.Web/Themes/Madadrang/Views/**/*.cshtml;../../Presentation/Nop.Web/Themes/MishaShop/Views/**/*.cshtml" />
       <_StorefrontClientSource Include="../../Storefront/**/obj/project.assets.json;../../Storefront/**/obj/*.nuget.g.props;../../Storefront/**/obj/*.nuget.g.targets" />
       <_StorefrontClientConfigurationFile Include="$(MSBuildAllProjects);$(MSBuildProjectFullPath);../../Storefront/*;../../*.props;../../*.targets;../../NuGet.Config;../../../global.json;../../../NuGet.Config;../../../*.props;../../../*.targets;../../../vendor/blazorblueprint-primitives/packages/*.nupkg;$(StorefrontClientPublishAdditionalInputs)" />
       <_StorefrontClientSource Include="@(_StorefrontClientConfigurationFile)"
                                Condition="Exists('%(_StorefrontClientConfigurationFile.Identity)')" />
-      <_StorefrontClientSettings Include="Configuration=$(Configuration);Theme=$(StorefrontTheme);Output=$(OutDir);Compiler=$(UseSharedCompilation);SDK=$(NETCoreSdkVersion);FindRazor=$(EnableFindRazorSourceFile);Compression=$(CompressionExcludePatterns);Trimmed=$(PublishTrimmed);AOT=$(RunAOTCompilation);Globalization=$(InvariantGlobalization)" />
+      <_StorefrontClientSettings Include="Configuration=$(Configuration);Theme=$(StorefrontBrand);Output=$(OutDir);Compiler=$(UseSharedCompilation);SDK=$(NETCoreSdkVersion);FindRazor=$(EnableFindRazorSourceFile);Compression=$(CompressionExcludePatterns);Trimmed=$(PublishTrimmed);AOT=$(RunAOTCompilation);Globalization=$(InvariantGlobalization)" />
     </ItemGroup>
     <WriteLinesToFile File="$(_StorefrontClientCache).inputs" Lines="@(_StorefrontClientSettings);@(_StorefrontClientSource->'%(FullPath)')"
                       Overwrite="true" WriteOnlyWhenDifferent="true" />

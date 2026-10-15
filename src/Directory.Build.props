@@ -7,6 +7,9 @@
   <PropertyGroup>
     <TargetFramework>net10.0</TargetFramework>
     <StorefrontTheme Condition="'$(StorefrontTheme)' == ''">Madadrang</StorefrontTheme>
+    <!-- Keep legacy global -p:StorefrontTheme=Boutique inputs valid. -->
+    <StorefrontBrand>$(StorefrontTheme)</StorefrontBrand>
+    <StorefrontBrand Condition="'$(StorefrontTheme)' == 'Boutique'">MishaShop</StorefrontBrand>
     <StorefrontBlueprintPrimitivesVersion>4.1.1-storefront.1</StorefrontBlueprintPrimitivesVersion>
     <RestoreAdditionalProjectSources>$(RestoreAdditionalProjectSources);$(MSBuildThisFileDirectory)../vendor/blazorblueprint-primitives/packages</RestoreAdditionalProjectSources>
     <RepositoryType>Git</RepositoryType>
@@ -14,8 +17,8 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
   <Target Name="ValidateStorefrontTheme" BeforeTargets="PrepareForBuild">
-    <Error Condition="'$(StorefrontTheme)' != 'Madadrang' and '$(StorefrontTheme)' != 'Boutique' and '$(StorefrontTheme)' != 'All'"
-           Text="StorefrontTheme must be Madadrang, Boutique or All." />
+    <Error Condition="'$(StorefrontBrand)' != 'Madadrang' and '$(StorefrontBrand)' != 'MishaShop' and '$(StorefrontBrand)' != 'All'"
+           Text="StorefrontTheme must be Madadrang, MishaShop or All." />
   </Target>
 
   <PropertyGroup>

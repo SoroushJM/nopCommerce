@@ -10,7 +10,7 @@ $sourcePaths = [ordered]@{
     client = 'src/Storefront/Storefront.Client/Program.cs'
     razor = 'src/Storefront/Storefront.UI.Shared/Components/NativeSelectBridge.razor'
     madadrang = 'src/Storefront/Storefront.UI.Madadrang/Components/HomeHero.razor'
-    boutique = 'src/Storefront/Storefront.UI.Boutique/Components/BoutiqueHero.razor'
+    mishashop = 'src/Storefront/Storefront.UI.MishaShop/Components/MishaShopHero.razor'
     asset = 'src/Storefront/Storefront.UI.Shared/wwwroot/native-select.js'
 }
 $original = @{}
@@ -49,7 +49,7 @@ function Output-Hashes {
         client = (Get-FileHash (Active-Wasm 'Storefront.Client')).Hash
         razor = (Get-FileHash (Active-Wasm 'Storefront.UI.Shared')).Hash
         madadrang = (Get-FileHash (Join-Path $publish 'wwwroot/_content/Storefront.UI.Madadrang/storefront.css')).Hash
-        boutique = (Get-FileHash (Join-Path $publish 'wwwroot/_content/Storefront.UI.Boutique/boutique.css')).Hash
+        mishashop = (Get-FileHash (Join-Path $publish 'wwwroot/_content/Storefront.UI.MishaShop/mishashop.css')).Hash
         asset = (Get-FileHash (Join-Path $publish 'wwwroot/_content/Storefront.UI.Shared/native-select.js')).Hash
     }
 }
@@ -66,14 +66,14 @@ try {
         [IO.File]::WriteAllText((Join-Path $repo $sourcePaths.client), $clientText)
         [IO.File]::WriteAllText((Join-Path $repo $sourcePaths.razor), [Text.Encoding]::UTF8.GetString($original.razor) + "`n<span hidden>$razorMarker</span>`n")
         [IO.File]::WriteAllText((Join-Path $repo $sourcePaths.madadrang), [Text.Encoding]::UTF8.GetString($original.madadrang) + "`n<span hidden class=`"w-[$madWidth]`">cache-probe</span>`n")
-        [IO.File]::WriteAllText((Join-Path $repo $sourcePaths.boutique), [Text.Encoding]::UTF8.GetString($original.boutique) + "`n<span hidden class=`"w-[$boutWidth]`">cache-probe</span>`n")
+        [IO.File]::WriteAllText((Join-Path $repo $sourcePaths.mishashop), [Text.Encoding]::UTF8.GetString($original.mishashop) + "`n<span hidden class=`"w-[$boutWidth]`">cache-probe</span>`n")
         [IO.File]::WriteAllText((Join-Path $repo $sourcePaths.asset), [Text.Encoding]::UTF8.GetString($original.asset) + "`n/* $assetMarker */`n")
         Build "real-output-v$version"
         $clientWasm = Active-Wasm 'Storefront.Client'
         $sharedWasm = Active-Wasm 'Storefront.UI.Shared'
         Assert (Contains-BinaryText $clientWasm $clientMarker) 'The compiled C# marker is absent from the active published Client WASM.'
         Assert (Contains-BinaryText $sharedWasm $razorMarker) 'The Razor markup marker is absent from the active published Shared WASM.'
-        foreach ($style in @(@('Storefront.UI.Madadrang', 'storefront.css', $madWidth), @('Storefront.UI.Boutique', 'boutique.css', $boutWidth))) {
+        foreach ($style in @(@('Storefront.UI.Madadrang', 'storefront.css', $madWidth), @('Storefront.UI.MishaShop', 'mishashop.css', $boutWidth))) {
             $publishedCss = Join-Path $publish "wwwroot/_content/$($style[0])/$($style[1])"
             $pluginCss = Join-Path $content "$($style[0])/$($style[1])"
             Assert ((Get-Content $publishedCss -Raw).Contains("width:$($style[2])")) "Tailwind utility not present in published $($style[1])."
@@ -88,7 +88,7 @@ try {
             Assert (!(Contains-BinaryText $clientWasm 'CACHE_REAL_CLIENT_V1')) 'Old C# marker survived in active output.'
             Assert (!(Contains-BinaryText $sharedWasm 'CACHE_REAL_RAZOR_V1')) 'Old Razor marker survived in active output.'
             Assert (!(Get-Content "$publish/wwwroot/_content/Storefront.UI.Madadrang/storefront.css" -Raw).Contains('width:17.8125rem')) 'Old Madadrang utility survived.'
-            Assert (!(Get-Content "$publish/wwwroot/_content/Storefront.UI.Boutique/boutique.css" -Raw).Contains('width:18.0625rem')) 'Old Boutique utility survived.'
+            Assert (!(Get-Content "$publish/wwwroot/_content/Storefront.UI.MishaShop/mishashop.css" -Raw).Contains('width:18.0625rem')) 'Old MishaShop utility survived.'
         }
         $evidence.Add([ordered]@{ version = $version; clientWasm = $clientWasm; sharedWasm = $sharedWasm; markers = @($clientMarker, $razorMarker, $assetMarker, $madWidth, $boutWidth); hashes = (Output-Hashes); passed = $true })
         $evidence | ConvertTo-Json -Depth 6 | Set-Content (Join-Path $ArtifactsDirectory 'real-output-evidence.json')

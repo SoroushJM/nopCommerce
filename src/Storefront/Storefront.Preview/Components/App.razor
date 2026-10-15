@@ -24,6 +24,8 @@
 </html>
 @code {
     [Inject] private IConfiguration Configuration { get; set; } = default!;
-    private string ThemeName => (Configuration["StorefrontTheme"] ?? typeof(App).Assembly.GetCustomAttributes(typeof(System.Reflection.AssemblyMetadataAttribute), false).Cast<System.Reflection.AssemblyMetadataAttribute>().FirstOrDefault(item => item.Key == "StorefrontTheme")?.Value) == "Boutique" ? "Boutique" : "Madadrang";
-    private string ThemeCss => ThemeName == "Boutique" ? "boutique.css" : "storefront.css";
+    private string SelectedTheme => Configuration["StorefrontTheme"] ?? typeof(App).Assembly.GetCustomAttributes(typeof(System.Reflection.AssemblyMetadataAttribute), false).Cast<System.Reflection.AssemblyMetadataAttribute>().FirstOrDefault(item => item.Key == "StorefrontTheme")?.Value ?? "Madadrang";
+    private string ThemeName => string.Equals(SelectedTheme, "MishaShop", StringComparison.OrdinalIgnoreCase)
+        || string.Equals(SelectedTheme, "Boutique", StringComparison.OrdinalIgnoreCase) ? "MishaShop" : "Madadrang";
+    private string ThemeCss => ThemeName == "MishaShop" ? "mishashop.css" : "storefront.css";
 }

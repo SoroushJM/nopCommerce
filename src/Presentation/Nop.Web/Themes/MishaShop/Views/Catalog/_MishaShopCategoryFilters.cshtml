@@ -1,0 +1,28 @@
+@model CatalogProductsModel
+@{
+    if (!Model.PriceRangeFilter.Enabled && !Model.SpecificationFilter.Enabled && !Model.ManufacturerFilter.Enabled)
+        return;
+    var activeCount = Model.SpecificationFilter.Attributes.Sum(attribute => attribute.Values.Count(value => value.Selected))
+        + Model.ManufacturerFilter.Manufacturers.Count(manufacturer => manufacturer.Selected);
+    if (Model.PriceRangeFilter.Enabled &&
+        (Model.PriceRangeFilter.SelectedPriceRange.From != Model.PriceRangeFilter.AvailablePriceRange.From ||
+         Model.PriceRangeFilter.SelectedPriceRange.To != Model.PriceRangeFilter.AvailablePriceRange.To))
+        activeCount++;
+}
+<component type="typeof(MishaShopCatalogDisclosure)" render-mode="WebAssemblyPrerendered" param-ActiveCount="activeCount" />
+<section id="mishashop-category-filters" aria-label="فیلترها" role="region" class="hidden min-[62.5625rem]:block rounded-[0.75rem] border-[0.0625rem] border-solid border-border bg-card p-4 mb-4 [&_.product-filters]:m-0! [&_.product-filter]:mb-4! [&_.product-filter:last-child]:mb-0! [&_.filter-title]:m-0! [&_.filter-title]:mb-3! [&_.filter-title]:p-0! [&_.filter-title]:text-[0.8125rem]! [&_.filter-title]:font-medium! [&_.filter-title]:bg-transparent! [&_.filter-title]:bg-none! [&_.filter-content]:block! [&_.filter-content]:p-0! [&_.filter-content]:m-0! [&_.filter-content]:text-[0.75rem]! [&_.selected-price-range]:mb-3! [&_.selected-price-range]:text-[0.75rem]!">
+    <div class="block product-filters">
+        @if (Model.PriceRangeFilter.Enabled)
+        {
+            @await Html.PartialAsync("_FilterPriceBox", Model.PriceRangeFilter)
+        }
+        @if (Model.SpecificationFilter.Enabled)
+        {
+            @await Html.PartialAsync("_FilterSpecsBox", Model.SpecificationFilter)
+        }
+        @if (Model.ManufacturerFilter.Enabled)
+        {
+            @await Html.PartialAsync("_FilterManufacturerBox", Model.ManufacturerFilter)
+        }
+    </div>
+</section>

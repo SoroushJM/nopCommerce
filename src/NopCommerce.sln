@@ -101,7 +101,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nop.Storefront.Tests", "Tes
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storefront.UI.Madadrang", "Storefront\Storefront.UI.Madadrang\Storefront.UI.Madadrang.csproj", "{D95C9ECD-52F6-471B-9D97-07853CB289FF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storefront.UI.Boutique", "Storefront\Storefront.UI.Boutique\Storefront.UI.Boutique.csproj", "{705D4070-EEC1-426D-B6A3-6A0F5739D532}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Storefront.UI.MishaShop", "Storefront\Storefront.UI.MishaShop\Storefront.UI.MishaShop.csproj", "{705D4070-EEC1-426D-B6A3-6A0F5739D532}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Nop.Plugin.Misc.PersianStorefront", "Plugins\Nop.Plugin.Misc.PersianStorefront\Nop.Plugin.Misc.PersianStorefront.csproj", "{797ABF27-1CD4-4CE0-9286-911C38521EB8}"
 EndProject

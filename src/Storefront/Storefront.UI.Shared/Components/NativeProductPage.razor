@@ -10,7 +10,7 @@
             <input type="hidden" id="@field.Key.Replace('.', '_')" name="@field.Key" value="@field.Value" />
         }
         <main id="@(QuickPurchase ? null : "main-content")">
-            <section class="@(QuickPurchase ? "min-w-0" : "wrap mx-auto max-w-[80rem] px-8 max-md:px-5 [.boutique-shell_&]:w-[calc(100%-2.5rem)] [.boutique-shell_&]:max-w-[73.75rem] [.boutique-shell_&]:px-0 max-md:[.boutique-shell_&]:w-[calc(100%-1.75rem)] py-7")">
+            <section class="@(QuickPurchase ? "min-w-0" : "wrap mx-auto max-w-[80rem] px-8 max-md:px-5 [.mishashop-shell_&]:w-[calc(100%-2.5rem)] [.mishashop-shell_&]:max-w-[73.75rem] [.mishashop-shell_&]:px-0 max-md:[.mishashop-shell_&]:w-[calc(100%-1.75rem)] py-7")">
                 @if (!QuickPurchase && Initial.BreadcrumbEnabled)
                 {
                 <BbBreadcrumb Class="sf-product-breadcrumb [&_ol]:text-xs text-xs text-muted-foreground mb-7" aria-label="@Initial.Name">
@@ -32,30 +32,30 @@
                     @if (!QuickPurchase)
                     {
                     <div @ref="_gallery" class="sf-product-gallery min-w-0">
-                        <BbCard Class="sf-product-image aspect-square overflow-hidden [&>div]:h-full [.boutique-shell_&]:aspect-auto [.boutique-shell_&]:rounded-2xl [.boutique-shell_&]:border-[0rem] [.boutique-shell_&]:bg-muted">
+                        <BbCard Class="sf-product-image aspect-square overflow-hidden [&>div]:h-full [.mishashop-shell_&]:aspect-auto [.mishashop-shell_&]:rounded-2xl [.mishashop-shell_&]:border-[0rem] [.mishashop-shell_&]:bg-muted">
                             <BbCardHeader Class="absolute size-[.0625rem] -m-[.0625rem] overflow-hidden whitespace-nowrap border-[0rem] p-0 [clip-path:inset(50%)]"><BbCardTitle>@Labels.Format("Media.Product.ImageAlternateTextFormat.Details", Initial.Name)</BbCardTitle></BbCardHeader>
                             <BbCardContent Class="p-0">
                             @if (Initial.ZoomEnabled && !string.IsNullOrEmpty(_fullSizeImage))
                             {
                                 <BbDialogTrigger AsChild="false" class="sf-product-zoom block h-full w-full cursor-zoom-in" aria-label="@Labels.Format("Media.Product.ImageLinkTitleFormat.Details", Initial.Name)">
-                                    <img class="h-full w-full object-contain [.boutique-shell_&]:aspect-[3/4] [.boutique-shell_&]:h-auto [.boutique-shell_&]:object-cover" src="@_image" alt="@_imageAlt" title="@_imageTitle" />
+                                    <img class="h-full w-full object-contain [.mishashop-shell_&]:aspect-[3/4] [.mishashop-shell_&]:h-auto [.mishashop-shell_&]:object-cover" src="@_image" alt="@_imageAlt" title="@_imageTitle" />
                                 </BbDialogTrigger>
                             }
                             else
                             {
-                                <img class="h-full w-full object-contain [.boutique-shell_&]:aspect-[3/4] [.boutique-shell_&]:h-auto [.boutique-shell_&]:object-cover" src="@_image" alt="@_imageAlt" title="@_imageTitle" />
+                                <img class="h-full w-full object-contain [.mishashop-shell_&]:aspect-[3/4] [.mishashop-shell_&]:h-auto [.mishashop-shell_&]:object-cover" src="@_image" alt="@_imageAlt" title="@_imageTitle" />
                             }
                             </BbCardContent>
                         </BbCard>
                         @if (Initial.Pictures.Count > 1)
                         {
-                            <div class="sf-product-thumbnails mt-4 flex flex-wrap gap-3 [.boutique-shell_&]:gap-2.5" aria-label="@Labels.Format("Media.Product.ImageAlternateTextFormat.Details", Initial.Name)">
+                            <div class="sf-product-thumbnails mt-4 flex flex-wrap gap-3 [.mishashop-shell_&]:gap-2.5" aria-label="@Labels.Format("Media.Product.ImageAlternateTextFormat.Details", Initial.Name)">
                                 @foreach (var picture in VisiblePictures)
                                 {
-                                    <button type="button" class="@ClassNames.cn("size-[4.5rem] overflow-hidden rounded-md border-[0.125rem] bg-background p-1 [.boutique-shell_&]:h-auto [.boutique-shell_&]:w-16 [.boutique-shell_&]:rounded-lg [.boutique-shell_&]:border-[.0625rem] [.boutique-shell_&]:p-0", _image == picture.Image ? "selected border-primary [.boutique-shell_&]:border-ring" : "border-border")"
+                                    <button type="button" class="@ClassNames.cn("size-[4.5rem] overflow-hidden rounded-md border-[0.125rem] bg-background p-1 [.mishashop-shell_&]:h-auto [.mishashop-shell_&]:w-16 [.mishashop-shell_&]:rounded-lg [.mishashop-shell_&]:border-[.0625rem] [.mishashop-shell_&]:p-0", _image == picture.Image ? "selected border-primary [.mishashop-shell_&]:border-ring" : "border-border")"
                                             aria-label="@picture.Title" aria-pressed="@((_image == picture.Image).ToString().ToLowerInvariant())"
                                             @onclick="() => SelectPicture(picture)">
-                                        <img class="h-full w-full object-contain [.boutique-shell_&]:aspect-[3/4] [.boutique-shell_&]:h-auto [.boutique-shell_&]:object-cover" src="@picture.Thumbnail" alt="@picture.Alt" loading="lazy" />
+                                        <img class="h-full w-full object-contain [.mishashop-shell_&]:aspect-[3/4] [.mishashop-shell_&]:h-auto [.mishashop-shell_&]:object-cover" src="@picture.Thumbnail" alt="@picture.Alt" loading="lazy" />
                                     </button>
                                 }
                             </div>
@@ -142,7 +142,7 @@
                                         @foreach (var option in attribute.Options)
                                         {
                                             <BlazorBlueprint.Primitives.RadioGroup.BbRadioGroupItem @key="option.Id" TValue="int" Value="option.Id"
-                                                    class="@ClassNames.cn(attribute.ControlType is 40 or 45 ? "color-choice grid size-[2.125rem] place-items-center overflow-hidden rounded-[9999rem] border-[0.1875rem] border-background text-primary-foreground outline-[0.0625rem] outline-input disabled:opacity-30 focus-visible:ring-[0.125rem] focus-visible:ring-ring [.boutique-shell_&]:size-8 [.boutique-shell_&]:border-card [.boutique-shell_&]:outline-border" : "filter-pill rounded-md border-[.0625rem] border-border bg-background px-3.5 py-[0.5625rem] text-xs [.boutique-shell_&]:rounded-[9999rem] [.boutique-shell_&]:bg-secondary [.boutique-shell_&]:px-5 [.boutique-shell_&]:py-2", attribute.ControlType == 40 ? "bg-(--swatch-color)" : null, _selected.GetValueOrDefault(attribute.Id) == option.Id ? attribute.ControlType is 40 or 45 ? "selected outline-[0.125rem] outline-primary outline-offset-[0.1875rem] [.boutique-shell_&]:outline-offset-[0rem]" : "selected border-primary bg-secondary text-primary [.boutique-shell_&]:bg-accent" : null)"
+                                                    class="@ClassNames.cn(attribute.ControlType is 40 or 45 ? "color-choice grid size-[2.125rem] place-items-center overflow-hidden rounded-[9999rem] border-[0.1875rem] border-background text-primary-foreground outline-[0.0625rem] outline-input disabled:opacity-30 focus-visible:ring-[0.125rem] focus-visible:ring-ring [.mishashop-shell_&]:size-8 [.mishashop-shell_&]:border-card [.mishashop-shell_&]:outline-border" : "filter-pill rounded-md border-[.0625rem] border-border bg-background px-3.5 py-[0.5625rem] text-xs [.mishashop-shell_&]:rounded-[9999rem] [.mishashop-shell_&]:bg-secondary [.mishashop-shell_&]:px-5 [.mishashop-shell_&]:py-2", attribute.ControlType == 40 ? "bg-(--swatch-color)" : null, _selected.GetValueOrDefault(attribute.Id) == option.Id ? attribute.ControlType is 40 or 45 ? "selected outline-[0.125rem] outline-primary outline-offset-[0.1875rem] [.mishashop-shell_&]:outline-offset-[0rem]" : "selected border-primary bg-secondary text-primary [.mishashop-shell_&]:bg-accent" : null)"
                                                     style="@(attribute.ControlType == 40 ? "--swatch-color:" + option.Color : "")"
                                                     AriaLabel="@($"{AttributePrompt(attribute)} {OptionLabel(option)}")"
                                                     title="@OptionLabel(option)"

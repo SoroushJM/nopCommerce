@@ -51,7 +51,7 @@ switch ($Suite) {
         $after = Get-PublishedHashes
         $changed = @($before.Keys | Where-Object { !$after.ContainsKey($_) -or $before[$_] -ne $after[$_] })
         Assert ($before.Count -eq $after.Count -and $changed.Count -eq 0) "Forced publication changed cached output: $changed"
-        $victim = Join-Path $published 'wwwroot/_content/Storefront.UI.Boutique/boutique.css'
+        $victim = Join-Path $published 'wwwroot/_content/Storefront.UI.MishaShop/mishashop.css'
         Assert (Test-Path -LiteralPath $victim) "Expected output is missing: $victim"
         $victimHash = (Get-FileHash -LiteralPath $victim).Hash
         Remove-Item -LiteralPath $victim
@@ -85,7 +85,7 @@ switch ($Suite) {
         Write-Host 'PASS: adding/editing/removing C# source rebuilt the published WASM; original output hash restored.'
     }
     'Styles' {
-        foreach ($theme in @(@('Madadrang', 'Storefront', 'storefront'), @('Boutique', 'Boutique', 'boutique'))) {
+        foreach ($theme in @(@('Madadrang', 'Storefront', 'storefront'), @('MishaShop', 'MishaShop', 'mishashop'))) {
             $dir = Join-Path $repo "src/Storefront/Storefront.UI.$($theme[0])"
             $csproj = Join-Path $dir "Storefront.UI.$($theme[0]).csproj"
             $probe = Join-Path $dir 'Components/IncrementalStyleProbe.razor'
@@ -124,16 +124,16 @@ switch ($Suite) {
     }
     'Theme' {
         $beforeStamp = (Get-Item $stamp).LastWriteTimeUtc.Ticks
-        Invoke-VerifiedBuild 'verify-theme-boutique' @('-p:StorefrontTheme=Boutique')
+        Invoke-VerifiedBuild 'verify-theme-mishashop' @('-p:StorefrontTheme=MishaShop')
         Assert ((Get-Item $stamp).LastWriteTimeUtc.Ticks -gt $beforeStamp) 'Theme switch did not trigger publication.'
         $manifest = Get-Content (Join-Path $published 'Storefront.Client.staticwebassets.endpoints.json') -Raw
-        Assert (!$manifest.Contains('_content/Storefront.UI.Madadrang/')) 'Boutique manifest still contains Madadrang assets.'
+        Assert (!$manifest.Contains('_content/Storefront.UI.Madadrang/')) 'MishaShop manifest still contains Madadrang assets.'
         $beforeStamp = (Get-Item $stamp).LastWriteTimeUtc.Ticks
-        Invoke-VerifiedBuild 'verify-theme-boutique-cached' @('-p:StorefrontTheme=Boutique')
-        Assert ((Get-Item $stamp).LastWriteTimeUtc.Ticks -eq $beforeStamp) 'Unchanged Boutique publication was not cached.'
+        Invoke-VerifiedBuild 'verify-theme-mishashop-cached' @('-p:StorefrontTheme=MishaShop')
+        Assert ((Get-Item $stamp).LastWriteTimeUtc.Ticks -eq $beforeStamp) 'Unchanged MishaShop publication was not cached.'
         Invoke-VerifiedBuild 'verify-theme-all' -Full
         $manifest = Get-Content (Join-Path $published 'Storefront.Client.staticwebassets.endpoints.json') -Raw
-        Assert ($manifest.Contains('_content/Storefront.UI.Madadrang/') -and $manifest.Contains('_content/Storefront.UI.Boutique/')) 'All theme publication did not restore both asset sets.'
+        Assert ($manifest.Contains('_content/Storefront.UI.Madadrang/') -and $manifest.Contains('_content/Storefront.UI.MishaShop/')) 'All theme publication did not restore both asset sets.'
         Write-Host 'PASS: theme switch invalidates cache; repeated theme skips publication; All restores both themes.'
     }
 }

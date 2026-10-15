@@ -4,7 +4,7 @@ import paramiko
 sys.stdout.reconfigure(encoding='utf-8')
 p=argparse.ArgumentParser(); p.add_argument('--theme',choices=['madadrang','boutique'],required=True); p.add_argument('--app',required=True); p.add_argument('--config',required=True); p.add_argument('--resume-release',help='Resume this previously uploaded release directory after a safe pre-update failure'); p.add_argument('--skip-http-verification',action='store_true',help='Use process/database metadata only; no HTTP requests'); a=p.parse_args()
 c=json.loads(pathlib.Path(a.config).read_text(encoding='utf-8-sig')); root=c['remoteRoot']; app=pathlib.Path(a.app).resolve(); here=pathlib.Path(__file__).resolve().parent
-brand=a.theme.title(); brand='Madadrang' if a.theme=='madadrang' else 'Boutique'; opposite='Boutique' if brand=='Madadrang' else 'Madadrang'
+brand=a.theme.title(); brand='Madadrang' if a.theme=='madadrang' else 'MishaShop'; opposite='MishaShop' if brand=='Madadrang' else 'Madadrang'
 for required in ['Nop.Web.dll','Nop.Docker.Views.dll','libSkiaSharp.so','Microsoft.OpenApi.dll','Scalar.AspNetCore.dll','Swashbuckle.AspNetCore.Swagger.dll','Swashbuckle.AspNetCore.SwaggerGen.dll','Swashbuckle.AspNetCore.SwaggerUI.dll']:
  if not (app/required).is_file(): raise SystemExit('Missing Linux release dependency: '+required)
 files=list(app.rglob('*'))
@@ -76,7 +76,7 @@ with (backup/'App_Data.tar.gz').open('wb') as f: subprocess.run(['docker','exec'
 subprocess.run(['docker','cp',str(root/'ensure-relative-media.sql'),before['database']['Id']+':/tmp/ensure-relative-media.sql'],check=True)
 subprocess.run(['docker','exec',before['database']['Id'],'psql','-X','-v','ON_ERROR_STOP=1','-U','deployment_bootstrap','-d','nop_'+theme,'-f','/tmp/ensure-relative-media.sql'],check=True)
 subprocess.run(['tar','-xzf','app.tar.gz'],cwd=release,check=True)
-brand='Madadrang' if theme=='madadrang' else 'Boutique'; css='storefront.css' if theme=='madadrang' else 'boutique.css'
+brand='Madadrang' if theme=='madadrang' else 'MishaShop'; css='storefront.css' if theme=='madadrang' else 'mishashop.css'
 content=pathlib.Path(release)/'app/Plugins/Misc.PersianStorefront/Content'; canonical=content/('Storefront.UI.'+brand)/css
 for target in [pathlib.Path(release)/'app/wwwroot/_content'/('Storefront.UI.'+brand)/css,content/'Client/wwwroot/_content'/('Storefront.UI.'+brand)/css]:
  if target.exists(): shutil.copyfile(canonical,target)

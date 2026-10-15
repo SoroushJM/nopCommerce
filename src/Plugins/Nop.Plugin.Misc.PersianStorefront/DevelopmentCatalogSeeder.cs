@@ -23,7 +23,7 @@ public sealed class PersianStorefrontPlugin(DevelopmentCatalogSeeder seeder, IWe
 
     public override async Task InstallAsync()
     {
-        if (env.IsDevelopment() && configuration["StorefrontThemeConfig:Theme"] != "Boutique")
+        if (env.IsDevelopment() && StorefrontThemeService.NormalizeThemeName(configuration["StorefrontThemeConfig:Theme"]) != "MishaShop")
             await seeder.Seed();
         await base.InstallAsync();
     }

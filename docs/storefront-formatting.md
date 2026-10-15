@@ -1,6 +1,6 @@
 # Formatting the authored storefront files
 
-Current scope after the 2026-10-12 split: `scripts/format-storefront.ps1` targets the PersianStorefront plugin, Shared, Madadrang, Boutique, browser Client and Preview projects. The deleted `Storefront.UI.csproj` is no longer a formatter target. Historical pass records below concern their stated revisions; changing this project list does not assert that all current files pass full formatting verification. Use `-Verify` for review before applying broad formatter changes.
+Current scope after the 2026-10-12 split: `scripts/format-storefront.ps1` targets the PersianStorefront plugin, Shared, Madadrang, MishaShop, browser Client and Preview projects. The deleted `Storefront.UI.csproj` is no longer a formatter target. Historical pass records below concern their stated revisions; changing this project list does not assert that all current files pass full formatting verification. Use `-Verify` for review before applying broad formatter changes.
 
 The storefront uses Microsoft's C# and Razor formatting tools with the repository's `.editorconfig`. Two scoped `.editorconfig` files, in the storefront UI and PersianStorefront plugin directories, set `csharp_preserve_single_line_blocks` and `csharp_preserve_single_line_statements` to `false`. Upstream project rules are unchanged.
 

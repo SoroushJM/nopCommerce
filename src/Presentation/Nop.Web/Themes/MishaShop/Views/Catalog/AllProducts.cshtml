@@ -1,0 +1,21 @@
+@model Nop.Web.Models.Catalog.SearchModel
+@{
+    Layout = "_ColumnsTwo";
+
+    //title
+    NopHtml.AddTitleParts("همهٔ محصولات");
+    //page class
+    NopHtml.AppendPageCssClassParts("html-search-page");
+}
+
+@section CatalogFilters {
+    @await Html.PartialAsync("_CatalogFilters", Model.CatalogProductsModel)
+}
+
+<div class="page search-page">
+    <div class="page-title">
+        <h1>همهٔ محصولات</h1>
+    </div>
+    <div class="page-body">
+    @await Html.PartialAsync("~/Themes/MishaShop/Views/Catalog/_MishaShopSearchBody.cshtml", Model)
+</div>

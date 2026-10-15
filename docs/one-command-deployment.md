@@ -10,7 +10,7 @@ pwsh -File ./scripts/deploy-madadrang.ps1
 pwsh -File ./scripts/deploy-mishashop.ps1
 ```
 
-«میشا شاپ» در کد و Docker Compose با نام `Boutique` / `boutique` شناخته می‌شود.
+نام فنی «میشا شاپ» در کد `MishaShop` است. شناسهٔ سرویس نصب فعلی در Docker Compose برای سازگاری `boutique` باقی می‌ماند.
 این دستورها برای سرور موجود با Compose شامل `madadrang`، `boutique` و `database`
 هستند؛ سرور خالی را provision نمی‌کنند.
 

@@ -1,7 +1,7 @@
 [CmdletBinding()]
 param(
     [Parameter(Mandatory)]
-    [ValidateSet('Madadrang', 'Boutique')]
+    [ValidateSet('Madadrang', 'MishaShop', 'Boutique')]
     [string]$Theme,
 
     [string]$ConfigPath,
@@ -227,7 +227,7 @@ if ($PSVersionTable.PSVersion -lt [version]'7.4') {
     throw 'Run this script with PowerShell 7.4 or newer.'
 }
 
-$Theme = if ($Theme -ieq 'Boutique') { 'Boutique' } else { 'Madadrang' }
+$Theme = if ($Theme -in @('MishaShop', 'Boutique')) { 'MishaShop' } else { 'Madadrang' }
 $themeSlug = $Theme.ToLowerInvariant()
 $repositoryRoot = [IO.Path]::GetFullPath((Join-Path $PSScriptRoot '..'))
 $privateDirectory = Join-Path ([Environment]::GetFolderPath('LocalApplicationData')) 'NopStorefrontDeploy'

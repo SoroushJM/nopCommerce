@@ -4,7 +4,7 @@ RUN apk add --no-cache nodejs npm
 WORKDIR /source
 ARG RUNTIME_IDENTIFIER=linux-musl-x64
 ARG STOREFRONT_THEME=Madadrang
-RUN case "$STOREFRONT_THEME" in Madadrang|Boutique) ;; *) echo "STOREFRONT_THEME must be Madadrang or Boutique" >&2; exit 1 ;; esac
+RUN case "$STOREFRONT_THEME" in Madadrang|MishaShop|Boutique) ;; *) echo "STOREFRONT_THEME must be Madadrang or MishaShop" >&2; exit 1 ;; esac
 ENV DOTNET_CLI_TELEMETRY_OPTOUT=1 DOTNET_NOLOGO=1
 # Restore metadata first: source edits do not invalidate the NuGet layer.
 COPY global.json ./
@@ -17,7 +17,7 @@ COPY src/Presentation/Nop.Web/Nop.Web.csproj src/Presentation/Nop.Web/
 COPY src/Presentation/Nop.Docker.Views/Nop.Docker.Views.csproj src/Presentation/Nop.Docker.Views/
 COPY src/Storefront/Storefront.UI.Shared/Storefront.UI.Shared.csproj src/Storefront/Storefront.UI.Shared/
 COPY src/Storefront/Storefront.UI.Madadrang/Storefront.UI.Madadrang.csproj src/Storefront/Storefront.UI.Madadrang/
-COPY src/Storefront/Storefront.UI.Boutique/Storefront.UI.Boutique.csproj src/Storefront/Storefront.UI.Boutique/
+COPY src/Storefront/Storefront.UI.MishaShop/Storefront.UI.MishaShop.csproj src/Storefront/Storefront.UI.MishaShop/
 COPY src/Storefront/Storefront.Client/Storefront.Client.csproj src/Storefront/Storefront.Client/
 COPY src/Plugins/Nop.Plugin.Misc.PersianStorefront/Nop.Plugin.Misc.PersianStorefront.csproj src/Plugins/Nop.Plugin.Misc.PersianStorefront/
 COPY src/Plugins/Nop.Plugin.Payments.CheckMoneyOrder/Nop.Plugin.Payments.CheckMoneyOrder.csproj src/Plugins/Nop.Plugin.Payments.CheckMoneyOrder/
@@ -30,9 +30,9 @@ RUN --mount=type=cache,id=nop-nuget,target=/root/.nuget/packages,sharing=locked 
     dotnet restore src/Docker.slnx -p:StorefrontTheme="$STOREFRONT_THEME" -p:DockerRuntimeIdentifier="$RUNTIME_IDENTIFIER" && \
     dotnet restore src/Build/src/ClearPluginAssemblies/ClearPluginAssemblies.csproj
 COPY src/Storefront/Storefront.UI.Madadrang/package*.json src/Storefront/Storefront.UI.Madadrang/
-COPY src/Storefront/Storefront.UI.Boutique/package*.json src/Storefront/Storefront.UI.Boutique/
+COPY src/Storefront/Storefront.UI.MishaShop/package*.json src/Storefront/Storefront.UI.MishaShop/
 RUN --mount=type=cache,id=nop-npm,target=/root/.npm,sharing=locked \
-    cd "src/Storefront/Storefront.UI.$STOREFRONT_THEME" && npm ci --no-audit --no-fund
+    theme="$STOREFRONT_THEME" && if [ "$theme" = Boutique ]; then theme=MishaShop; fi && cd "src/Storefront/Storefront.UI.$theme" && npm ci --no-audit --no-fund
 COPY src/ src/
 RUN --mount=type=cache,id=nop-nuget,target=/root/.nuget/packages,sharing=locked \
     dotnet build src/Build/src/ClearPluginAssemblies/ClearPluginAssemblies.csproj \

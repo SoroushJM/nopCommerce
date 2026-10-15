@@ -1,0 +1,209 @@
+@model ProductDetailsModel
+
+@using Nop.Core.Domain.Catalog
+@using Nop.Core.Domain.Seo
+@using Nop.Services.Helpers
+@using Nop.Services.Html
+
+@inject IHtmlFormatter htmlFormatter
+@inject IWebHelper webHelper
+@inject SeoSettings seoSettings
+
+@{
+    Layout = "_ColumnsOne";
+
+    //title
+    NopHtml.AddTitleParts(!string.IsNullOrEmpty(Model.MetaTitle) ? Model.MetaTitle : Model.Name);
+    //meta
+    NopHtml.AddMetaDescriptionParts(Model.MetaDescription);
+    NopHtml.AddMetaKeywordParts(Model.MetaKeywords);
+    //page class
+    NopHtml.AppendPageCssClassParts("html-product-details-page");
+
+    //canonical URL
+    if (seoSettings.CanonicalUrlsEnabled)
+    {
+        var productUrl = (await NopUrl.RouteGenericUrlAsync<Product>(new { SeName = Model.SeName }, webHelper.GetCurrentRequestProtocol())).ToLowerInvariant();
+        NopHtml.AddCanonicalUrlParts(productUrl, seoSettings.QueryStringInCanonicalUrlsEnabled);
+    }
+
+    //open graph META tags
+    if (seoSettings.OpenGraphMetaTags)
+    {
+        NopHtml.AddHeadCustomParts("<meta property=\"og:type\" content=\"product\" />");
+        NopHtml.AddHeadCustomParts("<meta property=\"og:title\" content=\"" + Html.Encode(Model.Name) + "\" />");
+        NopHtml.AddHeadCustomParts("<meta property=\"og:description\" content=\"" + Html.Encode(htmlFormatter.StripTags(Model.MetaDescription)) + "\" />");
+        NopHtml.AddHeadCustomParts("<meta property=\"og:image\" content=\"" + Model.DefaultPictureModel.ImageUrl + "\" />");
+        NopHtml.AddHeadCustomParts("<meta property=\"og:image:url\" content=\"" + Model.DefaultPictureModel.ImageUrl + "\" />");
+        NopHtml.AddHeadCustomParts("<meta property=\"og:url\" content=\"" + webHelper.GetThisPageUrl(false) + "\" />");
+        NopHtml.AddHeadCustomParts("<meta property=\"og:site_name\" content=\"" + Html.Encode(Model.CurrentStoreName) + "\" />");
+    }
+
+    //Twitter META tags
+    if (seoSettings.TwitterMetaTags)
+    {
+        NopHtml.AddHeadCustomParts("<meta property=\"twitter:card\" content=\"summary\" />");
+        NopHtml.AddHeadCustomParts("<meta property=\"twitter:site\" content=\"" + Html.Encode(Model.CurrentStoreName) + "\" />");
+        NopHtml.AddHeadCustomParts("<meta property=\"twitter:title\" content=\"" + Html.Encode(Model.Name) + "\" />");
+        NopHtml.AddHeadCustomParts("<meta property=\"twitter:description\" content=\"" + Html.Encode(htmlFormatter.StripTags(Model.MetaDescription)) + "\" />");
+        NopHtml.AddHeadCustomParts("<meta property=\"twitter:image\" content=\"" + Model.DefaultPictureModel.ImageUrl + "\" />");
+        NopHtml.AddHeadCustomParts("<meta property=\"twitter:url\" content=\"" + webHelper.GetThisPageUrl(false) + "\" />");
+    }
+
+    NopHtml.AddJsonLdParts(Model.JsonLd);
+}
+<!--product breadcrumb-->
+@section Breadcrumb
+{
+    @await Html.PartialAsync("_ProductBreadcrumb", Model.Breadcrumb)
+}
+@await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductDetailsAfterBreadcrumb, additionalData = Model })
+<div class="page product-details-page">
+    <div class="page-body">
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductDetailsTop, additionalData = Model })
+        <form asp-route="Product" asp-route-sename="@Model.SeName" method="post" id="product-details-form">
+            <article data-productid="@Model.Id" class="
+                [&&_.product-essential]:[gap:1rem_2rem]! [&&_.product-essential]:mb-[1.25rem]!
+                [&&_.gallery_.picture]:mb-[.625rem]! [&&_.gallery_.picture::before]:hidden!
+                [&&_.gallery_.picture_img]:static! [&&_.gallery_.picture_img]:inset-auto!
+                [&&_.gallery_.picture_img]:block! [&&_.gallery_.picture_img]:m-0!
+                [&&_.gallery_.picture_img]:[aspect-ratio:auto]! [&&_.gallery_.picture_img]:p-[.5rem]!
+                [&&_.gallery_.picture_model-viewer]:static! [&&_.gallery_.picture_model-viewer]:w-full!
+                [&&_.gallery_.picture_model-viewer]:h-[28rem]!
+                [&&_:is(.overview,.variant-overview)_.product-name]:mb-[.5rem]!
+                [&&_:is(.overview,.variant-overview)_.product-name_h1]:leading-[1.5]!
+                [&&_:is(.overview,.variant-overview)_.short-description]:[margin:0_0_.5rem]!
+                [&&_:is(.overview,.variant-overview)_.product-reviews-overview]:my-[.5rem]!
+                [&&_:is(.overview,.variant-overview)_.product-review-links]:m-0!
+                [&&_:is(.overview,.variant-overview)_.product-review-box]:mb-[.375rem]!
+                [&&_:is(.overview,.variant-overview)_.manufacturers]:my-[.375rem]!
+                [&&_:is(.overview,.variant-overview)_.availability]:my-[.375rem]!
+                [&&_:is(.overview,.variant-overview)_.availability_.stock]:m-0!
+                [&&_:is(.overview,.variant-overview)_.additional-details]:my-[.375rem]!
+                [&&_:is(.overview,.variant-overview)_.additional-details_>_div]:my-[.25rem]!
+                [&&_:is(.overview,.variant-overview)_.delivery]:my-[.375rem]!
+                [&&_:is(.overview,.variant-overview)_.delivery-date]:my-[.25rem]!
+                [&&_:is(.overview,.variant-overview)_.attributes]:my-[.75rem]!
+                [&&_:is(.overview,.variant-overview)_.attributes]:py-[.75rem]!
+                [&&_:is(.overview,.variant-overview)_.attributes_dt]:mb-[.375rem]!
+                [&&_:is(.overview,.variant-overview)_.attributes_dd]:mb-[.75rem]!
+                [&&_:is(.overview,.variant-overview)_.attributes_dd:last-child]:mb-0!
+                [&&_:is(.overview,.variant-overview)_.prices]:my-[.75rem]!
+                [&&_:is(.overview,.variant-overview)_.add-to-cart]:my-[.75rem]!
+                [&&_:is(.overview,.variant-overview)_.product-estimate-shipping]:my-[.5rem]!
+                [&&_:is(.overview,.variant-overview)_.overview-buttons]:mt-[.5rem]!
+                max-[40rem]:[&&_.product-essential]:gap-[1rem]!
+                max-[40rem]:[&&_.gallery_.picture_model-viewer]:h-[22rem]!">
+                <div class="product-essential grid! grid-cols-[1fr_1fr]! [gap:2rem_3rem]! border-0! [margin:0_0_2.25rem]! [&_>_:not(.gallery):not(.overview)]:col-span-full! [&_>_.gallery]:float-none! [&_>_.gallery]:w-full! [&_>_.gallery]:m-0! [&_>_.gallery]:min-w-0! [&_>_.gallery]:p-0! [&_>_.overview]:float-none! [&_>_.overview]:w-full! [&_>_.overview]:m-0! [&_>_.overview]:min-w-0! [&_>_.overview]:p-0! [&_.gallery_.picture]:bg-muted! [&_.gallery_.picture]:rounded-[1rem]! [&_.gallery_.picture]:overflow-hidden! [&_.gallery_.picture]:[margin:0_0_1rem]! [&_.gallery_.picture_img]:w-full! [&_.gallery_.picture_img]:h-auto! [&_.gallery_.picture_img]:max-h-[none]! [&_.gallery_.picture_img]:object-contain! [&_.gallery_.picture_img]:[aspect-ratio:3/4]! [&_.gallery_.picture_img]:p-[0.875rem]! [&_.gallery_.picture-thumbs]:flex! [&_.gallery_.picture-thumbs]:gap-[0.625rem]! [&_.gallery_.picture-thumbs]:overflow-x-auto! [&_.gallery_.picture-thumbs]:justify-start! [&_.gallery_.picture-thumbs]:[scrollbar-width:thin]! [&_.gallery_.picture-thumbs]:m-0! [&_.gallery_.thumb-item]:[flex:0_0_4.375rem]! [&_.gallery_.thumb-item]:w-[4.375rem]! [&_.gallery_.thumb-item]:m-0! [&_.gallery_.thumb-item]:border-[0.0625rem]! [&_.gallery_.thumb-item]:border-solid! [&_.gallery_.thumb-item]:border-border! [&_.gallery_.thumb-item]:rounded-[0.5rem]! [&_.gallery_.thumb-item]:overflow-hidden! [&_.gallery_.thumb-item]:block! [&_.gallery_.thumb-item]:bg-transparent! [&_.gallery_.thumb-item]:bg-none! [&_.gallery_.thumb-item]:p-0! [&_.gallery_.thumb-item]:cursor-pointer! [&_.gallery_.thumb-item_img]:w-full! [&_.gallery_.thumb-item_img]:h-[5.625rem]! [&_.gallery_.thumb-item_img]:object-contain! [&_.gallery_.thumb-item_img]:p-[0.1875rem]! [&_.gallery_.thumb-item[aria-current=true]]:border-primary! [&_.gallery_.thumb-item[aria-current=true]]:[box-shadow:0_0_0_0.0625rem_var(--primary)]! [&_.overview_.product-name]:border-0! [&_.overview_.product-name]:[margin:0_0_0.75rem]! [&_.overview_.product-name]:p-0! [&_.overview_.product-name_h1]:font-medium! [&_.overview_.product-name_h1]:text-[clamp(1.4375rem,3vw,2rem)]! [&_.overview_.product-name_h1]:leading-[1.8]! [&_.overview_.product-name_h1]:text-foreground! [&_.overview_.short-description]:text-[0.8125rem]! [&_.overview_.short-description]:leading-[2]! [&_.overview_.short-description]:text-muted-foreground! [&_.overview_.product-reviews-overview]:text-[0.6875rem]! [&_.overview_.product-reviews-overview]:leading-[2]! [&_.overview_.product-reviews-overview]:text-muted-foreground! [&_.overview_.product-reviews-overview]:my-[0.75rem]! [&_.overview_.product-reviews-overview]:mx-[0]! [&_.overview_.manufacturers]:text-[0.6875rem]! [&_.overview_.manufacturers]:leading-[2]! [&_.overview_.manufacturers]:text-muted-foreground! [&_.overview_.manufacturers]:my-[0.75rem]! [&_.overview_.manufacturers]:mx-[0]! [&_.overview_.availability]:text-[0.6875rem]! [&_.overview_.availability]:leading-[2]! [&_.overview_.availability]:text-muted-foreground! [&_.overview_.availability]:my-[0.75rem]! [&_.overview_.availability]:mx-[0]! [&_.overview_.additional-details]:text-[0.6875rem]! [&_.overview_.additional-details]:leading-[2]! [&_.overview_.additional-details]:text-muted-foreground! [&_.overview_.additional-details]:my-[0.75rem]! [&_.overview_.additional-details]:mx-[0]! [&_.overview_.delivery]:text-[0.6875rem]! [&_.overview_.delivery]:leading-[2]! [&_.overview_.delivery]:text-muted-foreground! [&_.overview_.delivery]:my-[0.75rem]! [&_.overview_.delivery]:mx-[0]! [&_.overview_.stock]:text-[0.6875rem]! [&_.overview_.stock]:text-success! [&_.overview_.attributes]:[border-block:0.0625rem_solid_var(--border)]! [&_.overview_.attributes]:my-[1.5rem]! [&_.overview_.attributes]:mx-[0]! [&_.overview_.attributes]:py-[1.375rem]! [&_.overview_.attributes]:px-[0]! [&_.overview_.attributes_dt]:text-[0.8125rem]! [&_.overview_.attributes_dt]:[margin:0_0_0.75rem]! [&_.overview_.attributes_dt]:font-medium! [&_.overview_.attributes_dt]:text-foreground! [&_.overview_.attributes_dd]:mb-5! [&_.overview_.attributes_dd:last-child]:mb-0! [&_.overview_.option-list]:flex! [&_.overview_.option-list]:flex-wrap! [&_.overview_.option-list]:gap-2! [&_.overview_.option-list_li]:flex! [&_.overview_.option-list_li]:items-center! [&_.overview_.option-list_li]:gap-[0.375rem]! [&_.overview_.option-list_li]:m-0! [&_.overview_.option-list_li]:border-[0.0625rem]! [&_.overview_.option-list_li]:border-solid! [&_.overview_.option-list_li]:border-border! [&_.overview_.option-list_li]:rounded-[0.625rem]! [&_.overview_.option-list_li]:py-[0.5rem]! [&_.overview_.option-list_li]:px-[0.875rem]! [&_.overview_.option-list_li]:bg-card! [&_.overview_.option-list_li]:text-[0.75rem]! [&_.overview_.option-list_li]:min-h-10! [&_.overview_.option-list_li:has(input:checked)]:border-primary! [&_.overview_.option-list_li:has(input:checked)]:bg-secondary! [&_.overview_.attributes_.color-squares]:flex! [&_.overview_.attributes_.color-squares]:gap-3! [&_.overview_.attributes_.color-squares]:flex-wrap! [&_.overview_.attributes_.color-squares_li]:p-0! [&_.overview_.attributes_.color-squares_li]:m-0! [&_.overview_.attributes_.color-squares_li]:border-0! [&_.overview_.attributes_.color-squares_li]:bg-transparent! [&_.overview_.attributes_.color-squares_li]:bg-none! [&_.overview_.attributes_.color-squares_li]:rounded-none! [&_.overview_.attributes_.color-squares_li]:min-h-0! [&_.overview_.attributes_.color-squares_.attribute-square-container]:rounded-[9999rem]! [&_.overview_.attributes_.color-squares_.attribute-square-container]:border-[0.0625rem]! [&_.overview_.attributes_.color-squares_.attribute-square-container]:border-solid! [&_.overview_.attributes_.color-squares_.attribute-square-container]:border-border! [&_.overview_.attributes_.color-squares_.attribute-square-container]:p-1! [&_.overview_.attributes_.color-squares_.attribute-square-container]:w-[2.375rem]! [&_.overview_.attributes_.color-squares_.attribute-square-container]:h-[2.375rem]! [&_.overview_.attributes_.color-squares_.attribute-square-container]:bg-card! [&_.overview_.attributes_.color-squares_.attribute-square]:rounded-[9999rem]! [&_.overview_.attributes_.color-squares_.attribute-square]:w-7! [&_.overview_.attributes_.color-squares_.attribute-square]:h-7! [&_.overview_.attributes_.color-squares_.attribute-square]:border-0! [&_.overview_.attributes_.color-squares_.selected-value_.attribute-square-container]:border-primary! [&_.overview_.attributes_.color-squares_.selected-value_.attribute-square-container]:[box-shadow:0_0_0_0.0625rem_var(--primary)]! [&_.overview_.attributes_.color-squares_.selected-value_.attribute-square-container]:bg-secondary! [&_.overview_.attributes_.color-squares_li:has(input:checked)_.attribute-square-container]:border-primary! [&_.overview_.attributes_.color-squares_li:has(input:checked)_.attribute-square-container]:[box-shadow:0_0_0_0.0625rem_var(--primary)]! [&_.overview_.attributes_.color-squares_li:has(input:checked)_.attribute-square-container]:bg-secondary! [&_.overview_.attributes_select]:max-w-full! [&_.overview_.attributes_select]:min-w-45! [&_.overview_.attributes_select]:rounded-[0.625rem]! [&_.overview_.attributes_select]:bg-card! [&_.overview_.attributes_select]:border-[0.0625rem]! [&_.overview_.attributes_select]:border-solid! [&_.overview_.attributes_select]:border-border! [&_.overview_.attributes_select]:p-[0.625rem]! [&_.overview_.attributes_select]:text-[0.8125rem]! [&_.overview_.prices]:my-[1.25rem]! [&_.overview_.prices]:mx-[0]! [&_.overview_.product-price]:text-foreground! [&_.overview_.product-price]:text-[1.5625rem]! [&_.overview_.product-price]:font-medium! [&_.overview_.old-product-price]:text-muted-foreground! [&_.overview_.old-product-price]:text-[0.875rem]! [&_.overview_.add-to-cart]:static! [&_.overview_.add-to-cart]:flex! [&_.overview_.add-to-cart]:items-center! [&_.overview_.add-to-cart]:gap-[0.625rem]! [&_.overview_.add-to-cart]:flex-wrap! [&_.overview_.add-to-cart]:my-[1.5rem]! [&_.overview_.add-to-cart]:mx-[0]! [&_.overview_.add-to-cart-panel]:flex! [&_.overview_.add-to-cart-panel]:gap-[0.625rem]! [&_.overview_.add-to-cart-panel]:items-center! [&_.overview_.add-to-cart-panel]:flex-wrap! [&_.overview_.add-to-cart-panel]:w-full! [&_.overview_.qty-input]:rounded-[0.75rem]! [&_.overview_.qty-input]:min-w-15! [&_.overview_.qty-input]:h-12! [&_.overview_.qty-input]:bg-card! [&_.overview_.qty-input]:border-[0.0625rem]! [&_.overview_.qty-input]:border-solid! [&_.overview_.qty-input]:border-border! [&_.overview_.qty-input]:text-center! [&_.overview_.add-to-cart-button]:rounded-[9999rem]! [&_.overview_.add-to-cart-button]:text-[0.875rem]! [&_.overview_.add-to-cart-button]:bg-primary! [&_.overview_.add-to-cart-button]:text-primary-foreground! [&_.overview_.add-to-cart-button]:border-0! [&_.overview_.add-to-cart-button]:h-auto! [&_.overview_.add-to-cart-button]:min-h-12! [&_.overview_.add-to-cart-button]:flex-1! [&_.overview_.add-to-cart-button]:py-[0.75rem]! [&_.overview_.add-to-cart-button]:px-[1.5rem]! [&_.overview_.add-to-cart-button]:min-w-45! [&_.overview_.overview-buttons]:flex! [&_.overview_.overview-buttons]:flex-wrap! [&_.overview_.overview-buttons]:gap-[0.625rem]! [&_.overview_.overview-buttons_button]:text-[0.6875rem]! [&_.overview_.overview-buttons_button]:border-[0.0625rem]! [&_.overview_.overview-buttons_button]:border-solid! [&_.overview_.overview-buttons_button]:border-border! [&_.overview_.overview-buttons_button]:bg-card! [&_.overview_.overview-buttons_button]:text-muted-foreground! [&_.overview_.overview-buttons_button]:rounded-[9999rem]! [&_.overview_.overview-buttons_button]:h-auto! [&_.overview_.overview-buttons_button]:py-[0.5rem]! [&_.overview_.overview-buttons_button]:px-[0.875rem]! [&_.full-description]:col-span-full! [&_.full-description]:m-0! [&_.full-description]:p-0! [&_.full-description]:border-0! max-[40rem]:grid-cols-[1fr]! max-[40rem]:gap-7! max-[40rem]:[margin:0_0_1.625rem]! max-[40rem]:[&_.gallery_.picture]:rounded-[0.75rem]! max-[40rem]:[&_.gallery_.thumb-item]:[flex-basis:3.75rem]! max-[40rem]:[&_.gallery_.thumb-item]:w-15! max-[40rem]:[&_.gallery_.thumb-item_img]:h-[4.875rem]! max-[40rem]:[&_.overview_.product-name_h1]:text-[1.4375rem]! max-[40rem]:[&_.overview_.prices_.product-price]:text-[1.375rem]! max-[40rem]:[&_.overview_.add-to-cart-button]:w-full! max-[40rem]:[&_.overview_.add-to-cart-button]:min-h-[2.875rem]! max-[40rem]:[&_.overview_.attributes_.option-list_li]:py-[0.4375rem]! max-[40rem]:[&_.overview_.attributes_.option-list_li]:px-[0.75rem]!">
+                    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductDetailsEssentialTop, additionalData = Model })
+                    <div class="gallery">
+                        <!--product pictures-->
+                        @await Html.PartialAsync("_ProductDetailsPictures", Model)
+                        <!--product videos-->
+                        @await Html.PartialAsync("_ProductDetailsVideos", Model)
+                    </div>
+                    <div class="overview">
+                        @await Html.PartialAsync("_Discontinued", Model)
+                        <div class="product-name">
+                            <h1>
+                                @Model.Name
+                            </h1>
+                        </div>
+                        @if (!string.IsNullOrEmpty(Model.ShortDescription))
+                        {
+                            <div class="short-description">
+                                @Html.Raw(Model.ShortDescription)
+                            </div>
+                        }
+                        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductDetailsOverviewTop, additionalData = Model })
+                        <!--product reviews-->
+                        @await Html.PartialAsync("_ProductReviewOverview", Model.ProductReviewOverview)
+                        <!--manufacturers-->
+                        @await Html.PartialAsync("_ProductManufacturers", Model.ProductManufacturers)
+                        <!--availability-->
+                        @await Html.PartialAsync("_Availability", Model)
+                        <!--SKU, MAN, GTIN, vendor-->
+                        @await Html.PartialAsync("_SKU_Man_GTIN_Ven", Model)
+                        <!--delivery-->
+                        @await Html.PartialAsync("_DeliveryInfo", Model)
+                        <!--sample download-->
+                        @await Html.PartialAsync("_DownloadSample", Model)
+                        <!--attributes-->
+                        @{
+                            var dataDictAttributes = new ViewDataDictionary(ViewData);
+                            dataDictAttributes.TemplateInfo.HtmlFieldPrefix = $"attributes_{Model.Id}";
+                            @await Html.PartialAsync("_ProductAttributes", Model, dataDictAttributes)
+                        }
+                        <!--gift card-->
+                        @{
+                            var dataDictGiftCard = new ViewDataDictionary(ViewData);
+                            dataDictGiftCard.TemplateInfo.HtmlFieldPrefix = $"giftcard_{Model.Id}";
+                            @await Html.PartialAsync("_GiftCardInfo", Model.GiftCard, dataDictGiftCard)
+                        }
+                        <!--rental info-->
+                        @{
+                            var dataDictRental = new ViewDataDictionary(ViewData);
+                            dataDictRental.TemplateInfo.HtmlFieldPrefix = $"rental_{Model.Id}";
+                            @await Html.PartialAsync("_RentalInfo", Model, dataDictRental)
+                        }
+                        <!--price & add to cart & estimate shipping-->
+                        @{
+                            var dataDictPrice = new ViewDataDictionary(ViewData);
+                            dataDictPrice.TemplateInfo.HtmlFieldPrefix = $"price_{Model.Id}";
+                            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductPriceTop, additionalData = Model })
+                            @await Html.PartialAsync("_ProductPrice", Model.ProductPrice, dataDictPrice)
+                            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductPriceBottom, additionalData = Model })
+
+                            @await Html.PartialAsync("_ProductTierPrices", Model.TierPrices)
+
+                            var dataDictAddToCart = new ViewDataDictionary(ViewData);
+                            dataDictAddToCart.TemplateInfo.HtmlFieldPrefix = $"addtocart_{Model.Id}";
+                            @await Html.PartialAsync("_AddToCart", Model.AddToCart, dataDictAddToCart)
+
+                            @await Html.PartialAsync("_ProductEstimateShipping", Model.ProductEstimateShipping)
+                        }
+                        <!--wishlist, compare, email a friend-->
+                        <div class="overview-buttons">
+                            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductDetailsInsideOverviewButtonsBefore, additionalData = Model })
+                            @{
+                                var dataDictAddToWishlist = new ViewDataDictionary(ViewData);
+                                dataDictAddToWishlist.TemplateInfo.HtmlFieldPrefix = $"addtocart_{Model.Id}";
+                                @await Html.PartialAsync("_AddToWishlist", Model.AddToCart, dataDictAddToWishlist)
+                            }
+                            @await Html.PartialAsync("_CompareProductsButton", Model)
+                            @await Html.PartialAsync("_ProductEmailAFriendButton", Model)
+                            @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductDetailsInsideOverviewButtonsAfter, additionalData = Model })
+                        </div>
+                        @await Html.PartialAsync("_ShareButton", Model)
+                        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductDetailsOverviewBottom, additionalData = Model })
+                    </div>
+                    @if (!string.IsNullOrEmpty(Model.FullDescription))
+                    {
+                        <details class="mishashop-accordion" open><summary>توضیحات محصول</summary><div class="full-description mishashop-accordion-body">
+                            @Html.Raw(Model.FullDescription)
+                        </div></details>
+                    }
+                    @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductDetailsEssentialBottom, additionalData = Model })
+                </div>
+                @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductDetailsBeforeCollateral, additionalData = Model })
+                <section class="product-collateral">
+                    @if (Model.ProductSpecificationModel.Groups.Any(group => group.Attributes.Count > 0)) { <details class="mishashop-accordion"><summary>@T("Products.Specs")</summary><div class="mishashop-accordion-body">@await Html.PartialAsync("_ProductSpecifications", Model.ProductSpecificationModel)</div></details> }
+                    @await Html.PartialAsync("_ProductTags", Model.ProductTags)
+                </section>
+                @await Component.InvokeAsync(typeof(ProductsAlsoPurchasedViewComponent), new { productId = Model.Id })
+                @await Component.InvokeAsync(typeof(RelatedProductsViewComponent), new { productId = Model.Id })
+                @await Component.InvokeAsync(typeof(CompatibleWithFilterLevelValuesViewComponent), new { productId = Model.Id })
+            </article>
+        </form>
+        <!--product reviews-->
+        @if (Model.ProductReviewOverview.AllowCustomerReviews && Model.ProductReviews.Items.Count > 0)
+        {
+            <details class="mishashop-accordion"><summary>@T("Reviews")</summary><div class="mishashop-accordion-body">@await Html.PartialAsync("_ProductReviews", Model.ProductReviews)</div></details>
+        }
+        else if (Model.ProductReviewOverview.AllowCustomerReviews)
+        {
+            @await Html.PartialAsync("_EmptyProductReviewForm", Model.ProductReviews)
+        }
+        @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductDetailsBottom, additionalData = Model })
+    </div>
+</div>

@@ -8,4 +8,4 @@ param(
 
 $ErrorActionPreference = 'Stop'
 $deploymentScript = Join-Path $PSScriptRoot 'deploy-storefront.ps1'
-& $deploymentScript -Theme Boutique @PSBoundParameters
+& $deploymentScript -Theme MishaShop @PSBoundParameters

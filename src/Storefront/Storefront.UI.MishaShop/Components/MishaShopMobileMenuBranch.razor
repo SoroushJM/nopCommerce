@@ -1,0 +1,27 @@
+<li class="!m-0 !list-none !p-0">
+    @if (!string.IsNullOrEmpty(Item.Url))
+    {
+        <a href="@Item.Url" @onclick="Navigate"
+           class="flex min-h-[2.75rem] items-center rounded-[0.5rem] px-[0.75rem] py-[0.625rem] text-start text-[0.9375rem] leading-[1.6] text-foreground hover:bg-secondary focus-visible:[outline:0.125rem_solid_var(--ring)] focus-visible:outline-offset-[0.125rem] @(Nested ? "font-normal" : "font-semibold")">@Item.Title</a>
+    }
+    else
+    {
+        <span class="flex min-h-[2.75rem] items-center px-[0.75rem] py-[0.625rem] text-[0.9375rem] font-semibold leading-[1.6] text-foreground">@Item.Title</span>
+    }
+    @if (Item.Children.Count > 0)
+    {
+        <ul class="!m-0 !ms-[0.75rem] !flex !list-none !flex-col !gap-[0.125rem] !border-s-[0.0625rem] !border-solid !border-border !p-0 !ps-[0.5rem]">
+            @foreach (var child in Item.Children)
+            {
+                <MishaShopMobileMenuBranch Item="child" Nested="true" OnNavigate="OnNavigate" />
+            }
+        </ul>
+    }
+</li>
+
+@code {
+    [Parameter] public StoreMenuItem Item { get; set; } = new();
+    [Parameter] public bool Nested { get; set; }
+    [Parameter] public EventCallback OnNavigate { get; set; }
+    private Task Navigate() => OnNavigate.InvokeAsync();
+}

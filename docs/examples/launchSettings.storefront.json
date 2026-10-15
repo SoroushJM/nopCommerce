@@ -11,12 +11,12 @@
       },
       "applicationUrl": "http://localhost:5602"
     },
-    "Boutique": {
+    "MishaShop": {
       "commandName": "Project",
       "launchBrowser": true,
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development",
-        "StorefrontThemeConfig__Theme": "Boutique",
+        "StorefrontThemeConfig__Theme": "MishaShop",
         "CommonConfig__UsePrecompiledViews": "false",
         "StorefrontHostConfig__HttpPort": "5630"
       },

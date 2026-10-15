@@ -1,0 +1,45 @@
+@implements IAsyncDisposable
+@inject Microsoft.JSInterop.IJSRuntime JS
+@using Microsoft.JSInterop
+
+<BbCollapsible Open="_open" OpenChanged="SetOpen" Class="mb-3 min-[62.5625rem]:hidden">
+    <BbCollapsibleTrigger AsChild="true">
+        <BbButton Variant="ButtonVariant.Outline" Class="flex! h-11! w-full! items-center! justify-between! gap-3! rounded-[0.75rem]! border-[0.0625rem]! border-border! bg-card! px-4! text-[0.8125rem]! text-foreground! shadow-none!" aria-controls="@PanelId">
+            <span class="flex items-center gap-2"><SfIcon Name="filter" />فیلترها</span>
+            <span class="flex items-center gap-2 text-[0.75rem] text-muted-foreground">
+                @if (ActiveCount > 0)
+                {
+                    <span>@ActiveCount فعال</span>
+                }
+                <SfIcon Name="@(_open ? "minus" : "plus")" Size="1m" />
+            </span>
+        </BbButton>
+    </BbCollapsibleTrigger>
+</BbCollapsible>
+
+@code {
+    [Parameter] public string PanelId { get; set; } = "mishashop-category-filters";
+    [Parameter] public int ActiveCount { get; set; }
+    private bool _open;
+    private IJSObjectReference? _module;
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        if (!firstRender) return;
+        _module = await JS.InvokeAsync<IJSObjectReference>("import", "./_content/Storefront.UI.MishaShop/catalog-disclosure.js");
+        await _module.InvokeVoidAsync("initialize", PanelId);
+    }
+
+    private async Task SetOpen(bool open)
+    {
+        _open = open;
+        if (_module is not null) await _module.InvokeVoidAsync("setOpen", PanelId, open);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        if (_module is null) return;
+        await _module.InvokeVoidAsync("dispose", PanelId);
+        await _module.DisposeAsync();
+    }
+}

@@ -15,6 +15,7 @@ public sealed class StorefrontThemeConfig : IConfig
     public string Theme { get; set; } = "";
 }
 
+// Retain this type name because nopCommerce uses it in existing persisted setting keys.
 public sealed class BoutiqueThemeSettings : ISettings
 {
     public int HeroPictureId { get; set; }
@@ -25,13 +26,21 @@ public sealed class BoutiqueThemeSettings : ISettings
 public sealed class StorefrontThemeService(IThemeContext themes, IStoreContext stores,
     ILocalizationService localization, IWebHostEnvironment environment, INopUrlHelper urls, IWorkContext work)
 {
-    public static bool IsSupported(string theme) => theme is "Madadrang" or "Boutique";
+    public static string NormalizeThemeName(string? theme) => theme?.Trim() switch
+    {
+        var value when string.Equals(value, "Boutique", StringComparison.OrdinalIgnoreCase)
+            || string.Equals(value, "MishaShop", StringComparison.OrdinalIgnoreCase) => "MishaShop",
+        var value when string.Equals(value, "Madadrang", StringComparison.OrdinalIgnoreCase) => "Madadrang",
+        var value => value ?? ""
+    };
+
+    public static bool IsSupported(string theme) => NormalizeThemeName(theme) is "Madadrang" or "MishaShop";
 
     public async Task<StorefrontThemeProfile> GetProfileAsync()
     {
         var theme = await themes.GetWorkingThemeNameAsync();
         var labels = await NativeUiLocalization.PrepareAsync(localization, work);
-        if (theme == "Boutique")
+        if (theme == "MishaShop")
         {
             var store = await stores.GetCurrentStoreAsync();
             var name = await localization.GetLocalizedAsync(store, item => item.Name);
