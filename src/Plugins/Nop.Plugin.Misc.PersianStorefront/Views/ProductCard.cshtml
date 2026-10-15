@@ -22,10 +22,18 @@
     var picture = Model.PictureModels.FirstOrDefault();
     var inStock = (bool)ViewData["InStock"]!;
     var purchaseOptions = ViewData["PurchaseOptions"] is true;
-    var label = !inStock ? "ناموجود" : Model.ProductPrice.DisableBuyButton ? "خرید غیرفعال" : Model.MarkAsNew ? "تازه رسیده" : !string.IsNullOrEmpty(Model.ProductPrice.OldPrice) ? "پیشنهاد رنگی" : "";
+    var oldPriceValue = Model.ProductPrice.OldPriceValue;
+    var currentPriceValue = Model.ProductPrice.PriceValue;
+    var hasDiscount = oldPriceValue is > 0 && currentPriceValue is >= 0
+        && oldPriceValue.Value > currentPriceValue.Value;
+    var discountPercent = hasDiscount
+        ? decimal.Floor((oldPriceValue!.Value - currentPriceValue!.Value) / oldPriceValue.Value * 100m)
+        : 0m;
+    RenderFragment discountContent = builder => builder.AddContent(0, $"{discountPercent:0}٪ تخفیف");
+    var label = !inStock ? "ناموجود" : Model.ProductPrice.DisableBuyButton ? "خرید غیرفعال" : Model.MarkAsNew ? "تازه رسیده" : hasDiscount ? "پیشنهاد رنگی" : "";
     var freshArrival = inStock && !Model.ProductPrice.DisableBuyButton && Model.MarkAsNew;
     var recommendation = inStock && !Model.ProductPrice.DisableBuyButton && !Model.MarkAsNew
-        && !string.IsNullOrEmpty(Model.ProductPrice.OldPrice);
+        && hasDiscount;
     var badgeVariant = freshArrival ? BadgeVariant.Default : recommendation ? BadgeVariant.Soft : BadgeVariant.Secondary;
     RenderFragment badgeContent = builder =>
     {
@@ -104,26 +112,33 @@
         {
             <div class="sku text-xs text-muted-foreground mb-2">@Model.Sku</div>
         }
-        @if (Model.ReviewOverviewModel.AllowCustomerReviews)
+        @if (Model.ReviewOverviewModel.AllowCustomerReviews && Model.ReviewOverviewModel.TotalReviews > 0)
         {
-            var ratingPercent = Model.ReviewOverviewModel.TotalReviews == 0 ? 0
-                : ((Model.ReviewOverviewModel.RatingSum * 100) / Model.ReviewOverviewModel.TotalReviews) / 5;
-            <div class="product-rating-box inline-block mb-2" title="@string.Format(T("Reviews.TotalReviews").Text, Model.ReviewOverviewModel.TotalReviews)">
-                <div class="rating h-3.5 w-[5.9375rem] bg-(image:--rating-image) bg-repeat-x" style="--rating-image:url('@Url.Content("~/Themes/DefaultClean/Content/images/rating1.png")')">
-                    <div class="h-3.5 w-(--rating-percent) bg-(image:--rating-image) bg-repeat-x" style="--rating-percent:@(ratingPercent)%;--rating-image:url('@Url.Content("~/Themes/DefaultClean/Content/images/rating2.png")')"></div>
-                </div>
+            var averageRating = Math.Clamp((decimal)Model.ReviewOverviewModel.RatingSum / Model.ReviewOverviewModel.TotalReviews, 0m, 5m);
+            var ratingText = averageRating.ToString("0.0");
+            var reviewCountText = string.Format(T("Reviews.TotalReviews").Text, Model.ReviewOverviewModel.TotalReviews);
+            <div class="product-rating-box mb-[.5rem] inline-flex items-center gap-[.375rem] text-[.8125rem] leading-[1.5]" title="@reviewCountText" role="img" aria-label="امتیاز @ratingText از ۵؛ @reviewCountText">
+                <component type="typeof(SfIcon)" render-mode="Static" param-Name='@("star")' param-Size="@(1m)" param-AdditionalAttributes='@(new Dictionary<string, object> { ["class"] = "fill-warning text-warning" })' />
+                <span class="font-semibold tabular-nums text-foreground" dir="ltr">@ratingText</span>
             </div>
         }
         <div class="description text-xs text-muted-foreground leading-6" hidden="@(!catalogSettings.ShowShortDescriptionOnCatalogPages)" @(catalogSettings.ShowShortDescriptionOnCatalogPages ? "" : "data-short-description=none")>@Html.Raw(Model.ShortDescription)</div>
     </div>
     @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductBoxAddinfoBefore, additionalData = Model })
-    <div class="mt-auto flex items-end justify-between gap-2 px-4 pb-4 [.sf-catalog-list_&]:mt-0">
-        <div>
-            @if (!string.IsNullOrEmpty(Model.ProductPrice.OldPrice))
+    <div class="mt-auto flex items-end justify-between gap-[.5rem] px-[1rem] pb-[1rem] max-md:flex-col max-md:items-stretch max-md:px-[.75rem] [.sf-catalog-list_&]:mt-0">
+        <div class="min-w-0 flex-1">
+            @if (hasDiscount && !string.IsNullOrEmpty(Model.ProductPrice.OldPrice))
             {
-                <del class="text-xs text-muted-foreground block mb-1 price">@Model.ProductPrice.OldPrice</del>
+                <div class="mb-[.375rem] flex flex-wrap items-center gap-x-[.5rem] gap-y-[.25rem]">
+                    <del class="price text-[.75rem] leading-[1.75] text-muted-foreground line-through decoration-[.0625rem]">@Model.ProductPrice.OldPrice</del>
+                    @if (discountPercent > 0)
+                    {
+                        <component type="typeof(BbBadge)" render-mode="Static" param-Variant="@(BadgeVariant.Secondary)" param-ChildContent="@discountContent"
+                                   param-Class='@("shrink-0! rounded-[.375rem]! border-0! bg-secondary! px-[.375rem]! py-[.125rem]! text-[.625rem]! leading-[1.5]! text-secondary-foreground!")' />
+                    }
+                </div>
             }
-            <p class="text-sm font-bold price">@Model.ProductPrice.Price</p>
+            <p class="price m-0 text-[1rem] font-bold leading-[1.75] tabular-nums text-foreground max-md:text-[.9375rem]">@Model.ProductPrice.Price</p>
             @if (Model.ProductPrice.DisplayTaxShippingInfo)
             {
                 var inclTax = await workContext.GetTaxDisplayTypeAsync() == TaxDisplayType.IncludingTax;
@@ -135,7 +150,7 @@
             }
         </div>
         @await Component.InvokeAsync(typeof(WidgetViewComponent), new { widgetZone = PublicWidgetZones.ProductBoxAddinfoMiddle, additionalData = Model })
-        <a href="@url" aria-label="مشاهدهٔ @Model.Name" class="inline-flex min-h-10 shrink-0 items-center gap-1 rounded-md px-2 text-xs text-primary transition-colors hover:bg-secondary focus-visible:outline-[.125rem] focus-visible:outline-offset-[.125rem] focus-visible:outline-ring motion-reduce:transition-none">
+        <a href="@url" aria-label="مشاهدهٔ @Model.Name" class="inline-flex min-h-[2rem] shrink-0 items-center gap-[.25rem] self-end rounded-md px-[.5rem] text-[.75rem] text-primary transition-colors hover:bg-secondary focus-visible:outline-[.125rem] focus-visible:outline-offset-[.125rem] focus-visible:outline-ring motion-reduce:transition-none">
             <span>مشاهده</span>
             <component type="typeof(SfIcon)" render-mode="Static" param-Name='@("arrow")' param-Size="@(.875m)" />
         </a>
