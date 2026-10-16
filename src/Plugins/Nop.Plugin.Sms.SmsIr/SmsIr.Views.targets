@@ -1,0 +1,6 @@
+<Project>
+  <ItemGroup>
+    <ProjectReference Include="$(MSBuildThisFileDirectory)Nop.Plugin.Sms.SmsIr.csproj" />
+    <Content Include="$(MSBuildThisFileDirectory)Views/**/*.cshtml" Link="Plugins/Sms.SmsIr/Views/%(RecursiveDir)%(Filename)%(Extension)" />
+  </ItemGroup>
+</Project>

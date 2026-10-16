@@ -43,8 +43,10 @@ public sealed class StorefrontStartup : INopStartup
         services.AddScoped<NativeCatalogModelFactory>();
         services.AddScoped<NativeCartPresentation>();
         services.AddScoped<DevelopmentCatalogFiltersRepair>();
-        services.AddSingleton<IStorefrontOtpSender, DevelopmentMockOtpSender>();
-        services.AddSingleton<StorefrontOtpService>();
+        services.AddScoped<IStorefrontOtpSender, DevelopmentMockOtpSender>();
+        services.AddScoped<IStorefrontOtpAudit, NullStorefrontOtpAudit>();
+        services.AddScoped<StorefrontOtpService>();
+        services.AddScoped<StorefrontPhoneAccounts>();
         services.AddSwaggerGen(o =>
         {
             o.SwaggerDoc("v1", new OpenApiInfo { Title = "Persian storefront API", Version = "v1" });

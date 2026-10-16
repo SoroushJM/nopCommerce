@@ -26,6 +26,10 @@
     <RazorGenerate Remove="Views/HomeHero.cshtml;Views/HomepageBanners.cshtml;Views/NativeHeader.cshtml;Views/NativeFooter.cshtml" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="DevelopmentSeed/MishaShop/catalog.json"
+                      LogicalName="Nop.Plugin.Misc.PersianStorefront.DevelopmentSeed.MishaShop.catalog.json" />
+    <EmbeddedResource Include="DevelopmentSeed/MishaShop/Images/*.svg"
+                      LogicalName="Nop.Plugin.Misc.PersianStorefront.DevelopmentSeed.MishaShop.Images.%(Filename)%(Extension)" />
     <EmbeddedResource Include="../../Presentation/Nop.Web/App_Data/Localization/PersianPublic/fa-IR.public.xml"
                       LogicalName="Nop.Plugin.Misc.PersianStorefront.Localization.fa-IR.public.xml" />
     <Content Update="plugin.json" CopyToOutputDirectory="PreserveNewest" />

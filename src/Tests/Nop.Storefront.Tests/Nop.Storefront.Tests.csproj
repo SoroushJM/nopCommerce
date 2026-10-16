@@ -20,6 +20,15 @@
     <Compile Include="../../Plugins/Nop.Plugin.Misc.PersianStorefront/StorefrontCookieScope.cs" Link="Plugin/StorefrontCookieScope.cs" />
     <Compile Include="../../Plugins/Nop.Plugin.Misc.PersianStorefront/StorefrontCompiledViews.cs" Link="Plugin/StorefrontCompiledViews.cs" />
     <Compile Include="../../Plugins/Nop.Plugin.Misc.PersianStorefront/StorefrontInstallation.cs" Link="Plugin/StorefrontInstallation.cs" />
+    <Compile Include="../../Plugins/Nop.Plugin.Misc.PersianStorefront/IranianMobile.cs" Link="Plugin/IranianMobile.cs" />
+    <Compile Include="../../Plugins/Nop.Plugin.Misc.PersianStorefront/IStorefrontOtpSender.cs" Link="Plugin/IStorefrontOtpSender.cs" />
+    <Compile Include="../../Plugins/Nop.Plugin.Misc.PersianStorefront/StorefrontOtpService.cs" Link="Plugin/StorefrontOtpService.cs" />
+    <Compile Include="../../Plugins/Nop.Plugin.Misc.PersianStorefront/StorefrontPhoneAccounts.cs" Link="Plugin/StorefrontPhoneAccounts.cs" />
+    <Compile Include="../../Plugins/Nop.Plugin.Sms.SmsIr/SmsIrClient.cs" Link="Plugin/SmsIrClient.cs" />
+    <Compile Include="../../Plugins/Nop.Plugin.Sms.SmsIr/SmsIrSettings.cs" Link="Plugin/SmsIrSettings.cs" />
+    <Compile Include="../../Plugins/Nop.Plugin.Sms.SmsIr/SmsIrSender.cs" Link="Plugin/SmsIrSender.cs" />
+    <Compile Include="../../Plugins/Nop.Plugin.Sms.SmsIr/SmsIrMessage.cs" Link="Plugin/SmsIrMessage.cs" />
+    <Compile Include="../../Plugins/Nop.Plugin.Sms.SmsIr/SmsIrJournal.cs" Link="Plugin/SmsIrJournal.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="../../Presentation/Nop.Web/App_Data/Localization/defaultResources.nopres.xml" Link="Localization/defaultResources.nopres.xml" CopyToOutputDirectory="PreserveNewest" />

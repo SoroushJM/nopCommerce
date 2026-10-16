@@ -1,0 +1,128 @@
+@layer components {
+  .mishashop-shell .mishashop-catalog-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: .75rem 1.25rem;
+    margin: 1rem 0;
+    border-block: .0625rem solid var(--border);
+    padding: 1rem 0;
+    background: transparent;
+    color: var(--muted-foreground);
+    font-size: .75rem;
+    text-align: start;
+  }
+
+  .mishashop-shell .mishashop-catalog-toolbar::after {
+    display: none;
+  }
+
+  .mishashop-shell .mishashop-catalog-toolbar > .mishashop-catalog-field {
+    display: flex;
+    flex: 0 1 auto;
+    align-items: center;
+    gap: .5rem;
+    min-width: 0;
+    margin: 0;
+    float: none;
+  }
+
+  .mishashop-shell .mishashop-catalog-toolbar .mishashop-catalog-label,
+  .mishashop-shell .mishashop-catalog-toolbar .mishashop-catalog-per-page {
+    flex: none;
+    margin: 0;
+    color: inherit;
+    font-size: .75rem;
+    white-space: nowrap;
+  }
+
+  /* The native control and its Blueprint host occupy the same slot before/after mounting. */
+  .mishashop-shell .mishashop-catalog-toolbar .product-sorting > select:not(.sf-select-mirror),
+  .mishashop-shell .mishashop-catalog-toolbar .product-sorting > .sf-native-select {
+    flex: 0 1 12.5rem;
+    width: 12.5rem;
+    min-width: 0 !important;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .mishashop-shell .mishashop-catalog-toolbar .product-page-size > select:not(.sf-select-mirror),
+  .mishashop-shell .mishashop-catalog-toolbar .product-page-size > .sf-native-select {
+    flex: 0 0 5.9375rem;
+    width: 5.9375rem;
+    min-width: 0 !important;
+    max-width: 100%;
+    margin: 0;
+  }
+
+  .mishashop-shell .mishashop-catalog-toolbar select:not(.sf-select-mirror) {
+    height: 2.75rem;
+    border: .0625rem solid var(--border);
+    border-radius: 9999rem;
+    background: var(--card);
+    padding: .4375rem .875rem;
+    color: var(--foreground);
+    font-size: .75rem;
+  }
+
+  .mishashop-shell .mishashop-catalog-toolbar .sf-native-select [role="combobox"] {
+    width: 100% !important;
+    min-width: 0 !important;
+    height: 2.75rem !important;
+    min-height: 2.75rem !important;
+  }
+
+  .mishashop-shell .mishashop-catalog-toolbar .sf-native-select[hidden] {
+    display: none !important;
+  }
+
+  .mishashop-shell .mishashop-catalog-toolbar > .mishashop-catalog-viewmode {
+    display: flex;
+    flex: none;
+    align-items: center;
+    gap: .5rem;
+    margin: 0;
+    margin-inline-start: auto;
+    float: none;
+  }
+
+  .mishashop-shell .mishashop-catalog-toolbar .viewmode-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 2.75rem;
+    height: 2.75rem;
+    margin: 0;
+    background: none;
+    opacity: .5;
+  }
+
+  .mishashop-shell .mishashop-catalog-toolbar .viewmode-icon.selected,
+  .mishashop-shell .mishashop-catalog-toolbar .viewmode-icon:hover {
+    opacity: 1;
+  }
+
+  .mishashop-shell .mishashop-catalog-toolbar .mishashop-catalog-icon {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0;
+  }
+
+  .mishashop-shell .mishashop-catalog-toolbar .mishashop-catalog-icon svg {
+    width: 1.25rem;
+    height: 1.25rem;
+  }
+
+  @media (width < 40rem) {
+    .mishashop-shell .mishashop-catalog-toolbar > .product-sorting {
+      flex: 1 1 100%;
+    }
+
+    .mishashop-shell .mishashop-catalog-toolbar .product-sorting > select:not(.sf-select-mirror),
+    .mishashop-shell .mishashop-catalog-toolbar .product-sorting > .sf-native-select {
+      flex: 1 1 0%;
+      width: 0;
+    }
+  }
+}

@@ -1,4 +1,4 @@
 #!/bin/sh
 set -eu
 cd -- "$(dirname -- "$0")"
-exec sh docker/deploy-madadrang.sh "$@"
+exec bash scripts/deploy-madadrang.sh "$@"

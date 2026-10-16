@@ -16,6 +16,7 @@ public partial class NativeHeader
     [Parameter] public bool AccountDropdown { get; set; }
 
     [Parameter] public bool CompactCartBadge { get; set; }
+    [Parameter] public bool LoginOnly { get; set; }
 
     private string AccountUrl => _signedIn ? Theme.AccountUrl : Theme.LoginUrl;
     private NativeUiLabels Labels => Theme.Labels;

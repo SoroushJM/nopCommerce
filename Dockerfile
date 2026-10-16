@@ -21,6 +21,7 @@ COPY src/Storefront/Storefront.UI.Madadrang/Storefront.UI.Madadrang.csproj src/S
 COPY src/Storefront/Storefront.UI.MishaShop/Storefront.UI.MishaShop.csproj src/Storefront/Storefront.UI.MishaShop/
 COPY src/Storefront/Storefront.Client/Storefront.Client.csproj src/Storefront/Storefront.Client/
 COPY src/Plugins/Nop.Plugin.Misc.PersianStorefront/Nop.Plugin.Misc.PersianStorefront.csproj src/Plugins/Nop.Plugin.Misc.PersianStorefront/
+COPY src/Plugins/Nop.Plugin.Sms.SmsIr/Nop.Plugin.Sms.SmsIr.csproj src/Plugins/Nop.Plugin.Sms.SmsIr/SmsIr.Views.targets src/Plugins/Nop.Plugin.Sms.SmsIr/
 COPY src/Plugins/Nop.Plugin.Payments.CheckMoneyOrder/Nop.Plugin.Payments.CheckMoneyOrder.csproj src/Plugins/Nop.Plugin.Payments.CheckMoneyOrder/
 COPY src/Plugins/Nop.Plugin.Shipping.FixedByWeightByTotal/Nop.Plugin.Shipping.FixedByWeightByTotal.csproj src/Plugins/Nop.Plugin.Shipping.FixedByWeightByTotal/
 COPY src/Plugins/Nop.Plugin.Tax.FixedOrByCountryStateZip/Nop.Plugin.Tax.FixedOrByCountryStateZip.csproj src/Plugins/Nop.Plugin.Tax.FixedOrByCountryStateZip/
@@ -61,7 +62,7 @@ COPY docker/create-certificate.sh /usr/local/bin/create-certificate
 ENTRYPOINT ["sh", "/usr/local/bin/create-certificate"]
 
 FROM mcr.microsoft.com/dotnet/aspnet:10.0-alpine AS runtime
-RUN apk add --no-cache icu-libs icu-data-full tzdata gcompat libgdiplus tiff
+RUN apk add --no-cache icu-libs icu-data-full tzdata gcompat libgdiplus tiff jq
 ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
     ASPNETCORE_HTTP_PORTS=8080 \
     CommonConfig__UsePrecompiledViews=true \
@@ -71,5 +72,6 @@ ENV DOTNET_SYSTEM_GLOBALIZATION_INVARIANT=false \
     DOTNET_EnableDiagnostics=0
 WORKDIR /app
 COPY --from=build /app/published ./
+COPY docker/storefront-entrypoint.sh docker/check-storefront-plugins.sh ./
 EXPOSE 8080 8443
-ENTRYPOINT ["dotnet", "Nop.Web.dll"]
+ENTRYPOINT ["sh", "/app/storefront-entrypoint.sh"]

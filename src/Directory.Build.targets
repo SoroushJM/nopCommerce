@@ -1,6 +1,7 @@
 <Project>
   <Import Project="Storefront.Build.props" Condition="'$(StorefrontBrand)' == ''" />
   <Import Project="Storefront/Storefront.Integration.targets" Condition="'$(MSBuildProjectName)' == 'Nop.Web'" />
+  <Import Project="Plugins/Nop.Plugin.Sms.SmsIr/SmsIr.Views.targets" Condition="'$(MSBuildProjectName)' == 'Nop.Docker.Views'" />
   <!-- Keep development tooling separate from the storefront projects and theme build rules. -->
   <PropertyGroup>
     <EnableFindRazorSourceFile Condition="'$(EnableFindRazorSourceFile)' == '' and '$(Configuration)' == 'Debug'">true</EnableFindRazorSourceFile>

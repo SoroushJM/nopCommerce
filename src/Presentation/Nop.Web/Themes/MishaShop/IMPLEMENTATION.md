@@ -26,4 +26,12 @@ Checkout retains addresses, pickup/shipping, payment discovery and payment-plugi
 
 ## Validation and limits
 
+### Catalog toolbar decision (2026-10-15)
+
+The approved desktop toolbar is a compact aligned row: sorting label and dropdown at the RTL start, page-size control with its labels kept together beside it, and a horizontal grid/list toggle at the opposite end. Groups wrap on narrow screens; sorting occupies its own row below 40rem. Existing brand tokens, typography and Blueprint dropdown appearance remain in use.
+
+The theme owns `_CatalogSelectors.cshtml` and `Storefront.UI.MishaShop/Styles/catalog-toolbar.css`. This replaces the previous category-only overrides and native inline/float layout, which did not size the visible Blueprint host on search/all-products pages. Both the initial native select and `.sf-native-select` host share a size; native mirrored selects and hidden hosts remain hidden. Grid/list icons use the installed Blazor Blueprint Lucide component rather than DefaultClean background images. Native rendering guards, options, field IDs/names and catalog AJAX handlers are retained.
+
+Validation for this toolbar change is limited to CSS generation, isolated Razor compilation and static source/CSS/core-boundary inspection. No browser verification, tests or test-writing is performed, per the user's instruction; responsive appearance and actual interactions have not been verified in a browser.
+
 The MishaShop Razor library and compiled Tailwind stylesheet build with no errors/warnings. The MVC views require the host's independent assembly references and view-component bridges to compile/render. No fake shopper records, payment transactions or production orders are created by the theme. SMS login is disabled in the MishaShop profile until a real configured integration is available; native login and its enabled authentication capabilities remain accessible. Native/plugin capability preservation is structural; production gateway, shipping, tax and third-party plugin integration still require store-specific end-to-end validation by the host.

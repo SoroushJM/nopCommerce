@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk.Razor">
+  <Import Project="../../Storefront.Build.props" />
+  <PropertyGroup>
+    <TargetFramework>net10.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+    <OutputPath Condition="'$(StorefrontPluginOutputRoot)' == ''">../../Presentation/Nop.Web/Plugins/Sms.SmsIr/</OutputPath>
+    <OutputPath Condition="'$(StorefrontPluginOutputRoot)' != ''">$(StorefrontPluginOutputRoot)/Sms.SmsIr/</OutputPath>
+    <OutDir>$([System.IO.Path]::GetFullPath('$(OutputPath)', '$(MSBuildProjectDirectory)'))/</OutDir>
+  </PropertyGroup>
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+    <ProjectReference Include="../Nop.Plugin.Misc.PersianStorefront/Nop.Plugin.Misc.PersianStorefront.csproj" Private="false" />
+    <Content Update="plugin.json;Views/**/*.cshtml" CopyToOutputDirectory="PreserveNewest" />
+  </ItemGroup>
+</Project>

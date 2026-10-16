@@ -11,3 +11,7 @@ Do not modify original nopCommerce code, views, styles, or project files except 
 Run `python scripts/check-nopcommerce-core.py` when changing integration or native files to verify this boundary. Its admin exceptions require review for Persian localization scope.
 
 Review changes to shared UI for effects on both themes. Keep each theme's visual styling independent and use Blazor Blueprint components wherever practical on pages being corrected.
+
+## Feature preservation
+
+Do not remove any nopCommerce feature when customizing, integrating, or fixing the storefront UI. Preserve existing capabilities and behavior, including sorting, page-size selection, grid/list views, filters, pagination, and their native data and event contracts. A styling fix must retain the feature and correct its presentation.

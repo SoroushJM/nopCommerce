@@ -1,0 +1,311 @@
+[
+  {
+    "Id": 1,
+    "Name": "شومیز لینن آوا",
+    "Slug": "mishashop-dev-linen-shirt",
+    "Category": "شومیز و تاپ",
+    "CategoryKey": "tops",
+    "PriceInToman": 1290000,
+    "OldPriceInToman": 1490000,
+    "Description": "شومیز آزاد با بافت لینن، یقهٔ کلاسیک و دکمه‌های صدفی؛ انتخابی سبک برای استایل مینیمال روزانه.",
+    "Image": "mishashop-dev-001.svg",
+    "Colors": [
+      {
+        "Name": "کرم",
+        "Hex": "#e6dac7"
+      },
+      {
+        "Name": "موکا",
+        "Hex": "#a7856b"
+      }
+    ],
+    "Sizes": [
+      "S",
+      "M",
+      "L"
+    ]
+  },
+  {
+    "Id": 2,
+    "Name": "شومیز پاپلین نوا",
+    "Slug": "mishashop-dev-poplin-shirt",
+    "Category": "شومیز و تاپ",
+    "CategoryKey": "tops",
+    "PriceInToman": 1190000,
+    "OldPriceInToman": 0,
+    "Description": "پاپلین نرم با برش آزاد و سرآستین پهن؛ مناسب ترکیب با شلوار دنیم و کیف روزمره.",
+    "Image": "mishashop-dev-002.svg",
+    "Colors": [
+      {
+        "Name": "شیری",
+        "Hex": "#efece4"
+      },
+      {
+        "Name": "آبی مه‌آلود",
+        "Hex": "#b4c5d0"
+      }
+    ],
+    "Sizes": [
+      "S",
+      "M",
+      "L"
+    ]
+  },
+  {
+    "Id": 3,
+    "Name": "تاپ ریب مینا",
+    "Slug": "mishashop-dev-ribbed-top",
+    "Category": "شومیز و تاپ",
+    "CategoryKey": "tops",
+    "PriceInToman": 590000,
+    "OldPriceInToman": 690000,
+    "Description": "تاپ ریب با یقهٔ گرد و برش ساده؛ یک لایهٔ پایه برای پوشیدن زیر کت یا شومیز.",
+    "Image": "mishashop-dev-003.svg",
+    "Colors": [
+      {
+        "Name": "نود",
+        "Hex": "#af9786"
+      },
+      {
+        "Name": "مشکی",
+        "Hex": "#383633"
+      }
+    ],
+    "Sizes": [
+      "S",
+      "M",
+      "L"
+    ]
+  },
+  {
+    "Id": 4,
+    "Name": "پلیور بافت رها",
+    "Slug": "mishashop-dev-knit-pullover",
+    "Category": "بافت و ژیله",
+    "CategoryKey": "knitwear",
+    "PriceInToman": 1690000,
+    "OldPriceInToman": 1890000,
+    "Description": "بافت نرم با سرآستین کشباف و فرم آزاد؛ همراه روزهای خنک و استایل لایه‌ای.",
+    "Image": "mishashop-dev-004.svg",
+    "Colors": [
+      {
+        "Name": "موکا روشن",
+        "Hex": "#c5ad9d"
+      },
+      {
+        "Name": "شیری",
+        "Hex": "#ede6d9"
+      }
+    ],
+    "Sizes": [
+      "S/M",
+      "L/XL"
+    ]
+  },
+  {
+    "Id": 5,
+    "Name": "ژیلهٔ بافت ماهور",
+    "Slug": "mishashop-dev-knit-vest",
+    "Category": "بافت و ژیله",
+    "CategoryKey": "knitwear",
+    "PriceInToman": 990000,
+    "OldPriceInToman": 0,
+    "Description": "ژیلهٔ یقه‌هفت با خطوط بافت ظریف؛ برای ترکیب با شومیز سفید یا تاپ ساده.",
+    "Image": "mishashop-dev-005.svg",
+    "Colors": [
+      {
+        "Name": "جو دوسر",
+        "Hex": "#d5c9b2"
+      },
+      {
+        "Name": "طوسی",
+        "Hex": "#aaa7a1"
+      }
+    ],
+    "Sizes": [
+      "S/M",
+      "L/XL"
+    ]
+  },
+  {
+    "Id": 6,
+    "Name": "کت آزاد لونا",
+    "Slug": "mishashop-dev-relaxed-blazer",
+    "Category": "کت و رویه",
+    "CategoryKey": "outerwear",
+    "PriceInToman": 2790000,
+    "OldPriceInToman": 3190000,
+    "Description": "کت تک با یقهٔ انگلیسی، جیب پاکتی و برش آزاد؛ مناسب استایل شهری و مینیمال.",
+    "Image": "mishashop-dev-006.svg",
+    "Colors": [
+      {
+        "Name": "بژ",
+        "Hex": "#cdbb9d"
+      },
+      {
+        "Name": "ذغالی",
+        "Hex": "#56534f"
+      }
+    ],
+    "Sizes": [
+      "S",
+      "M",
+      "L"
+    ]
+  },
+  {
+    "Id": 7,
+    "Name": "ترنچ کوتاه آیلین",
+    "Slug": "mishashop-dev-trench-coat",
+    "Category": "کت و رویه",
+    "CategoryKey": "outerwear",
+    "PriceInToman": 3490000,
+    "OldPriceInToman": 0,
+    "Description": "رویهٔ دو ردیف دکمه با کمربند پارچه‌ای و سرآستین قابل تنظیم؛ مناسب روزهای پاییزی.",
+    "Image": "mishashop-dev-007.svg",
+    "Colors": [
+      {
+        "Name": "شتری",
+        "Hex": "#b69875"
+      },
+      {
+        "Name": "کرم روشن",
+        "Hex": "#e0d2bc"
+      }
+    ],
+    "Sizes": [
+      "S",
+      "M",
+      "L"
+    ]
+  },
+  {
+    "Id": 8,
+    "Name": "جین واید نیکا",
+    "Slug": "mishashop-dev-wide-leg-jeans",
+    "Category": "شلوار و دنیم",
+    "CategoryKey": "trousers",
+    "PriceInToman": 1890000,
+    "OldPriceInToman": 2190000,
+    "Description": "دنیم واید با فاق بلند و جیب‌های کاربردی؛ ترکیبی راحت برای شومیز و کفش روزمره.",
+    "Image": "mishashop-dev-008.svg",
+    "Colors": [
+      {
+        "Name": "آبی سنگ‌شور",
+        "Hex": "#7c96a7"
+      },
+      {
+        "Name": "سرمه‌ای",
+        "Hex": "#3d5262"
+      }
+    ],
+    "Sizes": [
+      "36",
+      "38",
+      "40",
+      "42"
+    ]
+  },
+  {
+    "Id": 9,
+    "Name": "شلوار پیلی‌دار السا",
+    "Slug": "mishashop-dev-pleated-trousers",
+    "Category": "شلوار و دنیم",
+    "CategoryKey": "trousers",
+    "PriceInToman": 1590000,
+    "OldPriceInToman": 0,
+    "Description": "شلوار پارچه‌ای با پیلی جلو و فرم راستهٔ آزاد؛ مناسب ست‌های ساده و نیمه‌رسمی.",
+    "Image": "mishashop-dev-009.svg",
+    "Colors": [
+      {
+        "Name": "کرم",
+        "Hex": "#d9ceb8"
+      },
+      {
+        "Name": "موکا",
+        "Hex": "#977f69"
+      }
+    ],
+    "Sizes": [
+      "36",
+      "38",
+      "40",
+      "42"
+    ]
+  },
+  {
+    "Id": 10,
+    "Name": "جین راستهٔ مانا",
+    "Slug": "mishashop-dev-straight-jeans",
+    "Category": "شلوار و دنیم",
+    "CategoryKey": "trousers",
+    "PriceInToman": 1790000,
+    "OldPriceInToman": 0,
+    "Description": "جین راسته با فاق متوسط و دوخت ساده؛ پایه‌ای کاربردی برای استایل خیابانی.",
+    "Image": "mishashop-dev-010.svg",
+    "Colors": [
+      {
+        "Name": "آبی تیره",
+        "Hex": "#586c7a"
+      },
+      {
+        "Name": "مشکی",
+        "Hex": "#363a3d"
+      }
+    ],
+    "Sizes": [
+      "36",
+      "38",
+      "40",
+      "42"
+    ]
+  },
+  {
+    "Id": 11,
+    "Name": "کیف دوشی لیا",
+    "Slug": "mishashop-dev-shoulder-bag",
+    "Category": "اکسسوری",
+    "CategoryKey": "accessories",
+    "PriceInToman": 1390000,
+    "OldPriceInToman": 1590000,
+    "Description": "کیف دوشی کوچک با بند قابل تنظیم و یراق طلایی؛ برای همراه داشتن وسایل ضروری روزانه.",
+    "Image": "mishashop-dev-011.svg",
+    "Colors": [
+      {
+        "Name": "کنیاکی",
+        "Hex": "#946947"
+      },
+      {
+        "Name": "مشکی",
+        "Hex": "#34312e"
+      }
+    ],
+    "Sizes": [
+      "تک‌سایز"
+    ]
+  },
+  {
+    "Id": 12,
+    "Name": "عینک مینیمال سایا",
+    "Slug": "mishashop-dev-sunglasses",
+    "Category": "اکسسوری",
+    "CategoryKey": "accessories",
+    "PriceInToman": 690000,
+    "OldPriceInToman": 0,
+    "Description": "عینک با قاب ظریف و فرم بیضی؛ اکسسوری ساده برای تکمیل استایل شهری.",
+    "Image": "mishashop-dev-012.svg",
+    "Colors": [
+      {
+        "Name": "قهوه‌ای",
+        "Hex": "#554a40"
+      },
+      {
+        "Name": "مشکی",
+        "Hex": "#292a29"
+      }
+    ],
+    "Sizes": [
+      "تک‌سایز"
+    ]
+  }
+]

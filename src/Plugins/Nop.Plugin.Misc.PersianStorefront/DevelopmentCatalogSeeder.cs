@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using Nop.Core.Domain.Catalog;
 using Nop.Core.Domain.Directory;
 using Nop.Core.Domain.Orders;
@@ -13,8 +14,8 @@ using Nop.Services.Plugins;
 
 namespace Nop.Plugin.Misc.PersianStorefront;
 
-public sealed class PersianStorefrontPlugin(DevelopmentCatalogSeeder seeder, IWebHostEnvironment env, IWebHelper web,
-    IConfiguration configuration) : BasePlugin
+public sealed class PersianStorefrontPlugin(DevelopmentCatalogSeeder seeder, MishaShopDevelopmentCatalogSeeder mishaSeeder,
+    IWebHostEnvironment env, IWebHelper web, IConfiguration configuration, ILogger<PersianStorefrontPlugin> logger) : BasePlugin
 {
     public override string GetConfigurationPageUrl()
     {
@@ -23,8 +24,27 @@ public sealed class PersianStorefrontPlugin(DevelopmentCatalogSeeder seeder, IWe
 
     public override async Task InstallAsync()
     {
-        if (env.IsDevelopment() && StorefrontThemeService.NormalizeThemeName(configuration["StorefrontThemeConfig:Theme"]) != "MishaShop")
-            await seeder.Seed();
+        if (env.IsDevelopment())
+        {
+            if (StorefrontThemeService.NormalizeThemeName(configuration["StorefrontThemeConfig:Theme"]) == "MishaShop")
+            {
+                if (configuration.GetValue<bool>("StorefrontDevelopmentSeed:MishaShopOnInstall"))
+                {
+                    try
+                    {
+                        var result = await mishaSeeder.SeedAsync();
+                        logger.LogInformation("MishaShop development samples: added {Added}, skipped {Skipped}. {Report}",
+                            result.AddedProducts, result.SkippedProducts, string.Join(" ", result.Messages));
+                    }
+                    catch (Exception exception) when (exception is not OperationCanceledException)
+                    {
+                        logger.LogWarning(exception, "Optional MishaShop development seed did not finish. Use its administrator page to inspect and rerun after correcting the cause.");
+                    }
+                }
+            }
+            else
+                await seeder.Seed();
+        }
         await base.InstallAsync();
     }
 }

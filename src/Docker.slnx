@@ -1,4 +1,7 @@
 <Solution>
+  <Folder Name="/Plugins/">
+    <Project Path="Plugins/Nop.Plugin.Sms.SmsIr/Nop.Plugin.Sms.SmsIr.csproj" />
+  </Folder>
   <Project Path="Libraries/Nop.Core/Nop.Core.csproj" />
   <Project Path="Libraries/Nop.Data/Nop.Data.csproj" />
   <Project Path="Libraries/Nop.Services/Nop.Services.csproj" />

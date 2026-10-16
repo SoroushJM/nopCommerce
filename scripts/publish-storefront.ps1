@@ -108,6 +108,10 @@ try {
         !(Test-Path -LiteralPath (Join-Path $publishRoot "Themes/$Theme")) -or
         !(Test-Path -LiteralPath (Join-Path $publishRoot 'Themes/DefaultClean'))) { throw 'The selected brand/shared assemblies or native theme folders are missing.' }
     $inactiveTheme = if ($Theme -eq 'Madadrang') { 'MishaShop' } else { 'Madadrang' }
+    foreach ($required in @('plugin.json','Nop.Plugin.Sms.SmsIr.dll')) {
+        if (!(Test-Path -LiteralPath (Join-Path $publishRoot "Plugins/Sms.SmsIr/$required"))) { throw "SMS.ir package is incomplete: $required" }
+    }
+    Copy-Item -LiteralPath (Join-Path $sourceRoot 'docker/storefront-entrypoint.sh'), (Join-Path $sourceRoot 'docker/check-storefront-plugins.sh') -Destination $publishRoot
     $inactiveFiles = Get-ChildItem -LiteralPath $publishRoot -Recurse -File | Where-Object { $_.Name -like "Storefront.UI.$inactiveTheme*" -or $_.FullName -match "[\\/](Themes[\\/]$inactiveTheme|Storefront\.UI\.$inactiveTheme)[\\/]" }
     if ($inactiveFiles) { throw "The release contains inactive $inactiveTheme artifacts; refusing to label this package as isolated." }
     New-Item -ItemType Directory -Path (Join-Path $publishRoot 'logs'), (Join-Path $publishRoot 'bin'), (Join-Path $publishRoot 'App_Data/DataProtectionKeys') -Force | Out-Null

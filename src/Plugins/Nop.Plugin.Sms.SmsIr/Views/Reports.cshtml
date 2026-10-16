@@ -1,0 +1,46 @@
+@model Nop.Plugin.Sms.SmsIr.Controllers.SmsIrReportModel
+@{ Layout = "_AdminLayout"; NopHtml.SetActiveMenuItemSystemName("SmsIr.Reports"); }
+<div class="content-header clearfix"><h1 class="float-left">گزارش پیامک‌های sms.ir</h1><a href="@Url.RouteUrl("Plugin.SmsIr.Configure")" class="btn btn-default float-right">تنظیمات سرویس</a></div>
+<section class="content" dir="rtl">
+    <p>پذیرش توسط سرویس به معنی تحویل به گوشی نیست. برای پیام عملیاتی می‌توانید نتیجهٔ تحویل را استعلام کنید. لیست سیاه، نتیجهٔ همان پیام در زمان آخرین استعلام است و مسدودی دائمی شماره در فروشگاه ایجاد نمی‌کند. زمان‌ها UTC هستند.</p>
+    <p>محدودیت مهمان یا IP فقط همان درخواست‌کننده را محدود می‌کند؛ الزاماً همهٔ درخواست‌ها به آن شماره را مسدود نمی‌کند. فیلتر محدودیت با زمان باقی‌مانده، رخدادهای ثبت‌شده‌ای را نشان می‌دهد که زمان محدودیت آن‌ها هنوز نگذشته است.</p>
+    <p>محدودیت‌های تکراری یک شماره با دلیل و بازهٔ زمانی یکسان در یک رکورد با تعداد درخواست‌ها و آخرین درخواست‌کننده جمع می‌شوند.</p>
+    <p>گزارش از زمان نصب این افزونه ثبت می‌شود. متن حساس و کد ورود نگهداری نمی‌شوند؛ «OTP» یعنی درخواست قالب کد ورود و «Text» یعنی پیام عمومی. درخواست بدون نتیجهٔ قطعی، نامشخص باقی می‌ماند و خودکار تکرار نمی‌شود.</p>
+    <form asp-controller="SmsIrReports" asp-action="Index" asp-area="Admin" method="get" class="card card-body">
+        <div asp-validation-summary="All" class="text-danger"></div>
+        <div class="form-group"><label for="phone">شماره موبایل</label><input id="phone" name="phone" value="@Model.Phone" class="form-control" placeholder="0912…" /></div>
+        <div class="form-group"><label asp-for="Status">وضعیت</label><select asp-for="Status" name="status" class="form-control">
+            <option value="All">همه</option><option value="Accepted">پذیرفته‌شدهٔ عملیاتی</option><option value="Sandbox">آزمایشی Sandbox</option>
+            <option value="Failed">ناموفق قطعی</option><option value="Unknown">نتیجه نامشخص / در حال ارسال</option><option value="Blocked">همهٔ محدودیت‌های فروشگاه</option><option value="ActiveBlock">محدودیت موقت با زمان باقی‌مانده</option><option value="ProviderBlacklist">لیست سیاه اپراتور طبق استعلام</option>
+        </select></div><button class="btn btn-primary" type="submit">نمایش گزارش</button>
+    </form>
+    <div class="card"><div class="card-header">تعداد درخواست به تفکیک شماره — مطابق فیلتر فعلی (@Model.Numbers.TotalCount شماره)</div><div class="card-body table-responsive">
+        <table class="table table-bordered"><thead><tr><th>شماره</th><th>کل درخواست‌ها</th><th>پذیرفته‌شدهٔ عملیاتی</th><th>آزمایشی</th><th>ناموفق قطعی</th><th>محدودشده در فروشگاه</th><th>نامشخص</th><th>آخرین درخواست UTC</th></tr></thead><tbody>
+        @foreach (var number in Model.Numbers)
+        {
+            <tr><td dir="ltr"><a asp-action="Index" asp-route-phone="@number.Phone">@number.Phone</a></td><td>@number.Requests</td><td>@number.Accepted</td><td>@number.SandboxAccepted</td><td>@number.Failed</td><td>@number.Blocked</td><td>@number.Unknown</td><td>@number.LastRequestUtc.ToString("yyyy-MM-dd HH:mm:ss")</td></tr>
+        }
+        </tbody></table>
+        @if (Model.Numbers.HasPreviousPage) { <a asp-action="Index" asp-route-phone="@Model.Phone" asp-route-status="@Model.Status" asp-route-numbersPage="@(Model.Numbers.PageIndex)" class="btn btn-default">شماره‌های قبلی</a> }
+        @if (Model.Numbers.HasNextPage) { <a asp-action="Index" asp-route-phone="@Model.Phone" asp-route-status="@Model.Status" asp-route-numbersPage="@(Model.Numbers.PageIndex + 2)" class="btn btn-default">شماره‌های بعدی</a> }
+    </div></div>
+    <div class="card"><div class="card-header">تاریخچهٔ درخواست‌ها (@Model.Messages.TotalCount رکورد)</div><div class="card-body table-responsive">
+        <table class="table table-bordered"><thead><tr><th>آخرین درخواست UTC</th><th>شماره</th><th>آخرین درخواست‌کننده</th><th>نوع / قالب / تعداد درخواست</th><th>نتیجهٔ ارسال</th><th>دلیل / پایان محدودیت UTC</th><th>شناسه / وضعیت سرویس</th><th>تحویل</th></tr></thead><tbody>
+        @foreach (var message in Model.Messages)
+        {
+            <tr><td>@message.LastRequestOnUtc.ToString("yyyy-MM-dd HH:mm:ss")</td><td dir="ltr">@message.Phone</td>
+                <td><a href="@Url.Action("Edit", "Customer", new { area = "Admin", id = message.CustomerId })">#@message.CustomerId</a><small class="d-block">ممکن است در زمان درخواست مهمان بوده باشد</small></td>
+                <td>@message.Kind / @message.TemplateId / @message.RequestCount</td><td>@message.OutcomeLabel</td><td>@message.ReasonLabel @message.BlockedUntilUtc?.ToString("yyyy-MM-dd HH:mm:ss")</td><td>@message.MessageId / @message.ProviderStatus</td>
+                <td>@message.DeliveryLabel
+                    @if (!message.Sandbox && message.Outcome == "Accepted" && message.MessageId.HasValue)
+                    {
+                        <form asp-action="RefreshDelivery" asp-controller="SmsIrReports" asp-area="Admin" method="post"><input type="hidden" name="id" value="@message.Id" /><button class="btn btn-default btn-sm" type="submit">استعلام تحویل</button></form>
+                    }
+                    @if (message.DeliveryCheckedOnUtc.HasValue) { <small class="d-block">آخرین تلاش استعلام: @message.DeliveryCheckedOnUtc.Value.ToString("yyyy-MM-dd HH:mm:ss") UTC</small> }
+                </td></tr>
+        }
+        </tbody></table>
+        @if (Model.Messages.HasPreviousPage) { <a asp-action="Index" asp-route-phone="@Model.Phone" asp-route-status="@Model.Status" asp-route-page="@(Model.Messages.PageIndex)" class="btn btn-default">پیام‌های قبلی</a> }
+        @if (Model.Messages.HasNextPage) { <a asp-action="Index" asp-route-phone="@Model.Phone" asp-route-status="@Model.Status" asp-route-page="@(Model.Messages.PageIndex + 2)" class="btn btn-default">پیام‌های بعدی</a> }
+    </div></div>
+</section>

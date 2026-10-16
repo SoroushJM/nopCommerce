@@ -24,7 +24,7 @@ public sealed class BoutiqueThemeSettings : ISettings
 }
 
 public sealed class StorefrontThemeService(IThemeContext themes, IStoreContext stores,
-    ILocalizationService localization, IWebHostEnvironment environment, INopUrlHelper urls, IWorkContext work)
+    ILocalizationService localization, INopUrlHelper urls, IWorkContext work)
 {
     public static string NormalizeThemeName(string? theme) => theme?.Trim() switch
     {
@@ -52,7 +52,8 @@ public sealed class StorefrontThemeService(IThemeContext themes, IStoreContext s
                 AccountUrl = urls.RouteUrl(NopRouteNames.General.CUSTOMER_INFO),
                 LogoutUrl = urls.RouteUrl(NopRouteNames.Standard.LOGOUT),
                 CatalogUrl = urls.RouteUrl("MadadrangAllProducts"),
-                LoginUrl = urls.RouteUrl(NopRouteNames.General.LOGIN), EnableOtp = false,
+                LoginUrl = urls.RouteUrl("StationeryLogin"), EnableOtp = true,
+                OtpApiBasePath = urls.RouteUrl("StationeryLogin").Replace("/login", "/api/"),
                 CartDescription = "انتخاب‌های تو", EmptyCartDescription = "لباس دلخواهت را پیدا کن.",
                 SearchPlaceholder = "جست‌وجوی لباس و محصولات"
             };
@@ -66,10 +67,9 @@ public sealed class StorefrontThemeService(IThemeContext themes, IStoreContext s
             AccountUrl = urls.RouteUrl(NopRouteNames.General.CUSTOMER_INFO),
             LogoutUrl = urls.RouteUrl(NopRouteNames.Standard.LOGOUT),
             CatalogUrl = urls.RouteUrl("StationeryCatalog"),
-            LoginUrl = urls.RouteUrl(NopRouteNames.General.LOGIN),
+            LoginUrl = urls.RouteUrl("StationeryLogin"),
             OtpApiBasePath = urls.RouteUrl("StationeryLogin").Replace("/login", "/api/"),
-            EnableOtp = environment.IsDevelopment()
-                && (await work.GetWorkingLanguageAsync()).LanguageCulture.StartsWith("fa", StringComparison.OrdinalIgnoreCase),
+            EnableOtp = true,
             CartDescription = "یک جای کوچک برای انتخاب‌های رنگی",
             EmptyCartDescription = "برای شروع، یک همراه رنگی انتخاب کن.", HomeIcon = "pencil",
             SearchPlaceholder = "دنبال چی می‌گردی؟ دفتر، مداد، یک ایده تازه..."

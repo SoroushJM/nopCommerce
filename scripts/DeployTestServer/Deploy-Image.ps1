@@ -410,29 +410,11 @@ function Save-DeploymentReceipt {
 function Send-ImageArchive {
     param([string]$Destination)
     Assert-DeploymentLock
-    $source = [IO.File]::OpenRead($ArchivePath)
-    $destinationStream = $null
-    try {
-        $destinationStream = $script:sftp.Open($Destination, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write)
-        $script:sftp.ChangePermissions($Destination, [short]600)
-        $buffer = [byte[]]::new(1MB)
-        $transferred = 0L
-        $nextProgress = 64MB
-        while (($count = $source.Read($buffer, 0, $buffer.Length)) -gt 0) {
-            Assert-DeploymentLock
-            $destinationStream.Write($buffer, 0, $count)
-            $transferred += $count
-            if ($transferred -ge $nextProgress) {
-                Write-Host ('Image upload: {0:N0} MiB of {1:N0} MiB' -f ($transferred / 1MB), ($source.Length / 1MB))
-                $nextProgress += 64MB
-            }
-        }
-        $destinationStream.Flush()
-    }
-    finally {
-        if ($destinationStream) { $destinationStream.Dispose() }
-        $source.Dispose()
-    }
+    if ($script:sftp.Exists($Destination)) { throw 'Refusing to overwrite an existing transfer archive.' }
+    Write-Host 'Uploading the Linux image archive using SCP.'
+    $script:scp.Upload([IO.FileInfo]::new($ArchivePath), $Destination)
+    Assert-DeploymentLock
+    $script:sftp.ChangePermissions($Destination, [short]600)
 }
 
 function Get-RemoteDiskState {
@@ -470,7 +452,11 @@ function Wait-SelectedContainer {
         }
         if ($listening) {
             if (!$stableSince) { $stableSince = [DateTime]::UtcNow }
-            if (([DateTime]::UtcNow - $stableSince).TotalSeconds -ge 5) { return $current }
+            if (([DateTime]::UtcNow - $stableSince).TotalSeconds -ge 5) {
+                $pluginCheck = Invoke-RemoteCommand -Arguments @('docker','exec',$containerId,'sh','/app/check-storefront-plugins.sh') -Purpose 'verify native storefront and SMS.ir installation' -AllowFailure $true
+                if ($pluginCheck.ExitStatus -ne 0) { throw 'Required plugins did not finish installing. Inspect the application log; the release is not ready.' }
+                return $current
+            }
         }
         else { $stableSince = $null }
         Start-Sleep -Seconds 1
@@ -565,6 +551,7 @@ function Remove-TransferArchives {
 
 $script:ssh = $null
 $script:sftp = $null
+$script:scp = $null
 $script:privateKeyFile = $null
 $script:lockCommand = $null
 $script:lockTask = $null
@@ -622,8 +609,11 @@ try {
     $connection = New-ConnectionInfo $settings
     $script:ssh = [Renci.SshNet.SshClient]::new($connection)
     $script:sftp = [Renci.SshNet.SftpClient]::new($connection)
+    $script:scp = [Renci.SshNet.ScpClient]::new($connection)
     $hostKeyGuard.Attach($script:ssh)
     $hostKeyGuard.Attach($script:sftp)
+    $hostKeyGuard.Attach($script:scp)
+    $script:scp.OperationTimeout = [TimeSpan]::FromMinutes(30)
     $script:ssh.KeepAliveInterval = [TimeSpan]::FromSeconds(15)
     $script:sftp.KeepAliveInterval = [TimeSpan]::FromSeconds(15)
     $script:sftp.OperationTimeout = [TimeSpan]::FromSeconds(1800)
@@ -633,6 +623,7 @@ try {
     $script:receipt.Phase = 'acquire deployment lock'
     Start-DeploymentLock
     $script:sftp.Connect()
+    $script:scp.Connect()
     Write-Host 'Remote lock acquired. Checking image identity, protected services and capacity.'
     $script:receipt.Phase = 'check protected services and disk capacity'
     $script:before = [ordered]@{}
@@ -795,6 +786,7 @@ finally {
     if ($script:lockCommand) { $script:lockCommand.Dispose() }
     if ($script:lockReader) { $script:lockReader.Dispose() }
     if ($script:sftp) { $script:sftp.Dispose() }
+    if ($script:scp) { $script:scp.Dispose() }
     if ($script:ssh) { $script:ssh.Dispose() }
     if ($script:privateKeyFile) { $script:privateKeyFile.Dispose() }
 }

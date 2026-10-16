@@ -11,7 +11,7 @@ $repo = Split-Path $PSScriptRoot -Parent
 $webDirectory = Join-Path $repo 'src/Presentation/Nop.Web'
 $webDll = Join-Path $webDirectory 'bin/Debug/net10.0/Nop.Web.dll'
 $webExecutable = Join-Path $webDirectory 'bin/Debug/net10.0/Nop.Web.exe'
-$pluginProject = Join-Path $repo 'src/Plugins/Nop.Plugin.Misc.PersianStorefront/Nop.Plugin.Misc.PersianStorefront.csproj'
+$pluginProject = Join-Path $repo 'src/Plugins/Nop.Plugin.Sms.SmsIr/Nop.Plugin.Sms.SmsIr.csproj'
 
 if (-not $PSBoundParameters.ContainsKey('Port')) {
     $Port = if ($Theme -eq 'MishaShop') { 5630 } else { 5602 }
@@ -69,6 +69,7 @@ $developmentEnvironment = @{
     StorefrontHostConfig__HttpPort = "$Port"
     StorefrontHostConfig__HttpsPort = ''
     CommonConfig__UsePrecompiledViews = 'false'
+    SmsIrBootstrap__SettingsPath = (Join-Path $env:LOCALAPPDATA 'MadadrangDev/smsir-local.json')
 }
 $previousEnvironment = @{}
 foreach ($name in $developmentEnvironment.Keys) {
@@ -84,6 +85,7 @@ try {
     Write-Host "Building nopCommerce, the storefront plugin and $Theme assets..."
     dotnet build $pluginProject --configuration Debug "-p:StorefrontTheme=$Theme" -p:UseSharedCompilation=false -maxcpucount:1 --verbosity minimal
     if ($LASTEXITCODE -ne 0) { throw 'Build failed. The site was not started.' }
+    & (Join-Path $PSScriptRoot 'initialize-storefront-plugins.ps1') -AppPath $webDirectory
 
     Write-Host "Store: http://localhost:$Port/"
     Write-Host "Admin: http://localhost:$Port/admin"

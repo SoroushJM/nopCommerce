@@ -1,11 +1,25 @@
 @inherits Nop.Web.Framework.Mvc.Razor.NopRazorPage<TModel>
+@using Storefront.UI.Shared.Components
+@using Nop.Web.Factories
+@inject Nop.Plugin.Misc.PersianStorefront.StorefrontThemeService storefrontTheme
+@inject Nop.Plugin.Misc.PersianStorefront.StorefrontNavigation storefrontNavigation
+@inject ICommonModelFactory commonModels
+@inject Nop.Services.Themes.IThemeContext themeContext
 @{
-    Layout = "_MadadrangRoot";
+    var profile = await storefrontTheme.GetProfileAsync();
+    var activeTheme = await themeContext.GetWorkingThemeNameAsync();
+    var misha = activeTheme is "MishaShop" or "Boutique";
+    Layout = misha ? "_MishaShopRoot" : "_MadadrangRoot";
     Context.Items["Madadrang.NativePage"] = true;
     Context.Items["Madadrang.OpenLogin"] = true;
 }
 @Html.AntiForgeryToken()
 <main class="wrap mx-auto max-w-[80rem] px-8 max-md:px-5 py-12">
-    <h1 class="text-2xl font-bold">ورود به مداد رنگی</h1>
+    <h1 class="text-2xl font-bold">ورود به @profile.BrandName</h1>
     <p class="mt-3 text-muted-foreground">برای ورود، شمارهٔ موبایل و کد یک‌بارمصرف را در پنجرهٔ ورود وارد کنید.</p>
 </main>
+@if (misha)
+{
+    var navigation = await storefrontNavigation.PrepareAsync(await commonModels.PrepareHeaderLinksModelAsync());
+    <component type="typeof(NativeHeader)" render-mode="WebAssemblyPrerendered" param-Initial="navigation" param-Theme="profile" param-LoginOnly="true" param-OpenLoginOnLoad="true" />
+}

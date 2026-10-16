@@ -1,0 +1,22 @@
+@model Nop.Plugin.Sms.SmsIr.Controllers.SmsIrConfigurationModel
+@{ Layout = "_ConfigurePlugin"; NopHtml.SetActiveMenuItemSystemName("Sms providers"); }
+<form asp-controller="SmsIr" asp-action="Configure" asp-area="Admin" method="post" autocomplete="off">
+    <section class="content">
+        <p><a href="@Url.RouteUrl("Plugin.SmsIr.Reports")">گزارش پیامک‌ها، تعداد ارسال و شماره‌های محدودشده</a></p>
+        <input type="hidden" name="HasApiKey" value="@Model.HasApiKey.ToString().ToLowerInvariant()" />
+        <div class="card card-default"><div class="card-header">تنظیمات sms.ir</div><div class="card-body">
+            @if (Model.Warning is not null) { <div class="alert alert-warning" role="alert">@Model.Warning</div> }
+            <div asp-validation-summary="All" class="text-danger"></div>
+            <div class="form-group"><label for="ApiKey">کلید API</label>
+                <input id="ApiKey" name="ApiKey" type="password" class="form-control" autocomplete="new-password" value="" />
+                <small>@(Model.HasApiKey ? "کلید ذخیره شده است؛ برای حفظ آن این کادر را خالی بگذارید." : "کلید را از پنل sms.ir وارد کنید.")</small>
+            </div>
+            <div class="form-group form-check"><input asp-for="Sandbox" class="form-check-input" /><label asp-for="Sandbox">حالت آزمایشی Sandbox</label></div>
+            <p>برای Sandbox باید کلید مخصوص Sandbox را در پنل sms.ir ساخته باشید. این گزینه نوع کلید را تغییر نمی‌دهد و نوع کلید از پاسخ ارسال قابل تشخیص نیست؛ کلید عملیاتی می‌تواند پیامک واقعی بفرستد. نمایش کد آزمایشی فقط در Development مجاز است. برای قالب آماده، شناسه 123456 و پارامتر CODE را وارد کنید.</p>
+            <div class="form-group"><label asp-for="TemplateId">شناسهٔ قالب</label><input asp-for="TemplateId" class="form-control" min="1" /></div>
+            <div class="form-group"><label asp-for="CodeParameterName">نام پارامتر کد، بدون #</label><input asp-for="CodeParameterName" class="form-control" /></div>
+            <div class="form-group"><label asp-for="LineNumber">شماره خط ارسال متن عمومی (اختیاری)</label><input asp-for="LineNumber" class="form-control" min="0" /><small>ورود فروشگاه از قالب Verify استفاده می‌کند. این خط فقط برای پیام‌های متنی عمومی nopCommerce است.</small></div>
+            <button type="submit" class="btn btn-primary">ذخیره تنظیمات</button>
+        </div></div>
+    </section>
+</form>

@@ -14,7 +14,18 @@
         </div>
         <component type="typeof(MishaShopHeader)" render-mode="Static" param-BrandName="theme.BrandName" param-HomeUrl="@(Url.RouteUrl(NopRouteNames.General.HOMEPAGE))" param-LogoUrl="@(ViewData["LogoUrl"] as string ?? "")" />
         <div class="header-links-wrapper relative! flex! justify-end! m-0! p-0! float-none! w-auto! min-w-0! text-start! col-start-3! row-start-1! max-[62.5rem]:col-start-2!">
-            @await Component.InvokeAsync(typeof(HeaderLinksViewComponent))
+            @{
+                var links = await Component.InvokeAsync(typeof(HeaderLinksViewComponent));
+                using var linksWriter = new System.IO.StringWriter();
+                links.WriteTo(linksWriter, System.Text.Encodings.Web.HtmlEncoder.Default);
+                var linksHtml = linksWriter.ToString();
+                var nativeLogin = Url.RouteUrl(NopRouteNames.General.LOGIN);
+                var mobileLogin = Url.RouteUrl("StationeryLogin");
+                if (!string.IsNullOrWhiteSpace(nativeLogin) && !string.IsNullOrWhiteSpace(mobileLogin))
+                    linksHtml = linksHtml.Replace("href=\"" + nativeLogin + "\"", "href=\"" + mobileLogin + "\"", StringComparison.Ordinal)
+                        .Replace("href=\"" + nativeLogin + "?", "href=\"" + mobileLogin + "?", StringComparison.Ordinal);
+            }
+            @Html.Raw(linksHtml)
             @await Component.InvokeAsync(typeof(FlyoutShoppingCartViewComponent))
         </div>
     </div>

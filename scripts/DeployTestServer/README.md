@@ -3,9 +3,11 @@
 For routine deployment, use the one-command image-transfer scripts from the repository root:
 
 ```powershell
-pwsh -File ./scripts/deploy-madadrang.ps1
-pwsh -File ./scripts/deploy-mishashop.ps1
+pwsh -File ./scripts/deploy-storefront.ps1 -Theme Madadrang
+pwsh -File ./scripts/deploy-storefront.ps1 -Theme MishaShop
 ```
+
+The per-shop `deploy-madadrang.ps1` and `deploy-mishashop.ps1` wrappers now target independent self-host projects; see [that deployment guide](../../docs/smsir-selfhost.md). Do not point them at this existing dual-store layout.
 
 This path requires PowerShell 7.4 or newer and uses SSH.NET in the existing .NET
 runtime. It has no Python or Paramiko dependency. Named PowerShell functions keep

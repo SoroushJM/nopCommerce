@@ -1,5 +1,6 @@
 @layer properties, theme, base, native, components, bb-utilities, utilities, bb;
 @import "tailwindcss" source(none);
+@import "./catalog-toolbar.css";
 @source "../*.razor";
 @source "../Components/**/*.razor";
 @source "../../Storefront.UI.Shared/**/*.razor";

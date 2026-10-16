@@ -12,11 +12,11 @@ using Nop.Core.Http;
 
 namespace Nop.Plugin.Misc.PersianStorefront.Controllers;
 
-public sealed class PersianStorefrontController(IThemeContext themes, IWebHostEnvironment environment) : BasePublicController
+public sealed class PersianStorefrontController(IThemeContext themes) : BasePublicController
 {
     public async Task<IActionResult> Login()
     {
-        if (await themes.GetWorkingThemeNameAsync() != "Madadrang" || !environment.IsDevelopment())
+        if (!StorefrontThemeService.IsSupported(await themes.GetWorkingThemeNameAsync()))
             return RedirectToRoute(NopRouteNames.General.LOGIN);
         return View("~/Plugins/Misc.PersianStorefront/Views/Login.cshtml");
     }
@@ -28,51 +28,24 @@ public sealed class PersianStorefrontController(IThemeContext themes, IWebHostEn
 [AutoValidateAntiforgeryToken]
 [CheckAccessPublicStore]
 [CheckAccessClosedStore]
-public sealed class PersianStorefrontApiController(IWebHostEnvironment environment, IWorkContext work, IStoreContext store, ICustomerService customers, ICustomerRegistrationService registration, StorefrontOtpService otp) : ControllerBase
+public sealed class PersianStorefrontApiController(IWorkContext work, IStoreContext store, ICustomerService customers, ICustomerRegistrationService registration, StorefrontOtpService otp, StorefrontPhoneAccounts accounts) : ControllerBase
 {
     [HttpPost("otp/send")]
     public async Task<ActionResult<OtpResult>> Send([FromBody] PhoneRequest request)
     {
-        if (!environment.IsDevelopment())
-            return StatusCode(503, new OtpResult(false, "ورود پیامکی هنوز به سرویس واقعی متصل نشده است."));
         return await otp.SendAsync((await work.GetCurrentCustomerAsync()).CustomerGuid, request.Phone);
     }
 
     [HttpPost("otp/verify")]
     public async Task<ActionResult<OtpResult>> Verify([FromBody] VerifyRequest request)
     {
-        if (!environment.IsDevelopment())
-            return StatusCode(503, new OtpResult(false, "محیط آزمایشی غیرفعال است."));
         var guest = await work.GetCurrentCustomerAsync();
         var phone = await otp.VerifyAsync(guest.CustomerGuid, request.Phone, request.Code);
         if (phone == null)
             return new OtpResult(false, "کد صحیح نیست یا منقضی شده است.");
-        var customer = await customers.GetCustomerByPhoneAsync(phone);
-        if (customer != null && (!customer.Active || customer.Deleted || await customers.IsAdminAsync(customer)))
-            return new OtpResult(false, "ورود به این حساب از محیط آزمایشی مجاز نیست.");
-        if (customer == null)
-        {
-            customer = new Customer
-            {
-                Email = "mobile-" + phone + "@accounts.invalid",
-                Phone = phone,
-                PhoneSmsVerified = true,
-                Username = "mobile:" + phone,
-                Active = true,
-                CreatedOnUtc = DateTime.UtcNow,
-                LastActivityDateUtc = DateTime.UtcNow,
-                RegisteredInStoreId = (await store.GetCurrentStoreAsync()).Id
-            };
-            await customers.InsertCustomerAsync(customer);
-            var role = await customers.GetCustomerRoleBySystemNameAsync(NopCustomerDefaults.RegisteredRoleName);
-            await customers.AddCustomerRoleMappingAsync(new CustomerCustomerRoleMapping { CustomerId = customer.Id, CustomerRoleId = role.Id });
-        }
-
-        if (string.IsNullOrWhiteSpace(customer.Email))
-        {
-            customer.Email = "mobile-" + customer.Id + "@accounts.invalid";
-            await customers.UpdateCustomerAsync(customer);
-        }
+        var customer = await accounts.ResolveAsync(phone, (await store.GetCurrentStoreAsync()).Id);
+        if (customer is null)
+            return new OtpResult(false, "ورود به این شماره ممکن نیست؛ برای بررسی حساب با پشتیبانی تماس بگیرید.");
 
         if (await customers.GetCurrentPasswordAsync(customer.Id) == null)
             await customers.InsertCustomerPasswordAsync(new CustomerPassword { CustomerId = customer.Id, PasswordFormat = PasswordFormat.Hashed, Password = Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(64)), PasswordSalt = Convert.ToHexString(System.Security.Cryptography.RandomNumberGenerator.GetBytes(32)), CreatedOnUtc = DateTime.UtcNow });

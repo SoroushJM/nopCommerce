@@ -1,13 +1,13 @@
 # انتشار فروشگاه با یک دستور
 
-از ریشهٔ مخزن، یکی از این دو دستور را در PowerShell اجرا کنید:
+این راهنما مخصوص سرور آزمایشی موجود با دو سرویس است. برای پروژه‌های مستقل self-host و اسکریپت‌های هر فروشگاه، [راهنمای جدید](smsir-selfhost.md) را ببینید. برای سرور موجود از ریشهٔ مخزن اجرا کنید:
 
 ```powershell
-pwsh -File ./scripts/deploy-madadrang.ps1
+pwsh -File ./scripts/deploy-storefront.ps1 -Theme Madadrang
 ```
 
 ```powershell
-pwsh -File ./scripts/deploy-mishashop.ps1
+pwsh -File ./scripts/deploy-storefront.ps1 -Theme MishaShop
 ```
 
 نام فنی «میشا شاپ» در کد `MishaShop` است. شناسهٔ سرویس نصب فعلی در Docker Compose برای سازگاری `boutique` باقی می‌ماند.
@@ -75,7 +75,7 @@ pwsh -File ./scripts/deploy-mishashop.ps1
 ابزارهای لازم: PowerShell 7.4 یا جدیدتر، Git، SDK سازگار با `global.json`،
 Node.js/npm و Docker Desktop با موتور Linux amd64.
 
-تمام هماهنگی انتشار در PowerShell انجام می‌شود. انتقال SSH/SFTP از کتابخانهٔ
+تمام هماهنگی انتشار در PowerShell انجام می‌شود. انتقال archive با SCP و دسترسی به فایل‌های تنظیمات با SFTP از کتابخانهٔ
 [SSH.NET](https://www.nuget.org/packages/SSH.NET/2026.0.0) در همان runtime داخلی
 .NET استفاده می‌کند. نسخه‌های کتابخانه و وابستگی‌هایش ثابت‌اند؛ اولین اجرا آن‌ها
 را از NuGet رسمی دریافت و SHA256 را بررسی می‌کند و اجراهای بعدی از cache استفاده
@@ -89,8 +89,8 @@ Compose و ابزارهای استاندارد Linux مانند `flock`، `sha25
 
 ## ساختار خوانای کد
 
-دو فایل `deploy-madadrang.ps1` و `deploy-mishashop.ps1` فقط برند را انتخاب می‌کنند.
-جریان ساخت و انتشار در `deploy-storefront.ps1` با تابع‌های مستقل خوانده می‌شود:
+دو فایل `deploy-madadrang.ps1` و `deploy-mishashop.ps1` مسیر جدید پروژه‌های مستقل را اجرا می‌کنند.
+جریان ساخت و انتشار سرور آزمایشی موجود در `deploy-storefront.ps1` با تابع‌های مستقل خوانده می‌شود:
 
 - `Get-DeploymentConfiguration`: پیدا کردن و بررسی تنظیمات خصوصی.
 - `Start-LocalDocker`: آماده کردن موتور محلی Docker.
@@ -120,7 +120,7 @@ snapshot، app منتشرشده، archive و tag موقت image روی سیست�
 نمونهٔ تعیین مسیر خصوصی، مهلت startup و حفظ فایل‌های build:
 
 ```powershell
-pwsh -File ./scripts/deploy-mishashop.ps1 `
+pwsh -File ./scripts/deploy-storefront.ps1 -Theme MishaShop `
     -ConfigPath 'C:/private/deploy.private.json' `
     -OutputDirectory 'D:/storefront-deployments' `
     -StartupTimeout 240 `

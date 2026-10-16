@@ -6,6 +6,13 @@ param(
 
     [string]$ConfigPath,
     [string]$OutputDirectory,
+    [string]$Server,
+    [string]$SshUser,
+    [ValidateRange(0,65535)][int]$SshPort = 0,
+    [string]$IdentityFile,
+    [string]$KnownHostsPath,
+    [string]$RemoteRoot,
+    [switch]$NonInteractive,
 
     [ValidateRange(30, 1800)]
     [int]$StartupTimeout = 180,
@@ -34,9 +41,10 @@ function Get-DeploymentConfiguration {
             Select-Object -First 1
     }
 
-    if (!$RequestedPath) {
-        throw 'Private deployment configuration was not found. See docs/one-command-deployment.md.'
-    }
+    . (Join-Path $PSScriptRoot 'resolve-storefront-deployment.ps1')
+    $RequestedPath = Resolve-StorefrontDeploymentInput -ConfigPath $RequestedPath -PrivateDirectory $PrivateDirectory `
+        -Server $Server -SshUser $SshUser -SshPort $SshPort -IdentityFile $IdentityFile `
+        -KnownHostsPath $KnownHostsPath -RemoteRoot $RemoteRoot -NonInteractive:$NonInteractive
 
     $resolvedPath = (Resolve-Path -LiteralPath $RequestedPath).Path
     $repositoryPrefix = $RepositoryRoot + [IO.Path]::DirectorySeparatorChar

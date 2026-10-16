@@ -1,0 +1,12 @@
+{
+  "Group": "Sms providers",
+  "FriendlyName": "SMS.ir",
+  "SystemName": "Sms.SmsIr",
+  "Version": "5.00.1",
+  "SupportedVersions": ["5.00"],
+  "DependsOn": ["Misc.PersianStorefront"],
+  "Author": "Storefront",
+  "DisplayOrder": 2,
+  "FileName": "Nop.Plugin.Sms.SmsIr.dll",
+  "Description": "SMS.ir verification templates for Madadrang and MishaShop. Includes Sandbox support and administrator setup warnings."
+}
