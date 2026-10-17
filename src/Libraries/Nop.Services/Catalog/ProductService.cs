@@ -782,7 +782,7 @@ public partial class ProductService : IProductService
             .PrepareKeyForDefaultCache(NopCatalogDefaults.CategoryProductsNumberCacheKey, customerRoleIds, storeId, categoryIds);
 
         //only distinct products
-        return await _staticCacheManager.GetAsync(cacheKey, () => query.Select(p => p.Id).CountAsync());
+        return await _staticCacheManager.GetAsync(cacheKey, () => query.Select(p => p.Id).Distinct().CountAsync());
     }
 
     /// <summary>
@@ -1095,10 +1095,9 @@ public partial class ProductService : IProductService
             {
                 var productCategoryQuery =
                     from pc in _productCategoryRepository.Table
-                    join c in _categoryRepository.Table on pc.CategoryId equals c.Id
                     where (!excludeFeaturedProducts || !pc.IsFeaturedProduct) &&
                           categoryIds.Contains(pc.CategoryId)
-                    group c.DisplayOrder by pc.ProductId into gr
+                    group pc.DisplayOrder by pc.ProductId into gr
                     select new
                     {
                         ProductId = gr.Key,

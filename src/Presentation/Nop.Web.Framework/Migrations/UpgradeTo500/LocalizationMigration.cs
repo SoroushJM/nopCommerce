@@ -6,7 +6,7 @@ using Nop.Web.Framework.Extensions;
 
 namespace Nop.Web.Framework.Migrations.UpgradeTo500;
 
-[NopUpdateMigration("2026-01-10 00:00:00", "5.00", UpdateMigrationType.Localization)]
+[NopUpdateMigration("2026-10-14 00:00:00", "5.00", UpdateMigrationType.Localization)]
 public class LocalizationMigration : MigrationBase
 {
     /// <summary>Collect the UP migration expressions</summary>
@@ -822,7 +822,7 @@ public class LocalizationMigration : MigrationBase
             ["ReturnRequests.Withdrawal.Title"] = "Withdraw contract for <a href=\"{0}\">order #{1}</a>",
             ["ReturnRequests.WithdrawalForm"] = "Find your order",
             ["ReturnRequests.WithdrawalForm.Submit"] = "Continue",
-            ["ReturnRequests.WithdrawalForm.ConfirnationText"] = "If your details are correct, we've sent you a link to continue.",
+            ["ReturnRequests.WithdrawalForm.ConfirmationText"] = "If your details are correct, we've sent you a link to continue.",
             ["ReturnRequests.WithdrawalForm.EmailAddress.Required"] = "The Email address is required",
             ["ReturnRequests.WithdrawalForm.OrderNumber.Required"] = "The Order number is required",
 
@@ -883,6 +883,13 @@ public class LocalizationMigration : MigrationBase
             ["Products.Manufacturers.ResponsiblePerson"] = "Responsible person name: {0}",
             ["Products.Manufacturers.ResponsiblePersonPhysicalAddress"] = "Responsible person physical address: {0}",
             ["Products.Manufacturers.ResponsiblePersonElectronicAddress"] = "Responsible person electronic address: {0}",
+            //#8349
+            ["Account.Login.Phone.Required"] = "Phone number is required",
+            ["Admin.System.SystemInfo.UsedMemory"] = "Used memory (MB)",
+            ["Admin.System.SystemInfo.UsedMemory.Hint"] = "Total megabytes (MB) in use by the application.",
+
+            //#8372
+            ["Admin.Configuration.Settings.Catalog.CacheProductPrices.Hint"] = "Check to cache product prices. It can significantly improve performance. But you should not enable it if you use price lists, complex discounts, discount requirement rules, or coupon codes.",
         });
 
         #endregion

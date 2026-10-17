@@ -1,11 +1,70 @@
+using System.Reflection;
 using System.Text.RegularExpressions;
 using System.Xml.Linq;
+using Nop.Core.Domain.Localization;
+using Nop.Plugin.Misc.PersianStorefront;
+using Nop.Services.Localization;
 
 namespace Nop.Storefront.Tests;
 
-// Source-pack contracts only; no website or database required.
+// Resource-pack and upgrade contracts; no website or database required.
 public sealed class PersianPublicLocalizationTests
 {
+    [Test]
+    [Arguments("متن اختصاصی قبلی", null)]
+    [Arguments("متن اختصاصی قبلی", "متن اختصاصی جدید")]
+    [Arguments(null, null)]
+    [Arguments("  ", null)]
+    public async Task RenamedWithdrawalResourcePreservesMerchantTextAndIsIdempotent(string? legacyValue, string? currentValue)
+    {
+        const string legacyKey = "ReturnRequests.WithdrawalForm.ConfirnationText";
+        const string currentKey = "ReturnRequests.WithdrawalForm.ConfirmationText";
+        var localization = DispatchProxy.Create<ILocalizationService, ResourceLocalization>();
+        var state = (ResourceLocalization)(object)localization;
+        if (legacyValue != null)
+            state.Resources[legacyKey] = legacyValue;
+        if (currentValue != null)
+            state.Resources[currentKey] = currentValue;
+
+        await PersianPublicResourcesStartup.PreserveRenamedWithdrawalResourceAsync(localization, 7);
+        await PersianPublicResourcesStartup.PreserveRenamedWithdrawalResourceAsync(localization, 7);
+
+        var expected = currentValue ?? (string.IsNullOrWhiteSpace(legacyValue) ? null : legacyValue);
+        await Assert.That(state.Resources.GetValueOrDefault(currentKey)).IsEqualTo(expected);
+        await Assert.That(state.Resources.GetValueOrDefault(legacyKey)).IsEqualTo(legacyValue);
+        await Assert.That(state.Writes).IsEqualTo(currentValue == null && !string.IsNullOrWhiteSpace(legacyValue) ? 1 : 0);
+    }
+
+    public class ResourceLocalization : DispatchProxy
+    {
+        public Dictionary<string, string> Resources { get; } = new(StringComparer.OrdinalIgnoreCase);
+        public int Writes { get; private set; }
+
+        protected override object? Invoke(MethodInfo? targetMethod, object?[]? args)
+        {
+            if (targetMethod?.Name == nameof(ILocalizationService.GetLocaleStringResourceByNameAsync))
+            {
+                if ((int)args![1]! != 7 || (bool)args[2]!)
+                    throw new InvalidOperationException("Only the selected Persian language may be queried, without missing-key warnings.");
+                var key = (string)args[0]!;
+                var resource = Resources.TryGetValue(key, out var value)
+                    ? new LocaleStringResource { LanguageId = 7, ResourceName = key, ResourceValue = value }
+                    : null;
+                return Task.FromResult(resource);
+            }
+            if (targetMethod?.Name == nameof(ILocalizationService.AddOrUpdateLocaleResourceAsync))
+            {
+                if ((int?)args![1] != 7)
+                    throw new InvalidOperationException("Only the selected Persian language may be updated.");
+                foreach (var pair in (IDictionary<string, string>)args[0]!)
+                    Resources[pair.Key] = pair.Value;
+                Writes++;
+                return Task.CompletedTask;
+            }
+            throw new NotSupportedException(targetMethod?.Name);
+        }
+    }
+
     [Test]
     [Arguments(true)]
     [Arguments(false)]

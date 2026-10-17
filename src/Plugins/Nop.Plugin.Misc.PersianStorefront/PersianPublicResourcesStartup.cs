@@ -53,8 +53,26 @@ public sealed class PersianPublicResourcesStartup : INopStartup
         if (persian == null)
             return;
 
-        await services.GetRequiredService<ILocalizationService>()
-            .ImportResourcesFromXmlAsync(persian, reader, updateExistingResources: false);
+        var localization = services.GetRequiredService<ILocalizationService>();
+        await PreserveRenamedWithdrawalResourceAsync(localization, persian.Id);
+        await localization.ImportResourcesFromXmlAsync(persian, reader, updateExistingResources: false);
+    }
+
+    internal static async Task PreserveRenamedWithdrawalResourceAsync(ILocalizationService localization, int languageId)
+    {
+        const string oldName = "ReturnRequests.WithdrawalForm.ConfirnationText";
+        const string newName = "ReturnRequests.WithdrawalForm.ConfirmationText";
+        if (await localization.GetLocaleStringResourceByNameAsync(newName, languageId, logIfNotFound: false) != null)
+            return;
+
+        var previous = await localization.GetLocaleStringResourceByNameAsync(oldName, languageId, logIfNotFound: false);
+        if (previous == null || string.IsNullOrWhiteSpace(previous.ResourceValue))
+            return;
+
+        // Keep the merchant's previous wording when upstream corrects the key's spelling.
+        // Retain the old key for older integrations and never replace an existing new value.
+        await localization.AddOrUpdateLocaleResourceAsync(
+            new Dictionary<string, string> { [newName] = previous.ResourceValue }, languageId);
     }
 
     // The admin pack creates the language at 50; native culture setup follows at 100.

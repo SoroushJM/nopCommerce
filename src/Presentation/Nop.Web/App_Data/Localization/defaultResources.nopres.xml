@@ -11716,9 +11716,6 @@
   <LocaleResource Name="Admin.ContentManagement.MessageTemplates.Description.ReturnRequestStatusChanged.CustomerNotification">
     <Value>This message template is used to notify a customer that the request status to the certain order is changed. You can set up this option in Sales - Return requests by clicking "Notify customer about status change" button.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.ContentManagement.MessageTemplates.Description.ReturnRequest.WithdrawalLink">
-    <Value>This message template is used to send the withdrawal request confirmation.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.ContentManagement.MessageTemplates.Description.Service.ContactUs">
     <Value>This message template is used to notify a store owner about a message sent through the contact form.</Value>
   </LocaleResource>
@@ -20014,7 +20011,7 @@
   <LocaleResource Name="ReturnRequests.WithdrawalForm">
     <Value>Find your order</Value>
   </LocaleResource>
-  <LocaleResource Name="ReturnRequests.WithdrawalForm.ConfirnationText">
+  <LocaleResource Name="ReturnRequests.WithdrawalForm.ConfirmationText">
     <Value>If your details are correct, we've sent you a link to continue.</Value>
   </LocaleResource>
   <LocaleResource Name="ReturnRequests.WithdrawalForm.EmailAddress.Required">

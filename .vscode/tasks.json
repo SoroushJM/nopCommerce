@@ -13,7 +13,7 @@
       "label": "nop: build solution",
       "type": "process",
       "command": "dotnet",
-      "args": ["build", "src/Storefront.sln", "--configuration", "Debug", "-p:StorefrontTheme=All", "-maxcpucount:1", "--verbosity", "minimal"],
+      "args": ["build", "src/Storefront.sln", "--configuration", "Debug", "-p:StorefrontTheme=All", "-maxcpucount:4", "--verbosity", "minimal"],
       "options": { "cwd": "${workspaceFolder}" },
       "group": { "kind": "build", "isDefault": true },
       "problemMatcher": "$msCompile"

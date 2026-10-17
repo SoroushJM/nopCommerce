@@ -10872,9 +10872,6 @@
   <LocaleResource Name="Admin.ContentManagement.MessageTemplates.Description.ReturnRequestStatusChanged.CustomerNotification">
     <Value>این الگوی پیام برای اطلاع مشتری از تغییر وضعیت درخواست به سفارش خاص استفاده می شود. می توانید این گزینه را در Sales - Return requests با کلیک کردن روی دکمه "اطلاع رسانی به مشتری در مورد تغییر وضعیت" تنظیم کنید.</Value>
   </LocaleResource>
-  <LocaleResource Name="Admin.ContentManagement.MessageTemplates.Description.ReturnRequest.WithdrawalLink">
-    <Value>این الگوی پیام برای ارسال تاییدیه درخواست برداشت استفاده می شود.</Value>
-  </LocaleResource>
   <LocaleResource Name="Admin.ContentManagement.MessageTemplates.Description.Service.ContactUs">
     <Value>این الگوی پیام برای اطلاع صاحب فروشگاه در مورد پیام ارسال شده از طریق فرم تماس استفاده می شود.</Value>
   </LocaleResource>

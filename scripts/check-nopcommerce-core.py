@@ -1,11 +1,12 @@
-"""Check the agreed boundary against the repository's pre-storefront source."""
+"""Check custom changes against the reviewed upstream nopCommerce baseline."""
 
 import subprocess
 import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parent.parent
-BASE = "ed05bf3e382b008d1895b8cfbb12de31fc904038"
+# Advance only after reviewing and merging the corresponding upstream changes.
+BASE = "77d112f365e210ebdfa2f9790c8202a0e3b1c74e"
 NATIVE_ROOTS = ("src/Libraries/", "src/Presentation/Nop.Web/", "src/Presentation/Nop.Web.Framework/", "src/Tests/Nop.Tests/")
 CODE_EXTENSIONS = {".cs", ".cshtml", ".css", ".js", ".csproj", ".props", ".targets", ".sln"}
 CUSTOM_ROOTS = ("src/Presentation/Nop.Web/Themes/Madadrang/", "src/Presentation/Nop.Web/Themes/MishaShop/")

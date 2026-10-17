@@ -2869,7 +2869,7 @@
   <LocaleResource Name="ReturnRequests.WithdrawalForm">
     <Value>پیداکردن سفارش</Value>
   </LocaleResource>
-  <LocaleResource Name="ReturnRequests.WithdrawalForm.ConfirnationText">
+  <LocaleResource Name="ReturnRequests.WithdrawalForm.ConfirmationText">
     <Value>اگر اطلاعات شما صحیح باشد، پیوند ادامهٔ درخواست را برای شما ارسال کرده‌ایم.</Value>
   </LocaleResource>
   <LocaleResource Name="ReturnRequests.WithdrawalForm.EmailAddress.Required">
